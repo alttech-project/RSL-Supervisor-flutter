@@ -48,7 +48,10 @@ class Home extends GetView<HomeController> {
                         width: 20,
                       ),
                       FloatingActionButton(
-                        onPressed: () => controller.incrementCartCount(),
+                        onPressed: (){
+    controller.incrementCartCount();
+    controller.dashboardApiCall();
+    },
                         child: const Icon(CupertinoIcons.add),
                       ),
                     ],

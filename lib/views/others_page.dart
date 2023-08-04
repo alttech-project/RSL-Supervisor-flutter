@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_x_sample/controllers/home_controller.dart';
-import 'package:get_x_sample/views/details_page.dart';
+import 'package:rsl_supervisor/controllers/home_controller.dart';
+import 'package:rsl_supervisor/views/details_page.dart';
 
 class Other extends GetView<HomeController> {
   static const routeName = '/others';

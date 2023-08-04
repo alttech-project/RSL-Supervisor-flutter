@@ -18,4 +18,22 @@ class GetStorageController extends GetxController {
   void removeTokeData() {
     storage.remove("token");
   }
+
+  void saveUserId({required String id}) {
+    storage.write("userId", id);
+  }
+
+  void removeUserId() {
+    storage.remove("userId");
+  }
+
+  Future<String> getUserId() async {
+    final userId = await storage.read("userId") ?? "";
+    return userId;
+  }
+
+  void setEmptyUserInfo() {
+    storage.write("userInfo", "");
+    storage.write("userId", "");
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_x_sample/data/product_data.dart';
+import 'package:rsl_supervisor/data/product_data.dart';
 
 import '../data/dashboard_data.dart';
 import '../network/app_services.dart';
@@ -8,6 +8,7 @@ import '../utils/helpers/basic_utils.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
+  var viewEnable = false.obs;
   var count = 0.obs;
   final product = Product(name: "Battery", cartCount: 0).obs;
 

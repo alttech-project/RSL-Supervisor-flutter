@@ -1,91 +1,37 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_x_sample/controllers/details_controller.dart';
-import 'package:get_x_sample/controllers/home_controller.dart';
-import 'package:get_x_sample/views/others_page.dart';
+import 'package:rsl_supervisor/controllers/home_controller.dart';
+import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 
 class Home extends GetView<HomeController> {
   Home({super.key});
 
   static const routeName = '/home';
 
-  final DetailsController detailsController = Get.find();
-
   @override
   Widget build(context) {
-    return Scaffold(
-      // Use Obx(()=> to update Text() whenever count is changed.
-      appBar: AppBar(title: Obx(() => Text("Clicks: ${controller.count}"))),
-
-      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton(
-                    child: const Text("Go to Other"),
-                    onPressed: () => Get.toNamed(Other.routeName),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Obx(() => Text("Name: ${detailsController.name.value}")),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FloatingActionButton(
-                        onPressed: () => controller.decrementCartCount(),
-                        child: const Icon(CupertinoIcons.minus),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      FloatingActionButton(
-                        onPressed: (){
-    controller.incrementCartCount();
-    controller.dashboardApiCall();
-    },
-                        child: const Icon(CupertinoIcons.add),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          _addToCartPopUp(),
-          /*Obx(
-            () => Align(
-              alignment: Alignment.bottomCenter,
-              child: Visibility(
-                visible: controller.product.value.cartCount > 0,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(
-                      12,
-                    ),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  child: Text(
-                      'Total Item Count - ${controller.product.value.cartCount}'),
+    return WillPopScope(
+      onWillPop: () {
+        SystemNavigator.pop();
+        return Future.value(false);
+      },
+      child: SafeAreaContainer(
+        child: Scaffold(
+          appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.menu,
                 ),
+                onPressed: () {},
               ),
-            ),
-          ),*/
-        ],
+              title: Obx(() => Text("Clicks: ${controller.count}"))),
+
+          // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+          body: const Center(
+            child: Text('Home'),
+          ),
+        ),
       ),
     );
   }

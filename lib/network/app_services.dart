@@ -1,5 +1,5 @@
 import 'package:get/get_instance/src/get_instance.dart';
-import 'package:get_x_sample/network/services.dart';
+import 'package:rsl_supervisor/network/services.dart';
 
 import '../data/dashboard_data.dart';
 

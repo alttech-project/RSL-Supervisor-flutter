@@ -5,7 +5,7 @@ import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 
 class Home extends GetView<HomeController> {
-  Home({super.key});
+  const Home({super.key});
 
   static const routeName = '/home';
 

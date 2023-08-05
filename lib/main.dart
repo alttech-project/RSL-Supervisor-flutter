@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
-import 'package:rsl_supervisor/views/home_page.dart';
 
 import 'app.dart';
 import 'shared/styles/theme.dart';
@@ -21,15 +20,12 @@ Future<void> main() async {
 }
 
 Future<void> initServices() async {
-  print('starting services ...');
   await Get.putAsync(() => GetStorage.init());
-  print('All services started...');
 }
 
 class AppMain extends StatelessWidget {
   const AppMain({super.key});
 
-  //final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -47,12 +43,12 @@ class AppMain extends StatelessWidget {
     return GetMaterialApp(
       navigatorKey: NavigationService.navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'RSL-Booking',
+      title: 'RSL-Supervisor',
       theme: themeData,
       home: child,
       initialBinding: AppBind(),
       getPages: routes,
-      initialRoute: Home.routeName,
+      initialRoute: "/",
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

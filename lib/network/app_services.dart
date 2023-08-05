@@ -8,9 +8,10 @@ final callService = ApiProvider();
 
 Future<DashboardResponseData> dashboardApi(
     DashboardRequestData requestData) async {
-  final response = await _apiProvider.httpRequest(
+  final response = await _apiProvider.postApiCall(
       resource: Resource(
           url: "api/StockTakeDashboard",
-          request: dashboardRequestDataToJson(requestData)));
+          request: dashboardRequestDataToJson(requestData)),
+      key: "Home");
   return dashboardResponseDataFromJson(response);
 }

@@ -1,6 +1,4 @@
-
-
-enum BaseUrls { local, demo, live }
+enum BaseUrls { demo, live }
 
 extension BaseURLHelper on BaseUrls {
   String get rawValue {
@@ -17,5 +15,4 @@ extension BaseURLHelper on BaseUrls {
 
 class AppInfo {
   static String kAppBaseUrl = BaseUrls.demo.rawValue;
-
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +7,7 @@ import '../../shared/styles/app_style.dart';
 import '../../shared/styles/colors.dart';
 import '../../utils/assets/assets.dart';
 
-/*class SideMenuBg extends GetView<SideMenuController> {
+class SideMenuBg extends GetView<SideMenuController> {
   final VoidCallback closeMenu;
 
   const SideMenuBg({

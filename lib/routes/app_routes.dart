@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/app.dart';
-import 'package:rsl_supervisor/views/details_page.dart';
-import 'package:rsl_supervisor/views/home_page.dart';
-import 'package:rsl_supervisor/views/others_page.dart';
+import 'package:rsl_supervisor/bindings/app_bindings.dart';
+import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+
+class AppRoutes {
+  static const home = '/';
+  static const dashboardPage = '/dashboardPage';
+}
 
 List<GetPage> routes = [
-  GetPage(name: Home.routeName, page: () => Home()),
-  GetPage(name: AppStart.routeName, page: () => Home()),
   GetPage(
-    name: Other.routeName,
-    page: () => const Other(),
-    customTransition: SizeTransitions(),
-  ),
-// GetPage with default transitions
-  GetPage(
-    name: DetailsPage.routeName,
-    transition: Transition.cupertino,
-    page: () => const DetailsPage(),
+    name: AppRoutes.dashboardPage,
+    page: () => const DashboardPage(),
+    binding: AppBind(),
+    transition: Transition.fadeIn,
+    transitionDuration: const Duration(milliseconds: 200),
   ),
 ];
 

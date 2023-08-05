@@ -26,13 +26,13 @@ class HomeController extends GetxController
       ),
     );
   }
-dashboardApiCall(){
-  dashboardApi(DashboardRequestData(
-      userID: "manager"
-  )).then((value) {
-    printLogs("${value.statusMessage}");
-  });
-}
+
+  dashboardApiCall() {
+    dashboardApi(DashboardRequestData(userID: "manager")).then((value) {
+      printLogs("${value.statusMessage}");
+    });
+  }
+
   updateProduct(Product productNew) {
     product.update((val) {
       val!.name = productNew.name;

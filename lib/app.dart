@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 import 'package:rsl_supervisor/utils/helpers/getx_storage.dart';
-import 'package:rsl_supervisor/views/home_page.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'controllers/app_start_controller.dart';
-import 'views/login_page.dart';
 
 class AppStart extends StatelessWidget {
-  static const routeName = '/';
-
   const AppStart({super.key});
 
   @override
@@ -21,11 +18,11 @@ class AppStart extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data?.status == 1) {
-            return Home();
+            return const DashboardPage();
           } else if (snapshot.data?.status == 2) {
-            return const LoginPage();
+            return const DashboardPage();
           }
-          return /*const SizedBox.shrink()*/Home();
+          return const SizedBox.shrink();
         } else {
           return const SplashScreen();
         }

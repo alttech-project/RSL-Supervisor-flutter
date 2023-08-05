@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 
+import '../place_search/views/place_search_view.dart';
+
 class AppRoutes {
   static const home = '/';
   static const dashboardPage = '/dashboardPage';
+  static const placeSearchPage = '/placeSearchPage';
 }
 
 List<GetPage> routes = [
@@ -14,6 +17,13 @@ List<GetPage> routes = [
     page: () => const DashboardPage(),
     binding: AppBind(),
     transition: Transition.fadeIn,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.placeSearchPage,
+    page: () => const PlaceSearchPage(),
+    binding: AppBind(),
+    transition: Transition.downToUp,
     transitionDuration: const Duration(milliseconds: 200),
   ),
 ];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/routes/app_routes.dart';
 
 import '../../utils/helpers/basic_utils.dart';
 import '../data/dashboard_api_data.dart';
@@ -9,7 +10,9 @@ class DashBoardController extends GetxController {
   RxBool isShiftIn = true.obs;
   RxBool useCustomDrop = false.obs;
   Rx<TextEditingController> searchController = TextEditingController().obs;
-  RxList<DropOffList> dropOffList = <DropOffList>[].obs;
+  List<DropOffList> dropList = <DropOffList>[].obs;
+  RxList<DropOffList> dropSearchList = <DropOffList>[].obs;
+  RxString searchTxt = "".obs;
   RxString noDropOffDataMsg = "No Dropoff found".obs;
   @override
   void onInit() {
@@ -26,17 +29,20 @@ class DashBoardController extends GetxController {
           "dJsfk-hJS6izKJRqBd-9vI:APA91bEhxZRzH2ThZiHMXZPm9OEQh7PBhzrwjNYjsJYRBJ2kYy3xX5BbiNbc-MOwiRDR9zrIWikhD6fRBnedi4yUVXQXHUMAyTTzTxNw_PEnJClgzwqEeTaJhVFWSHsWJtejctcTUBSm",
     )).then((response) {
       if ((response.status ?? 0) == 1) {
-        dropOffList.value = response.dropOffList ?? [];
-        dropOffList.refresh();
+        dropList = response.dropOffList ?? [];
+        dropSearchList.value = response.dropOffList ?? [];
+        dropSearchList.refresh();
       } else {
         noDropOffDataMsg.value = "No Dropoff found";
-        dropOffList.value = [];
-        dropOffList.refresh();
+        dropList = [];
+        dropSearchList.value = [];
+        dropSearchList.refresh();
       }
     }).onError((error, stackTrace) {
       printLogs("Dashboard api error: ${error.toString()}");
-      dropOffList.value = [];
-      dropOffList.refresh();
+      dropList = [];
+      dropSearchList.value = [];
+      dropSearchList.refresh();
     });
   }
 
@@ -48,12 +54,34 @@ class DashBoardController extends GetxController {
     useCustomDrop.value = newValue;
 
     if (useCustomDrop.value) {
+      searchController.value.text = "";
+      searchTxt.value = "";
+      FocusManager.instance.primaryFocus?.unfocus();
       noDropOffDataMsg.value =
           "Please search any drop off location in the search option above.";
-      dropOffList.value = [];
-      dropOffList.refresh();
+      dropSearchList.value = [];
+      dropSearchList.refresh();
     } else {
-      _callDashboardApi();
+      dropSearchList.value = dropList;
+      dropSearchList.refresh();
     }
+  }
+
+  searchDropOff(String text) {
+    if (text.isEmpty) {
+      dropSearchList.value = dropList;
+      dropSearchList.refresh();
+      return;
+    }
+
+    dropSearchList.value = dropList
+        .where((dropoff) =>
+            (dropoff.address ?? "").toLowerCase().contains(text.toLowerCase()))
+        .toList();
+    dropSearchList.refresh();
+  }
+
+  moveToPlaceSeaerch() {
+    Get.toNamed(AppRoutes.placeSearchPage);
   }
 }

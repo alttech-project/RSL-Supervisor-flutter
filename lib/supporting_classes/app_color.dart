@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppColors {
-  kPrimaryColor,
-}
+enum AppColors { kPrimaryColor }
 
 extension AppColorHelper on AppColors {
   Color get value {

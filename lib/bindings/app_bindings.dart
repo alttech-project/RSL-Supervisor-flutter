@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
+import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 
 import '../controllers/app_start_controller.dart';
 import '../controllers/login_controller.dart';
@@ -16,5 +17,6 @@ class AppBind extends Bindings {
     Get.lazyPut<ApiProvider>(() => ApiProvider());
     Get.lazyPut<GetStorageController>(() => GetStorageController());
     Get.lazyPut<DashBoardController>(() => DashBoardController());
+    Get.lazyPut<PlaceSearchController>(() => PlaceSearchController());
   }
 }

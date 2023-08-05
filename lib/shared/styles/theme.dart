@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'colors.dart';
+import 'package:rsl_supervisor/supporting_classes/app_color.dart';
 
 final ThemeData themeData = ThemeData(
     textTheme: GoogleFonts.outfitTextTheme().apply(),
     brightness: Brightness.light,
-    primaryColor: AppColor.kPrimaryColor.value,
-    buttonTheme: ButtonThemeData(buttonColor: AppColor.kPrimaryColor.value),
+    primaryColor: AppColors.kPrimaryColor.value,
+    buttonTheme: ButtonThemeData(buttonColor: AppColors.kPrimaryColor.value),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColor.kPrimaryColor.value,
+      backgroundColor: AppColors.kPrimaryColor.value,
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColor.kPrimaryColor.value,
+      backgroundColor: AppColors.kPrimaryColor.value,
     ));
 
 final ThemeData themeDataDark = ThemeData(
   textTheme: GoogleFonts.outfitTextTheme().apply(),
   brightness: Brightness.dark,
-  primaryColor: AppColor.kPrimaryColor.value,
+  primaryColor: AppColors.kPrimaryColor.value,
 );

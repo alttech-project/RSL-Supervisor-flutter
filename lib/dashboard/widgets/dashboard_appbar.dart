@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
@@ -19,10 +20,10 @@ class DashboardAppBar extends GetView<DashBoardController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: EdgeInsets.only(top: 10.h),
               child: Icon(
                 Icons.menu,
-                size: 25,
+                size: 25.sp,
                 color: AppColors.kPrimaryColor.value,
               ),
             ),
@@ -34,24 +35,31 @@ class DashboardAppBar extends GetView<DashBoardController> {
                   style: AppFontStyle.subHeading(color: Colors.white),
                 ),
                 Obx(
-                  () => Switch(
-                    value: controller.isShiftIn.value,
-                    inactiveTrackColor: Colors.red.shade300,
-                    inactiveThumbColor: Colors.red.shade800,
-                    activeColor: Colors.green,
-                    onChanged: (bool newValue) {
-                      controller.shiftInOutAction(newValue);
-                    },
+                  () => SizedBox(
+                    height: 30.h,
+                    width: 40.w,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Switch(
+                        value: controller.isShiftIn.value,
+                        inactiveTrackColor: Colors.red.shade300,
+                        inactiveThumbColor: Colors.red.shade800,
+                        activeColor: Colors.green,
+                        onChanged: (bool newValue) {
+                          controller.shiftInOutAction(newValue);
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ],
         ),
-        const Image(
-          image: AssetImage(Assets.appIcon),
-          width: 100,
-          height: 100,
+        Image(
+          image: const AssetImage(Assets.appIcon),
+          width: 100.w,
+          height: 100.h,
         ),
       ],
     );

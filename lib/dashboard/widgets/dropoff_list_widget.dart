@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
@@ -12,10 +13,10 @@ class DropoffListWidget extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => (controller.dropOffList.isEmpty)
+      () => (controller.dropSearchList.isEmpty)
           ? Center(
               child: SizedBox(
-                height: 300,
+                height: 300.h,
                 child: Center(
                   child: Row(
                     children: [
@@ -32,37 +33,37 @@ class DropoffListWidget extends GetView<DashBoardController> {
               ),
             )
           : ListView.builder(
-              itemCount: controller.dropOffList.length,
+              itemCount: controller.dropSearchList.length,
               shrinkWrap: true,
               physics: const ScrollPhysics(),
-              padding: const EdgeInsets.only(
-                top: 20,
+              padding: EdgeInsets.only(
+                top: 20.h,
               ),
               itemBuilder: (BuildContext context, int index) {
-                final dropOff = controller.dropOffList[index];
+                final dropOff = controller.dropSearchList[index];
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
+                  padding: EdgeInsets.only(bottom: 15.h),
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.kPrimaryColor.value,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 10.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.h, horizontal: 10.w),
                       child: Row(
                         children: [
                           Text(
                             dropOff.address ?? "",
                             style: AppFontStyle.body(
-                              weight: FontWeight.bold,
+                              weight: AppFontWeight.semibold.value,
                             ),
                           ),
                           const Spacer(),
                           Text(
                             dropOff.fare ?? "",
                             style: AppFontStyle.body(
-                              weight: FontWeight.bold,
+                              weight: AppFontWeight.semibold.value,
                             ),
                           ),
                         ],

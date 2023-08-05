@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../shared/styles/colors.dart';
-
 class SafeAreaContainer extends StatefulWidget {
   final Widget child;
   final bool isTabBarShown;
   final Color? statusBarColor;
   final bool themedark;
   final Color? systemNavigationBarColor;
-
-  final bool?  NavigationBarthemedark;
+  final bool? navigationBarthemedark;
 
   const SafeAreaContainer({
     Key? key,
@@ -18,7 +15,8 @@ class SafeAreaContainer extends StatefulWidget {
     this.isTabBarShown = false,
     this.statusBarColor,
     this.themedark = true,
-    this.systemNavigationBarColor,this.NavigationBarthemedark=false,
+    this.systemNavigationBarColor,
+    this.navigationBarthemedark = false,
   }) : super(key: key);
 
   @override
@@ -30,20 +28,19 @@ class SafeAreaContainerState extends State<SafeAreaContainer> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-          statusBarColor:
-              widget.statusBarColor ?? AppColor.kStatusBarPrimaryColor.value,
+          statusBarColor: widget.statusBarColor ?? Colors.white,
           statusBarBrightness:
               widget.themedark ? Brightness.dark : Brightness.light,
           statusBarIconBrightness:
               widget.themedark ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: widget.NavigationBarthemedark ==true
-              ? widget.systemNavigationBarColor ??
-              Colors
-                  .black:widget.systemNavigationBarColor ??
-                  AppColor.kBackGroundColor.value,
-               // Set the background color of the navigation bar
+          systemNavigationBarColor: widget.navigationBarthemedark == true
+              ? widget.systemNavigationBarColor ?? Colors.black
+              : widget.systemNavigationBarColor ?? Colors.white,
+          // Set the background color of the navigation bar
           systemNavigationBarIconBrightness:
-              widget.NavigationBarthemedark ==true? Brightness.light : Brightness.dark,
+              widget.navigationBarthemedark == true
+                  ? Brightness.light
+                  : Brightness.dark,
         ),
         child: widget.child);
   }

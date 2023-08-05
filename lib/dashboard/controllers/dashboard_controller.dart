@@ -4,6 +4,7 @@ import 'package:rsl_supervisor/routes/app_routes.dart';
 
 import '../../utils/helpers/basic_utils.dart';
 import '../data/dashboard_api_data.dart';
+import '../data/shift_in_api_data.dart';
 import '../service/dashboard_service.dart';
 
 class DashBoardController extends GetxController {
@@ -18,6 +19,7 @@ class DashBoardController extends GetxController {
   void onInit() {
     super.onInit();
     _callDashboardApi();
+    _callShiftInApi("1");
   }
 
   void _callDashboardApi() async {
@@ -46,8 +48,22 @@ class DashBoardController extends GetxController {
     });
   }
 
+  void _callShiftInApi(String type) async {
+    shiftInApi(ShiftInRequest(
+      kioskId: "187",
+      supervisorId: "126",
+      cid: "7",
+      type: type,
+    )).then((response) {
+      printLogs("Shift in message: ${response.message ?? ""}");
+    }).onError((error, stackTrace) {
+      printLogs("Shift in error: ${error.toString()}");
+    });
+  }
+
   shiftInOutAction(bool newValue) {
     isShiftIn.value = newValue;
+    _callShiftInApi(newValue ? "1" : "2");
   }
 
   customDropAction(bool newValue) {

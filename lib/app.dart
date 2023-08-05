@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/utils/helpers/getx_storage.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'controllers/app_start_controller.dart';
+import 'views/login_page.dart';
 
 class AppStart extends StatelessWidget {
   const AppStart({super.key});
@@ -20,7 +21,7 @@ class AppStart extends StatelessWidget {
           if (snapshot.data?.status == 1) {
             return const DashboardPage();
           } else if (snapshot.data?.status == 2) {
-            return const DashboardPage();
+            return const LoginPage();
           }
           return const SizedBox.shrink();
         } else {

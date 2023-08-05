@@ -1,9 +1,13 @@
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-
 class GetStorageController extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    saveNodeUrl(url: 'https://ridenodeauth.limor.us/passenger/');
+  }
+
   final storage = GetStorage();
 
   void saveTokenData({required String value}) {
@@ -11,7 +15,7 @@ class GetStorageController extends GetxController {
   }
 
   Future<String> getTokenData() async {
-   final  token= await storage.read("token")??"";
+    final token = await storage.read("token") ?? "";
     return token;
   }
 
@@ -35,5 +39,13 @@ class GetStorageController extends GetxController {
   void setEmptyUserInfo() {
     storage.write("userInfo", "");
     storage.write("userId", "");
+  }
+
+  void saveNodeUrl({required String url}) {
+    storage.write("node_url", url);
+  }
+
+  Future<String> getNodeUrl() async {
+    return await storage.read("node_url") ?? "";
   }
 }

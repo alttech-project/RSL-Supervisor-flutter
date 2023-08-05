@@ -6,7 +6,9 @@ import '../utils/helpers/basic_utils.dart';
 import '../utils/helpers/getx_storage.dart';
 
 class SideMenuController extends GetxController {
-  HomeController dashController = Get.find<HomeController>();
+  late final HomeController _dashController = Get.find<HomeController>();
+  late final _storageController = Get.find<GetStorageController>();
+
   Rx<String?> userId = ''.obs;
   var appVersion = ''.obs;
   var appBuildNumber = ''.obs;
@@ -19,19 +21,19 @@ class SideMenuController extends GetxController {
   }
 
   getUserInfo() async {
-    userId.value = await GetStorageController().getUserId();
+    userId.value = await _storageController.getUserId();
     printLogs("hiSabari UserInfo called in side  ID ${userId.value}");
     return;
   }
 
   void logout() {
-    dashController.viewEnable.value = false;
-    GetStorageController().setEmptyUserInfo();
+    _dashController.viewEnable.value = false;
+    _storageController.setEmptyUserInfo();
     getUserInfo();
   }
 
   void hideMenu() {
-    dashController.viewEnable.value = false;
+    _dashController.viewEnable.value = false;
   }
 
   void _getAppInfo() async {

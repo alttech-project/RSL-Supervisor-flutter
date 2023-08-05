@@ -13,46 +13,55 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kBlack.value,
-      extendBodyBehindAppBar: true,
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: SafeAreaContainer(
-          statusBarColor: AppColors.kBlack.value,
-          systemNavigationBarColor: AppColors.kBlack.value,
-          navigationBarthemedark: false,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Obx(
-                () => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 600),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                  child: controller.showEmailInput.value
-                      ? _buildEmailInput()
-                      : _buildOtpInput(),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.onBackPressed();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.kBlack.value,
+        extendBodyBehindAppBar: true,
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          child: SafeAreaContainer(
+            statusBarColor: AppColors.kBlack.value,
+            systemNavigationBarColor: AppColors.kBlack.value,
+            navigationBarthemedark: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Obx(
+                  () => AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 600),
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    child: controller.showEmailInput.value
+                        ? _buildEmailInput()
+                        : _buildOtpInput(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.h),
-              CustomButton(
-                width: double.maxFinite,
-                linearColor: primaryButtonLinearColor,
-                height: 35.h,
-                borderRadius: 25.r,
-                style: TextStyle(color: AppColors.kSecondaryTextColor.value),
-                text: controller.showEmailInput.value ? 'Continue' : 'Login',
-                onTap: () {
-                  controller.toggleShowEmailInput();
-                },
-              ),
-            ],
+                SizedBox(height: 20.h),
+                Obx(
+                  () => CustomButton(
+                    width: double.maxFinite,
+                    linearColor: primaryButtonLinearColor,
+                    height: 35.h,
+                    borderRadius: 25.r,
+                    isLoader: controller.apiLoading.value,
+                    style:
+                        TextStyle(color: AppColors.kSecondaryTextColor.value),
+                    text:
+                        controller.showEmailInput.value ? 'Continue' : 'Login',
+                    onTap: () => controller.checkValidationAndCallApi(),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -79,16 +88,21 @@ class LoginPage extends GetView<LoginController> {
           style: const TextStyle(
             color: Colors.white, // Set the label text color here
             fontWeight:
-            FontWeight.bold, // Set the label text font weight here
+                FontWeight.normal, // Set the label text font weight here
           ),
+          keyboardType: TextInputType.emailAddress,
+          maxLines: 1,
+          cursorColor: AppColors.kPrimaryColor.value,
+          autofocus: false,
+          onFieldSubmitted: (value) => controller.checkValidationAndCallApi(),
           decoration: InputDecoration(
-            labelText: 'Email',
+            labelText: 'Email/Phone',
             labelStyle: const TextStyle(
-              color: Colors.white, // Set the label text color here
+              color: Colors.white70, // Set the label text color here
               fontWeight:
                   FontWeight.bold, // Set the label text font weight here
             ),
-            hintText: 'Enter your email here',
+            hintText: 'Enter your email/phone here',
             hintStyle: TextStyle(
               color: Colors.white.withOpacity(0.6),
               fontSize: 12,
@@ -105,6 +119,7 @@ class LoginPage extends GetView<LoginController> {
               borderSide: BorderSide(
                   color: Colors.white), // Set the focused border color here
             ),
+            focusColor: Colors.white60,
           ),
         ),
       ],

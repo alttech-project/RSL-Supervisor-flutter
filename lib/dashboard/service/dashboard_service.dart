@@ -1,27 +1,29 @@
-import 'package:get/get_instance/src/get_instance.dart';
+import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/data/shift_in_api_data.dart';
 
 import '../../network/services.dart';
+import '../../utils/helpers/getx_storage.dart';
 import '../data/dashboard_api_data.dart';
 
-final ApiProvider apiProvider = GetInstance().find<ApiProvider>();
+final ApiProvider _apiProvider = Get.find<ApiProvider>();
+final _storageController = Get.find<GetStorageController>();
 
 Future<DasboardApiResponse> dashboardApi(DasboardApiRequest requestData) async {
-  final response = await apiProvider.postApiCall(
-      resource: Resource(
-        url: 'https://ridenodeauth.limor.us/passenger/dashboard',
-        request: dashboardApiRequestToJson(requestData),
-      ),
-      key: "Dashboard Api");
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${await _storageController.getNodeUrl()}dashboard',
+      request: dashboardApiRequestToJson(requestData),
+    ),
+  );
   return dashboardApiResponseFromJson(response);
 }
 
 Future<ShiftInResponse> shiftInApi(ShiftInRequest requestData) async {
-  final response = await apiProvider.postApiCall(
-      resource: Resource(
-        url: 'https://ridenodeauth.limor.us/passenger/shiftTime',
-        request: shiftInApiRequestToJson(requestData),
-      ),
-      key: "Shift in");
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${await _storageController.getNodeUrl()}shiftTime',
+      request: shiftInApiRequestToJson(requestData),
+    ),
+  );
   return shiftInApiResponseFromJson(response);
 }

@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-import '../../supporting_classes/app_color.dart';
-import '../../supporting_classes/app_font.dart';
+import '../../shared/styles/app_color.dart';
+import '../../shared/styles/app_font.dart';
 import '../../utils/assets/assets.dart';
 import '../controllers/dashboard_controller.dart';
 
@@ -19,12 +19,15 @@ class DashboardAppBar extends GetView<DashBoardController> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: Icon(
-                Icons.menu,
-                size: 25.sp,
-                color: AppColors.kPrimaryColor.value,
+            InkWell(
+              onTap: () => controller.logout(),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Icon(
+                  Icons.menu,
+                  size: 25.sp,
+                  color: AppColors.kPrimaryColor.value,
+                ),
               ),
             ),
             const Spacer(),

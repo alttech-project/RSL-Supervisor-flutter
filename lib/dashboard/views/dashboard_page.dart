@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/dashboard/widgets/drop_search_bar.dart';
 import 'package:rsl_supervisor/dashboard/widgets/dropoff_list_widget.dart';
-import 'package:rsl_supervisor/supporting_classes/app_color.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
 
-import '../../supporting_classes/app_font.dart';
+import '../../shared/styles/app_font.dart';
 import '../widgets/dashboard_appbar.dart';
 
 class DashboardPage extends GetView<DashBoardController> {
@@ -24,21 +24,26 @@ class DashboardPage extends GetView<DashBoardController> {
             child: Column(
               children: [
                 const DashboardAppBar(),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.h),
-                  child: Text(
-                    "Tidel Park Coimbatore - 2",
-                    style: AppFontStyle.subHeading(
-                      color: AppColors.kPrimaryColor.value,
+                Obx(
+                  () => Padding(
+                    padding: EdgeInsets.only(top: 10.h),
+                    child: Text(
+                      controller.supervisorInfo.value.kioskAddress ?? "",
+                      maxLines: 3,
+                      style: AppFontStyle.subHeading(
+                        color: AppColors.kPrimaryColor.value,
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.h),
-                  child: Text(
-                    "RSL Test",
-                    style: AppFontStyle.subHeading(
-                      color: AppColors.kPrimaryColor.value,
+                Obx(
+                  () => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Text(
+                      controller.supervisorInfo.value.kioskName ?? "",
+                      style: AppFontStyle.subHeading(
+                        color: AppColors.kPrimaryColor.value,
+                      ),
                     ),
                   ),
                 ),

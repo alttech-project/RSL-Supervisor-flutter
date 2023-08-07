@@ -4,7 +4,7 @@ import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 
 import '../controllers/app_start_controller.dart';
-import '../controllers/login_controller.dart';
+import '../login/controller/login_controller.dart';
 import '../network/services.dart';
 import '../utils/helpers/getx_storage.dart';
 

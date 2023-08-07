@@ -1,25 +1,5 @@
 import 'package:flutter/material.dart';
 
-/*enum AppColors { kPrimaryColor, kBlack, kWhite, kSecondaryTextColor }
-
-extension AppColorHelper on AppColors {
-  Color get value {
-    switch (this) {
-      case AppColors.kPrimaryColor:
-        return const Color(0xff7ac5c0);
-
-      case AppColors.kBlack:
-        return const Color(0xff000000);
-
-      case AppColors.kWhite:
-        return const Color(0xffffffff);
-
-      default:
-        return const Color(0xFF212B36);
-    }
-  }
-}*/
-
 enum AppColors {
   kStatusBarPrimaryColor,
   kBackButtonColor,
@@ -53,7 +33,8 @@ enum AppColors {
   kImageBackgroundColor,
   kBackgroundColorNew,
   kGetSnackBarColor,
-  kWhite
+  kWhite,
+  kOtpFieldColor
 }
 
 extension AppColorHelper on AppColors {
@@ -94,35 +75,52 @@ extension AppColorHelper on AppColors {
 
       case AppColors.kPrimaryButtonBackGround:
         return const Color(0xff7AC6BF);
+
       case AppColors.kloader:
         return const Color(0xFF36B37E);
+
       case AppColors.kContainerBorder:
         return const Color(0xff7AC6BF);
+
       case AppColors.kSecondaryContainerBorder:
         return const Color(0xFFC5C5C5);
+
       case AppColors.kHeadbackgroundColor:
         return const Color(0xFF000000).withOpacity(0.08);
+
       case AppColors.kLightPrimary:
         return const Color(0xFFedf0ee);
 
       case AppColors.kPrimaryColor:
         return const Color(0xFF7AC6BF);
+
       case AppColors.kIndicatorColor:
         return const Color(0xFFCDE5A5);
+
       case AppColors.kIconSecondaryColor:
         return const Color(0xFF7AC6BF);
+
       case AppColors.kPrimaryIconColor:
         return Colors.black;
+
       case AppColors.kWhiteIconColor:
         return Colors.white;
+
       case AppColors.kBlack:
         return Colors.black;
+
       case AppColors.kImageBackgroundColor:
         return Colors.black12;
+
       case AppColors.kBackgroundColorNew:
         return const Color(0xFFF5F5F5);
+
+      case AppColors.kOtpFieldColor:
+        return const Color(0xFF203428);
+
       case AppColors.kGetSnackBarColor:
         return const Color(0xFFF5F5F5).withOpacity(0.90);
+
       default:
         return const Color(0xFF212B36);
     }
@@ -158,7 +156,7 @@ LinearGradient? redLinearColor = const LinearGradient(
 
 LinearGradient? primaryBackGroundColorLinearColor = LinearGradient(
   transform: const GradientRotation(1.59), // Convert 90.82 degrees to radians
-  stops: [-0.0966, 0.9719],
+  stops: const [-0.0966, 0.9719],
   colors: [
     const Color(0xFF50B2A9),
     const Color(0xFF8AD4CD).withOpacity(0.1),

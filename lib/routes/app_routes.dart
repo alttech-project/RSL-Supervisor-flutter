@@ -4,7 +4,7 @@ import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 
 import '../place_search/views/place_search_view.dart';
-import '../views/login_page.dart';
+import '../login/view/login_page.dart';
 
 class AppRoutes {
   static const home = '/';

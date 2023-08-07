@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-import '../../common_widgets/app_textfields.dart';
-import '../../supporting_classes/app_color.dart';
-import '../../supporting_classes/app_font.dart';
+import '../../widgets/app_textfields.dart';
+import '../../shared/styles/app_color.dart';
+import '../../shared/styles/app_font.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DropSearchBar extends GetView<DashBoardController> {

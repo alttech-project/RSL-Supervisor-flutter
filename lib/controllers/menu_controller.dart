@@ -21,14 +21,14 @@ class SideMenuController extends GetxController {
   }
 
   getUserInfo() async {
-    userId.value = await _storageController.getUserId();
+    userId.value = await _storageController.getSupervisorId();
     printLogs("hiSabari UserInfo called in side  ID ${userId.value}");
     return;
   }
 
   void logout() {
     _dashController.viewEnable.value = false;
-    _storageController.setEmptyUserInfo();
+    _storageController.removeSupervisorInfo();
     getUserInfo();
   }
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
 import '../../utils/helpers/basic_utils.dart';
+import '../../utils/helpers/getx_storage.dart';
 import '../data/dashboard_api_data.dart';
 import '../data/shift_in_api_data.dart';
 import '../service/dashboard_service.dart';
@@ -15,27 +16,38 @@ class DashBoardController extends GetxController {
   RxList<DropOffList> dropSearchList = <DropOffList>[].obs;
   RxString searchTxt = "".obs;
   RxString noDropOffDataMsg = "No Dropoff found".obs;
+  final GetStorageController _storageController =
+      Get.find<GetStorageController>();
+
+  Rx<SupervisorInfo> supervisorInfo = SupervisorInfo().obs;
+  var deviceToken = "";
   @override
   void onInit() {
     super.onInit();
-    _callDashboardApi();
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    supervisorInfo.value = await _storageController.getSupervisorInfo();
+    deviceToken = await _storageController.getDeviceToken();
     _callShiftInApi("1");
+    _callDashboardApi();
   }
 
   void _callDashboardApi() async {
     dashboardApi(DasboardApiRequest(
-      kioskId: "187",
-      supervisorId: "126",
-      cid: "7",
-      deviceToken:
-          "dJsfk-hJS6izKJRqBd-9vI:APA91bEhxZRzH2ThZiHMXZPm9OEQh7PBhzrwjNYjsJYRBJ2kYy3xX5BbiNbc-MOwiRDR9zrIWikhD6fRBnedi4yUVXQXHUMAyTTzTxNw_PEnJClgzwqEeTaJhVFWSHsWJtejctcTUBSm",
+      kioskId: supervisorInfo.value.kioskId,
+      supervisorId: supervisorInfo.value.supervisorId,
+      cid: supervisorInfo.value.cid,
+      deviceToken: deviceToken,
     )).then((response) {
       if ((response.status ?? 0) == 1) {
         dropList = response.dropOffList ?? [];
         dropSearchList.value = response.dropOffList ?? [];
         dropSearchList.refresh();
+        noDropOffDataMsg.value = response.message ?? "";
       } else {
-        noDropOffDataMsg.value = "No Dropoff found";
+        noDropOffDataMsg.value = response.message ?? "No Dropoff found";
         dropList = [];
         dropSearchList.value = [];
         dropSearchList.refresh();
@@ -50,9 +62,9 @@ class DashBoardController extends GetxController {
 
   void _callShiftInApi(String type) async {
     shiftInApi(ShiftInRequest(
-      kioskId: "187",
-      supervisorId: "126",
-      cid: "7",
+      kioskId: supervisorInfo.value.kioskId,
+      supervisorId: supervisorInfo.value.supervisorId,
+      cid: supervisorInfo.value.cid,
       type: type,
     )).then((response) {
       printLogs("Shift in message: ${response.message ?? ""}");
@@ -73,8 +85,6 @@ class DashBoardController extends GetxController {
       searchController.value.text = "";
       searchTxt.value = "";
       FocusManager.instance.primaryFocus?.unfocus();
-      noDropOffDataMsg.value =
-          "Please search any drop off location in the search option above.";
       dropSearchList.value = [];
       dropSearchList.refresh();
     } else {
@@ -99,5 +109,10 @@ class DashBoardController extends GetxController {
 
   moveToPlaceSeaerch() {
     Get.toNamed(AppRoutes.placeSearchPage);
+  }
+
+  logout() {
+    _storageController.removeSupervisorInfo();
+    Get.offNamed(AppRoutes.loginPage);
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 
-import '../../supporting_classes/app_color.dart';
-import '../../supporting_classes/app_font.dart';
+import '../../shared/styles/app_color.dart';
+import '../../shared/styles/app_font.dart';
 
 class PlaceSearchBar extends GetView<PlaceSearchController> {
   const PlaceSearchBar({Key? key}) : super(key: key);

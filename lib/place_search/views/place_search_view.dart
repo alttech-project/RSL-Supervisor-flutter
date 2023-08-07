@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
-import 'package:rsl_supervisor/supporting_classes/app_font.dart';
+import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
 import '../widgets/place_search_bar.dart';
 

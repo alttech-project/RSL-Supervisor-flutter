@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
+import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/network/app_config.dart';
 
 import '../../network/services.dart';
@@ -15,4 +17,26 @@ Future<VerifyUserNameResponseData> verifyUserNameApi(
     ),
   );
   return verifyUserNameResponseFromJson(response);
+}
+
+Future<VerifyOtpResponse> verifyOtpApi(VerifyOtpRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url:
+          '${AppConfig.webBaseUrl}login_with_temporary_password_supervisor_new',
+      request: verifyOtpRequestToJson(requestData),
+    ),
+  );
+  return verifyOtpResponseFromJson(response);
+}
+
+Future<AssignSupervisorResponse> assignSupervisorApi(
+    AssignSupervisorRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${AppConfig.webBaseUrl}assign_acting_supervisor_new',
+      request: assignSupervisorRequestToJson(requestData),
+    ),
+  );
+  return assignSupervisorResponseFromJson(response);
 }

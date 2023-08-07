@@ -1,12 +1,6 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import '../utils/helpers/basic_utils.dart';
 import '../utils/helpers/getx_storage.dart';
-
-enum AppBaseUrls {
-  kWebDemo,
-  kBackButtonColor,
-}
 
 class ApiProvider extends GetConnect {
   final GetStorageController controller = Get.find<GetStorageController>();
@@ -42,9 +36,9 @@ class ApiProvider extends GetConnect {
 
   Future<String> httpRequest(
       {RequestType requestType = RequestType.kPost,
-        required Resource resource,
-        bool encryptParams = true,
-        bool decryptResponse = false}) async {
+      required Resource resource,
+      bool encryptParams = true,
+      bool decryptResponse = false}) async {
     printLogs("Request Url : ${resource.url}");
     printLogs("Request Data : ${resource.request}");
     switch (requestType) {
@@ -68,29 +62,6 @@ class ApiProvider extends GetConnect {
     }
   }
 }
-
-/*class ApiProvider extends GetConnect {
-  final GetStorageController controller = Get.find<GetStorageController>();
-
-  Future<String> postApiCall(
-      {required Resource resource, required String key}) async {
-    printLogs("$key Url : ${resource.url}");
-    printLogs("$key Request : ${resource.request}");
-    Response response = await post(
-      resource.url,
-      resource.request,
-    );
-    printLogs("$key Response : ${json.encode(response.body)}");
-    return json.encode(response.body);
-  }
-
-  Future<String> getApiCall({required String url, required String key}) async {
-    printLogs("$key Url : $url");
-    Response response = await get(url);
-    printLogs("$key Response : ${json.encode(response.body)}");
-    return json.encode(response.body);
-  }
-}*/
 
 class Resource<T> {
   final String url;

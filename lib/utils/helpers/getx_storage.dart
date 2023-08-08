@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 
 import '../../network/app_config.dart';
 
@@ -7,112 +10,36 @@ class GetStorageController extends GetxController {
   final storage = GetStorage();
 
   void saveTokenData({required String value}) {
-    storage.write("token", value);
+    storage.write(StorageKeys.accessToken, value);
   }
 
   Future<String> getTokenData() async {
-    final token = await storage.read("token") ?? "";
+    final token = await storage.read(StorageKeys.accessToken) ?? "";
     return token;
   }
 
   void removeTokeData() {
-    storage.remove("token");
-  }
-
-  void saveSupervisorId({required String value}) {
-    storage.write(StorageKeys.supervisorId, value);
-  }
-
-  Future<String> getSupervisorId() async {
-    final supervisorId = await storage.read(StorageKeys.supervisorId) ?? "";
-    return supervisorId;
-  }
-
-  void saveCompanyId({required String value}) {
-    storage.write(StorageKeys.companyId, value);
-  }
-
-  Future<String> getCompanyId() async {
-    final companyId = await storage.read(StorageKeys.companyId) ?? "";
-    return companyId;
-  }
-
-  void saveKioskId({required String value}) {
-    storage.write(StorageKeys.kioskId, value);
-  }
-
-  Future<String> getKioskId() async {
-    final kioskId = await storage.read(StorageKeys.kioskId) ?? "";
-    return kioskId;
-  }
-
-  void saveKioskAddress({required String value}) {
-    storage.write(StorageKeys.kioskAddress, value);
-  }
-
-  Future<String> getKioskAddress() async {
-    final kioskAddress = await storage.read(StorageKeys.kioskAddress) ?? "";
-    return kioskAddress;
-  }
-
-  void saveKioskName({required String value}) {
-    storage.write(StorageKeys.kioskName, value);
-  }
-
-  Future<String> getKioskName() async {
-    final kioskAddress = await storage.read(StorageKeys.kioskName) ?? "";
-    return kioskAddress;
-  }
-
-  void savePhone({required String value}) {
-    storage.write(StorageKeys.phoneNumber, value);
-  }
-
-  Future<String> getPhone() async {
-    final phoneNumber = await storage.read(StorageKeys.phoneNumber) ?? "";
-    return phoneNumber;
+    storage.write(StorageKeys.accessToken, "");
   }
 
   Future<SupervisorInfo> getSupervisorInfo() async {
-    final phoneNumber =
-        await storage.read(StorageKeys.supervisorInfo) ?? SupervisorInfo();
-    return phoneNumber;
+    final supervisorInfoStr = await storage.read(StorageKeys.supervisorInfo) ??
+        _supervisorInfoToJson(SupervisorInfo());
+    printLogs("getSupervisorInfo $supervisorInfoStr");
+
+    return _supervisorInfoFromJson(supervisorInfoStr);
   }
 
   void removeSupervisorInfo() {
-    storage.write(StorageKeys.supervisorId, "");
-    storage.write(StorageKeys.companyId, "");
-    storage.write(StorageKeys.kioskId, "");
-    storage.write(StorageKeys.kioskAddress, "");
-    storage.write(StorageKeys.kioskName, "");
-    storage.write(StorageKeys.phoneNumber, "");
-    storage.write(StorageKeys.supervisorInfo, SupervisorInfo());
+    storage.write(
+        StorageKeys.supervisorInfo, _supervisorInfoToJson(SupervisorInfo()));
   }
 
-  void saveSupervisorInfo({
-    required String supervisorId,
-    required String companyId,
-    required String kioskId,
-    required String kioskAddress,
-    required String kioskName,
-    required String phoneNumber,
-  }) {
-    storage.write(StorageKeys.supervisorId, supervisorId);
-    storage.write(StorageKeys.companyId, companyId);
-    storage.write(StorageKeys.kioskId, kioskId);
-    storage.write(StorageKeys.kioskAddress, kioskAddress);
-    storage.write(StorageKeys.phoneNumber, phoneNumber);
-    storage.write(StorageKeys.kioskName, kioskName);
+  void saveSupervisorInfo({required SupervisorInfo supervisorInfo}) {
+    printLogs("saveSupervisorInfo : ${_supervisorInfoToJson(supervisorInfo)}");
     storage.write(
       StorageKeys.supervisorInfo,
-      SupervisorInfo(
-        supervisorId: supervisorId,
-        cid: companyId,
-        kioskId: kioskId,
-        kioskAddress: kioskAddress,
-        kioskName: kioskName,
-        phoneNumber: phoneNumber,
-      ),
+      _supervisorInfoToJson(supervisorInfo),
     );
   }
 
@@ -138,6 +65,8 @@ class GetStorageController extends GetxController {
 class SupervisorInfo {
   String? kioskId;
   String? supervisorId;
+  String? supervisorName;
+  String? supervisorUniqueId;
   String? cid;
   String? kioskAddress;
   String? kioskName;
@@ -146,20 +75,51 @@ class SupervisorInfo {
   SupervisorInfo({
     this.kioskId = "",
     this.supervisorId = "",
+    this.supervisorName = "",
+    this.supervisorUniqueId = "",
     this.cid = "",
     this.kioskName = "",
     this.kioskAddress = "",
     this.phoneNumber = "",
   });
+
+  SupervisorInfo.fromJson(Map<String, dynamic> json) {
+    kioskId = json['kioskId'] ?? "";
+    supervisorId = json['supervisorId'] ?? "";
+    supervisorName = json['supervisorName'] ?? "";
+    supervisorUniqueId = json['supervisorUniqueId'] ?? "";
+    cid = json['cid'] ?? "";
+    kioskName = json['kioskName'] ?? "";
+    kioskAddress = json['kioskAddress'] ?? "";
+    phoneNumber = json['phoneNumber'] ?? "";
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['kioskId'] = kioskId;
+    data['supervisorId'] = supervisorId;
+    data['supervisorName'] = supervisorName;
+    data['supervisorUniqueId'] = supervisorUniqueId;
+    data['cid'] = cid;
+    data['kioskName'] = kioskName;
+    data['kioskAddress'] = kioskAddress;
+    data['phoneNumber'] = phoneNumber;
+    return data;
+  }
+}
+
+SupervisorInfo _supervisorInfoFromJson(String str) {
+  final jsonData = json.decode(str);
+  return SupervisorInfo.fromJson(jsonData);
+}
+
+String _supervisorInfoToJson(SupervisorInfo data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
 }
 
 class StorageKeys {
-  static const String supervisorId = 'supervisorId';
-  static const String companyId = 'companyId';
-  static const String kioskId = 'kioskId';
-  static const String kioskAddress = 'kioskAddress';
-  static const String kioskName = 'kioskName';
-  static const String phoneNumber = 'phoneNumber';
+  static const String accessToken = 'accessToken';
   static const String supervisorInfo = 'supervisorInfo';
   static const String deviceToken = 'deviceToken';
   static const String nodeUrl = 'nodeUrl';

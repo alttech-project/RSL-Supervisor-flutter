@@ -52,7 +52,7 @@ class VerifyOtpResponse {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['message'] = message;
     data['status'] = status;
-    if (this.detail != null) {
+    if (detail != null) {
       data['detail'] = detail!.toJson();
     }
     data['auth_key'] = authKey;
@@ -91,7 +91,7 @@ class Detail {
     if (json['kiosk_list'] != null) {
       kioskList = <KioskList>[];
       json['kiosk_list'].forEach((v) {
-        kioskList!.add(new KioskList.fromJson(v));
+        kioskList!.add(KioskList.fromJson(v));
       });
     }
   }
@@ -105,7 +105,7 @@ class Detail {
     data['unique_id'] = uniqueId;
     data['phone'] = phone;
     data['company_id'] = companyId;
-    if (this.kioskList != null) {
+    if (kioskList != null) {
       data['kiosk_list'] = kioskList!.map((v) => v.toJson()).toList();
     }
     return data;

@@ -59,11 +59,12 @@ class VerifyOTPWidget extends GetView<LoginController> {
           ),
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Didn't receive code? ",
                 style: AppFontStyle.body(color: Colors.white)),
             InkWell(
-              onTap: () {},
+              onTap: () => controller.callResendOtpApi(),
               child: Text(
                 "Request again",
                 style: AppFontStyle.body(color: AppColors.kPrimaryColor.value),

@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/dashboard/widgets/drop_search_bar.dart';
 import 'package:rsl_supervisor/dashboard/widgets/dropoff_list_widget.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
+import 'package:rsl_supervisor/dashboard/views/side_menu.dart';
 
 import '../../shared/styles/app_font.dart';
 import '../widgets/dashboard_appbar.dart';
@@ -15,8 +16,10 @@ class DashboardPage extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideMenuPage(),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
+      key: controller.scaffoldKey,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -28,7 +31,7 @@ class DashboardPage extends GetView<DashBoardController> {
                   () => Padding(
                     padding: EdgeInsets.only(top: 10.h),
                     child: Text(
-                      controller.supervisorInfo.value.kioskAddress ?? "",
+                      controller.supervisorInfo.value.kioskName ?? "",
                       maxLines: 3,
                       style: AppFontStyle.subHeading(
                         color: AppColors.kPrimaryColor.value,
@@ -40,7 +43,7 @@ class DashboardPage extends GetView<DashBoardController> {
                   () => Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: Text(
-                      controller.supervisorInfo.value.kioskName ?? "",
+                      controller.supervisorInfo.value.supervisorName ?? "",
                       style: AppFontStyle.subHeading(
                         color: AppColors.kPrimaryColor.value,
                       ),

@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/dashboard/data/shift_in_api_data.dart';
 
+import '../../network/app_config.dart';
 import '../../network/services.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../data/dashboard_api_data.dart';
@@ -26,4 +28,14 @@ Future<ShiftInResponse> shiftInApi(ShiftInRequest requestData) async {
     ),
   );
   return shiftInApiResponseFromJson(response);
+}
+
+Future<LogoutApiResponse> logoutApi(LogoutApiRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${AppConfig.webBaseUrl}unassign_acting_supervisor',
+      request: logoutApiRequestToJson(requestData),
+    ),
+  );
+  return logoutApiResponseFromJson(response);
 }

@@ -9,10 +9,10 @@ class VerifyUserNameRequestData {
 
   VerifyUserNameRequestData(
       {this.companyDomain,
-        this.companyMainDomain,
-        this.username,
-        this.cid,
-        this.deviceToken});
+      this.companyMainDomain,
+      this.username,
+      this.cid,
+      this.deviceToken});
 
   VerifyUserNameRequestData.fromJson(Map<String, dynamic> json) {
     companyDomain = json['company_domain'];

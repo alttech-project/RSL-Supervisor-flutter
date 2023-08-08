@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/utils/helpers/getx_storage.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'controllers/app_start_controller.dart';
@@ -11,9 +12,10 @@ class AppStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final storageController = Get.find<GetStorageController>();
     final appStartController = Get.find<AppStartController>();
     return FutureBuilder<Status>(
-      future: appStartController.checkLoginStatus(),
+      future: appStartController.checkLoginStatus(storageController),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data?.status == 1) {

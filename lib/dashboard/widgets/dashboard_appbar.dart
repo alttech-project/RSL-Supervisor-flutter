@@ -20,7 +20,7 @@ class DashboardAppBar extends GetView<DashBoardController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () => controller.logout(),
+              onTap: () => controller.openMenu(),
               child: Padding(
                 padding: EdgeInsets.only(top: 10.h),
                 child: Icon(

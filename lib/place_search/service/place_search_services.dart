@@ -8,11 +8,13 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 final _storageController = Get.find<GetStorageController>();
 
 Future<GetPlacesResponse> getPlacesApi(String text) async {
+  String url = await _storageController.getNodeUrl();
+  url = url.replaceAll('passnode', 'ridenode');
   final response = await _apiProvider.httpRequest(
     requestType: RequestType.kGet,
     resource: Resource(
       url:
-          '${await _storageController.getNodeUrl()}getPlaces?input=$text&region=IN%2C+AE&key=AIzaSyBqdu4G5XlM8aUzSA6Myult46AuZauvD8Q',
+          '${url}getPlaces?input=$text&region=IN%2C+AE&key=AIzaSyBqdu4G5XlM8aUzSA6Myult46AuZauvD8Q',
       request: '',
     ),
   );

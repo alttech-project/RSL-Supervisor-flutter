@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
+import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 
 import '../widgets/place_search_bar.dart';
 
@@ -11,57 +12,59 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          const PlaceSearchBar(),
-          const Divider(
-            height: 1,
-            color: Colors.grey,
-          ),
-          Obx(
-            () => ListView.builder(
-              itemCount: controller.predictionList.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              itemBuilder: (context, index) {
-                final prediction = controller.predictionList[index];
-                return InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            size: 22.sp,
-                            color: Colors.grey.shade800,
-                          ),
-                          Text(
-                            "  ${prediction.description ?? ''}",
+    return SafeAreaContainer(
+      themedark: false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            SizedBox(height: 6.h,),
+            const PlaceSearchBar(),
+            Obx(
+              () => ListView.separated(
+                itemCount: controller.predictionList.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 2.h),
+                itemBuilder: (context, index) {
+                  final prediction = controller.predictionList[index];
+                  return InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 16.sp,
+                          color: Colors.grey.withOpacity(0.7),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 16),
+                          child: Text(
+                            prediction.description ?? '',
                             style: AppFontStyle.body(
                               color: Colors.grey.shade800,
+                              size: AppFontSize.medium.value
                             ),
                           ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Divider(
-                          height: 0.8,
-                          color: Colors.grey,
                         ),
-                      )
-                    ],
-                  ),
-                );
+                      ],
+                    ),
+                  );
+                }, separatorBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 16.w),
+                    child: Divider(
+                      height: 0.8,
+                      thickness: 0.5,
+                      color: Colors.grey.withOpacity(0.7),
+                    ),
+                  );
               },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

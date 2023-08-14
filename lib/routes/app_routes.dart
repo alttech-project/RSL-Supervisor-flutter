@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 
 import '../place_search/views/place_search_view.dart';
 import '../login/view/login_page.dart';
@@ -11,6 +12,7 @@ class AppRoutes {
   static const loginPage = '/loginPage';
   static const dashboardPage = '/dashboardPage';
   static const placeSearchPage = '/placeSearchPage';
+  static const quickTripPage = '/quickTripPage';
 }
 
 List<GetPage> routes = [
@@ -31,6 +33,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.placeSearchPage,
     page: () => const PlaceSearchPage(),
+    binding: AppBind(),
+    transition: Transition.downToUp,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.quickTripPage,
+    page: () => const QuickTripPage(),
     binding: AppBind(),
     transition: Transition.downToUp,
     transitionDuration: const Duration(milliseconds: 200),

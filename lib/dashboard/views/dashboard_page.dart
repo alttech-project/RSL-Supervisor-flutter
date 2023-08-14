@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/dashboard/widgets/drop_search_bar.dart';
-import 'package:rsl_supervisor/dashboard/widgets/dropoff_list_widget.dart';
+import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/dashboard/views/side_menu.dart';
 
 import '../../shared/styles/app_font.dart';
+import '../../widgets/safe_area_container.dart';
 import '../widgets/dashboard_appbar.dart';
 
 class DashboardPage extends GetView<DashBoardController> {
@@ -15,14 +16,16 @@ class DashboardPage extends GetView<DashBoardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const SideMenuPage(),
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.black,
-      key: controller.scaffoldKey,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
+    return SafeAreaContainer(
+      statusBarColor: Colors.black,
+      themedark: true,
+      child: Scaffold(
+        drawer: const SideMenuPage(),
+        extendBodyBehindAppBar: false,
+        backgroundColor: Colors.black,
+        key: controller.scaffoldKey,
+        body: Padding(
+          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 24.h,),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -78,7 +81,7 @@ class DashboardPage extends GetView<DashBoardController> {
                   ],
                 ),
                 const DropSearchBar(),
-                const DropoffListWidget(),
+                const LocationsListWidget(),
               ],
             ),
           ),

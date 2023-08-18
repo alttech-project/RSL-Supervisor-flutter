@@ -40,7 +40,7 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
           ),
         ),
         InkWell(
-          onTap: () => {},
+          onTap: () => controller.navigateToScannerAndFetch(),
           child: Padding(
             padding: EdgeInsets.all(8.h),
             child: Icon(

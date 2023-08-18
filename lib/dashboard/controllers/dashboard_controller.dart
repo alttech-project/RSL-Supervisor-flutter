@@ -20,7 +20,7 @@ class DashBoardController extends GetxController {
   List<DropOffList> dropList = <DropOffList>[].obs;
   RxList<DropOffList> dropSearchList = <DropOffList>[].obs;
   RxString searchTxt = "".obs;
-  RxString noDropOffDataMsg = "No Dropoff found".obs;
+  RxString noDropOffDataMsg = "No Drop-off found".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final LocationManager locationManager = LocationManager();
 
@@ -28,6 +28,7 @@ class DashBoardController extends GetxController {
   var deviceToken = "";
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
+  var apiLoading = false.obs;
 
   @override
   void onInit() {
@@ -44,12 +45,14 @@ class DashBoardController extends GetxController {
   }
 
   void _callDashboardApi() async {
+    apiLoading.value = true;
     dashboardApi(DasboardApiRequest(
       kioskId: supervisorInfo.value.kioskId,
       supervisorId: supervisorInfo.value.supervisorId,
       cid: supervisorInfo.value.cid,
       deviceToken: deviceToken,
     )).then((response) {
+      apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         dropList = response.dropOffList ?? [];
         dropSearchList.value = response.dropOffList ?? [];
@@ -62,6 +65,7 @@ class DashBoardController extends GetxController {
         dropSearchList.refresh();
       }
     }).onError((error, stackTrace) {
+      apiLoading.value = false;
       printLogs("Dashboard api error: ${error.toString()}");
       dropList = [];
       dropSearchList.value = [];

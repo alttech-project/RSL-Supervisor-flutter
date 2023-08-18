@@ -6,6 +6,7 @@ import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 
 import '../place_search/views/place_search_view.dart';
 import '../login/view/login_page.dart';
+import '../scanner/views/scanner_page.dart';
 
 class AppRoutes {
   static const home = '/';
@@ -13,6 +14,7 @@ class AppRoutes {
   static const dashboardPage = '/dashboardPage';
   static const placeSearchPage = '/placeSearchPage';
   static const quickTripPage = '/quickTripPage';
+  static const qrScannerPage = '/qrScannerPage';
 }
 
 List<GetPage> routes = [
@@ -40,6 +42,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.quickTripPage,
     page: () => const QuickTripPage(),
+    binding: AppBind(),
+    transition: Transition.downToUp,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.qrScannerPage,
+    page: () => const ScannerPage(),
     binding: AppBind(),
     transition: Transition.downToUp,
     transitionDuration: const Duration(milliseconds: 200),

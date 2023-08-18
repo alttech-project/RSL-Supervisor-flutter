@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
+import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 
+import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../widgets/place_search_bar.dart';
 
 class PlaceSearchPage extends GetView<PlaceSearchController> {
@@ -29,7 +31,13 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                   final prediction = controller.predictionList[index];
                   return InkWell(
                     onTap: () {
-                      Get.back();
+                      final QuickTripController controller = Get.find<QuickTripController>();
+                      controller
+                        ..dropLocationController.text = '${prediction.description}'
+                        ..dropLatitude = 0
+                        ..dropLongitude = 0
+                        ..fareController.text = '';
+                      Get.offAndToNamed(AppRoutes.quickTripPage);
                     },
                     child: Row(
                       children: [
@@ -38,13 +46,15 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                           size: 16.sp,
                           color: Colors.grey.withOpacity(0.7),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 16),
-                          child: Text(
-                            prediction.description ?? '',
-                            style: AppFontStyle.body(
-                              color: Colors.grey.shade800,
-                              size: AppFontSize.medium.value
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 16),
+                            child: Text(
+                              prediction.description ?? '',
+                              style: AppFontStyle.body(
+                                color: Colors.grey.shade800,
+                                size: AppFontSize.medium.value
+                              ),
                             ),
                           ),
                         ),

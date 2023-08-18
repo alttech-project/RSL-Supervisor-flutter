@@ -27,4 +27,6 @@ class AppConfig {
   static String get nodeUrl => nodeUrls[currentEnvironment]!;
 
   static String get companyId => companyIds[companyType]!;
+
+  static String get googleMapKey => 'AIzaSyBqdu4G5XlM8aUzSA6Myult46AuZauvD8Q';
 }

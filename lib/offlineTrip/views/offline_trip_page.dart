@@ -7,11 +7,11 @@ import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
-import '../controllers/quick_trip_controller.dart';
-import '../widgets/quick_trip_app_bar.dart';
+import '../controllers/offline_trip_controller.dart';
+import 'offline_trip_appbar.dart';
 
-class QuickTripPage extends GetView<QuickTripController> {
-  const QuickTripPage({super.key});
+class OfflineTripPage extends GetView<OfflineTripController> {
+  const OfflineTripPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class QuickTripPage extends GetView<QuickTripController> {
               ),
               child: Column(
                 children: [
-                  const QuickTripsAppBar(),
+                  const OfflineTripsAppBar(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: Form(
@@ -43,23 +43,22 @@ class QuickTripPage extends GetView<QuickTripController> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _tripIdWidget(),
+                          _taxiNoWidget(),
                           _dropLocationWidget(),
                           _labelAndTextFieldWidget('Fare', 'Fixed Fare',
                               'Enter Fixed Fare (Optional)',
                               txtEditingController: controller.fareController,
                               keyboardType: TextInputType.number),
+                          _labelAndTextFieldWidget(
+                            'Date',
+                            'Date',
+                            'Select Date',
+                            txtEditingController: controller.dateController,
+                            textInputAction: TextInputAction.done,
+                          ),
                           _nameWidget(),
                           _phoneNumberWidget(),
                           _emailIdWidget(),
-                          _labelAndTextFieldWidget(
-                            'Payment ID',
-                            'Payment ID',
-                            'Enter Payment ID (Optional)',
-                            txtEditingController:
-                                controller.paymentIdController,
-                            textInputAction: TextInputAction.done,
-                          ),
                           SizedBox(
                             height: 24.h,
                           ),
@@ -88,48 +87,14 @@ class QuickTripPage extends GetView<QuickTripController> {
     );
   }
 
-  Widget _labelAndTextFieldColumnWidget(
-      String fieldLabel, String label, String hint,
-      {Widget? suffix}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: Text(
-              fieldLabel,
-              style:
-                  AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 4.h,
-        ),
-        CapsuleTextField(
-          controller: controller.tripIdController,
-          hint: hint,
-          /*inputLblTxt: */ /*label*/ /*'',
-          keyboardType: TextInputType.text,
-          onSubmit: (value) {},*/
-          suffix: suffix,
-        ),
-        SizedBox(
-          height: 12.h,
-        ),
-      ],
-    );
-  }
-
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
       required TextEditingController txtEditingController,
       TextInputType keyboardType = TextInputType.text,
       TextInputAction textInputAction = TextInputAction.next,
       FormFieldValidator? validator,
-      bool readOnly = false, GestureTapCallback? onTap}) {
+      bool readOnly = false,
+      GestureTapCallback? onTap}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -145,6 +110,7 @@ class QuickTripPage extends GetView<QuickTripController> {
         suffix: suffix,
         validator: validator,
         readOnly: readOnly,
+        onTap: onTap,
       ),
     );
   }
@@ -204,7 +170,7 @@ class QuickTripPage extends GetView<QuickTripController> {
         'Drop Location', 'Drop Location', 'Enter Trip Id',
         txtEditingController: controller.dropLocationController,
         readOnly: true,
-        onTap: () => Get.back(),
+        onTap: () => controller.navigateToPlaceSearchPage(),
         suffix: IconButton(
           onPressed: () => controller.clearDropLocation(),
           icon: Icon(
@@ -212,22 +178,25 @@ class QuickTripPage extends GetView<QuickTripController> {
             size: 20.r,
             color: AppColors.kPrimaryColor.value,
           ),
-        ), validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please select a valid Drop Location!';
-      }
-      return null;
-    });
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please select a valid Drop Location!';
+          }
+          return null;
+        });
   }
 
-  Widget _tripIdWidget() {
+  Widget _taxiNoWidget() {
     return _labelAndTextFieldWidget(
-      'Trip Id',
-      'Trip Id',
-      'Enter Trip Id',
-      txtEditingController: controller.tripIdController,
+      'Car No',
+      'Car No',
+      'Enter Car No',
+      txtEditingController: controller.taxiNoController,
+      readOnly: true,
+      onTap: () => _showTaxiList(),
       suffix: IconButton(
-        onPressed: () => controller.clearTripId(),
+        onPressed: () => controller.clearTaxiNumber(),
         icon: Icon(
           Icons.clear_sharp,
           size: 20.r,
@@ -235,6 +204,46 @@ class QuickTripPage extends GetView<QuickTripController> {
         ),
       ),
       keyboardType: TextInputType.number,
+    );
+  }
+
+  _showTaxiList() {
+    /*Get.bottomSheet(
+    ,
+    barrierColor: Colors.red[50],
+    isDismissible: false,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(35),
+    side: const BorderSide(
+    width: 1,
+    color: Colors.black,
+    ),
+    ),
+    enableDrag: true,
+    backgroundColor: Colors.transparent,
+
+    );*/
+
+    showModalBottomSheet(
+      context: Get.context!,
+      builder: (context) {
+        return Container(
+          height: 150,
+          color: Colors.greenAccent,
+          child: ListView.separated(
+            itemCount: controller.taxiList.length,
+            itemBuilder: (context, index) {
+              final taxiData = controller.taxiList[index];
+              return Text('${taxiData.taxiNo}');
+            },
+            separatorBuilder: (context, index) => Divider(
+              color: Colors.grey.withOpacity(0.6),
+              thickness: 1,
+              height: 5,
+            ),
+          ),
+        );
+      },
     );
   }
 }

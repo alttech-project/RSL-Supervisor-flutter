@@ -5,6 +5,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
+import '../../place_search/data/get_place_details_response.dart';
+import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
@@ -120,8 +122,20 @@ class DashBoardController extends GetxController {
     dropSearchList.refresh();
   }
 
-  moveToPlaceSeaerch() {
-    Get.toNamed(AppRoutes.placeSearchPage);
+  void moveToPlaceSearch() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    if (result is PlaceDetails) {
+      final QuickTripController controller = Get.find<QuickTripController>();
+      controller
+        ..dropLocationController.text = '${result.formattedAddress}'
+        ..dropLatitude = result.geometry?.location?.lat ?? 0.0
+        ..dropLongitude = result.geometry?.location?.lng ?? 0.0
+        ..fareController.text = '';
+      Get.toNamed(AppRoutes.quickTripPage);
+    }
   }
 
   openMenu() {
@@ -133,6 +147,9 @@ class DashBoardController extends GetxController {
     switch (title) {
       case 'Logout':
         _callLogoutApi();
+        break;
+      case 'Offline Trips':
+        Get.toNamed(AppRoutes.offlineTripPage);
         break;
       default:
         break;

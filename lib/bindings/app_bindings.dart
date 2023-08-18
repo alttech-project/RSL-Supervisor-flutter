@@ -9,6 +9,7 @@ import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 import '../controllers/app_start_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
+import '../offlineTrip/controllers/offline_trip_controller.dart';
 import '../utils/helpers/getx_storage.dart';
 
 class AppBind extends Bindings {
@@ -23,5 +24,6 @@ class AppBind extends Bindings {
     Get.lazyPut<PlaceSearchController>(() => PlaceSearchController());
     Get.lazyPut<QuickTripController>(() => QuickTripController());
     Get.lazyPut<ScannerController>(() => ScannerController());
+    Get.lazyPut<OfflineTripController>(() => OfflineTripController());
   }
 }

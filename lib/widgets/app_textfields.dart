@@ -66,33 +66,35 @@ class UnderlinedTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final FormFieldValidator? validator;
   final bool readOnly;
+  final GestureTapCallback? onTap;
 
-  const UnderlinedTextField({
-    super.key,
-    required this.controller,
-    required this.hint,
-    required this.inputLblTxt,
-    this.onChanged,
-    this.isEnabled,
-    this.textStyle,
-    this.suffix,
-    this.keyboardType,
-    this.cursorColor,
-    this.onSubmit,
-    this.inputLblStyle,
-    this.hintStyle,
-    this.borderColor,
-    this.focusColor,
-    this.validator,
-    this.textInputAction = TextInputAction.done,
-    this.readOnly = false
-  });
+  const UnderlinedTextField(
+      {super.key,
+      required this.controller,
+      required this.hint,
+      required this.inputLblTxt,
+      this.onChanged,
+      this.isEnabled,
+      this.textStyle,
+      this.suffix,
+      this.keyboardType,
+      this.cursorColor,
+      this.onSubmit,
+      this.inputLblStyle,
+      this.hintStyle,
+      this.borderColor,
+      this.focusColor,
+      this.validator,
+      this.textInputAction = TextInputAction.done,
+      this.readOnly = false,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       style: textStyle ?? AppFontStyle.body(color: Colors.white),
+      onTap: onTap,
       keyboardType: keyboardType,
       maxLines: 1,
       cursorColor: cursorColor ?? AppColors.kPrimaryColor.value,
@@ -112,6 +114,7 @@ class UnderlinedTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.white70),
         ),
         focusColor: focusColor ?? Colors.white,
+        suffixIcon: suffix,
       ),
       textInputAction: textInputAction,
       validator: validator,

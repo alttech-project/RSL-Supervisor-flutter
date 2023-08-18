@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 
-import '../place_search/views/place_search_view.dart';
 import '../login/view/login_page.dart';
+import '../place_search/views/place_search_view.dart';
 import '../scanner/views/scanner_page.dart';
 
 class AppRoutes {
@@ -15,6 +16,7 @@ class AppRoutes {
   static const placeSearchPage = '/placeSearchPage';
   static const quickTripPage = '/quickTripPage';
   static const qrScannerPage = '/qrScannerPage';
+  static const offlineTripPage = '/offlineTripPage';
 }
 
 List<GetPage> routes = [
@@ -51,6 +53,13 @@ List<GetPage> routes = [
     page: () => const ScannerPage(),
     binding: AppBind(),
     transition: Transition.downToUp,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.offlineTripPage,
+    page: () => const OfflineTripPage(),
+    binding: AppBind(),
+    transition: Transition.leftToRightWithFade,
     transitionDuration: const Duration(milliseconds: 200),
   ),
 ];

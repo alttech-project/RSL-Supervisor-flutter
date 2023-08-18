@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class GetPlaceDetailsResponse {
-  Result? result;
+  PlaceDetails? result;
   String? status;
 
   GetPlaceDetailsResponse({this.result, this.status});
 
   GetPlaceDetailsResponse.fromJson(Map<String, dynamic> json) {
-    result = json['result'] != null ? Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? PlaceDetails.fromJson(json['result']) : null;
     status = json['status'];
   }
 
@@ -21,15 +21,15 @@ class GetPlaceDetailsResponse {
   }
 }
 
-class Result {
+class PlaceDetails {
   String? formattedAddress;
   Geometry? geometry;
   String? name;
   String? placeId;
 
-  Result({this.formattedAddress, this.geometry, this.name, this.placeId});
+  PlaceDetails({this.formattedAddress, this.geometry, this.name, this.placeId});
 
-  Result.fromJson(Map<String, dynamic> json) {
+  PlaceDetails.fromJson(Map<String, dynamic> json) {
     formattedAddress = json['formatted_address'];
     geometry =
         json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
@@ -56,7 +56,7 @@ class Geometry {
 
   Geometry.fromJson(Map<String, dynamic> json) {
     location = json['location'] != null
-        ? new Location.fromJson(json['location'])
+        ? Location.fromJson(json['location'])
         : null;
   }
 

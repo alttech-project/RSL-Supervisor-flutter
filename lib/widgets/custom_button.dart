@@ -19,20 +19,21 @@ class CustomButton extends StatelessWidget {
   final double? borderRadius;
   final LinearGradient? linearColor;
 
-  const CustomButton(
-      {super.key,
-      required this.text,
-      this.secondaryText,
-      this.onTap,
-      this.style,
-      this.secondaryTextStyle,
-      this.padding,
-      this.color,
-      this.height,
-      this.width,
-      this.borderRadius,
-      this.isLoader = false,
-      this.linearColor});
+  const CustomButton({
+    super.key,
+    required this.text,
+    this.secondaryText,
+    this.onTap,
+    this.style,
+    this.secondaryTextStyle,
+    this.padding,
+    this.color,
+    this.height,
+    this.width,
+    this.borderRadius,
+    this.isLoader = false,
+    this.linearColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class CustomButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "$text",
+                            text,
                             style: style ??
                                 TextStyle(
                                   color: AppColors.kSecondaryTextColor.value,
@@ -67,9 +68,9 @@ class CustomButton extends StatelessWidget {
                                   fontWeight: AppFontWeight.semibold.value,
                                 ),
                           ),
-                          if (secondaryText?.isNotEmpty ?? false) ...[
+                          if ((secondaryText ?? "").isNotEmpty) ...[
                             Text(
-                              "$secondaryText",
+                              secondaryText!,
                               style: secondaryTextStyle ??
                                   TextStyle(
                                     color: AppColors.kSecondaryTextColor.value,

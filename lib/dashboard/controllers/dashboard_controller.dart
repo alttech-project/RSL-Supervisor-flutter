@@ -5,7 +5,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
-import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
@@ -44,42 +43,54 @@ class DashBoardController extends GetxController {
   }
 
   void _callDashboardApi() async {
-    dashboardApi(DasboardApiRequest(
-      kioskId: supervisorInfo.value.kioskId,
-      supervisorId: supervisorInfo.value.supervisorId,
-      cid: supervisorInfo.value.cid,
-      deviceToken: deviceToken,
-    )).then((response) {
-      if ((response.status ?? 0) == 1) {
-        dropList = response.dropOffList ?? [];
-        dropSearchList.value = response.dropOffList ?? [];
-        dropSearchList.refresh();
-        noDropOffDataMsg.value = response.message ?? "";
-      } else {
-        noDropOffDataMsg.value = response.message ?? "No Dropoff found";
+    dashboardApi(
+      DasboardApiRequest(
+        kioskId: supervisorInfo.value.kioskId,
+        supervisorId: supervisorInfo.value.supervisorId,
+        cid: supervisorInfo.value.cid,
+        deviceToken: deviceToken,
+      ),
+    ).then(
+      (response) {
+        if ((response.status ?? 0) == 1) {
+          dropList = response.dropOffList ?? [];
+          dropSearchList.value = response.dropOffList ?? [];
+          dropSearchList.refresh();
+          noDropOffDataMsg.value = response.message ?? "";
+        } else {
+          noDropOffDataMsg.value = response.message ?? "No Dropoff found";
+          dropList = [];
+          dropSearchList.value = [];
+          dropSearchList.refresh();
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        printLogs("Dashboard api error: ${error.toString()}");
         dropList = [];
         dropSearchList.value = [];
         dropSearchList.refresh();
-      }
-    }).onError((error, stackTrace) {
-      printLogs("Dashboard api error: ${error.toString()}");
-      dropList = [];
-      dropSearchList.value = [];
-      dropSearchList.refresh();
-    });
+      },
+    );
   }
 
   void _callShiftInApi(String type) async {
-    shiftInApi(ShiftInRequest(
-      kioskId: supervisorInfo.value.kioskId,
-      supervisorId: supervisorInfo.value.supervisorId,
-      cid: supervisorInfo.value.cid,
-      type: type,
-    )).then((response) {
-      printLogs("Shift in message: ${response.message ?? ""}");
-    }).onError((error, stackTrace) {
-      printLogs("Shift in error: ${error.toString()}");
-    });
+    shiftInApi(
+      ShiftInRequest(
+        kioskId: supervisorInfo.value.kioskId,
+        supervisorId: supervisorInfo.value.supervisorId,
+        cid: supervisorInfo.value.cid,
+        type: type,
+      ),
+    ).then(
+      (response) {
+        printLogs("Shift in message: ${response.message ?? ""}");
+      },
+    ).onError(
+      (error, stackTrace) {
+        printLogs("Shift in error: ${error.toString()}");
+      },
+    );
   }
 
   shiftInOutAction(bool newValue) {
@@ -127,8 +138,11 @@ class DashBoardController extends GetxController {
   menuAction(String title) {
     scaffoldKey.currentState?.closeDrawer();
     switch (title) {
-      case 'Logout':
+      case "Logout":
         _callLogoutApi();
+        break;
+      case "Location Queue":
+        Get.toNamed(AppRoutes.locationQueuePage);
         break;
       default:
         break;
@@ -140,31 +154,41 @@ class DashBoardController extends GetxController {
         await locationManager.getCurrentLocation();
 
     if (result.data != null) {
-      logoutApi(LogoutApiRequest(
-        supervisorId: supervisorInfo.value.supervisorId,
-        cid: supervisorInfo.value.cid,
-        latitude: result.data!.latitude,
-        longitude: result.data!.longitude,
-        accuracy: result.data!.accuracy,
-        photoUrl:
-            "https://firebasestorage.googleapis.com/v0/b/rsl-passenger-b0629.appspot.com/o/Supervisor%2FPhotosVerification%2FPhotos_07-08-2023%2Fphoto_-2001340201?alt=media&token=94c2317c-80ce-4534-9a18-4000245313be",
-      )).then((response) {
-        if ((response.status ?? 0) == 1) {
-          GetStorageController().removeSupervisorInfo();
-          Get.offAndToNamed(AppRoutes.loginPage);
-        } else {
-          Get.snackbar('Alert', '${response.message}',
-              backgroundColor: AppColors.kGetSnackBarColor.value);
-        }
-      }).onError((error, stackTrace) {
-        Get.snackbar('Alert', error.toString(),
-            backgroundColor: AppColors.kGetSnackBarColor.value);
-      });
+      logoutApi(
+        LogoutApiRequest(
+          supervisorId: supervisorInfo.value.supervisorId,
+          cid: supervisorInfo.value.cid,
+          latitude: result.data!.latitude,
+          longitude: result.data!.longitude,
+          accuracy: result.data!.accuracy,
+          photoUrl:
+              "https://firebasestorage.googleapis.com/v0/b/rsl-passenger-b0629.appspot.com/o/Supervisor%2FPhotosVerification%2FPhotos_07-08-2023%2Fphoto_-2001340201?alt=media&token=94c2317c-80ce-4534-9a18-4000245313be",
+        ),
+      ).then(
+        (response) {
+          if ((response.status ?? 0) == 1) {
+            GetStorageController().removeSupervisorInfo();
+            Get.offAndToNamed(AppRoutes.loginPage);
+          } else {
+            showSnackBar(
+              title: 'Alert',
+              msg: response.message ?? "Something went wrong...",
+            );
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          showSnackBar(
+            title: 'Alert',
+            msg: error.toString(),
+          );
+        },
+      );
     } else {
-      Get.defaultDialog(
-          title: "ERROR!",
-          middleText:
-              result.error ?? "Error occured while fetching current location");
+      showSnackBar(
+        title: 'ERROR!',
+        msg: result.error ?? "Error occured while fetching current location",
+      );
     }
   }
 

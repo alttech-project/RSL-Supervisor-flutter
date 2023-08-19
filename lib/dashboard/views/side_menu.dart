@@ -40,8 +40,8 @@ class SideMenuPage extends GetView<DashBoardController> {
                     Flexible(
                       child: Text(
                         controller.supervisorInfo.value.phoneNumber ?? "",
-                        style:
-                            AppFontStyle.body(weight: AppFontWeight.semibold.value),
+                        style: AppFontStyle.body(
+                            weight: AppFontWeight.semibold.value),
                       ),
                     ),
                   ],
@@ -65,7 +65,8 @@ class SideMenuPage extends GetView<DashBoardController> {
                 title: Text(
                   "App Version - ${controller.appVersion.value}",
                   style: AppFontStyle.body(
-                      weight: AppFontWeight.semibold.value, color: Colors.white),
+                      weight: AppFontWeight.semibold.value,
+                      color: Colors.white),
                 ),
               ),
             ),

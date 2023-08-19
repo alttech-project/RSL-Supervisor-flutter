@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../shared/styles/app_color.dart';
 import '../shared/styles/app_font.dart';
+import '../utils/assets/assets.dart';
 
 class NavigationTitle extends StatelessWidget {
   final void Function()? onTap;
@@ -36,6 +37,43 @@ class NavigationTitle extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NavigationBarWithIcon extends StatelessWidget {
+  final void Function()? onTap;
+  final Color? color;
+  final double? size;
+  const NavigationBarWithIcon({super.key, this.onTap, this.color, this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: [
+        SizedBox(
+          width: double.maxFinite,
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: Image(
+                image: const AssetImage(Assets.appIcon),
+                width: size ?? 70.r,
+                height: size ?? 70.r,
+              ),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: onTap,
+          child: Icon(
+            Icons.arrow_back,
+            size: 25.sp,
+            color: color ?? AppColors.kPrimaryColor.value,
+          ),
+        ),
+      ],
     );
   }
 }

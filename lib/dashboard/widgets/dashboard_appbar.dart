@@ -38,7 +38,7 @@ class DashboardAppBar extends GetView<DashBoardController> {
           ),
         ),
         Padding(
-          padding:  EdgeInsets.only(top: 4.h),
+          padding: EdgeInsets.only(top: 4.h),
           child: Column(
             children: [
               Text(
@@ -46,7 +46,7 @@ class DashboardAppBar extends GetView<DashBoardController> {
                 style: AppFontStyle.subHeading(color: Colors.white),
               ),
               Obx(
-                    () => SizedBox(
+                () => SizedBox(
                   height: 30.h,
                   width: 40.w,
                   child: FittedBox(

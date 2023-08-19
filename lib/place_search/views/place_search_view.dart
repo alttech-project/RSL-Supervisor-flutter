@@ -18,7 +18,9 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            SizedBox(height: 6.h,),
+            SizedBox(
+              height: 6.h,
+            ),
             const PlaceSearchBar(),
             Obx(
               () => ListView.separated(
@@ -39,19 +41,20 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                           color: Colors.grey.withOpacity(0.7),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 16),
                           child: Text(
                             prediction.description ?? '',
                             style: AppFontStyle.body(
-                              color: Colors.grey.shade800,
-                              size: AppFontSize.medium.value
-                            ),
+                                color: Colors.grey.shade800,
+                                size: AppFontSize.medium.value),
                           ),
                         ),
                       ],
                     ),
                   );
-                }, separatorBuilder: (BuildContext context, int index) {
+                },
+                separatorBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: EdgeInsets.only(left: 16.w),
                     child: Divider(
@@ -60,7 +63,7 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                       color: Colors.grey.withOpacity(0.7),
                     ),
                   );
-              },
+                },
               ),
             ),
           ],

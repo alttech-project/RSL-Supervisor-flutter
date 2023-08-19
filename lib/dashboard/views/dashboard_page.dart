@@ -25,7 +25,11 @@ class DashboardPage extends GetView<DashBoardController> {
         backgroundColor: Colors.black,
         key: controller.scaffoldKey,
         body: Padding(
-          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 24.h,),
+          padding: EdgeInsets.only(
+            left: 10.w,
+            right: 10.w,
+            top: 24.h,
+          ),
           child: SingleChildScrollView(
             child: Column(
               children: [

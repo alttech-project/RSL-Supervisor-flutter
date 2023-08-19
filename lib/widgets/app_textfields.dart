@@ -110,7 +110,6 @@ class UnderlinedTextField extends StatelessWidget {
   }
 }
 
-
 class CountryCodeTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
@@ -160,7 +159,11 @@ class CountryCodeTextField extends StatelessWidget {
       showCountryFlag: true,
       languageCode: 'en',
       dropdownTextStyle: const TextStyle(color: Colors.white),
-      dropdownIcon: Icon(Icons.arrow_drop_down, color: cursorColor ?? AppColors.kPrimaryColor.value, size: 14.r,),
+      dropdownIcon: Icon(
+        Icons.arrow_drop_down,
+        color: cursorColor ?? AppColors.kPrimaryColor.value,
+        size: 14.r,
+      ),
       decoration: InputDecoration(
         labelText: inputLblTxt,
         labelStyle: inputLblStyle ??

@@ -87,7 +87,8 @@ class LocationsListWidget extends GetView<DashBoardController> {
     final QuickTripController controller = Get.find<QuickTripController>();
     controller
       ..dropLocationController.text = dropLocation.name ?? ''
-      ..fareController.text = (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
+      ..fareController.text =
+          (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
     Get.toNamed(AppRoutes.quickTripPage);
   }
 }

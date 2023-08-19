@@ -8,7 +8,6 @@ class DetailsPage extends GetView<DetailsController> {
 
   static const routeName = '/detailsPage';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

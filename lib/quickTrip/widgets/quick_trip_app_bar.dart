@@ -18,7 +18,7 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
           onTap: () {
             controller.onClose();
             Get.back();
-          } ,
+          },
           radius: 24.r,
           child: Padding(
             padding: EdgeInsets.all(14.r),

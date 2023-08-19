@@ -17,7 +17,7 @@ class DropSearchBar extends GetView<DashBoardController> {
       () => InkWell(
         onTap: () {
           if (controller.useCustomDrop.value) {
-            controller.moveToPlaceSeaerch();
+            controller.moveToPlaceSearch();
           }
         },
         child: Padding(

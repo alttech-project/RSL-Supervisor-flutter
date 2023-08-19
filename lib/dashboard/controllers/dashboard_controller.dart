@@ -5,6 +5,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
+import '../../place_search/data/get_place_details_response.dart';
+import '../../quickTrip/controllers/quick_trip_controller.dart';
+import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
@@ -19,7 +22,7 @@ class DashBoardController extends GetxController {
   List<DropOffList> dropList = <DropOffList>[].obs;
   RxList<DropOffList> dropSearchList = <DropOffList>[].obs;
   RxString searchTxt = "".obs;
-  RxString noDropOffDataMsg = "No Dropoff found".obs;
+  RxString noDropOffDataMsg = "No Drop-off found".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final LocationManager locationManager = LocationManager();
 
@@ -27,6 +30,7 @@ class DashBoardController extends GetxController {
   var deviceToken = "";
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
+  var apiLoading = false.obs;
 
   @override
   void onInit() {
@@ -43,35 +47,32 @@ class DashBoardController extends GetxController {
   }
 
   void _callDashboardApi() async {
-    dashboardApi(
-      DasboardApiRequest(
-        kioskId: supervisorInfo.value.kioskId,
-        supervisorId: supervisorInfo.value.supervisorId,
-        cid: supervisorInfo.value.cid,
-        deviceToken: deviceToken,
-      ),
-    ).then(
-      (response) {
-        if ((response.status ?? 0) == 1) {
-          dropList = response.dropOffList ?? [];
-          dropSearchList.value = response.dropOffList ?? [];
-          dropSearchList.refresh();
-          noDropOffDataMsg.value = response.message ?? "";
-        } else {
-          noDropOffDataMsg.value = response.message ?? "No Dropoff found";
-          dropList = [];
-          dropSearchList.value = [];
-          dropSearchList.refresh();
-        }
-      },
-    ).onError(
-      (error, stackTrace) {
-        printLogs("Dashboard api error: ${error.toString()}");
+    apiLoading.value = true;
+    dashboardApi(DasboardApiRequest(
+      kioskId: supervisorInfo.value.kioskId,
+      supervisorId: supervisorInfo.value.supervisorId,
+      cid: supervisorInfo.value.cid,
+      deviceToken: deviceToken,
+    )).then((response) {
+      apiLoading.value = false;
+      if ((response.status ?? 0) == 1) {
+        dropList = response.dropOffList ?? [];
+        dropSearchList.value = response.dropOffList ?? [];
+        dropSearchList.refresh();
+        noDropOffDataMsg.value = response.message ?? "";
+      } else {
+        noDropOffDataMsg.value = response.message ?? "No Dropoff found";
         dropList = [];
         dropSearchList.value = [];
         dropSearchList.refresh();
-      },
-    );
+      }
+    }).onError((error, stackTrace) {
+      apiLoading.value = false;
+      printLogs("Dashboard api error: ${error.toString()}");
+      dropList = [];
+      dropSearchList.value = [];
+      dropSearchList.refresh();
+    });
   }
 
   void _callShiftInApi(String type) async {
@@ -127,8 +128,20 @@ class DashBoardController extends GetxController {
     dropSearchList.refresh();
   }
 
-  moveToPlaceSeaerch() {
-    Get.toNamed(AppRoutes.placeSearchPage);
+  void moveToPlaceSearch() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    if (result is PlaceDetails) {
+      final QuickTripController controller = Get.find<QuickTripController>();
+      controller
+        ..dropLocationController.text = '${result.formattedAddress}'
+        ..dropLatitude = result.geometry?.location?.lat ?? 0.0
+        ..dropLongitude = result.geometry?.location?.lng ?? 0.0
+        ..fareController.text = '';
+      Get.toNamed(AppRoutes.quickTripPage);
+    }
   }
 
   openMenu() {
@@ -140,6 +153,9 @@ class DashBoardController extends GetxController {
     switch (title) {
       case "Logout":
         _callLogoutApi();
+        break;
+      case 'Offline Trips':
+        Get.toNamed(AppRoutes.offlineTripPage);
         break;
       case "Location Queue":
         Get.toNamed(AppRoutes.locationQueuePage);

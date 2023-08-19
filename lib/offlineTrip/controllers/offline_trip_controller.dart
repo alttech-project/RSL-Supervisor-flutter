@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:rsl_supervisor/routes/app_routes.dart';
-import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
+import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 
-import '../../shared/styles/app_color.dart';
-import '../../utils/helpers/alert_helpers.dart';
+import '../../quickTrip/data/quick_trip_api_data.dart';
+import '../../quickTrip/service/quick_trip_services.dart';
+import '../../routes/app_routes.dart';
+import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
-import '../data/quick_trip_api_data.dart';
-import '../service/quick_trip_services.dart';
+import '../data/taxi_list_api_data.dart';
+import '../services/offline_trip_service.dart';
 
-class QuickTripController extends GetxController {
+class OfflineTripController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
-  final TextEditingController tripIdController = TextEditingController();
+  final TextEditingController taxiNoController = TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController fareController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController paymentIdController = TextEditingController();
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
-  SupervisorInfo? supervisorInfo;
+  List<TaxiDetails> taxiList = <TaxiDetails>[].obs;
 
+  SupervisorInfo? supervisorInfo;
   double dropLatitude = 0.0, dropLongitude = 0.0;
 
   @override
@@ -33,27 +34,8 @@ class QuickTripController extends GetxController {
     _getUserInfo();
   }
 
-  @override
-  void onReady() {
-    print('hiTamil QTC onReady');
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    print('hiTamil QTC onClose');
-    tripIdController.dispose();
-    dropLocationController.dispose();
-    fareController.dispose();
-    nameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    paymentIdController.dispose();
-    super.onClose();
-  }
-
-  void clearTripId() {
-    tripIdController.clear();
+  void clearTaxiNumber() {
+    taxiNoController.clear();
   }
 
   void clearDropLocation() {
@@ -63,16 +45,16 @@ class QuickTripController extends GetxController {
   void checkValidation() {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     if (formKey.currentState!.validate()) {
-      final tripID = tripIdController.text.trim();
+      final taxiNo = taxiNoController.text.trim();
       final dropLocation = dropLocationController.text.trim();
       final fare = fareController.text.trim();
       final name = nameController.text.trim();
       final phone = phoneController.text.trim();
       final email = emailController.text.trim();
-      final paymentId = paymentIdController.text.trim();
+      final date = dateController.text.trim();
 
       //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
-      if (tripID.isEmpty) {
+      if (taxiNo.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid Trip ID!');
       } else if (dropLocation.isEmpty) {
         _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
@@ -89,7 +71,7 @@ class QuickTripController extends GetxController {
         apiLoading.value = true;
         dispatchQuickTripApi(
           DispatchQuickTripRequestData(
-            tripId: tripID,
+            tripId: taxiNo,
             kioskId: supervisorInfo!.kioskId,
             companyId: supervisorInfo!.cid,
             supervisorName: supervisorInfo!.supervisorName,
@@ -101,14 +83,14 @@ class QuickTripController extends GetxController {
             email: email,
             fixedMeter: (fare.isEmpty) ? '2' : '1',
             kioskFare: fare,
-            paymentId: paymentId,
+            paymentId: date,
             dropLatitude: dropLatitude,
             dropLongitude: dropLongitude,
             dropplace: dropLocation,
           ),
         ).then((response) {
           apiLoading.value = false;
-          _handleDispatchQuickTripResponse(response);
+          _handleOfflineTripResponse(response);
         }).catchError((onError) {
           apiLoading.value = false;
           _showSnackBar('Error', 'Server Connection Error!');
@@ -117,44 +99,57 @@ class QuickTripController extends GetxController {
     }
   }
 
-  void navigateToScannerAndFetch() async {
-    final result = await Get.toNamed(AppRoutes.qrScannerPage);
-    if (result is QrResult) {
-      tripIdController.text = result.data?.code ?? '';
+  void _getUserInfo() async {
+    supervisorInfo = await GetStorageController().getSupervisorInfo();
+    // deviceToken = await GetStorageController().getDeviceToken();
+    if (supervisorInfo == null) {
+      return;
+    }
+
+    _callTaxiListApi();
+  }
+
+  void _callTaxiListApi() {
+    apiLoading.value = true;
+    taxiListApi(
+      TaxiListRequestData(
+        kioskId: '${supervisorInfo!.kioskId}',
+        cid: '${supervisorInfo!.cid}',
+      ),
+    ).then((response) {
+      apiLoading.value = false;
+      _handleTaxiListResponse(response);
+    }).catchError((onError) {
+      apiLoading.value = false;
+      showSnackBar('Server Connection Error!', title: 'Error');
+    });
+  }
+
+  void _handleTaxiListResponse(TaxiListResponseData response) {
+    switch (response.status) {
+      case 1:
+        taxiList = response.details ?? [];
+        break;
+      default:
+        showSnackBar(response.message ?? 'Server Connection Error!',
+            title: 'Error');
     }
   }
 
-  _getUserInfo() async {
-    supervisorInfo = await GetStorageController().getSupervisorInfo();
-    // deviceToken = await GetStorageController().getDeviceToken();
-  }
+  void _showSnackBar(String title, String message) =>
+      showSnackBar(message, title: title);
 
-  void _showSnackBar(String title, String message) {
-    Get.snackbar(title, message,
-        backgroundColor: AppColors.kGetSnackBarColor.value);
-  }
+  void _handleOfflineTripResponse(DispatchQuickTripResponseData response) {}
 
-  void _handleDispatchQuickTripResponse(
-      DispatchQuickTripResponseData response) {
-    switch (response.status) {
-      case 1:
-        showAppDialog(
-          title: 'Success',
-          message: '${response.message}',
-          content: QrImageView(
-            data: '${response.trackUrl}',
-            version: QrVersions.auto,
-            size: 200.0,
-          ),
-          confirm: defaultAlertConfirm(
-            onPressed: () {
-              Get.back();
-            },
-          ),
-        );
-        break;
-      default:
-        _showSnackBar('Error', response.message ?? 'Server Connection Error!');
+  void navigateToPlaceSearchPage() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    if (result is PlaceDetails) {
+      dropLocationController.text = result.formattedAddress ?? '';
+      dropLatitude = result.geometry?.location?.lat ?? 0.0;
+      dropLongitude = result.geometry?.location?.lng ?? 0.0;
     }
   }
 }

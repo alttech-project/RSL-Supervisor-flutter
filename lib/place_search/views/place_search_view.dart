@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 
@@ -23,6 +24,17 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
             ),
             const PlaceSearchBar(),
             Obx(
+              () => Visibility(
+                visible: controller.apiLoading.value,
+                child: SizedBox(
+                  height: 4,
+                  child: LinearProgressIndicator(
+                    color: AppColors.kPrimaryColor.value,
+                  ),
+                ),
+              ),
+            ),
+            Obx(
               () => ListView.separated(
                 itemCount: controller.predictionList.length,
                 shrinkWrap: true,
@@ -30,9 +42,8 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                 itemBuilder: (context, index) {
                   final prediction = controller.predictionList[index];
                   return InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
+                    onTap: () =>
+                        controller.callPlaceDetailsApi('${prediction.placeId}'),
                     child: Row(
                       children: [
                         Icon(
@@ -40,14 +51,16 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                           size: 16.sp,
                           color: Colors.grey.withOpacity(0.7),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 16),
-                          child: Text(
-                            prediction.description ?? '',
-                            style: AppFontStyle.body(
-                                color: Colors.grey.shade800,
-                                size: AppFontSize.medium.value),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 16),
+                            child: Text(
+                              prediction.description ?? '',
+                              style: AppFontStyle.body(
+                                  color: Colors.grey.shade800,
+                                  size: AppFontSize.medium.value),
+                            ),
                           ),
                         ),
                       ],

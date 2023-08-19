@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
@@ -62,30 +63,38 @@ class UnderlinedTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final Color? borderColor;
   final Color? focusColor;
+  final TextInputAction textInputAction;
+  final FormFieldValidator? validator;
+  final bool readOnly;
+  final GestureTapCallback? onTap;
 
-  const UnderlinedTextField({
-    super.key,
-    required this.controller,
-    required this.hint,
-    required this.inputLblTxt,
-    this.onChanged,
-    this.isEnabled,
-    this.textStyle,
-    this.suffix,
-    this.keyboardType,
-    this.cursorColor,
-    this.onSubmit,
-    this.inputLblStyle,
-    this.hintStyle,
-    this.borderColor,
-    this.focusColor,
-  });
+  const UnderlinedTextField(
+      {super.key,
+      required this.controller,
+      required this.hint,
+      required this.inputLblTxt,
+      this.onChanged,
+      this.isEnabled,
+      this.textStyle,
+      this.suffix,
+      this.keyboardType,
+      this.cursorColor,
+      this.onSubmit,
+      this.inputLblStyle,
+      this.hintStyle,
+      this.borderColor,
+      this.focusColor,
+      this.validator,
+      this.textInputAction = TextInputAction.done,
+      this.readOnly = false,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       style: textStyle ?? AppFontStyle.body(color: Colors.white),
+      onTap: onTap,
       keyboardType: keyboardType,
       maxLines: 1,
       cursorColor: cursorColor ?? AppColors.kPrimaryColor.value,
@@ -105,7 +114,11 @@ class UnderlinedTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.white70),
         ),
         focusColor: focusColor ?? Colors.white,
+        suffixIcon: suffix,
       ),
+      textInputAction: textInputAction,
+      validator: validator,
+      readOnly: readOnly,
     );
   }
 }
@@ -125,6 +138,8 @@ class CountryCodeTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final Color? borderColor;
   final Color? focusColor;
+  final TextInputAction textInputAction;
+  final ValueChanged<Country>? onCountryChanged;
 
   const CountryCodeTextField({
     super.key,
@@ -142,6 +157,8 @@ class CountryCodeTextField extends StatelessWidget {
     this.hintStyle,
     this.borderColor,
     this.focusColor,
+    this.onCountryChanged,
+    this.textInputAction = TextInputAction.done,
   });
 
   @override
@@ -179,6 +196,8 @@ class CountryCodeTextField extends StatelessWidget {
         ),
         focusColor: focusColor ?? Colors.white,
       ),
+      textInputAction: textInputAction,
+      onCountryChanged: onCountryChanged,
     );
   }
 }

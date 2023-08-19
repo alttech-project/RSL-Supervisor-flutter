@@ -121,7 +121,7 @@ class OfflineTripController extends GetxController {
       _handleTaxiListResponse(response);
     }).catchError((onError) {
       apiLoading.value = false;
-      showSnackBar('Server Connection Error!', title: 'Error');
+      showSnackBar(title: 'Error', msg: 'Server Connection Error!',);
     });
   }
 
@@ -131,13 +131,13 @@ class OfflineTripController extends GetxController {
         taxiList = response.details ?? [];
         break;
       default:
-        showSnackBar(response.message ?? 'Server Connection Error!',
+        showSnackBar(msg:response.message ?? 'Server Connection Error!',
             title: 'Error');
     }
   }
 
   void _showSnackBar(String title, String message) =>
-      showSnackBar(message, title: title);
+      showSnackBar(msg:message, title: title);
 
   void _handleOfflineTripResponse(DispatchQuickTripResponseData response) {}
 

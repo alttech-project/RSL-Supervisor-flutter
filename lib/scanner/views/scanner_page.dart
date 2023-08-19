@@ -41,7 +41,7 @@ class ScannerPage extends GetView<ScannerController> {
                           QrResult(status: PermissionStatus.permanentlyDenied));
                 } else {
                   showSnackBar(
-                      "Please allow to access the camera for Scanning QR Code");
+                      msg: "Please allow to access the camera for Scanning QR Code", title: 'Alert');
                   Get.back();
                 }
 
@@ -109,7 +109,7 @@ class ScannerPage extends GetView<ScannerController> {
 
     if (!p/*== false && controller.has.value == false*/) {
       controller.has.value = true;
-      showSnackBar("No Permission");
+      showSnackBar(msg:"No Permission", title: "Alert");
       ctrl.dispose();
       Get.back();
     }

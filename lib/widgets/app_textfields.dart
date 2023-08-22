@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -67,27 +68,30 @@ class UnderlinedTextField extends StatelessWidget {
   final FormFieldValidator? validator;
   final bool readOnly;
   final GestureTapCallback? onTap;
+  final int? maxLines;
 
-  const UnderlinedTextField(
-      {super.key,
-      required this.controller,
-      required this.hint,
-      required this.inputLblTxt,
-      this.onChanged,
-      this.isEnabled,
-      this.textStyle,
-      this.suffix,
-      this.keyboardType,
-      this.cursorColor,
-      this.onSubmit,
-      this.inputLblStyle,
-      this.hintStyle,
-      this.borderColor,
-      this.focusColor,
-      this.validator,
-      this.textInputAction = TextInputAction.done,
-      this.readOnly = false,
-      this.onTap});
+  const UnderlinedTextField({
+    super.key,
+    required this.controller,
+    required this.hint,
+    required this.inputLblTxt,
+    this.onChanged,
+    this.isEnabled,
+    this.textStyle,
+    this.suffix,
+    this.keyboardType,
+    this.cursorColor,
+    this.onSubmit,
+    this.inputLblStyle,
+    this.hintStyle,
+    this.borderColor,
+    this.focusColor,
+    this.validator,
+    this.textInputAction = TextInputAction.done,
+    this.readOnly = false,
+    this.onTap,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +100,7 @@ class UnderlinedTextField extends StatelessWidget {
       style: textStyle ?? AppFontStyle.body(color: Colors.white),
       onTap: onTap,
       keyboardType: keyboardType,
-      maxLines: 1,
+      maxLines: maxLines ?? 1,
       cursorColor: cursorColor ?? AppColors.kPrimaryColor.value,
       autofocus: false,
       onFieldSubmitted: onSubmit,
@@ -178,7 +182,7 @@ class CountryCodeTextField extends StatelessWidget {
       dropdownTextStyle: const TextStyle(color: Colors.white),
       dropdownIcon: Icon(
         Icons.arrow_drop_down,
-        color: cursorColor ?? AppColors.kPrimaryColor.value,
+        color: Colors.white,
         size: 14.r,
       ),
       decoration: InputDecoration(
@@ -198,6 +202,72 @@ class CountryCodeTextField extends StatelessWidget {
       ),
       textInputAction: textInputAction,
       onCountryChanged: onCountryChanged,
+    );
+  }
+}
+
+class BoxTextField extends StatelessWidget {
+  const BoxTextField({
+    this.hintText,
+    this.keyboardType,
+    this.textController,
+    this.decoration,
+    this.enable = false,
+    this.autocorrect,
+    super.key,
+    this.suffix,
+    this.style,
+    this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
+    this.autofocus = false,
+    this.contentPadding,
+  });
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController? textController;
+  final InputDecoration? decoration;
+  final bool? enable;
+  final bool? autocorrect;
+  final TextStyle? style;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final Widget? suffix;
+  final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
+  final EdgeInsetsGeometry? contentPadding;
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: focusNode,
+      enabled: enable,
+      autofocus: autofocus ?? false,
+      keyboardType: keyboardType ?? TextInputType.text,
+      cursorColor: AppColors.kPrimaryColor.value,
+      controller: textController,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      style: style ?? AppFontStyle.body(),
+      autocorrect: autocorrect ?? false,
+      decoration: decoration ??
+          InputDecoration(
+            hintText: hintText ?? "search...",
+            hintStyle: AppFontStyle.hint(
+              color: Colors.grey.shade500,
+              size: AppFontSize.small.value,
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.kPrimaryColor.value),
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.kPrimaryColor.value),
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            suffixIcon: suffix,
+            //isDense: true,
+            contentPadding: contentPadding ?? EdgeInsets.all(10.r),
+          ),
     );
   }
 }

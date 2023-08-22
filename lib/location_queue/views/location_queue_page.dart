@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/location_queue/controllers/location_queue_controller.dart';
 import 'package:rsl_supervisor/location_queue/widgets/driver_list_widget.dart';
+import 'package:rsl_supervisor/widgets/car_search_widget.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import 'package:rsl_supervisor/widgets/navigation_title.dart';
-
-import '../../widgets/safe_area_container.dart';
 
 class LocationQueuePage extends GetView<LocationQueueController> {
   const LocationQueuePage({super.key});
@@ -16,9 +15,7 @@ class LocationQueuePage extends GetView<LocationQueueController> {
     return Obx(
       () => CommonAppContainer(
         showLoader: controller.showLoader.value,
-        child: SafeAreaContainer(
-          statusBarColor: Colors.black,
-          themedark: true,
+        child: SafeArea(
           child: WillPopScope(
             onWillPop: () async {
               controller.goBack();
@@ -29,13 +26,20 @@ class LocationQueuePage extends GetView<LocationQueueController> {
               backgroundColor: Colors.black,
               body: Padding(
                 padding: EdgeInsets.only(
-                    left: 10.w, right: 10.w, top: 24.h, bottom: 12.h),
+                  left: 10.w,
+                  right: 10.w,
+                  bottom: 12.h,
+                ),
                 child: Column(
                   children: [
                     NavigationBarWithIcon(
                       onTap: () => controller.goBack(),
                     ),
-                    const AddCarBtnWidget(),
+                    AddCarBtnWidget(
+                      onTap: () {
+                        _showDriverSearchWidget();
+                      },
+                    ),
                     Flexible(
                       child: ReorderableListView.builder(
                         itemCount: controller.driverList.length,
@@ -56,10 +60,9 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                           controller.driverList[index]);
                                 },
                                 removeDriver: () {
-                                  controller.callAddDriverApi(
+                                  controller.showRemoveDriverAlert(
                                       driverDetails:
-                                          controller.driverList[index],
-                                      type: 2);
+                                          controller.driverList[index]);
                                 },
                               ),
                             ),
@@ -86,6 +89,44 @@ class LocationQueuePage extends GetView<LocationQueueController> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showDriverSearchWidget() {
+    controller.driverSearchText.value = "";
+    controller.callSearchDriverApi();
+
+    Get.bottomSheet(
+      Obx(
+        () => Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.r),
+              topRight: Radius.circular(12.r),
+            ),
+          ),
+          margin: EdgeInsets.only(top: 70.h),
+          child: CarSearchView(
+            onChanged: (text) {
+              controller.driverSearchText.value = text;
+              controller.callSearchDriverApi();
+            },
+            showLoader: controller.showDrverSearchLoader.value,
+            listData: controller.driverSearchList
+                .map((element) =>
+                    ("${element.taxiNo ?? ""} - ${element.driverName ?? ""}"))
+                .toList(),
+            onSelect: (index) {
+              Get.back();
+              controller.showAddDriverAlert(
+                  driverDetails: controller.driverSearchList[index]);
+            },
+            noDataText: "No cars found!",
+          ),
+        ),
+      ),
+      isScrollControlled: true,
     );
   }
 }

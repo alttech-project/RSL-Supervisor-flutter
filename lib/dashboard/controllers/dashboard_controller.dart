@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
+import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 
 import '../../place_search/data/get_place_details_response.dart';
 import '../../quickTrip/controllers/quick_trip_controller.dart';
-import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
@@ -30,7 +30,8 @@ class DashBoardController extends GetxController {
   var deviceToken = "";
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
-  var apiLoading = false.obs;
+  RxBool apiLoading = false.obs;
+  RxBool showLoader = false.obs;
 
   @override
   void onInit() {
@@ -76,6 +77,7 @@ class DashBoardController extends GetxController {
   }
 
   void _callShiftInApi(String type) async {
+    showLoader.value = true;
     shiftInApi(
       ShiftInRequest(
         kioskId: supervisorInfo.value.kioskId,
@@ -85,10 +87,12 @@ class DashBoardController extends GetxController {
       ),
     ).then(
       (response) {
+        showLoader.value = false;
         printLogs("Shift in message: ${response.message ?? ""}");
       },
     ).onError(
       (error, stackTrace) {
+        showLoader.value = false;
         printLogs("Shift in error: ${error.toString()}");
       },
     );
@@ -152,7 +156,7 @@ class DashBoardController extends GetxController {
     scaffoldKey.currentState?.closeDrawer();
     switch (title) {
       case "Logout":
-        _callLogoutApi();
+        _showLogoutAlert();
         break;
       case 'Offline Trips':
         Get.toNamed(AppRoutes.offlineTripPage);
@@ -160,9 +164,26 @@ class DashBoardController extends GetxController {
       case "Location Queue":
         Get.toNamed(AppRoutes.locationQueuePage);
         break;
+      case "Trip History":
+        Get.toNamed(AppRoutes.tripHistoryPage);
+        break;
       default:
         break;
     }
+  }
+
+  void _showLogoutAlert() {
+    showDefaultDialog(
+      context: Get.context!,
+      title: "Alert",
+      message: "Are you sure you want to logout?",
+      isTwoButton: true,
+      acceptBtnTitle: "Yes, Logout",
+      acceptAction: () {
+        _callLogoutApi();
+      },
+      cancelBtnTitle: "No",
+    );
   }
 
   void _callLogoutApi() async {
@@ -170,6 +191,7 @@ class DashBoardController extends GetxController {
         await locationManager.getCurrentLocation();
 
     if (result.data != null) {
+      showLoader.value = true;
       logoutApi(
         LogoutApiRequest(
           supervisorId: supervisorInfo.value.supervisorId,
@@ -182,6 +204,7 @@ class DashBoardController extends GetxController {
         ),
       ).then(
         (response) {
+          showLoader.value = false;
           if ((response.status ?? 0) == 1) {
             GetStorageController().removeSupervisorInfo();
             Get.offAndToNamed(AppRoutes.loginPage);
@@ -194,6 +217,7 @@ class DashBoardController extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
+          showLoader.value = false;
           showSnackBar(
             title: 'Alert',
             msg: error.toString(),

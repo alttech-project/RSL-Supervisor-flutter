@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
 import '../../shared/styles/app_color.dart';
 
@@ -54,3 +54,79 @@ Widget defaultAlertCancel({String text = 'Cancel', VoidCallback? onPressed}) =>
         ),
       ),
     );
+
+Future<void> showDefaultDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+  bool isTwoButton = false,
+  String? acceptBtnTitle,
+  VoidCallback? acceptAction,
+  String? cancelBtnTitle,
+  VoidCallback? cancelAction,
+}) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          title,
+          style: AppFontStyle.body(
+            weight: AppFontWeight.semibold.value,
+          ),
+        ),
+        content: Text(
+          message,
+          style: AppFontStyle.body(),
+        ),
+        actions: isTwoButton
+            ? <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (cancelAction != null) {
+                      cancelAction();
+                    }
+                  },
+                  child: Text(
+                    cancelBtnTitle ?? 'Cancel',
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (acceptAction != null) {
+                      acceptAction();
+                    }
+                  },
+                  child: Text(
+                    acceptBtnTitle ?? 'OK',
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                      color: AppColors.kPrimaryColor.value,
+                    ),
+                  ),
+                ),
+              ]
+            : <Widget>[
+                TextButton(
+                  child: Text(
+                    'OK',
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                      color: AppColors.kPrimaryColor.value,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+      );
+    },
+  );
+}

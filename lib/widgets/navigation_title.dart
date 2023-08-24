@@ -9,8 +9,13 @@ class NavigationTitle extends StatelessWidget {
   final void Function()? onTap;
   final String title;
   final Color? color;
+  final Widget? rightBarWidget;
   const NavigationTitle(
-      {super.key, this.onTap, required this.title, this.color});
+      {super.key,
+      this.onTap,
+      required this.title,
+      this.color,
+      this.rightBarWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,8 @@ class NavigationTitle extends StatelessWidget {
               color: color ?? AppColors.kPrimaryColor.value,
             ),
           ),
+          if (rightBarWidget != null)
+            Positioned(right: 0, child: rightBarWidget!),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'driver_list_response.dart';
+import 'driver_list_data.dart';
 
 class SearchDriverResponse {
   String? message;

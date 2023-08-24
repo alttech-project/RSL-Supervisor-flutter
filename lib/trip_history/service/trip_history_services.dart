@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/trip_history/data/trip_history_response.dart';
+import 'package:rsl_supervisor/trip_history/data/cancel_trip_data.dart';
+import 'package:rsl_supervisor/trip_history/data/export_pdf_data.dart';
+import 'package:rsl_supervisor/trip_history/data/trip_history_data.dart';
 
 import '../../network/app_config.dart';
 import '../../network/services.dart';
@@ -15,4 +17,24 @@ Future<TripHistoryResponse> tripHistoryApi(
     ),
   );
   return tripHistoryResponseFromJson(response);
+}
+
+Future<ExportPdfResponse> exportPdfApi(ExportPdfRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${AppConfig.webBaseUrl}export_pdf',
+      request: exportPdfRequestToJson(requestData),
+    ),
+  );
+  return exportPdfResponseFromJson(response);
+}
+
+Future<CancelTripResponse> cancelTripApi(CancelTripRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${AppConfig.webBaseUrl}cancel_supervisor_trip',
+      request: cancelTripRequestToJson(requestData),
+    ),
+  );
+  return camcelTripResponseFromJson(response);
 }

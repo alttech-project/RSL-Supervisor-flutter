@@ -234,3 +234,75 @@ class ToggleButtonState extends State<ToggleButton> {
     );
   }
 }
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
+    super.key,
+    required this.title,
+    required this.icon,
+    this.height,
+    this.cornerRadius,
+    this.borderColor,
+    this.backgroundColor,
+    this.titleColor,
+    this.iconColor,
+    this.onTap,
+    this.showLoader,
+  });
+
+  final String title;
+  final IconData icon;
+  final double? height;
+  final double? cornerRadius;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final Color? titleColor;
+  final Color? iconColor;
+  final bool? showLoader;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: height ?? 25.h,
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.kPrimaryColor.value),
+          color: backgroundColor ?? Colors.black,
+          borderRadius:
+              BorderRadius.circular(cornerRadius ?? ((height ?? 25.h) / 2)),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "$title ",
+                  style: AppFontStyle.smallText(
+                      color: (showLoader ?? false)
+                          ? Colors.transparent
+                          : (titleColor ?? AppColors.kPrimaryColor.value)),
+                ),
+                Icon(
+                  icon,
+                  color: (showLoader ?? false)
+                      ? Colors.transparent
+                      : (iconColor ?? AppColors.kPrimaryColor.value),
+                  size: AppFontSize.verySmall.value,
+                )
+              ],
+            ),
+            Visibility(
+              visible: (showLoader ?? false),
+              child: AppLoader(size: (height ?? 25.h) * 0.8),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

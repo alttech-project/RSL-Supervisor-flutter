@@ -69,6 +69,7 @@ class UnderlinedTextField extends StatelessWidget {
   final bool readOnly;
   final GestureTapCallback? onTap;
   final int? maxLines;
+  final Color? hintColor;
 
   const UnderlinedTextField({
     super.key,
@@ -91,6 +92,7 @@ class UnderlinedTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.maxLines,
+    this.hintColor,
   });
 
   @override
@@ -110,12 +112,12 @@ class UnderlinedTextField extends StatelessWidget {
             AppFontStyle.body(
                 weight: AppFontWeight.semibold.value, color: Colors.white70),
         hintText: hint,
-        hintStyle: AppFontStyle.hint(color: Colors.white70),
+        hintStyle: AppFontStyle.hint(color: hintColor ?? Colors.white70),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: borderColor ?? Colors.white70),
         ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white70),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: focusColor ?? Colors.white),
         ),
         focusColor: focusColor ?? Colors.white,
         suffixIcon: suffix,

@@ -21,7 +21,15 @@ class AppFontStyle {
 
   static TextStyle body({double? size, Color? color, FontWeight? weight}) {
     return TextStyle(
-      fontSize: size ?? AppFontSize.medium.value,
+      fontSize: size ?? AppFontSize.small.value,
+      fontWeight: weight ?? AppFontWeight.normal.value,
+      color: color ?? Colors.black,
+    );
+  }
+
+  static TextStyle smallText({double? size, Color? color, FontWeight? weight}) {
+    return TextStyle(
+      fontSize: size ?? AppFontSize.verySmall.value,
       fontWeight: weight ?? AppFontWeight.normal.value,
       color: color ?? Colors.black,
     );

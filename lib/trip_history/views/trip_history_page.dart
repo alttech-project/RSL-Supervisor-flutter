@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
+import 'package:rsl_supervisor/trip_history/widgets/trip_list_filter_widget.dart';
 import 'package:rsl_supervisor/trip_history/widgets/trip_list_widget.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
-import 'package:rsl_supervisor/widgets/custom_button.dart';
 
 import '../../shared/styles/app_font.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/navigation_title.dart';
 
 class TripHistoryPage extends GetView<TripHistoryController> {
@@ -36,59 +35,19 @@ class TripHistoryPage extends GetView<TripHistoryController> {
                 NavigationTitle(
                   title: "Trip History",
                   onTap: () => controller.goBack(),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.kPrimaryColor.value,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  padding: EdgeInsets.all(8.r),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "From",
-                            style: AppFontStyle.body(
-                              weight: AppFontWeight.semibold.value,
-                            ),
-                          ),
-                          Text(
-                            DateFormat("MMM d, y")
-                                .format(controller.fromDate.value),
-                            style: AppFontStyle.body(
-                              size: AppFontSize.small.value,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                  rightBarWidget: Obx(
+                    () => Visibility(
+                      visible: (controller.tripList.isNotEmpty),
+                      child: CustomIconButton(
+                        title: "Export",
+                        icon: Icons.upload,
+                        showLoader: controller.showBtnLoader.value,
+                        onTap: () => controller.callExportPdfApi(),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            "To",
-                            style: AppFontStyle.body(
-                              weight: AppFontWeight.semibold.value,
-                            ),
-                          ),
-                          Text(
-                            DateFormat("MMM d, y")
-                                .format(controller.toDate.value),
-                            style: AppFontStyle.body(
-                              size: AppFontSize.small.value,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      const CustomButton(
-                        text: "Submit",
-                        color: Colors.black,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
+                const TripListFilterWidget(),
                 Obx(
                   () => Expanded(
                     child: (controller.showLoader.value)

@@ -58,8 +58,7 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
                             child: Text(
                               prediction.description ?? '',
                               style: AppFontStyle.body(
-                                  color: Colors.grey.shade800,
-                                  size: AppFontSize.medium.value),
+                                  color: Colors.grey.shade800),
                             ),
                           ),
                         ),

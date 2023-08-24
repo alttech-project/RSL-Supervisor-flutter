@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rsl_supervisor/location_queue/data/driver_list_response.dart';
+import 'package:rsl_supervisor/location_queue/data/driver_list_data.dart';
 
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';

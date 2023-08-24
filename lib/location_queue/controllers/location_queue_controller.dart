@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/location_queue/data/add_driver_response.dart';
-import 'package:rsl_supervisor/location_queue/data/driver_list_response.dart';
-import 'package:rsl_supervisor/location_queue/data/driver_queue_position_response.dart';
-import 'package:rsl_supervisor/location_queue/data/save_booking_response.dart';
+import 'package:rsl_supervisor/location_queue/data/add_driver_data.dart';
+import 'package:rsl_supervisor/location_queue/data/driver_list_data.dart';
+import 'package:rsl_supervisor/location_queue/data/driver_queue_position_data.dart';
+import 'package:rsl_supervisor/location_queue/data/save_booking_data.dart';
 import 'package:rsl_supervisor/location_queue/service/location_queue_service.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
-import '../data/search_driver_response.dart';
+import '../data/search_driver_data.dart';
 
 class LocationQueueController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();

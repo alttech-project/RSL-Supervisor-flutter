@@ -1,12 +1,12 @@
-import 'package:rsl_supervisor/location_queue/data/add_driver_response.dart';
-import 'package:rsl_supervisor/location_queue/data/driver_list_response.dart';
+import 'package:rsl_supervisor/location_queue/data/add_driver_data.dart';
+import 'package:rsl_supervisor/location_queue/data/driver_list_data.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/location_queue/data/driver_queue_position_response.dart';
-import 'package:rsl_supervisor/location_queue/data/save_booking_response.dart';
+import 'package:rsl_supervisor/location_queue/data/driver_queue_position_data.dart';
+import 'package:rsl_supervisor/location_queue/data/save_booking_data.dart';
 
 import '../../network/app_config.dart';
 import '../../network/services.dart';
-import '../data/search_driver_response.dart';
+import '../data/search_driver_data.dart';
 
 final ApiProvider _apiProvider = Get.find<ApiProvider>();
 

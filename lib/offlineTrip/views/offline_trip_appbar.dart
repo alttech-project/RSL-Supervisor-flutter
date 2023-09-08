@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/offlineTrip/controllers/offline_trip_controller.dart';
 
 import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 
-class OfflineTripsAppBar extends GetView<QuickTripController> {
+class OfflineTripsAppBar extends GetView<OfflineTripController> {
   const OfflineTripsAppBar({Key? key}) : super(key: key);
 
   @override

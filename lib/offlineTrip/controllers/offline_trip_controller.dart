@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 
-import '../../quickTrip/data/quick_trip_api_data.dart';
-import '../../quickTrip/service/quick_trip_services.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
+import '../data/offline_trip_api_data.dart';
 import '../data/taxi_list_api_data.dart';
 import '../services/offline_trip_service.dart';
+import '../../utils/helpers/alert_helpers.dart';
 
 class OfflineTripController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -20,13 +20,21 @@ class OfflineTripController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-
+  final TextEditingController searchCarController = TextEditingController();
+  var taxiModel = ''.obs;
+  var taxiId = ''.obs;
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
-  List<TaxiDetails> taxiList = <TaxiDetails>[].obs;
+
+  List<TaxiDetails> initialTaxiList = <TaxiDetails>[].obs;
+  RxList<TaxiDetails> taxiList = <TaxiDetails>[].obs;
 
   SupervisorInfo? supervisorInfo;
   double dropLatitude = 0.0, dropLongitude = 0.0;
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  DateTime dateTime = DateTime.now();
 
   @override
   void onInit() {
@@ -36,10 +44,35 @@ class OfflineTripController extends GetxController {
 
   void clearTaxiNumber() {
     taxiNoController.clear();
+    taxiModel.value = "";
+    taxiId.value = "";
   }
 
   void clearDropLocation() {
     dropLocationController.clear();
+  }
+
+  void filterCarNoResults(String text) {
+    if (text.isEmpty) {
+      getAllCarNoResults();
+      return;
+    }
+    taxiList.value = initialTaxiList
+        .where((taxiList) =>
+            (taxiList.taxiNo ?? "").toLowerCase().contains(text.toLowerCase()))
+        .toList();
+
+    taxiList.refresh();
+  }
+
+  void clearSearchedCarNumber() {
+    searchCarController.clear();
+    getAllCarNoResults();
+  }
+
+  void getAllCarNoResults() {
+    taxiList.value = initialTaxiList;
+    taxiList.refresh();
   }
 
   void checkValidation() {
@@ -55,9 +88,9 @@ class OfflineTripController extends GetxController {
 
       //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
       if (taxiNo.isEmpty) {
-        _showSnackBar('Validation!', 'Enter a valid Trip ID!');
-      } else if (dropLocation.isEmpty) {
-        _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
+        _showSnackBar('Validation!', 'Enter a valid Car No!');
+      } else if (fare.isEmpty) {
+        _showSnackBar('Validation!', 'Enter a valid fare!');
       } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
         _showSnackBar('Validation!', 'Enter a valid phone number!');
       } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
@@ -69,25 +102,23 @@ class OfflineTripController extends GetxController {
         }
 
         apiLoading.value = true;
-        dispatchQuickTripApi(
-          DispatchQuickTripRequestData(
-            tripId: taxiNo,
-            kioskId: supervisorInfo!.kioskId,
-            companyId: supervisorInfo!.cid,
-            supervisorName: supervisorInfo!.supervisorName,
-            supervisorId: supervisorInfo!.supervisorId,
-            supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-            name: name,
-            countryCode: countryCode.value,
-            mobileNo: phone,
-            email: email,
-            fixedMeter: (fare.isEmpty) ? '2' : '1',
-            kioskFare: fare,
-            paymentId: date,
-            dropLatitude: dropLatitude,
-            dropLongitude: dropLongitude,
-            dropplace: dropLocation,
-          ),
+        offlineTripApi(
+          DispatchOfflineTripRequestData(
+              dropLatitude: dropLatitude,
+              dropLongitude: dropLongitude,
+              fare: fare,
+              kioskId: supervisorInfo!.kioskId,
+              taxiId: taxiId.value,
+              supervisorName: supervisorInfo!.supervisorName,
+              supervisorId: supervisorInfo!.supervisorId,
+              supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+              taxiModel: taxiModel.value,
+              cid: supervisorInfo!.cid,
+              name: name,
+              countryCode: countryCode.value,
+              mobileNo: phone,
+              email: email,
+              pickupDateTime: date),
         ).then((response) {
           apiLoading.value = false;
           _handleOfflineTripResponse(response);
@@ -121,25 +152,43 @@ class OfflineTripController extends GetxController {
       _handleTaxiListResponse(response);
     }).catchError((onError) {
       apiLoading.value = false;
-      showSnackBar(title: 'Error', msg: 'Server Connection Error!',);
+      showSnackBar(
+        title: 'Error',
+        msg: 'Server Connection Error!',
+      );
     });
   }
 
   void _handleTaxiListResponse(TaxiListResponseData response) {
     switch (response.status) {
       case 1:
-        taxiList = response.details ?? [];
+        initialTaxiList = response.details ?? [];
+        taxiList.value = response.details ?? [];
+        taxiList.refresh();
         break;
       default:
-        showSnackBar(msg:response.message ?? 'Server Connection Error!',
+        showSnackBar(
+            msg: response.message ?? 'Server Connection Error!',
             title: 'Error');
     }
   }
 
   void _showSnackBar(String title, String message) =>
-      showSnackBar(msg:message, title: title);
+      showSnackBar(msg: message, title: title);
 
-  void _handleOfflineTripResponse(DispatchQuickTripResponseData response) {}
+  void _handleOfflineTripResponse(DispatchOfflineTripResponseData response) {
+    switch (response.status) {
+      case 1:
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: response.message ?? "Something went wrong...",
+        );
+        break;
+      default:
+        _showSnackBar('Error', response.message ?? 'Server Connection Error!');
+    }
+  }
 
   void navigateToPlaceSearchPage() async {
     final result = await Get.toNamed(

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/offlineTrip/data/offline_trip_api_data.dart';
 
 import '../../network/app_config.dart';
 import '../../network/services.dart';
@@ -15,4 +16,15 @@ Future<TaxiListResponseData> taxiListApi(
     ),
   );
   return taxiListResponseFromJson(response);
+}
+
+Future<DispatchOfflineTripResponseData> offlineTripApi(
+    DispatchOfflineTripRequestData requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: '${AppConfig.webBaseUrl}dispatch_offline_trips_new',
+      request: dispatchOfflineTripRequestToJson(requestData),
+    ),
+  );
+  return dispatchOfflineTripResponseFromJson(response);
 }

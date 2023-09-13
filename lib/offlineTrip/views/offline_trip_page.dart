@@ -16,8 +16,6 @@ class OfflineTripPage extends GetView<OfflineTripController> {
 
   @override
   Widget build(BuildContext context) {
-    getDate();
-
     return SafeArea(
       child: WillPopScope(
         onWillPop: () {
@@ -352,12 +350,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
       time.hour,
       time.minute,
     );
-    getDate();
-  }
-
-  void getDate() {
-    controller.dateController.text =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(controller.dateTime);
+    controller.getDate();
   }
 
   Future<DateTime> _selectDate(BuildContext context) async {

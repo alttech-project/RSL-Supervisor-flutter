@@ -68,6 +68,10 @@ dependencies:
   dropdown_search: ^5.0.6
   syncfusion_flutter_datepicker: ^21.2.3
   crypto: ^3.0.3
+  camera: ^0.10.5+4
+  flutter_native_image: ^0.0.6+1
+  firebase_storage: ^11.2.6
+  firebase_core: ^2.15.1
 
 dev_dependencies:
   flutter_test:

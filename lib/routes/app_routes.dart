@@ -4,6 +4,7 @@ import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
 import 'package:rsl_supervisor/location_queue/views/location_queue_page.dart';
+import 'package:rsl_supervisor/login/view/capture_image_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
@@ -23,6 +24,7 @@ class AppRoutes {
   static const qrScannerPage = '/qrScannerPage';
   static const offlineTripPage = '/offlineTripPage';
   static const tripHistoryPage = '/tripHistoryPage';
+  static const captureImagePage = '/captureImagePage';
 }
 
 List<GetPage> routes = [
@@ -85,6 +87,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.tripHistoryPage,
     page: () => const TripHistoryPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.captureImagePage,
+    page: () => const CaptureImageScreen(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

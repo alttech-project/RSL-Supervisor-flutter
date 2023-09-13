@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 
 import '../../routes/app_routes.dart';
@@ -39,6 +40,7 @@ class OfflineTripController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    getDate();
     _getUserInfo();
   }
 
@@ -136,8 +138,11 @@ class OfflineTripController extends GetxController {
     if (supervisorInfo == null) {
       return;
     }
-
     _callTaxiListApi();
+  }
+
+  void getDate() {
+    dateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
   }
 
   void _callTaxiListApi() {

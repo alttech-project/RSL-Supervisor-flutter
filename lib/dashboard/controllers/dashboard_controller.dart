@@ -168,6 +168,9 @@ class DashBoardController extends GetxController {
       case "Trip History":
         Get.toNamed(AppRoutes.tripHistoryPage);
         break;
+      case "Feeds":
+        Get.toNamed(AppRoutes.feedsPage);
+        break;
       default:
         break;
     }

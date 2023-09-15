@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/leaderboard/controllers/leaderboard_controller.dart';
+import 'package:rsl_supervisor/feeds/controller/feeds_controller.dart';
+import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 import 'package:rsl_supervisor/quickTrip/controllers/quick_trip_controller.dart';
 import 'package:rsl_supervisor/rider_refferral/controllers/rider_refferal_controller.dart';
@@ -34,5 +36,7 @@ class AppBind extends Bindings {
     Get.lazyPut<SubscribersController>(() => SubscribersController());
     Get.lazyPut<RiderRefferalController>(() => RiderRefferalController());
     Get.lazyPut<LeaderBoardController>(() => LeaderBoardController());
+    Get.lazyPut<CaptureImageController>(() => CaptureImageController());
+    Get.lazyPut<FeedsController>(() => FeedsController());
   }
 }

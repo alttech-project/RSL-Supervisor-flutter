@@ -76,7 +76,6 @@ class UnderlinedTextField extends StatelessWidget {
     required this.controller,
     required this.hint,
     required this.inputLblTxt,
-    this.onChanged,
     this.isEnabled,
     this.textStyle,
     this.suffix,
@@ -93,6 +92,7 @@ class UnderlinedTextField extends StatelessWidget {
     this.onTap,
     this.maxLines,
     this.hintColor,
+    this.onChanged,
   });
 
   @override
@@ -125,6 +125,7 @@ class UnderlinedTextField extends StatelessWidget {
       textInputAction: textInputAction,
       validator: validator,
       readOnly: readOnly,
+      onChanged: onChanged,
     );
   }
 }
@@ -226,6 +227,7 @@ class BoxTextField extends StatelessWidget {
     this.autofocus = false,
     this.contentPadding,
   });
+
   final String? hintText;
   final TextInputType? keyboardType;
   final TextEditingController? textController;
@@ -239,6 +241,7 @@ class BoxTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
   final EdgeInsetsGeometry? contentPadding;
+
   @override
   Widget build(BuildContext context) {
     return TextField(

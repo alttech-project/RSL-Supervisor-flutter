@@ -157,7 +157,7 @@ class LoginController extends GetxController {
             phoneNumber =
                 kioskList.isNotEmpty ? (kioskList[0].phone ?? "") : "";
 
-            callAssignSupervisorApi();
+            moveToCaptureImagePage();
           } else {
             Get.snackbar('Alert', '${response.message}',
                 backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -179,7 +179,7 @@ class LoginController extends GetxController {
     }
   }
 
-  callAssignSupervisorApi() async {
+  callAssignSupervisorApi(imageUrl) async {
     apiLoading.value = true;
     LocationResult<Position> result =
         await locationManager.getCurrentLocation();
@@ -187,16 +187,14 @@ class LoginController extends GetxController {
     if (result.data != null) {
       assignSupervisorApi(
         AssignSupervisorRequest(
-          kioskId: kioskId,
-          supervisorId: supervisorId,
-          cid: cid,
-          latitude: result.data!.latitude,
-          longitude: result.data!.longitude,
-          accuracy: result.data!.altitude,
-          deviceToken: deviceToken,
-          photoUrl:
-              "https://firebasestorage.googleapis.com/v0/b/rsl-passenger-b0629.appspot.com/o/Supervisor%2FPhotosVerification%2FPhotos_07-08-2023%2Fphoto_-2001340201?alt=media&token=94c2317c-80ce-4534-9a18-4000245313be",
-        ),
+            kioskId: kioskId,
+            supervisorId: supervisorId,
+            cid: cid,
+            latitude: result.data!.latitude,
+            longitude: result.data!.longitude,
+            accuracy: result.data!.altitude,
+            deviceToken: deviceToken,
+            photoUrl: imageUrl),
       ).then(
         (response) {
           apiLoading.value = false;
@@ -235,6 +233,13 @@ class LoginController extends GetxController {
           title: "ERROR!",
           middleText:
               result.error ?? "Error occured while fetching current location");
+    }
+  }
+
+  void moveToCaptureImagePage() async {
+    final imageUrl = await Get.toNamed(AppRoutes.captureImagePage);
+    if (imageUrl is String) {
+      callAssignSupervisorApi(imageUrl);
     }
   }
 

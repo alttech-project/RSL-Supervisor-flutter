@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
+import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 
@@ -167,6 +168,9 @@ class DashBoardController extends GetxController {
       case "Trip History":
         Get.toNamed(AppRoutes.tripHistoryPage);
         break;
+      case "Feeds":
+        Get.toNamed(AppRoutes.feedsPage);
+        break;
       case "Subscribers":
         Get.toNamed(AppRoutes.subscriberPage);
         break;
@@ -195,21 +199,18 @@ class DashBoardController extends GetxController {
     );
   }
 
-  void _callLogoutApi() async {
-    LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
-
-    if (result.data != null) {
+  void moveToCaptureImagePage(data) async {
+    final imageUrl = await Get.toNamed(AppRoutes.captureImagePage);
+    if (imageUrl is String) {
       showLoader.value = true;
       logoutApi(
         LogoutApiRequest(
           supervisorId: supervisorInfo.value.supervisorId,
           cid: supervisorInfo.value.cid,
-          latitude: result.data!.latitude,
-          longitude: result.data!.longitude,
-          accuracy: result.data!.accuracy,
-          photoUrl:
-              "https://firebasestorage.googleapis.com/v0/b/rsl-passenger-b0629.appspot.com/o/Supervisor%2FPhotosVerification%2FPhotos_07-08-2023%2Fphoto_-2001340201?alt=media&token=94c2317c-80ce-4534-9a18-4000245313be",
+          latitude: data!.latitude,
+          longitude: data!.longitude,
+          accuracy: data!.accuracy,
+          photoUrl: imageUrl,
         ),
       ).then(
         (response) {
@@ -233,6 +234,15 @@ class DashBoardController extends GetxController {
           );
         },
       );
+    }
+  }
+
+  void _callLogoutApi() async {
+    LocationResult<Position> result =
+        await locationManager.getCurrentLocation();
+
+    if (result.data != null) {
+      moveToCaptureImagePage(result.data);
     } else {
       showSnackBar(
         title: 'ERROR!',

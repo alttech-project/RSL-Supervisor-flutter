@@ -71,9 +71,12 @@ dependencies:
   barcode_image: ^2.0.3
   share: ^2.0.4
   percent_indicator: ^4.2.3
-
-
-
+  camera: ^0.10.5+4
+  flutter_native_image: ^0.0.6+1
+  firebase_storage: ^11.2.6
+  firebase_core: ^2.15.1
+  video_player: ^2.7.1
+  chewie: ^1.7.1
 
 dev_dependencies:
   flutter_test:

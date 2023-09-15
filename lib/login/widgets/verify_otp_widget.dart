@@ -46,7 +46,7 @@ class VerifyOTPWidget extends GetView<LoginController> {
             textFieldAlignment: MainAxisAlignment.spaceAround,
             fieldStyle: FieldStyle.box,
             otpFieldStyle:
-                OtpFieldStyle(backgroundColor: AppColors.kOtpFieldColor.value),
+            OtpFieldStyle(backgroundColor: AppColors.kOtpFieldColor.value),
             onCompleted: (pin) {
               printLogs("OTP Completed: $pin");
               controller.otp.value = pin;
@@ -75,20 +75,21 @@ class VerifyOTPWidget extends GetView<LoginController> {
         Padding(
           padding: EdgeInsets.only(top: 50.h),
           child: Obx(
-            () => CustomButton(
-              width: double.maxFinite,
-              linearColor: primaryButtonLinearColor,
-              height: 35.h,
-              borderRadius: 35.h / 2,
-              isLoader: controller.apiLoading.value,
-              style: AppFontStyle.body(color: Colors.white),
-              text: 'Verify OTP',
-              onTap: () {
-                if (controller.otp.value.length == 4) {
-                  controller.calVerfyOtpApi();
-                }
-              },
-            ),
+                () =>
+                CustomButton(
+                  width: double.maxFinite,
+                  linearColor: primaryButtonLinearColor,
+                  height: 35.h,
+                  borderRadius: 35.h / 2,
+                  isLoader: controller.apiLoading.value,
+                  style: AppFontStyle.body(color: Colors.white),
+                  text: 'Verify OTP',
+                  onTap: () {
+                    if (controller.otp.value.length == 4) {
+                      controller.calVerfyOtpApi();
+                    }
+                  },
+                ),
           ),
         )
       ],

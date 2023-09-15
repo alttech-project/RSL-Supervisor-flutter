@@ -56,8 +56,8 @@ class FareSelectionPage extends GetView<LocationQueueController> {
                         ),
                         _formFields(
                           controller: controller.nameController,
-                          hint: "Name (optional)",
-                          lblTxt: "Name (optional)",
+                          hint: "Passenger Name (optional)",
+                          lblTxt: "Passenger Name (optional)",
                           keyboardtype: TextInputType.name,
                           onSubmit: (text) {},
                         ),

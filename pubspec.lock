@@ -33,6 +33,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  barcode:
+    dependency: transitive
+    description:
+      name: barcode
+      sha256: "789f898eef0bd88312470bdb2cc996f895ad7dd5f89e9adde84b204546a90b45"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.4"
+  barcode_image:
+    dependency: "direct main"
+    description:
+      name: barcode_image
+      sha256: b93f6ec7fa3d29373cff404ea99fb2afe895d2b4f36704e563f861e7a0818483
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -672,6 +688,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: e4ff8e8564c03f255408decd16e7899da1733852a9110a58fe6d1b817684a63e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   nested:
     dependency: transitive
     description:
@@ -784,6 +808,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  percent_indicator:
+    dependency: "direct main"
+    description:
+      name: percent_indicator
+      sha256: c37099ad833a883c9d71782321cb65c3a848c21b6939b6185f0ff6640d05814c
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.3"
   permission_handler:
     dependency: "direct main"
     description:
@@ -920,6 +952,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  share:
+    dependency: "direct main"
+    description:
+      name: share
+      sha256: "97e6403f564ed1051a01534c2fc919cb6e40ea55e60a18ec23cee6e0ce19f4be"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
   sky_engine:
     dependency: transitive
     description: flutter

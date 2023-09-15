@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
 import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
 import 'package:rsl_supervisor/location_queue/views/location_queue_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
+import 'package:rsl_supervisor/rider_refferral/views/rider_refferal_page.dart';
+import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';
+import 'package:rsl_supervisor/trip_details/views/qr_page.dart';
+import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 
 import '../login/view/login_page.dart';
 import '../place_search/views/place_search_view.dart';
+import '../rider_refferral/views/referral_history_page.dart';
 import '../scanner/views/scanner_page.dart';
+import '../trip_details/views/edit_fare_page.dart';
 
 class AppRoutes {
   static const home = '/';
@@ -23,6 +30,17 @@ class AppRoutes {
   static const qrScannerPage = '/qrScannerPage';
   static const offlineTripPage = '/offlineTripPage';
   static const tripHistoryPage = '/tripHistoryPage';
+  static const subscriberPage = '/subscriberPage';
+  static const tripDetailPage = '/tripDetailPage';
+  static const qrPage = '/qrPage';
+  static const editFarePage = '/editFarePage';
+  static const riderRefferalPage = '/riderRefferalPage';
+  static const riderReferralHistoryPage = '/riderReferralHistoryPage';
+  static const leaderBoaradPage = '/leaderBoaradPage';
+
+
+
+
 }
 
 List<GetPage> routes = [
@@ -89,7 +107,57 @@ List<GetPage> routes = [
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
+  GetPage(
+    name: AppRoutes.subscriberPage,
+    page: () => const SubscribersPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.tripDetailPage,
+    page: () =>   TripDetailsPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.qrPage,
+    page: () =>   QRCodeGenerator(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.editFarePage,
+    page: () =>   const EditFarePage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),GetPage(
+    name: AppRoutes.riderRefferalPage,
+    page: () =>   const RiderReferralPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.riderReferralHistoryPage,
+    page: () =>   const RiderReferralHistoryPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.leaderBoaradPage,
+    page: () =>   const LeaderBoardPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  )
 ];
+
+
 
 class SizeTransitions extends CustomTransition {
   @override

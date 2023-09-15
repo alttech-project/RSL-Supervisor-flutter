@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 
+import '../../routes/app_routes.dart';
 import '../data/trip_history_data.dart';
 
 class TripListWidget extends GetView<TripHistoryController> {
@@ -43,10 +44,19 @@ class TripListWidget extends GetView<TripHistoryController> {
               itemCount: controller.tripList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return _listRowWidget(controller.tripList[index]);
+                return InkWell(
+                  onTap: () {
+                    controller.getTripDetailFromList(detail:controller.tripList[index]);
+                    Get.toNamed(AppRoutes.tripDetailPage);
+                  },
+                  child: _listRowWidget(controller.tripList[index]),
+                );
               },
-            ),
+            )
+            ,
+
           ),
+
         ],
       ),
     );

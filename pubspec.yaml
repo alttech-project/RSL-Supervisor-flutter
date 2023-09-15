@@ -68,6 +68,12 @@ dependencies:
   dropdown_search: ^5.0.6
   syncfusion_flutter_datepicker: ^21.2.3
   crypto: ^3.0.3
+  barcode_image: ^2.0.3
+  share: ^2.0.4
+  percent_indicator: ^4.2.3
+
+
+
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +101,10 @@ flutter:
   assets:
      - assets/images/
      - assets/side_menu/
+     - assets/subscriber_page/
+     - assets/trip_details/
+     - assets/rider_refferal/
+     - assets/leaderboard/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

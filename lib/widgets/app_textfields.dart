@@ -146,6 +146,7 @@ class CountryCodeTextField extends StatelessWidget {
   final Color? focusColor;
   final TextInputAction textInputAction;
   final ValueChanged<Country>? onCountryChanged;
+  final InputDecoration? decoration;
 
   const CountryCodeTextField({
     super.key,
@@ -153,7 +154,7 @@ class CountryCodeTextField extends StatelessWidget {
     required this.hint,
     required this.inputLblTxt,
     this.onChanged,
-    this.isEnabled,
+    this.isEnabled,this.decoration,
     this.textStyle,
     this.suffix,
     this.keyboardType,
@@ -187,7 +188,7 @@ class CountryCodeTextField extends StatelessWidget {
         color: Colors.white,
         size: 14.r,
       ),
-      decoration: InputDecoration(
+      decoration:decoration ?? InputDecoration(
         labelText: inputLblTxt,
         labelStyle: inputLblStyle ??
             AppFontStyle.body(

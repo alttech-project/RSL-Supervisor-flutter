@@ -57,6 +57,53 @@ class CancelTripResponse {
     return data;
   }
 }
+class EditFareRequestData {
+  int? tripId;
+  int? fare;
+  String? comments;
+
+  EditFareRequestData({this.tripId, this.fare, this.comments});
+
+  EditFareRequestData.fromJson(Map<String, dynamic> json) {
+    tripId = json['trip_id'];
+    fare = json['fare'];
+    comments = json['comments'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['trip_id'] = this.tripId;
+    data['fare'] = this.fare;
+    data['comments'] = this.comments;
+    return data;
+  }
+}
+
+class EditFareResponseData {
+  String? message;
+  String? details;
+  int? status;
+  String? authKey;
+
+  EditFareResponseData({this.message, this.details, this.status, this.authKey});
+
+  EditFareResponseData.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    details = json['details'];
+    status = json['status'];
+    authKey = json['auth_key'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['details'] = this.details;
+    data['status'] = this.status;
+    data['auth_key'] = this.authKey;
+    return data;
+  }
+}
+
 
 String cancelTripRequestToJson(CancelTripRequest data) {
   final dyn = data.toJson();
@@ -66,4 +113,14 @@ String cancelTripRequestToJson(CancelTripRequest data) {
 CancelTripResponse camcelTripResponseFromJson(String str) {
   final jsonData = json.decode(str);
   return CancelTripResponse.fromJson(jsonData);
+}
+
+String editFareRequestToJson(EditFareRequestData data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
+}
+
+EditFareResponseData editFareResponseFromJson(String str) {
+  final jsonData = json.decode(str);
+  return EditFareResponseData.fromJson(jsonData);
 }

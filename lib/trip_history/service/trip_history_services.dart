@@ -38,3 +38,13 @@ Future<CancelTripResponse> cancelTripApi(CancelTripRequest requestData) async {
   );
   return camcelTripResponseFromJson(response);
 }
+
+Future<EditFareResponseData> editFareApi(EditFareRequestData requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: 'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=update_trip_fare',
+      request: editFareRequestToJson(requestData),
+    ),
+  );
+  return editFareResponseFromJson(response);
+}

@@ -22,14 +22,14 @@ class RiderReferralRequest {
 }
 
 
-class RiderRefferalResponseData {
+class RiderReferralResponseData {
   int? status;
   String? message;
   Details? details;
 
-  RiderRefferalResponseData({this.status, this.message, this.details});
+  RiderReferralResponseData({this.status, this.message, this.details});
 
-  RiderRefferalResponseData.fromJson(Map<String, dynamic> json) {
+  RiderReferralResponseData.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     details =
@@ -88,15 +88,15 @@ class Details {
   }
 }
 
-class RiderReferraMessageRequestData {
+class RiderReferralMessageRequestData {
   int? supervisorId;
   String? countryCode;
   String? passengerPhone;
 
-  RiderReferraMessageRequestData(
+  RiderReferralMessageRequestData(
       {this.supervisorId, this.countryCode, this.passengerPhone});
 
-  RiderReferraMessageRequestData.fromJson(Map<String, dynamic> json) {
+  RiderReferralMessageRequestData.fromJson(Map<String, dynamic> json) {
     supervisorId = json['supervisorId'];
     countryCode = json['countryCode'];
     passengerPhone = json['passengerPhone'];
@@ -130,12 +130,12 @@ class RiderReferraMessageResponseData {
   }
 }
 
-class RiderRefferalHistoryRequestData {
+class RiderReferralHistoryRequestData {
   int? supervisorId;
 
-  RiderRefferalHistoryRequestData({this.supervisorId});
+  RiderReferralHistoryRequestData({this.supervisorId});
 
-  RiderRefferalHistoryRequestData.fromJson(Map<String, dynamic> json) {
+  RiderReferralHistoryRequestData.fromJson(Map<String, dynamic> json) {
     supervisorId = json['supervisorId'];
   }
 
@@ -245,20 +245,17 @@ class ReferralHistory {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['passengerId'] = this.passengerId;
-    data['phone'] = this.phone;
-    data['name'] = this.name;
-    data['LastName'] = this.lastName;
-    data['referralAmountUsed'] = this.referralAmountUsed;
-    data['earnedAmount'] = this.earnedAmount;
-    data['referralDescription'] = this.referralDescription;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['passengerId'] = passengerId;
+    data['phone'] = phone;
+    data['name'] = name;
+    data['LastName'] = lastName;
+    data['referralAmountUsed'] = referralAmountUsed;
+    data['earnedAmount'] = earnedAmount;
+    data['referralDescription'] = referralDescription;
     return data;
   }
 }
-
-
-
 
 
 RiderReferraMessageResponseData RiderRefferalMsgFromJson(String str) {
@@ -266,15 +263,15 @@ RiderReferraMessageResponseData RiderRefferalMsgFromJson(String str) {
   return RiderReferraMessageResponseData.fromJson(jsonData);
 }
 
-String riderReferralMsgRequestToJson(RiderReferraMessageRequestData data) {
+String riderReferralMsgRequestToJson(RiderReferralMessageRequestData data) {
   final dyn = data.toJson();
   return json.encode(dyn);
 }
 
 
-RiderRefferalResponseData RiderRefferalFromJson(String str) {
+RiderReferralResponseData RiderReferralFromJson(String str) {
   final jsonData = json.decode(str);
-  return RiderRefferalResponseData.fromJson(jsonData);
+  return RiderReferralResponseData.fromJson(jsonData);
 }
 
 String riderReferralRequestToJson(RiderReferralRequest data) {
@@ -288,7 +285,7 @@ RiderRefferalHistoryResponseData RiderRefferalHistoryFromJson(String str) {
   return RiderRefferalHistoryResponseData.fromJson(jsonData);
 }
 
-String riderReferralHistoryRequestToJson(RiderRefferalHistoryRequestData data) {
+String riderReferralHistoryRequestToJson(RiderReferralHistoryRequestData data) {
   final dyn = data.toJson();
   return json.encode(dyn);
 }

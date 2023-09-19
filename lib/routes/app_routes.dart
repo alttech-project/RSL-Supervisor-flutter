@@ -9,10 +9,11 @@ import 'package:rsl_supervisor/location_queue/views/location_queue_page.dart';
 import 'package:rsl_supervisor/login/view/capture_image_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
-import 'package:rsl_supervisor/rider_refferral/views/rider_refferal_page.dart';
+import 'package:rsl_supervisor/rider_refferral/views/rider_referral_page.dart';
 import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';
 import 'package:rsl_supervisor/trip_details/views/qr_page.dart';
 import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
+import 'package:rsl_supervisor/trip_history/views/trip_history_map_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 
 import '../login/view/login_page.dart';
@@ -41,6 +42,8 @@ class AppRoutes {
   static const leaderBoaradPage = '/leaderBoaradPage';
   static const captureImagePage = '/captureImagePage';
   static const feedsPage = '/feedsPage';
+  static const tripHistoryMapPage = '/tripHistoryMapPage';
+
 }
 
 List<GetPage> routes = [
@@ -165,6 +168,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.leaderBoaradPage,
     page: () =>   const LeaderBoardPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.tripHistoryMapPage,
+    page: () =>   TripHistoryMapPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

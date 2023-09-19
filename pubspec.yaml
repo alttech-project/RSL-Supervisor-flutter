@@ -77,6 +77,8 @@ dependencies:
   firebase_core: ^2.15.1
   video_player: ^2.7.1
   chewie: ^1.7.1
+  google_maps_flutter: ^2.3.0
+
 
 dev_dependencies:
   flutter_test:
@@ -106,8 +108,9 @@ flutter:
      - assets/side_menu/
      - assets/subscriber_page/
      - assets/trip_details/
-     - assets/rider_refferal/
+     - assets/rider_referral/
      - assets/leaderboard/
+     - assets/trip_History_map_page/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

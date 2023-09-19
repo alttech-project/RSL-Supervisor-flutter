@@ -1,19 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:rsl_supervisor/rider_refferral/data/rider_refferal_api_data.dart';
 import 'package:share/share.dart';
-
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
-import '../../utils/helpers/getx_storage.dart';
-import '../service/rider_refferal_service.dart';
+import '../data/rider_referral_api_data.dart';
+import '../service/rider_referral_service.dart';
 
-class RiderRefferalController extends GetxController {
+class RiderReferralController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   var countryCode = '971'.obs;
   RxBool showLoader = false.obs;
@@ -24,7 +19,7 @@ class RiderRefferalController extends GetxController {
   void callRiderReferralApi(int? supervisorId) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     showLoader.value = true;
-    riderRefferaAPi(
+    riderReferralApi(
       RiderReferralRequest(supervisorId: supervisorId),
     ).then(
       (response) {
@@ -52,12 +47,12 @@ class RiderRefferalController extends GetxController {
     );
   }
 
-  void callRideRefrralMsgAPi(
+  void callRideReferralMsgAPi(
       int? supervisorId, String? countryCode, String? passengerPhone) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     showLoader.value = true;
     riderRefferalMsgApi(
-      RiderReferraMessageRequestData(
+      RiderReferralMessageRequestData(
           supervisorId: supervisorId,
           countryCode: countryCode,
           passengerPhone: passengerPhone),
@@ -91,7 +86,7 @@ class RiderRefferalController extends GetxController {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     showLoader.value = true;
     riderRefferalHistoryApi(
-      RiderRefferalHistoryRequestData(
+      RiderReferralHistoryRequestData(
         supervisorId: supervisorId,
       ),
     ).then(

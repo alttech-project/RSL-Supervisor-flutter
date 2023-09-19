@@ -96,7 +96,7 @@ class TripDetailsPage extends GetView<TripHistoryController> {
             ),
             CommonWidgetForDetails(
               leadingText: 'Payment Type',
-              trailingText: controller.tripDetail.value.paymentType ?? "",
+              trailingText: controller.tripDetail.value.paymentText ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Total Distance',
@@ -109,15 +109,15 @@ class TripDetailsPage extends GetView<TripHistoryController> {
             ),
             CommonWidgetForDetails(
               leadingText: 'Vehicle Waiting Time Cost',
-              trailingText: controller.tripDetail.value.waitingCost ?? "",
+              trailingText: "AED ${controller.tripDetail.value.waitingCost ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Toll Fare',
-              trailingText: controller.tripDetail.value.tollAmount ?? "",
+              trailingText: "AED ${controller.tripDetail.value.tollAmount ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Total Fare',
-              trailingText: '${controller.tripDetail.value.tripFare ?? ""} AED',
+              trailingText: 'AED ${controller.tripDetail.value.tripFare ?? ""}',
               trailingWidget: (controller.tripDetail.value.travelStatus == '1')
                   ? GestureDetector(
                       onTap: () => Get.toNamed(AppRoutes.editFarePage),

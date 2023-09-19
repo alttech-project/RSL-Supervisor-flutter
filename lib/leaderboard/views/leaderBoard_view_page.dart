@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/leaderboard/controllers/leaderboard_controller.dart';
@@ -17,6 +18,9 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
       home: Scaffold(
         backgroundColor: Colors.black54,
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: AppColors.kPrimaryColor.value,
+          ),
           backgroundColor: AppColors.kPrimaryColor.value,
           elevation: 0,
           title: Text(
@@ -31,67 +35,7 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                 color: Colors.black54,
               ), // You can use any icon you prefer hera
               onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                      height: 100.h,
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(height: 20.h),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 20.w),
-                              Text("Apply Filter",
-                                  style: TextStyle(
-                                      fontWeight: AppFontWeight.bold.value)),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              RoundedButton(
-                                label: 'Trip Count',
-                                isSelected: controller.selectedButton.value ==
-                                    'Trip Count',
-                                onPressed: () {
-                                  controller.setSelectedButton('Trip Count');
-                                  // Handle Trip Count button press here
-                                  Navigator.pop(context);
-                                  print('Trip Count button pressed');
-                                },
-                              ),
-                              RoundedButton(
-                                label: 'Revenue',
-                                isSelected: controller.selectedButton.value ==
-                                    'Revenue',
-                                onPressed: () {
-                                  controller.setSelectedButton('Revenue');
-                                  // Handle Revenue button press here
-                                  Navigator.pop(context);
-                                  print('Revenue button pressed');
-                                },
-                              ),
-                              RoundedButton(
-                                label: 'Points',
-                                isSelected:
-                                    controller.selectedButton.value == 'Points',
-                                onPressed: () {
-                                  controller.setSelectedButton('Points');
-                                  // Handle Points button press here
-                                  Navigator.pop(context);
-                                  print('Points button pressed');
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
+                showRadioButtonBottomSheet(context);
               },
               color: AppColors.kPrimaryTextColor.value,
             ),
@@ -109,33 +53,33 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
     );
   }
 
-  void showRadioButtonDialog(BuildContext context) {
-    showDialog(
+  void showRadioButtonBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
+        return ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Text(
-                      'Apply Filter',
-                      style: TextStyle(
-                        fontWeight: AppFontWeight.bold.value,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0,
+                        top: 15), // Adjust the left padding as needed
+                    child: Center(
+                      child: Text(
+                        'Apply Filter',
+                        style: TextStyle(
+                          fontWeight: AppFontWeight.bold.value,
+                        ),
                       ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.close,
-                      color: AppColors.kPrimaryColor.value,
                     ),
                   ),
                 ],
@@ -149,7 +93,6 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                     groupValue: controller.selectedRadio.value,
                     onChanged: (value) {
                       controller.selectedRadio.value = value!;
-                      controller.handleRadioValueChanged(value);
                     },
                     activeColor: AppColors.kPrimaryColor.value,
                   ),
@@ -164,7 +107,6 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                     groupValue: controller.selectedRadio.value,
                     onChanged: (value) {
                       controller.selectedRadio.value = value!;
-                      controller.handleRadioValueChanged(value);
                     },
                     activeColor: AppColors.kPrimaryColor.value,
                   ),
@@ -178,11 +120,24 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                     value: 3,
                     groupValue: controller.selectedRadio.value,
                     onChanged: (value) {
-                      controller.handleRadioValueChanged(value);
+                      controller.selectedRadio.value = value!;
                     },
                     activeColor: AppColors.kPrimaryColor.value,
                   ),
                 ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Call your API with the selected radio button value
+                  controller
+                      .handleRadioValueChanged(controller.selectedRadio.value);
+                  Get.back();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: AppColors
+                      .kPrimaryColor.value, // Set the background color to cyan
+                ),
+                child: const Text('Submit'),
               ),
             ],
           ),
@@ -260,6 +215,8 @@ class MyContainerWithTabBar extends GetView<LeaderBoardController> {
 }
 
 class LeaderBoardList extends GetView<LeaderBoardController> {
+  const LeaderBoardList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -278,13 +235,13 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     ),
                   ),
                   Image.asset(
-                    'assets/leaderboard/uparrow.png',
+                    LeaderboardIcons.upArrow,
                     width: 15,
                     height: 15,
                     color: Colors.green,
                   ),
                   Image.asset(
-                    'assets/leaderboard/profileimg.png',
+                    LeaderboardIcons.profileIcon,
                     width: 50,
                     height: 50,
                   ),
@@ -292,8 +249,9 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     height: 5,
                   ),
                   Text(
-                    controller.driverList.isNotEmpty
-                        ? (controller.driverList[1]?.completedTrips
+                    controller.supervisorList.isNotEmpty &&
+                            controller.supervisorList != null
+                        ? (controller.supervisorList[1]?.completedTrips
                                 .toString() ??
                             "")
                         : "",
@@ -303,8 +261,9 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     ),
                   ),
                   Text(
-                    controller.driverList.isNotEmpty
-                        ? (controller.driverList[1]?.supervisorName ?? "")
+                    controller.supervisorList.isNotEmpty &&
+                            controller.supervisorList != null
+                        ? (controller.supervisorList[1]?.supervisorName ?? "")
                         : "",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -320,12 +279,12 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                 child: Column(
               children: [
                 Image.asset(
-                  'assets/leaderboard/crown.png',
+                  LeaderboardIcons.crown,
                   width: 30,
                   height: 30,
                 ),
                 Image.asset(
-                  'assets/leaderboard/profileimg.png',
+                  LeaderboardIcons.profileIcon,
                   width: 80,
                   height: 80,
                 ),
@@ -333,8 +292,10 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   height: 5,
                 ),
                 Text(
-                  controller.driverList.isNotEmpty
-                      ? (controller.driverList[0]?.completedTrips.toString() ??
+                  controller.supervisorList.isNotEmpty &&
+                          controller.supervisorList != null
+                      ? (controller.supervisorList[0]?.completedTrips
+                              .toString() ??
                           "")
                       : "",
                   style: TextStyle(
@@ -343,8 +304,9 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Text(
-                  controller.driverList.isNotEmpty
-                      ? (controller.driverList[0]?.supervisorName ?? "")
+                  controller.supervisorList.isNotEmpty &&
+                          controller.supervisorList != null
+                      ? (controller.supervisorList[0]?.supervisorName ?? "")
                       : "",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -366,13 +328,13 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Image.asset(
-                  'assets/leaderboard/downarrow.png',
+                  LeaderboardIcons.downArrow,
                   width: 15,
                   height: 15,
                   color: Colors.red,
                 ),
                 Image.asset(
-                  'assets/leaderboard/profileimg.png',
+                  LeaderboardIcons.profileIcon,
                   width: 50,
                   height: 50,
                 ),
@@ -380,8 +342,10 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   height: 5,
                 ),
                 Text(
-                  controller.driverList.isNotEmpty
-                      ? (controller.driverList[2]?.completedTrips.toString() ??
+                  controller.supervisorList.isNotEmpty &&
+                          controller.supervisorList != null
+                      ? (controller.supervisorList[2]?.completedTrips
+                              .toString() ??
                           "")
                       : "completedTrips",
                   style: TextStyle(
@@ -390,8 +354,9 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Text(
-                  controller.driverList.isNotEmpty
-                      ? (controller.driverList[2]?.supervisorName ?? "")
+                  controller.supervisorList.isNotEmpty &&
+                          controller.supervisorList != null
+                      ? (controller.supervisorList[2]?.supervisorName ?? "")
                       : "supervisorName",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -410,6 +375,8 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
 }
 
 class UserListView extends GetView<LeaderBoardController> {
+  const UserListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -419,10 +386,10 @@ class UserListView extends GetView<LeaderBoardController> {
               child: AppLoader(),
             )
           : ListView.builder(
-              itemCount: controller.driverList.length,
+              itemCount: controller.supervisorList.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-                final driverList = controller.driverList[index];
+                final supervisorList = controller.supervisorList[index];
                 return Container(
                   margin: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
@@ -434,7 +401,7 @@ class UserListView extends GetView<LeaderBoardController> {
                     child: Row(
                       children: [
                         Image.asset(
-                          'assets/leaderboard/profileimg.png',
+                          LeaderboardIcons.profileIcon,
                           width: 60.w,
                           height: 60.h,
                         ),
@@ -447,7 +414,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
-                                  Text(driverList.supervisorName ?? "",
+                                  Text(supervisorList.supervisorName ?? "",
                                       maxLines: 2,
                                       style: TextStyle(
                                         color: AppColors.kPrimaryColor.value,
@@ -464,7 +431,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                       children: <TextSpan>[
                                         TextSpan(
                                           text:
-                                              '${driverList.targetCompletedPercentage}',
+                                              'AED ${supervisorList.targetCompletedPercentage}',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -492,7 +459,8 @@ class UserListView extends GetView<LeaderBoardController> {
                                           ),
                                         ),
                                         TextSpan(
-                                          text: '${driverList.completedTrips}/',
+                                          text:
+                                              '${supervisorList.completedTrips}/',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -500,7 +468,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${driverList.totalTargetTrips}',
+                                              '${supervisorList.totalTargetTrips}',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -517,7 +485,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                     lineHeight: 3.0.h,
                                     trailing: Flexible(
                                       child: Text(
-                                        "${driverList.targetCompletedPercentage}%",
+                                        "${supervisorList.targetCompletedPercentage}%",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight:
@@ -525,8 +493,9 @@ class UserListView extends GetView<LeaderBoardController> {
                                         ),
                                       ),
                                     ),
-                                    percent: (driverList.completedTrips ?? 0) /
-                                        (driverList.totalTargetTrips ?? 1) /
+                                    percent: (supervisorList.completedTrips ??
+                                            0) /
+                                        (supervisorList.totalTargetTrips ?? 1) /
                                         100,
                                     linearStrokeCap: LinearStrokeCap.butt,
                                     progressColor: Colors.greenAccent,
@@ -568,7 +537,7 @@ class UserListView extends GetView<LeaderBoardController> {
                               Row(
                                 children: [
                                   Image.asset(
-                                    'assets/rider_refferal/smile.png',
+                                    LeaderboardIcons.smileIcon,
                                     width: 20.w,
                                     height: 20.h,
                                   ),
@@ -576,7 +545,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                     width: 5.w,
                                   ),
                                   Text(
-                                    "0",
+                                    supervisorList.points.toString(),
                                     style: TextStyle(
                                       color: Colors.white70,
                                       fontWeight: AppFontWeight.semibold.value,
@@ -594,80 +563,10 @@ class UserListView extends GetView<LeaderBoardController> {
   }
 }
 
-Future<T?> showModalBottomSheet<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  Color? backgroundColor,
-  String? barrierLabel,
-  double? elevation,
-  ShapeBorder? shape,
-  Clip? clipBehavior,
-  BoxConstraints? constraints,
-  Color? barrierColor,
-  bool isScrollControlled = false,
-  bool useRootNavigator = false,
-  bool isDismissible = true,
-  bool enableDrag = true,
-  bool? showDragHandle,
-  bool useSafeArea = false,
-  RouteSettings? routeSettings,
-  AnimationController? transitionAnimationController,
-  Offset? anchorPoint,
-}) {
-  assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
-
-  final NavigatorState navigator =
-      Navigator.of(context, rootNavigator: useRootNavigator);
-  final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-  return navigator.push(ModalBottomSheetRoute<T>(
-    builder: builder,
-    capturedThemes:
-        InheritedTheme.capture(from: context, to: navigator.context),
-    isScrollControlled: isScrollControlled,
-    barrierLabel: barrierLabel ?? localizations.scrimLabel,
-    barrierOnTapHint:
-        localizations.scrimOnTapHint(localizations.bottomSheetLabel),
-    backgroundColor: backgroundColor,
-    elevation: elevation,
-    shape: shape,
-    clipBehavior: clipBehavior,
-    constraints: constraints,
-    isDismissible: isDismissible,
-    modalBarrierColor:
-        barrierColor ?? Theme.of(context).bottomSheetTheme.modalBarrierColor,
-    enableDrag: enableDrag,
-    showDragHandle: showDragHandle,
-    settings: routeSettings,
-    transitionAnimationController: transitionAnimationController,
-    anchorPoint: anchorPoint,
-    useSafeArea: useSafeArea,
-  ));
-}
-
-class RoundedButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback? onPressed;
-
-  RoundedButton({
-    required this.label,
-    required this.isSelected,
-    this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        primary: isSelected ? Colors.black : AppColors.kPrimaryColor.value,
-        onPrimary: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
-      child: Text(label),
-    );
-  }
+class LeaderboardIcons {
+  static const String crown = 'assets/leaderboard/crown.png';
+  static const String downArrow = 'assets/leaderboard/downarrow.png';
+  static const String upArrow = 'assets/leaderboard/uparrow.png';
+  static const String profileIcon = 'assets/leaderboard/profileimg.png';
+  static const String smileIcon = 'assets/rider_referral/smile.png';
 }

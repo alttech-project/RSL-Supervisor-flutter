@@ -22,7 +22,6 @@ import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import 'dart:ui' as ui;
 
-
 class TripHistoryController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
   RxList<TripDetails> tripList = <TripDetails>[].obs;
@@ -37,10 +36,9 @@ class TripHistoryController extends GetxController {
   RxList<Marker> markers = <Marker>[].obs;
   BitmapDescriptor? icons;
 
-
-
   RxInt dispatchedTrips = 0.obs;
   RxInt cancelledTrips = 0.obs;
+  RxInt totalTrips = 0.obs;
   RxBool showBtnLoader = false.obs;
   Rx<TripDetails> tripDetail = TripDetails().obs;
 
@@ -92,10 +90,12 @@ class TripHistoryController extends GetxController {
           tripList.value = response.details ?? [];
           dispatchedTrips.value = response.dispatchedTripCount ?? 0;
           cancelledTrips.value = response.cancelledTripCount ?? 0;
+          totalTrips.value = dispatchedTrips.value + cancelledTrips.value;
         } else {
           tripList.value = [];
           dispatchedTrips.value = 0;
           cancelledTrips.value = 0;
+          totalTrips.value = 0;
           showSnackBar(
             title: 'Alert',
             msg: response.message ?? "Something went wrong...",
@@ -109,6 +109,7 @@ class TripHistoryController extends GetxController {
         tripList.value = [];
         dispatchedTrips.value = 0;
         cancelledTrips.value = 0;
+        totalTrips.value = 0;
         tripList.refresh();
         showSnackBar(
           title: 'Error',
@@ -269,8 +270,6 @@ class TripHistoryController extends GetxController {
           mapdatas.refresh();
           _pickUpMarker();
           _dropMarker();
-
-
         } else {
           showSnackBar(
             title: 'Error',
@@ -311,34 +310,36 @@ class TripHistoryController extends GetxController {
           int.parse(tripDetail.value.tripId ?? ''));
     }
   }
-   void addMarker(LatLng position, String title,BitmapDescriptor icon)  {
+
+  void addMarker(LatLng position, String title, BitmapDescriptor icon) {
     markers.add(
       Marker(
         markerId: MarkerId(position.toString()),
         position: position,
         infoWindow: InfoWindow(title: title),
-        icon:  icon,
+        icon: icon,
       ),
     );
     markers.refresh();
   }
 
   _pickUpMarker() async {
-    LatLng startLocation = LatLng(mapdatas.value[0].latitude ?? 0,
-        mapdatas.value[0].longitude ?? 0);
+    LatLng startLocation = LatLng(
+        mapdatas.value[0].latitude ?? 0, mapdatas.value[0].longitude ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
   }
 
   _dropMarker() async {
-    LatLng endLocation = LatLng(mapdatas.value[1].latitude ?? 0,
-        mapdatas.value[1].longitude ?? 0);
+    LatLng endLocation = LatLng(
+        mapdatas.value[1].latitude ?? 0, mapdatas.value[1].longitude ?? 0);
 
     addMarker(endLocation, "Drop", await getDropIcons());
   }
+
   Future<BitmapDescriptor> getPickUpIcons() async {
     final Uint8List customMarker = await getBytesFromAsset(
-      path:
-      'assets/trip_History_map_page/purplemarker.png', //paste the custom image path
+      path: 'assets/trip_History_map_page/purplemarker.png',
+      //paste the custom image path
       width: 40, // size of custom image as marker
     );
     var icon = BitmapDescriptor.fromBytes(customMarker);
@@ -348,7 +349,8 @@ class TripHistoryController extends GetxController {
 
   Future<BitmapDescriptor> getDropIcons() async {
     final Uint8List customMarker = await getBytesFromAsset(
-      path: 'assets/trip_History_map_page/redmarker.png', //paste the custom image path
+      path: 'assets/trip_History_map_page/redmarker.png',
+      //paste the custom image path
       width: 40, // size of custom image as marker
     );
     var icon = BitmapDescriptor.fromBytes(customMarker);
@@ -368,8 +370,6 @@ class TripHistoryController extends GetxController {
         .buffer
         .asUint8List();
   }
-
-
 }
 
 void removeRoutesUntil({String? routeName}) {
@@ -380,7 +380,3 @@ void removeRoutesUntil({String? routeName}) {
 
   Get.until(condition);
 }
-
-
-
-

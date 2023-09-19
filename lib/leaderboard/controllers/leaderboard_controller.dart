@@ -8,14 +8,12 @@ import '../service/leaderboard_service.dart';
 
 class LeaderBoardController extends GetxController {
   RxBool showLoader = false.obs;
-  RxList<ResponseDate> driverList = <ResponseDate>[].obs;
+  RxList<ResponseDate> supervisorList = <ResponseDate>[].obs;
   RxInt tabIndex = 1.obs;
   final dashBoardController = Get.find<DashBoardController>();
   final selectedRadio = 1.obs;
-  final selectedButton = ''.obs;
 
-
-
+  // Mark:LeaderBaordAPi
   void callLeaderboardApi(int forRange, int supervisorId, int basedOn) async {
     showLoader.value = true;
     leaderboardApi(
@@ -27,8 +25,8 @@ class LeaderBoardController extends GetxController {
     ).then(
       (response) {
         if (response.status == 1) {
-          driverList.value = response.responseDate ?? [];
-          driverList.refresh();
+          supervisorList.value = response.responseDate ?? [];
+          supervisorList.refresh();
           showLoader.value = false;
           printLogs("LeaderboardApi in message: ${response.message ?? ""}");
         }
@@ -42,16 +40,12 @@ class LeaderBoardController extends GetxController {
   }
 
   void handleRadioValueChanged(int? value) {
-    callLeaderboardApi(tabIndex.value,int.parse(dashBoardController.supervisorInfo.value.supervisorId ?? ""), value!);
+    callLeaderboardApi(
+        tabIndex.value,
+        int.parse(dashBoardController.supervisorInfo.value.supervisorId ?? ""),
+        value!);
     selectedRadio.value = value;
-    Get.back();
   }
-
-  void setSelectedButton(String label) {
-    selectedButton.value = label;
-  }
-
-
 
   @override
   void onInit() {
@@ -69,5 +63,5 @@ class LeaderBoardController extends GetxController {
         int.parse(dashBoardController.supervisorInfo.value.supervisorId ?? ""),
         selectedRadio.value);
   }
-}
 
+}

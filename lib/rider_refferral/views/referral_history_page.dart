@@ -5,9 +5,9 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../controllers/rider_refferal_controller.dart';
+import '../controllers/rider_referral_controller.dart';
 
-class RiderReferralHistoryPage extends GetView<RiderRefferalController> {
+class RiderReferralHistoryPage extends GetView<RiderReferralController> {
   const RiderReferralHistoryPage({super.key});
   @override
   Widget build(BuildContext context) {

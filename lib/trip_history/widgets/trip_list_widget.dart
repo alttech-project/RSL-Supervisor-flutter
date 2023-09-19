@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,8 +26,12 @@ class TripListWidget extends GetView<TripHistoryController> {
     return Flexible(
       child: Column(
         children: [
+          SizedBox(
+            height: 30.h,
+          ),
+          _tripDetailsWidget(),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(vertical: 30.h),
             child: Row(
               children: [
                 _headerTitleWidget("Trip id"),
@@ -46,17 +53,15 @@ class TripListWidget extends GetView<TripHistoryController> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    controller.getTripDetailFromList(detail:controller.tripList[index]);
+                    controller.getTripDetailFromList(
+                        detail: controller.tripList[index]);
                     Get.toNamed(AppRoutes.tripDetailPage);
                   },
                   child: _listRowWidget(controller.tripList[index]),
                 );
               },
-            )
-            ,
-
+            ),
           ),
-
         ],
       ),
     );
@@ -76,12 +81,101 @@ class TripListWidget extends GetView<TripHistoryController> {
     );
   }
 
+  Widget _tripDetailsWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 20.w,
+        ),
+        Expanded(
+            child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "Total\n",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: "Trips: 3",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        )),
+        SizedBox(
+          width: 20.w,
+        ),
+        Expanded(
+            child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "DisPatched Trips:",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: " 3",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        )),
+        SizedBox(
+          width: 20.w,
+        ),
+        Expanded(
+            child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "Cancel\n",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: "Trips: 3",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ))
+      ],
+    );
+  }
+
   Widget _listRowWidget(TripDetails details) {
+
+    print("completeTripMap: ${details?.completeTripMap}");
+    print("tripType: ${details?.tripType}");
+
     return Column(
       children: [
         Row(
           children: [
-            _listRowTextWidget(title: details.tripId ?? ""),
+            _listRowTextWidget(
+                title: details.tripId ?? "",
+                tripId: details.tripId ?? "",
+                details: details,
+                icon: Icons.map),
             _listRowTextWidget(
                 title:
                     controller.displayTimeFormatter(details.pickupTime ?? "")),
@@ -98,7 +192,13 @@ class TripListWidget extends GetView<TripHistoryController> {
     );
   }
 
-  Widget _listRowTextWidget({required String title, bool isStatus = false}) {
+  Widget _listRowTextWidget({
+    required String title,
+    bool isStatus = false,
+    String? tripId,
+    IconData? icon,
+    TripDetails? details,
+  }) {
     return Expanded(
       child: Container(
         decoration: isStatus
@@ -109,18 +209,53 @@ class TripListWidget extends GetView<TripHistoryController> {
             : null,
         padding: EdgeInsets.all(5.r),
         margin: EdgeInsets.symmetric(vertical: 8.h),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: isStatus
-                  ? AppFontSize.mini.value
-                  : AppFontSize.verySmall.value,
-              fontWeight: AppFontWeight.semibold.value,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        child: icon != null
+            ? Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes the text and icon apart
+          children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: isStatus
+                          ? AppFontSize.mini.value
+                          : AppFontSize.verySmall.value,
+                      fontWeight: AppFontWeight.semibold.value,
+                      color: Colors.white,
+                    ),
+                  ),
+                  details?.completeTripMap != null &&
+                          details?.tripType != "Offline Trip"
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.moveToMapPage(tripId ?? "");
+                          },
+                          child:  Icon(
+                            icon,
+                            size: 20.0, // Adjust the size as needed
+                            color: Colors.white,
+                          ),
+                        )
+                      : const SizedBox.shrink()
+                ],
+              )
+            : Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: isStatus
+                        ? AppFontSize.mini.value
+                        : AppFontSize.verySmall.value,
+                    fontWeight: AppFontWeight.semibold.value,
+                    color: Colors.white,
+                  ),
+                ),
+                // child: Row(
+                //   children: [
+                //
+                //
+                //   ],
+                // ),
+              ),
       ),
     );
   }
@@ -139,6 +274,7 @@ class TripListWidget extends GetView<TripHistoryController> {
             child: Center(
               child: Text(
                 details.travelStatusMessage ?? "",
+                textAlign:TextAlign.center,
                 style: TextStyle(
                   fontSize: AppFontSize.mini.value,
                   fontWeight: AppFontWeight.semibold.value,
@@ -194,4 +330,8 @@ class TripListWidget extends GetView<TripHistoryController> {
         return const Color(0xFFEF3E36);
     }
   }
+}
+
+_iconshowhidCondition(TripDetails details) {
+  if (details.completeTripMap != null && details.tripType == "Offline Trip") {}
 }

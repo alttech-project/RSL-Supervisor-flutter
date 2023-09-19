@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/trip_history/data/cancel_trip_data.dart';
 import 'package:rsl_supervisor/trip_history/data/export_pdf_data.dart';
 import 'package:rsl_supervisor/trip_history/data/trip_history_data.dart';
+import 'package:rsl_supervisor/trip_history/data/trip_history_map_data.dart';
 
 import '../../network/app_config.dart';
 import '../../network/services.dart';
@@ -47,4 +48,15 @@ Future<EditFareResponseData> editFareApi(EditFareRequestData requestData) async 
     ),
   );
   return editFareResponseFromJson(response);
+}
+
+
+Future<TripHistoryMapResponseData> tripHistoryMapApi(TripHistoryMapRequestedData requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: 'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=trip_map_datas',
+      request: tripHistoryMapRequestToJson(requestData),
+    ),
+  );
+  return tripHistoryMapResponseFromJson(response);
 }

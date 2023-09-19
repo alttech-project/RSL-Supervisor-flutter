@@ -1,18 +1,14 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
-import 'package:rsl_supervisor/rider_refferral/controllers/rider_refferal_controller.dart';
-import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/widgets/custom_button.dart';
-
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_loader.dart';
 import '../../widgets/app_textfields.dart';
+import '../controllers/rider_referral_controller.dart';
 
-class RiderReferralPage extends GetView<RiderRefferalController> {
+class RiderReferralPage extends GetView<RiderReferralController> {
   const RiderReferralPage({super.key});
 
   @override
@@ -55,7 +51,7 @@ class RiderReferralPage extends GetView<RiderRefferalController> {
                           borderRadius: 10,
                           text: 'Refer',
                           onTap: () {
-                            controller.callRideRefrralMsgAPi(
+                            controller.callRideReferralMsgAPi(
                                 int.parse(controller.dashBoardController
                                         .supervisorInfo.value.supervisorId ??
                                     ""),
@@ -137,13 +133,13 @@ class RiderReferralPage extends GetView<RiderRefferalController> {
                   ),
                   SizedBox(width: 10),
                   Image.asset(
-                    'assets/rider_refferal/smile.png',
+                    'assets/rider_referral/smile.png',
                     width: 30,
                     height: 30,
                   )
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -193,7 +189,7 @@ class RiderReferralPage extends GetView<RiderRefferalController> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 12,
                                   ),
                                   Obx(

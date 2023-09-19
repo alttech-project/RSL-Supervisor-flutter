@@ -57,8 +57,8 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.myTrips, 'My Trips'),
             _menuListRow(SideMenuIcon.driverList, 'Driver List'),
             _menuListRow(SideMenuIcon.subscribers, 'Subscribers'),
-            _menuListRow(SideMenuIcon.leaderBoard, 'Feeds'),
-            _menuListRow(SideMenuIcon.riderReferral, 'Leaderboard'),
+            _menuListRow(SideMenuIcon.feeds, 'Feeds'),
+            _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
             _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral'),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(

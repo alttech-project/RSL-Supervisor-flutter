@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 import 'package:rsl_supervisor/trip_history/widgets/trip_list_filter_widget.dart';
 import 'package:rsl_supervisor/trip_history/widgets/trip_list_widget.dart';
@@ -39,16 +40,15 @@ class TripHistoryPage extends GetView<TripHistoryController> {
                     () => Visibility(
                       visible: (controller.tripList.isNotEmpty),
                       child: CustomIconButton(
-                        title: "Export",
-                        icon: Icons.upload,
-                        showLoader: controller.showBtnLoader.value,
-                        onTap: () => controller.callExportPdfApi(),
-                      ),
+                          title: "Export",
+                          icon: Icons.upload,
+                          showLoader: controller.showBtnLoader.value,
+                          onTap: () => showAlertDialog(context)),
                     ),
                   ),
                 ),
                 const TripListFilterWidget(),
-                Obx(
+              Obx(
                   () => Expanded(
                     child: (controller.showLoader.value)
                         ? const Center(
@@ -74,4 +74,53 @@ class TripHistoryPage extends GetView<TripHistoryController> {
       ),
     );
   }
+}
+
+void showAlertDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: const Text(
+      "Are you sure want to export Pdf?",
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    actions: <Widget>[
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+
+
+        children: [
+          TextButton(
+            child: Text(
+              "No",
+              style: TextStyle(color: AppColors.kPrimaryColor.value,fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              final controller = Get.find<TripHistoryController>();
+              controller.callExportPdfApi();
+            },
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          TextButton(
+            child: Text("Yes",
+                style: TextStyle(color: AppColors.kPrimaryColor.value,fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      )
+    ],
+  );
+
+  // Show the AlertDialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

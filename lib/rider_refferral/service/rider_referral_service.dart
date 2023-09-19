@@ -2,7 +2,7 @@
 
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/network/app_config.dart';
-import 'package:rsl_supervisor/rider_refferral/data/rider_refferal_api_data.dart';
+import 'package:rsl_supervisor/rider_refferral/data/rider_referral_api_data.dart';
 
 import '../../network/services.dart';
 
@@ -10,7 +10,7 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 
 
 
-Future<RiderRefferalResponseData> riderRefferaAPi(
+Future<RiderReferralResponseData> riderReferralApi(
     RiderReferralRequest requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
@@ -18,12 +18,12 @@ Future<RiderRefferalResponseData> riderRefferaAPi(
       request: riderReferralRequestToJson(requestData),
     ),
   );
-  return RiderRefferalFromJson(response);
+  return RiderReferralFromJson(response);
 }
 
 
 Future<RiderReferraMessageResponseData> riderRefferalMsgApi(
-    RiderReferraMessageRequestData requestData) async {
+    RiderReferralMessageRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
       url: 'https://passnode.limor.us/passenger/shareReferralCode',
@@ -35,7 +35,7 @@ Future<RiderReferraMessageResponseData> riderRefferalMsgApi(
 
 
 Future<RiderRefferalHistoryResponseData> riderRefferalHistoryApi(
-    RiderRefferalHistoryRequestData requestData) async {
+    RiderReferralHistoryRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
       url: 'https://passnode.limor.us/passenger/referralHistory',

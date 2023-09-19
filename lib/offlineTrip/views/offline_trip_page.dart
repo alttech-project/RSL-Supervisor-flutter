@@ -48,7 +48,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                             _taxiNoWidget(),
                             _dropLocationWidget(),
                             _labelAndTextFieldWidget(
-                                'Fare', 'Fixed Fare', 'Enter Fixed Fare',
+                                'Fare', 'Fare', 'Enter Fare',
                                 txtEditingController: controller.fareController,
                                 keyboardType: TextInputType.number),
                             _labelAndTextFieldWidget(

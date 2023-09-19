@@ -33,7 +33,7 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
         Expanded(
           flex: 2,
           child: Text(
-            'Quick Trip',
+            'Quick Trips',
             style:
                 AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             textAlign: TextAlign.center,

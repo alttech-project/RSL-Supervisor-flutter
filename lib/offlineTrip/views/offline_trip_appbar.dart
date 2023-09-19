@@ -34,7 +34,7 @@ class OfflineTripsAppBar extends GetView<OfflineTripController> {
         Expanded(
           flex: 2,
           child: Text(
-            'Offline Trip',
+            'Offline Trips',
             style:
                 AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             textAlign: TextAlign.center,

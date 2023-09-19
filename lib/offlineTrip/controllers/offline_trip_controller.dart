@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -77,57 +79,65 @@ class OfflineTripController extends GetxController {
     taxiList.refresh();
   }
 
-  void checkValidation() {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
-    if (formKey.currentState!.validate()) {
-      final taxiNo = taxiNoController.text.trim();
-      final dropLocation = dropLocationController.text.trim();
-      final fare = fareController.text.trim();
-      final name = nameController.text.trim();
-      final phone = phoneController.text.trim();
-      final email = emailController.text.trim();
-      final date = dateController.text.trim();
+  void checkValidation() async {
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      FocusScope.of(Get.context!).requestFocus(FocusNode());
+      if (formKey.currentState!.validate()) {
+        final taxiNo = taxiNoController.text.trim();
+        final dropLocation = dropLocationController.text.trim();
+        final fare = fareController.text.trim();
+        final name = nameController.text.trim();
+        final phone = phoneController.text.trim();
+        final email = emailController.text.trim();
+        final date = dateController.text.trim();
 
-      //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
-      if (taxiNo.isEmpty) {
-        _showSnackBar('Validation!', 'Enter a valid Car No!');
-      } else if (fare.isEmpty) {
-        _showSnackBar('Validation!', 'Enter a valid fare!');
-      } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
-        _showSnackBar('Validation!', 'Enter a valid phone number!');
-      } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
-        _showSnackBar('Validation!', 'Enter a valid Email!');
-      } else {
-        if (supervisorInfo == null) {
-          _showSnackBar('Error!', 'Invalid user login status!');
-          return;
+        //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
+        if (taxiNo.isEmpty) {
+          _showSnackBar('Validation!', 'Enter a valid Car No!');
+        } else if (fare.isEmpty) {
+          _showSnackBar('Validation!', 'Enter a valid fare!');
+        } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+          _showSnackBar('Validation!', 'Enter a valid phone number!');
+        } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+          _showSnackBar('Validation!', 'Enter a valid Email!');
+        } else {
+          if (supervisorInfo == null) {
+            _showSnackBar('Error!', 'Invalid user login status!');
+            return;
+          }
+
+          apiLoading.value = true;
+          offlineTripApi(
+            DispatchOfflineTripRequestData(
+                dropLatitude: dropLatitude,
+                dropLongitude: dropLongitude,
+                fare: fare,
+                kioskId: supervisorInfo!.kioskId,
+                taxiId: taxiId.value,
+                supervisorName: supervisorInfo!.supervisorName,
+                supervisorId: supervisorInfo!.supervisorId,
+                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                taxiModel: taxiModel.value,
+                cid: supervisorInfo!.cid,
+                name: name,
+                countryCode: countryCode.value,
+                mobileNo: phone,
+                email: email,
+                pickupDateTime: date),
+          ).then((response) {
+            apiLoading.value = false;
+            _handleOfflineTripResponse(response);
+          }).catchError((onError) {
+            apiLoading.value = false;
+            _showSnackBar('Error', 'Server Connection Error!');
+          });
         }
-
-        apiLoading.value = true;
-        offlineTripApi(
-          DispatchOfflineTripRequestData(
-              dropLatitude: dropLatitude,
-              dropLongitude: dropLongitude,
-              fare: fare,
-              kioskId: supervisorInfo!.kioskId,
-              taxiId: taxiId.value,
-              supervisorName: supervisorInfo!.supervisorName,
-              supervisorId: supervisorInfo!.supervisorId,
-              supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-              taxiModel: taxiModel.value,
-              cid: supervisorInfo!.cid,
-              name: name,
-              countryCode: countryCode.value,
-              mobileNo: phone,
-              email: email,
-              pickupDateTime: date),
-        ).then((response) {
-          apiLoading.value = false;
-          _handleOfflineTripResponse(response);
-        }).catchError((onError) {
-          apiLoading.value = false;
-          _showSnackBar('Error', 'Server Connection Error!');
-        });
       }
     }
   }

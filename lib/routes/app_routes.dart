@@ -16,6 +16,7 @@ import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_map_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 
+import '../dispatch/dispatch_page.dart';
 import '../login/view/login_page.dart';
 import '../place_search/views/place_search_view.dart';
 import '../rider_refferral/views/referral_history_page.dart';
@@ -43,6 +44,7 @@ class AppRoutes {
   static const captureImagePage = '/captureImagePage';
   static const feedsPage = '/feedsPage';
   static const tripHistoryMapPage = '/tripHistoryMapPage';
+  static const dispatchPage = '/dispatchPage';
 }
 
 List<GetPage> routes = [
@@ -175,6 +177,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.tripHistoryMapPage,
     page: () => TripHistoryMapPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.dispatchPage,
+    page: () => const DispatchPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 
+import '../../location_queue/controllers/location_queue_controller.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../../utils/helpers/basic_utils.dart';
@@ -33,6 +35,7 @@ class DashBoardController extends GetxController {
   RxString appBuildNumber = "".obs;
   RxBool apiLoading = false.obs;
   RxBool showLoader = false.obs;
+  final GetStorageController controller = Get.find<GetStorageController>();
 
   @override
   void onInit() {
@@ -44,7 +47,12 @@ class DashBoardController extends GetxController {
   _getUserInfo() async {
     supervisorInfo.value = await GetStorageController().getSupervisorInfo();
     deviceToken = await GetStorageController().getDeviceToken();
-    _callShiftInApi("1");
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      isShiftIn.value = false;
+    } else {
+      isShiftIn.value = true;
+    }
     _callDashboardApi();
   }
 
@@ -77,7 +85,7 @@ class DashBoardController extends GetxController {
     });
   }
 
-  void _callShiftInApi(String type) async {
+  void _callShiftInApi(String type, bool shiftType) async {
     showLoader.value = true;
     shiftInApi(
       ShiftInRequest(
@@ -89,6 +97,7 @@ class DashBoardController extends GetxController {
     ).then(
       (response) {
         showLoader.value = false;
+        controller.saveShiftStatus(value: shiftType);
         printLogs("Shift in message: ${response.message ?? ""}");
       },
     ).onError(
@@ -101,7 +110,7 @@ class DashBoardController extends GetxController {
 
   shiftInOutAction(bool newValue) {
     isShiftIn.value = newValue;
-    _callShiftInApi(newValue ? "1" : "2");
+    _callShiftInApi(newValue ? "1" : "2", newValue);
   }
 
   customDropAction(bool newValue) {
@@ -149,6 +158,26 @@ class DashBoardController extends GetxController {
     }
   }
 
+  void moveToPlaceSearchDispatch() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    final LocationQueueController controller =
+        Get.find<LocationQueueController>();
+    controller
+      ..dropAddress = '${result.formattedAddress}'
+      ..dropLatitude =
+          double.tryParse('${result.geometry?.location?.lat}') ?? 0.0
+      ..dropLongitude =
+          double.tryParse('${result.geometry?.location?.lng}') ?? 0.0
+      ..fare = ''
+      ..fromDashboard = 0
+      ..zoneFareApplied = "0";
+
+    Get.toNamed(AppRoutes.locationQueuePage);
+  }
+
   openMenu() {
     scaffoldKey.currentState?.openDrawer();
   }
@@ -182,6 +211,9 @@ class DashBoardController extends GetxController {
         break;
       case "Leaderboard":
         Get.toNamed(AppRoutes.leaderBoaradPage);
+        break;
+      case "Dispatch":
+        Get.toNamed(AppRoutes.dispatchPage);
         break;
       default:
         break;

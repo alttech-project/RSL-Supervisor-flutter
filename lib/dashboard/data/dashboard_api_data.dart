@@ -65,9 +65,15 @@ class DropOffList {
   String? latitude;
   String? longitude;
   String? fare;
+  String? zoneFareApplied;
 
   DropOffList(
-      {this.name, this.address, this.latitude, this.longitude, this.fare});
+      {this.name,
+      this.address,
+      this.latitude,
+      this.longitude,
+      this.fare,
+      this.zoneFareApplied});
 
   DropOffList.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -75,6 +81,7 @@ class DropOffList {
     latitude = json['latitude'].toString();
     longitude = json['longitude'].toString();
     fare = json['fare'];
+    zoneFareApplied = json['zone_fare_applied'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +91,7 @@ class DropOffList {
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     data['fare'] = fare;
+    data['zone_fare_applied'] = zoneFareApplied;
     return data;
   }
 }

@@ -12,6 +12,7 @@ import 'package:rsl_supervisor/subscribers/controllers/subscriberpage_controller
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 
 import '../controllers/app_start_controller.dart';
+import '../dispatch/controllers/dispatch_controller.dart';
 import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
@@ -38,5 +39,6 @@ class AppBind extends Bindings {
     Get.lazyPut<LeaderBoardController>(() => LeaderBoardController());
     Get.lazyPut<CaptureImageController>(() => CaptureImageController());
     Get.lazyPut<FeedsController>(() => FeedsController());
+    Get.lazyPut<DispatchController>(() => DispatchController());
   }
 }

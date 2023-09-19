@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
-import 'package:rsl_supervisor/dashboard/widgets/drop_search_bar.dart';
 import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
-import 'package:rsl_supervisor/shared/styles/app_color.dart';
+import 'package:rsl_supervisor/dispatch/appbar/dispatch_app_bar.dart';
+import 'package:rsl_supervisor/dispatch/controllers/dispatch_controller.dart';
 import 'package:rsl_supervisor/dashboard/views/side_menu.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 
 import '../../shared/styles/app_font.dart';
 import '../../widgets/safe_area_container.dart';
-import '../widgets/dashboard_appbar.dart';
+import 'drop_search_bar.dart';
 
-class DashboardPage extends GetView<DashBoardController> {
-  const DashboardPage({Key? key}) : super(key: key);
+class DispatchPage extends GetView<DispatchController> {
+  const DispatchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +37,7 @@ class DashboardPage extends GetView<DashBoardController> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const DashboardAppBar(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.h),
-                      child: Text(
-                        controller.supervisorInfo.value.kioskName ?? "",
-                        maxLines: 3,
-                        style: AppFontStyle.subHeading(
-                          color: AppColors.kPrimaryColor.value,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: Text(
-                        controller.supervisorInfo.value.supervisorName ?? "",
-                        style: AppFontStyle.subHeading(
-                          color: AppColors.kPrimaryColor.value,
-                        ),
-                      ),
-                    ),
+                    const DispatchAppBar(),
                     Row(
                       children: [
                         const Spacer(),
@@ -83,9 +64,11 @@ class DashboardPage extends GetView<DashBoardController> {
                       ],
                     ),
                     DropSearchBar(
-                      pageType: 2,
+                      pageType: 1,
                     ),
-                    LocationsListWidget(pageType: 2),
+                    LocationsListWidget(
+                      pageType: 1,
+                    ),
                   ],
                 ),
               ),

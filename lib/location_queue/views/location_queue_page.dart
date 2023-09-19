@@ -7,6 +7,9 @@ import 'package:rsl_supervisor/widgets/car_search_widget.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import 'package:rsl_supervisor/widgets/navigation_title.dart';
 
+import '../../utils/helpers/basic_utils.dart';
+import '../../utils/helpers/getx_storage.dart';
+
 class LocationQueuePage extends GetView<LocationQueueController> {
   const LocationQueuePage({super.key});
 
@@ -37,7 +40,15 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                     ),
                     AddCarBtnWidget(
                       onTap: () {
-                        _showDriverSearchWidget();
+                        if (!controller.shiftStatus) {
+                          showSnackBar(
+                            title: 'Alert',
+                            msg:
+                                "You are not shift in.Please make shift in and try again!",
+                          );
+                        } else {
+                          _showDriverSearchWidget();
+                        }
                       },
                     ),
                     Flexible(
@@ -55,30 +66,54 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                 driverDetails: controller.driverList[index],
                                 position: (index + 1),
                                 onTap: () {
-                                  controller.callDriverQueuePositionApi(
-                                      driverDetails:
-                                          controller.driverList[index]);
+                                  if (!controller.shiftStatus) {
+                                    showSnackBar(
+                                      title: 'Alert',
+                                      msg:
+                                          "You are not shift in.Please make shift in and try again!",
+                                    );
+                                  } else {
+                                    controller.callDriverQueuePositionApi(
+                                        driverDetails:
+                                            controller.driverList[index]);
+                                  }
                                 },
                                 removeDriver: () {
-                                  controller.showRemoveDriverAlert(
-                                      driverDetails:
-                                          controller.driverList[index]);
+                                  if (!controller.shiftStatus) {
+                                    showSnackBar(
+                                      title: 'Alert',
+                                      msg:
+                                          "You are not shift in.Please make shift in and try again!",
+                                    );
+                                  } else {
+                                    controller.showRemoveDriverAlert(
+                                        driverDetails:
+                                            controller.driverList[index]);
+                                  }
                                 },
                               ),
                             ),
                           );
                         },
                         onReorder: ((oldIndex, newIndex) {
-                          List<int> driverArray = controller.driverList
-                              .map((element) => (element.driverId ?? 0))
-                              .toList();
-                          if (newIndex > oldIndex) {
-                            newIndex -= 1;
+                          if (!controller.shiftStatus) {
+                            showSnackBar(
+                              title: 'Alert',
+                              msg:
+                                  "You are not shift in.Please make shift in and try again!",
+                            );
+                          } else {
+                            List<int> driverArray = controller.driverList
+                                .map((element) => (element.driverId ?? 0))
+                                .toList();
+                            if (newIndex > oldIndex) {
+                              newIndex -= 1;
+                            }
+                            final int item = driverArray.removeAt(oldIndex);
+                            driverArray.insert(newIndex, item);
+                            controller.callUpdateDriverQueueApi(
+                                driverArray: driverArray);
                           }
-                          final int item = driverArray.removeAt(oldIndex);
-                          driverArray.insert(newIndex, item);
-                          controller.callUpdateDriverQueueApi(
-                              driverArray: driverArray);
                         }),
                       ),
                     ),

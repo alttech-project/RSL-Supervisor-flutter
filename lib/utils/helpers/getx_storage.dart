@@ -18,6 +18,15 @@ class GetStorageController extends GetxController {
     return token;
   }
 
+  void saveShiftStatus({required bool value}) {
+    storage.write(StorageKeys.shiftStatus, value);
+  }
+
+  Future<bool> getShiftStatus() async {
+    final shiftStatus = await storage.read(StorageKeys.shiftStatus) ?? true;
+    return shiftStatus;
+  }
+
   void removeTokeData() {
     storage.write(StorageKeys.accessToken, "");
   }
@@ -123,4 +132,5 @@ class StorageKeys {
   static const String supervisorInfo = 'supervisorInfo';
   static const String deviceToken = 'deviceToken';
   static const String nodeUrl = 'nodeUrl';
+  static const String shiftStatus = 'shiftStatus';
 }

@@ -159,6 +159,9 @@ class DashBoardController extends GetxController {
       case "Logout":
         _showLogoutAlert();
         break;
+      case 'Quick Trips':
+        Get.toNamed(AppRoutes.quickTripPage);
+        break;
       case 'Offline Trips':
         Get.toNamed(AppRoutes.offlineTripPage);
         break;
@@ -178,8 +181,8 @@ class DashBoardController extends GetxController {
         Get.toNamed(AppRoutes.riderRefferalPage);
         break;
       case "Leaderboard":
-          Get.toNamed(AppRoutes.leaderBoaradPage);
-          break;
+        Get.toNamed(AppRoutes.leaderBoaradPage);
+        break;
       default:
         break;
     }

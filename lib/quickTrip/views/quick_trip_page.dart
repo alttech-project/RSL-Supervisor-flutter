@@ -123,7 +123,7 @@ class QuickTripPage extends GetView<QuickTripController> {
     );
   }
 
-  Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
+  /*Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
       required TextEditingController txtEditingController,
       TextInputType keyboardType = TextInputType.text,
@@ -146,6 +146,43 @@ class QuickTripPage extends GetView<QuickTripController> {
         suffix: suffix,
         validator: validator,
         readOnly: readOnly,
+        onTap: onTap,
+      ),
+    );
+  }*/
+
+  Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
+      {Widget? suffix,
+      required TextEditingController txtEditingController,
+      TextInputType keyboardType = TextInputType.text,
+      TextInputAction textInputAction = TextInputAction.next,
+      FormFieldValidator? validator,
+      bool readOnly = false,
+      GestureTapCallback? onTap,
+      Function(String)? onChanged,
+      Color? borderColor,
+      Color? focusColor,
+      TextStyle? textStyle}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: UnderlinedTextField(
+        controller: txtEditingController,
+        hint: hint,
+        inputLblTxt: label,
+        inputLblStyle: AppFontStyle.subHeading(
+            color: AppColors.kPrimaryColor.value,
+            size: AppFontSize.medium.value),
+        keyboardType: keyboardType,
+        onSubmit: (value) {},
+        textInputAction: textInputAction,
+        suffix: suffix,
+        validator: validator,
+        readOnly: readOnly,
+        onTap: onTap,
+        onChanged: onChanged,
+        borderColor: borderColor,
+        focusColor: focusColor,
+        textStyle: textStyle,
       ),
     );
   }
@@ -205,7 +242,6 @@ class QuickTripPage extends GetView<QuickTripController> {
         'Drop Location', 'Drop Location', 'Enter Drop Location',
         txtEditingController: controller.dropLocationController,
         readOnly: true,
-        // onTap: () => controller.navigateToPlaceSearchPage(),
         onTap: () => Get.back(),
         suffix: IconButton(
           onPressed: () => controller.clearDropLocation(),
@@ -216,7 +252,7 @@ class QuickTripPage extends GetView<QuickTripController> {
           ),
         ),
         validator: (value) {
-          /* if (value == null || value.isEmpty) {
+          /*  if (value == null || value.isEmpty) {
             return 'Please select a valid Drop Location!';
           }*/
           return null;

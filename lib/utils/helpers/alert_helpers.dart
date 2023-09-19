@@ -27,7 +27,7 @@ showAppDialog({
   );
 }
 
-Widget defaultAlertConfirm({String text = 'Okay', VoidCallback? onPressed}) =>
+Widget defaultAlertConfirm({String text = 'Ok', VoidCallback? onPressed}) =>
     TextButton(
       onPressed: onPressed ??
           () {

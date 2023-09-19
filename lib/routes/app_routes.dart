@@ -43,7 +43,6 @@ class AppRoutes {
   static const captureImagePage = '/captureImagePage';
   static const feedsPage = '/feedsPage';
   static const tripHistoryMapPage = '/tripHistoryMapPage';
-
 }
 
 List<GetPage> routes = [
@@ -72,7 +71,7 @@ List<GetPage> routes = [
     name: AppRoutes.quickTripPage,
     page: () => const QuickTripPage(),
     binding: AppBind(),
-    transition: Transition.downToUp,
+    transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
@@ -100,7 +99,7 @@ List<GetPage> routes = [
     name: AppRoutes.offlineTripPage,
     page: () => const OfflineTripPage(),
     binding: AppBind(),
-    transition: Transition.leftToRightWithFade,
+    transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
@@ -133,55 +132,54 @@ List<GetPage> routes = [
   ),
   GetPage(
     name: AppRoutes.tripDetailPage,
-    page: () =>   TripDetailsPage(),
+    page: () => TripDetailsPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
     name: AppRoutes.qrPage,
-    page: () =>   QRCodeGenerator(),
+    page: () => QRCodeGenerator(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
     name: AppRoutes.editFarePage,
-    page: () =>   const EditFarePage(),
+    page: () => const EditFarePage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
-  ),GetPage(
+  ),
+  GetPage(
     name: AppRoutes.riderRefferalPage,
-    page: () =>   const RiderReferralPage(),
+    page: () => const RiderReferralPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
     name: AppRoutes.riderReferralHistoryPage,
-    page: () =>   const RiderReferralHistoryPage(),
+    page: () => const RiderReferralHistoryPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
     name: AppRoutes.leaderBoaradPage,
-    page: () =>   const LeaderBoardPage(),
+    page: () => const LeaderBoardPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
   GetPage(
     name: AppRoutes.tripHistoryMapPage,
-    page: () =>   TripHistoryMapPage(),
+    page: () => TripHistoryMapPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   )
 ];
-
-
 
 class SizeTransitions extends CustomTransition {
   @override

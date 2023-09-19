@@ -74,9 +74,11 @@ class QuickTripController extends GetxController {
       //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
       if (tripID.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid Trip ID!');
-      } else if (dropLocation.isEmpty) {
+      }
+      /* else if (dropLocation.isEmpty) {
         _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
-      } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+      } */
+      else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
         _showSnackBar('Validation!', 'Enter a valid phone number!');
       } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
         _showSnackBar('Validation!', 'Enter a valid Email!');
@@ -139,7 +141,7 @@ class QuickTripController extends GetxController {
     switch (response.status) {
       case 1:
         showAppDialog(
-          title: 'Success',
+          title: '${response.message}',
           message: '${response.message}',
           content: QrImageView(
             data: '${response.trackUrl}',
@@ -148,7 +150,7 @@ class QuickTripController extends GetxController {
           ),
           confirm: defaultAlertConfirm(
             onPressed: () {
-              Get.back();
+              navigateToDashboardPage();
             },
           ),
         );
@@ -156,5 +158,11 @@ class QuickTripController extends GetxController {
       default:
         _showSnackBar('Error', response.message ?? 'Server Connection Error!');
     }
+  }
+
+  void navigateToDashboardPage() async {
+    await Get.toNamed(
+      AppRoutes.dashboardPage,
+    );
   }
 }

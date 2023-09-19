@@ -43,9 +43,7 @@ class ApiProvider extends GetConnect {
     printLogs("Request Data : ${resource.request}");
     switch (requestType) {
       case RequestType.kGet:
-        Response response = await get(
-          resource.url,
-        );
+        Response response = await get(resource.url);
         return response.bodyString ?? '';
 
       case RequestType.kPut:
@@ -53,10 +51,7 @@ class ApiProvider extends GetConnect {
         return response.bodyString ?? '';
 
       default:
-        Response response = await post(
-          resource.url,
-          resource.request,
-        );
+        Response response = await post(resource.url, resource.request);
         printLogs("Response data : ${response.bodyString}");
         return response.bodyString ?? '';
     }
@@ -74,9 +69,7 @@ class Resource<T> {
 class Request<T> {
   final String request;
 
-  Request({
-    required this.request,
-  });
+  Request({required this.request});
 }
 
 enum RequestType { kGet, kPost, kPut }

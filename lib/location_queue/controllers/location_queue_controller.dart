@@ -316,32 +316,35 @@ class LocationQueueController extends GetxController {
       final phone = phoneController.text.trim();
       final email = emailController.text.trim();
       final message = messageController.text.trim();
-
-      if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+      if (fixedMeter == 1 && amount.isEmpty) {
+        showSnackBar(title: "Alert", msg: "Enter valid fare");
+      } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
         showSnackBar(title: "Alert", msg: "Enter valid email id");
       } else {
         showBtnLoader.value = true;
-        saveBookingApi(
-          SaveBookingRequest(
-            driverId: selectedDriver.driverId,
-            fixedMeter: fixedMeter,
-            kioskFare: amount,
-            kioskId: supervisorInfo.kioskId,
-            motorModel: selectedDriver.modelId,
-            pickupTime: "",
-            pickupplace: supervisorInfo.kioskAddress,
-            tripMessage: message,
-            supervisorName: supervisorInfo.supervisorName,
-            supervisorId: supervisorInfo.supervisorId,
-            zoneFareApplied: 0,
-            supervisorUniqueId: supervisorInfo.supervisorUniqueId,
-            cid: supervisorInfo.cid,
-            name: name,
-            countryCode: countryCode.value,
-            mobileNo: phone,
-            email: email,
-          ),
-        ).then(
+        saveBookingApi(SaveBookingRequest(
+          driverId: selectedDriver.driverId,
+          dropLatitude: 0.0,
+          dropLongitude: 0.0,
+          dropPlace: "",
+          fixedMeter: fixedMeter,
+          kioskFare: amount,
+          kioskId: supervisorInfo.kioskId,
+          motorModel: selectedDriver.modelId,
+          pickupTime: "",
+          pickupplace: supervisorInfo.kioskAddress,
+          tripMessage: message,
+          supervisorName: supervisorInfo.supervisorName,
+          supervisorId: supervisorInfo.supervisorId,
+          approxFare: amount,
+          zoneFareApplied: 0,
+          supervisorUniqueId: supervisorInfo.supervisorUniqueId,
+          cid: supervisorInfo.cid,
+          name: name,
+          countryCode: '+${countryCode.value}',
+          mobileNo: phone,
+          email: email,
+        )).then(
           (response) {
             showBtnLoader.value = false;
             if (response.status == 1) {
@@ -358,6 +361,7 @@ class LocationQueueController extends GetxController {
           },
         ).onError(
           (error, stackTrace) {
+            print("onError ${error.toString()}");
             showBtnLoader.value = false;
             showDefaultDialog(
               context: Get.context!,

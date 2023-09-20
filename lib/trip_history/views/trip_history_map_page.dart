@@ -10,7 +10,6 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
   const TripHistoryMapPage({super.key});
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -19,16 +18,15 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            color: AppColors.kPrimaryColor.value, // Change this to your desired color
+            color: AppColors
+                .kPrimaryColor.value, // Change this to your desired color
           ),
-
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(''),
+          title: const Text(''),
         ),
         body: Container(
-          padding:
-              const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+          padding: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
           child: FutureBuilder<LatLngBounds>(
             future: _calculateBounds(),
             builder: (context, snapshot) {
@@ -45,15 +43,28 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
                   // Set a maximum zoom level to ensure both markers are visible
                   zoom = 20.0;
                 }
-                List<LatLng> polylinePoints = [
+
+                List<LatLng> polylinePoints = <LatLng>[];
+                /* for (int i = 0; i < controller.mapdatas.length - 1; i++) {
+                  polylinePoints = [
+                    LatLng(controller.mapdatas.value[i].latitude ?? 0,
+                        controller.mapdatas.value[i].longitude ?? 0)
+                  ];
+                }*/
+                polylinePoints = [
                   LatLng(controller.mapdatas.value[0].latitude ?? 0,
                       controller.mapdatas.value[0].longitude ?? 0),
-                  LatLng(controller.mapdatas.value[1].latitude ?? 0,
-                      controller.mapdatas.value[1].longitude ?? 0),
+                  LatLng(
+                      controller.mapdatas.value[controller.mapdatas.length - 1]
+                              .latitude ??
+                          0,
+                      controller.mapdatas.value[controller.mapdatas.length - 1]
+                              .longitude ??
+                          0),
                 ];
 
                 Polyline polyline = Polyline(
-                  polylineId: PolylineId('polyline'),
+                  polylineId: const PolylineId('polyline'),
                   color: Colors.black,
                   points: polylinePoints,
                   width: 5,
@@ -65,7 +76,7 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
                     zoom: zoom,
                   ),
                   markers: Set<Marker>.from(controller.markers),
-                 // {_pickUpMarker(), _dropMarker()},
+                  // {_pickUpMarker(), _dropMarker()},
                   polylines: {
                     polyline,
                   },
@@ -75,8 +86,6 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
           ),
         ));
   }
-
-
 
   double _calculateZoom(LatLngBounds bounds, Size screenSize) {
     const double padding = 50.0;
@@ -128,6 +137,4 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
         (bounds.southwest.longitude + bounds.northeast.longitude) / 2;
     return LatLng(latCenter, lngCenter);
   }
-
-
 }

@@ -111,6 +111,8 @@ flutter:
      - assets/rider_referral/
      - assets/leaderboard/
      - assets/trip_History_map_page/
+     - assets/dashboard_page/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

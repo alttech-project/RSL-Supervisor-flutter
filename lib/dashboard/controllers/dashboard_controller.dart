@@ -45,10 +45,10 @@ class DashBoardController extends GetxController {
     supervisorInfo.value = await GetStorageController().getSupervisorInfo();
     deviceToken = await GetStorageController().getDeviceToken();
     _callShiftInApi("1");
-    _callDashboardApi();
+    callDashboardApi();
   }
 
-  void _callDashboardApi() async {
+  void callDashboardApi() async {
     apiLoading.value = true;
     dashboardApi(DasboardApiRequest(
       kioskId: supervisorInfo.value.kioskId,
@@ -61,7 +61,7 @@ class DashBoardController extends GetxController {
         dropList = response.dropOffList ?? [];
         dropSearchList.value = response.dropOffList ?? [];
         dropSearchList.refresh();
-        noDropOffDataMsg.value = response.message ?? "";
+        // noDropOffDataMsg.value = response.message ?? "";
       } else {
         noDropOffDataMsg.value = response.message ?? "No Dropoff found";
         dropList = [];

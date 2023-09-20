@@ -28,18 +28,61 @@ class LocationsListWidget extends GetView<DashBoardController> {
                   child: SizedBox(
                     height: 300.h,
                     child: Center(
-                      child: Row(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: Text(
-                              controller.useCustomDrop.value
-                                  ? "Please search any drop off location in the search option above."
-                                  : controller.noDropOffDataMsg.value,
-                              style:
-                                  AppFontStyle.subHeading(color: Colors.grey),
-                              textAlign: TextAlign.center,
+                          Visibility(
+                            visible: !controller.useCustomDrop.value,
+                            child: Image.asset(
+                              "assets/dashboard_page/files.png",
+                              width: 130.w,
+                              height: 130.h,
+                              color: Colors.white54,
+
                             ),
                           ),
+                          const SizedBox(height: 15),
+                          Text(
+                            controller.useCustomDrop.value
+                                ? "Please search any drop off location in the search option above."
+                                : controller.noDropOffDataMsg.value,
+                            style: AppFontStyle.subHeading(color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 30.h),
+                          Visibility(
+                            visible: !controller.useCustomDrop.value,
+                            child: TextButton(
+                              onPressed: () {
+                                controller.callDashboardApi();
+                                controller.searchController.value.text = "";
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  AppColors.kPrimaryColor.value,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Refresh",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: AppFontWeight.bold.value,
+                                    ),
+                                  ), // Add your button text and style
+                                  SizedBox(
+                                      width: 8
+                                          .w), // Add some spacing between text and icon
+                                  Icon(Icons.refresh,
+                                      color: Colors
+                                          .white), // Add the trailing refresh icon
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

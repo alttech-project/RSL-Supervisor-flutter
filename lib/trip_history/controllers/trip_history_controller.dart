@@ -1,15 +1,14 @@
 import 'dart:convert';
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:typed_data';
-
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
+import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/trip_history/data/cancel_trip_data.dart';
 import 'package:rsl_supervisor/trip_history/data/export_pdf_data.dart';
 import 'package:rsl_supervisor/trip_history/data/trip_history_data.dart';
@@ -21,7 +20,6 @@ import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import 'dart:ui' as ui;
-
 
 class TripHistoryController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
@@ -36,13 +34,15 @@ class TripHistoryController extends GetxController {
   RxList<MapDatas> mapdatas = <MapDatas>[].obs;
   RxList<Marker> markers = <Marker>[].obs;
   BitmapDescriptor? icons;
-
-
-
   RxInt dispatchedTrips = 0.obs;
   RxInt cancelledTrips = 0.obs;
   RxBool showBtnLoader = false.obs;
   Rx<TripDetails> tripDetail = TripDetails().obs;
+  RxBool isPasswordVisible = false.obs;
+  TextEditingController messageController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+// Initially, the password is hidden.
 
   @override
   void onInit() {
@@ -69,9 +69,9 @@ class TripHistoryController extends GetxController {
 
   void moveToMapPage(String tripId) {
     Get.toNamed(
-      AppRoutes.tripHistoryMapPage, // Pass the tripId here
+      AppRoutes.tripHistoryMapPage,
     );
-    callTripHistoryMapApi(int.parse(tripId), "7");
+    callTripHistoryMapApi(int.parse(tripId), supervisorInfo.cid);
   }
 
   void callTripHistoryApi() async {
@@ -172,7 +172,7 @@ class TripHistoryController extends GetxController {
       acceptBtnTitle: "Yes, Cancel",
       cancelBtnTitle: "No",
       acceptAction: () {
-        _callCancelTripApi(tripId);
+        showCancelBottomSheet(tripId);
       },
     );
   }
@@ -184,8 +184,8 @@ class TripHistoryController extends GetxController {
       CancelTripRequest(
         kioskId: supervisorInfo.kioskId,
         cid: supervisorInfo.cid,
-        cancelPwd: generateMd5("123456"),
-        cancelMessage: "Test cancel",
+        cancelPwd: generateMd5(passwordController.text.trim()),
+        cancelMessage: messageController.text.trim(),
         tripId: tripId,
       ),
     ).then(
@@ -269,8 +269,6 @@ class TripHistoryController extends GetxController {
           mapdatas.refresh();
           _pickUpMarker();
           _dropMarker();
-
-
         } else {
           showSnackBar(
             title: 'Error',
@@ -311,35 +309,47 @@ class TripHistoryController extends GetxController {
           int.parse(tripDetail.value.tripId ?? ''));
     }
   }
-   void addMarker(LatLng position, String title,BitmapDescriptor icon)  {
+
+  void addMarker(LatLng position, String title, BitmapDescriptor icon) {
     markers.add(
       Marker(
         markerId: MarkerId(position.toString()),
         position: position,
         infoWindow: InfoWindow(title: title),
-        icon:  icon,
+        icon: icon,
       ),
     );
     markers.refresh();
   }
 
   _pickUpMarker() async {
-    LatLng startLocation = LatLng(mapdatas.value[0].latitude ?? 0,
-        mapdatas.value[0].longitude ?? 0);
+    // if (mapdatas.isEmpty) {
+    //   LatLng startLocation = const LatLng(11.0317782,77.0185392);
+    //   addMarker(startLocation, "PickUp", await getPickUpIcons());
+    // } else {
+    LatLng startLocation = LatLng(
+        mapdatas.value[0].latitude ?? 0, mapdatas.value[0].longitude ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
+    // }
   }
 
   _dropMarker() async {
-    LatLng endLocation = LatLng(mapdatas.value[1].latitude ?? 0,
-        mapdatas.value[1].longitude ?? 0);
-
+    // if (mapdatas.isEmpty) {
+    //   LatLng endLocation = const LatLng(77.01876831054688,11.031820297241211);
+    //   addMarker(endLocation, "Drop", await getDropIcons());
+    // } else {
+    LatLng endLocation = LatLng(
+        mapdatas.value[1].latitude ?? 0, mapdatas.value[1].longitude ?? 0);
     addMarker(endLocation, "Drop", await getDropIcons());
+    // }
   }
+
   Future<BitmapDescriptor> getPickUpIcons() async {
     final Uint8List customMarker = await getBytesFromAsset(
-      path:
-      'assets/trip_History_map_page/purplemarker.png', //paste the custom image path
-      width: 40, // size of custom image as marker
+      path: 'assets/trip_History_map_page/greenmarker.png',
+      width: 40,
+      height: 40,
+
     );
     var icon = BitmapDescriptor.fromBytes(customMarker);
     icons = icon;
@@ -348,13 +358,13 @@ class TripHistoryController extends GetxController {
 
   Future<BitmapDescriptor> getDropIcons() async {
     final Uint8List customMarker = await getBytesFromAsset(
-      path: 'assets/trip_History_map_page/redmarker.png', //paste the custom image path
-      width: 40, // size of custom image as marker
+      path:
+          'assets/trip_History_map_page/redmarker.png', //paste the custom image path
+      width: 40,
+      height: 40,
     );
     var icon = BitmapDescriptor.fromBytes(customMarker);
-    // setState(() {
     icons = icon;
-    // });
     return icons!;
   }
 
@@ -369,6 +379,111 @@ class TripHistoryController extends GetxController {
         .asUint8List();
   }
 
+  void showCancelBottomSheet(tripId) {
+    showModalBottomSheet<void>(
+      context: Get.context!,
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0.r), // Adjust the corner radius as needed
+          topRight: Radius.circular(15.0.r),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return SingleChildScrollView( // Wrap the ListView in a SingleChildScrollView
+          child: Padding(
+            padding: const EdgeInsets.only(
+                bottom: 20, right: 10, left: 10, top: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Cancel Trip",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                TextField(
+                  controller: messageController,
+                  decoration: InputDecoration(
+                    hintText: 'Message', // Your placeholder text
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.kPrimaryColor.value,
+                        width: 2.0,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Obx(() => TextField(
+                  controller: passwordController,
+                  obscureText: !isPasswordVisible.value,
+                  decoration: InputDecoration(
+                    hintText: 'Enter the Password',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.kPrimaryColor.value,
+                        width: 2.0,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.kPrimaryColor.value,
+                        width: 2.0,
+                      ),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isPasswordVisible.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        print(isPasswordVisible.value);
+                        isPasswordVisible.value =
+                        !isPasswordVisible.value;
+                      },
+                    ),
+                  ),
+                )
+                ),
+                ElevatedButton(
+
+                  onPressed: () {
+                    if (messageController.text == "") {
+                      showSnackBar(
+                          title: "Alert", msg: "Please Enter Message");
+                    } else if (passwordController.text == "") {
+                      showSnackBar(
+                          title: "Alert", msg: "Please Enter Password");
+                    } else {
+                      _callCancelTripApi(tripId);
+                      messageController.text.isEmpty;
+                      passwordController.text.isEmpty;
+                      Get.back();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColors.kPrimaryColor.value,
+
+                  ),
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
 }
 
@@ -380,7 +495,3 @@ void removeRoutesUntil({String? routeName}) {
 
   Get.until(condition);
 }
-
-
-
-

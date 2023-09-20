@@ -1,17 +1,14 @@
-import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import '../controllers/trip_history_controller.dart';
 
 class TripHistoryMapPage extends GetView<TripHistoryController> {
+  const TripHistoryMapPage({super.key});
+
   @override
 
   Widget build(BuildContext context) {

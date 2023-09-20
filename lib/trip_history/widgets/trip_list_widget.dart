@@ -1,6 +1,6 @@
-import 'dart:ffi';
 
-import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -309,6 +309,8 @@ class TripListWidget extends GetView<TripHistoryController> {
               ),
             ),
           ),
+
+
         ],
       ),
     );
@@ -330,8 +332,12 @@ class TripListWidget extends GetView<TripHistoryController> {
         return const Color(0xFFEF3E36);
     }
   }
+
+
+
+
+
 }
 
-_iconshowhidCondition(TripDetails details) {
-  if (details.completeTripMap != null && details.tripType == "Offline Trip") {}
-}
+
+

@@ -97,7 +97,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                 text: "Total\n",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
               TextSpan(
@@ -105,7 +105,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                     "Trips: ${controller.dispatchedTrips.value + controller.cancelledTrips.value}",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
             ],
@@ -122,14 +122,14 @@ class TripListWidget extends GetView<TripHistoryController> {
                 text: "DisPatched Trips:",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
               TextSpan(
                 text: controller.dispatchedTrips.toString(),
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
             ],
@@ -146,14 +146,14 @@ class TripListWidget extends GetView<TripHistoryController> {
                 text: "Cancel\n",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
               TextSpan(
                 text: "Trips: ${controller.cancelledTrips.toString()}",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.semibold.value,
                 ),
               ),
             ],
@@ -233,7 +233,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                           },
                           child: Icon(
                             icon,
-                            size: 20.0, // Adjust the size as needed
+                            size: 13.0, // Adjust the size as needed
                             color: Colors.white,
                           ),
                         )
@@ -311,11 +311,11 @@ class TripListWidget extends GetView<TripHistoryController> {
                           color: Colors.white,
                         ),
                       ),
-                       SizedBox(
+                      SizedBox(
                           width: 5.0.w), // Add some space between text and icon
                       const Icon(
-                        Icons
-                            .close, // You can use a different icon if you prefer
+                        Icons.close,
+                        // You can use a different icon if you prefer
                         color: Colors.white,
                         size: 16.0, // Adjust the size of the icon as needed
                       ),

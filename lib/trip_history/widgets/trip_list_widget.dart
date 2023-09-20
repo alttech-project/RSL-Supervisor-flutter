@@ -233,7 +233,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                           },
                           child: Icon(
                             icon,
-                            size: 13.0, // Adjust the size as needed
+                            size: 15.0, // Adjust the size as needed
                             color: Colors.white,
                           ),
                         )

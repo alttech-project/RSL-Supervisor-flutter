@@ -13,10 +13,9 @@ class QRCodeGenerator extends GetView<TripHistoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         elevation: 0,
         title: const Text(''),
         leading: IconButton(
@@ -27,7 +26,6 @@ class QRCodeGenerator extends GetView<TripHistoryController> {
         ),
       ),
       body: Container(
-        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

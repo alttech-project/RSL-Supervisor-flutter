@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_text_field.dart';
@@ -8,6 +9,7 @@ import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
 import '../../shared/styles/app_color.dart';
+import '../../shared/styles/app_font.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../data/verify_user_api_data.dart';
@@ -21,6 +23,8 @@ class LoginController extends GetxController {
   RxString otp = "".obs;
   Rx<LoginViews> currentView = LoginViews.emailPage.obs;
   List<KioskList> kioskList = <KioskList>[];
+  RxBool showKioskList = false.obs;
+  RxString photoUrl = "".obs;
   var supervisorId = 0;
   var supervisorName = "";
   var supervisorUniqueId = "";
@@ -149,13 +153,6 @@ class LoginController extends GetxController {
             supervisorUniqueId = response.detail?.uniqueId ?? "";
             cid = response.detail?.companyId ?? 0;
             kioskList = response.detail?.kioskList ?? [];
-            kioskId = kioskList.isNotEmpty ? (kioskList[0].kioskId ?? 0) : 0;
-            kioskAddress =
-                kioskList.isNotEmpty ? (kioskList[0].address ?? "") : "";
-            kioskName =
-                kioskList.isNotEmpty ? (kioskList[0].kioskName ?? "") : "";
-            phoneNumber =
-                kioskList.isNotEmpty ? (kioskList[0].phone ?? "") : "";
 
             moveToCaptureImagePage();
           } else {
@@ -239,8 +236,128 @@ class LoginController extends GetxController {
   void moveToCaptureImagePage() async {
     final imageUrl = await Get.toNamed(AppRoutes.captureImagePage);
     if (imageUrl is String) {
-      callAssignSupervisorApi(imageUrl);
+      if (kioskList.isNotEmpty && kioskList.length == 1) {
+        showKioskList.value = false;
+        kioskId = kioskList.isNotEmpty ? (kioskList[0].kioskId ?? 0) : 0;
+        kioskAddress = kioskList.isNotEmpty ? (kioskList[0].address ?? "") : "";
+        kioskName = kioskList.isNotEmpty ? (kioskList[0].kioskName ?? "") : "";
+        phoneNumber = kioskList.isNotEmpty ? (kioskList[0].phone ?? "") : "";
+        callAssignSupervisorApi(imageUrl);
+      } else {
+        photoUrl.value = imageUrl;
+        showKioskList.value = true;
+        showKioskBottomSheet();
+      }
     }
+  }
+
+  void showKioskBottomSheet() {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
+          ),
+        ),
+        margin: EdgeInsets.only(top: 70.h),
+        child: Column(
+          children: [_line(), _kioskList()],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _line() {
+    return Container(
+      width: 40.w,
+      height: 3.h,
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(5.r),
+      ),
+    );
+  }
+
+  _kioskList() {
+    return Expanded(
+      child:
+          // Obx(() =>
+          kioskList.isEmpty
+              ? Center(
+                  child: SizedBox(
+                    height: 280.h,
+                    child: Center(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "No kiosk found!",
+                              style:
+                                  AppFontStyle.subHeading(color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemCount: kioskList.length,
+                  itemBuilder: (context, index) {
+                    return _kioskListRow(context, index);
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                    color: Colors.grey.withOpacity(0.6),
+                    thickness: 1,
+                    height: 5,
+                  ),
+                ),
+      // ),
+    );
+  }
+
+  Widget _kioskListRow(BuildContext context, int index) {
+    final kiosk = kioskList[index];
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        kioskId = kiosk.kioskId ?? 0;
+        kioskAddress = kiosk.address ?? "";
+        kioskName = kiosk.kioskName ?? "";
+        phoneNumber = kiosk.phone ?? "";
+        callAssignSupervisorApi(photoUrl.value);
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 8.h, left: 10.w, right: 10.w, top: 5.h),
+        padding: EdgeInsets.symmetric(
+          vertical: 8.h,
+          horizontal: 10.w,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: Row(
+          children: [
+            Flexible(
+              child: Text(
+                "  ${kiosk.kioskName}",
+                style: AppFontStyle.body(
+                  size: AppFontSize.small.value,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   resetView() {

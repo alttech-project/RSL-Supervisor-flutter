@@ -143,12 +143,13 @@ class SubscribersPage extends GetView<SubscribersController> {
                           : controller.filteredDriverList.isEmpty
                               ?  Center(
                         child: SizedBox(
-                          height: 400.h,
+                          height: 200.h,
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [Text(
                               "No Data found",
-                              style: TextStyle(color: Colors.white54),
+                              style: TextStyle(color: Colors.white54,fontWeight:FontWeight.bold)
+                              ,
                             )],
                           ),
                         ),

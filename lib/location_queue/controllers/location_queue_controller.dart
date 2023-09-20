@@ -37,6 +37,11 @@ class LocationQueueController extends GetxController {
   RxString qrData = "".obs;
   RxString qrMessage = "".obs;
 
+  double dropLatitude = 0.0, dropLongitude = 0.0;
+  String fare = "", dropAddress = "", zoneFareApplied = "0";
+  int fromDashboard = 0;
+  bool shiftStatus = true;
+
   @override
   void onInit() {
     super.onInit();
@@ -45,6 +50,7 @@ class LocationQueueController extends GetxController {
 
   _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
+    shiftStatus = await GetStorageController().getShiftStatus();
     _callDriverListApi(isOninit: true);
     startTimer();
   }
@@ -310,66 +316,74 @@ class LocationQueueController extends GetxController {
 
   void submitAction() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    if (formKey.currentState!.validate()) {
-      final amount = amountController.text.trim();
-      final name = nameController.text.trim();
-      final phone = phoneController.text.trim();
-      final email = emailController.text.trim();
-      final message = messageController.text.trim();
-      if (fixedMeter == 1 && amount.isEmpty) {
-        showSnackBar(title: "Alert", msg: "Enter valid fare");
-      } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
-        showSnackBar(title: "Alert", msg: "Enter valid email id");
-      } else {
-        showBtnLoader.value = true;
-        saveBookingApi(SaveBookingRequest(
-          driverId: selectedDriver.driverId,
-          dropLatitude: 0.0,
-          dropLongitude: 0.0,
-          dropPlace: "",
-          fixedMeter: fixedMeter,
-          kioskFare: amount,
-          kioskId: supervisorInfo.kioskId,
-          motorModel: selectedDriver.modelId,
-          pickupTime: "",
-          pickupplace: supervisorInfo.kioskAddress,
-          tripMessage: message,
-          supervisorName: supervisorInfo.supervisorName,
-          supervisorId: supervisorInfo.supervisorId,
-          approxFare: amount,
-          zoneFareApplied: 0,
-          supervisorUniqueId: supervisorInfo.supervisorUniqueId,
-          cid: supervisorInfo.cid,
-          name: name,
-          countryCode: '+${countryCode.value}',
-          mobileNo: phone,
-          email: email,
-        )).then(
-          (response) {
-            showBtnLoader.value = false;
-            if (response.status == 1) {
-              qrData.value = response.trackUrl ?? "";
-              qrMessage.value = response.message ?? "";
-              showQrCode.value = true;
-            } else {
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      if (formKey.currentState!.validate()) {
+        final amount = amountController.text.trim();
+        final name = nameController.text.trim();
+        final phone = phoneController.text.trim();
+        final email = emailController.text.trim();
+        final message = messageController.text.trim();
+        if (fixedMeter == 1 && amount.isEmpty) {
+          showSnackBar(title: "Alert", msg: "Enter valid fare");
+        } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+          showSnackBar(title: "Alert", msg: "Enter valid email id");
+        } else {
+          showBtnLoader.value = true;
+          saveBookingApi(SaveBookingRequest(
+            driverId: selectedDriver.driverId,
+            dropLatitude: dropLatitude,
+            dropLongitude: dropLongitude,
+            dropPlace: dropAddress,
+            fixedMeter: fixedMeter,
+            kioskFare: amount,
+            kioskId: supervisorInfo.kioskId,
+            motorModel: selectedDriver.modelId,
+            pickupTime: "",
+            pickupplace: supervisorInfo.kioskAddress,
+            tripMessage: message,
+            supervisorName: supervisorInfo.supervisorName,
+            supervisorId: supervisorInfo.supervisorId,
+            approxFare: fare,
+            zoneFareApplied: int.parse(zoneFareApplied),
+            supervisorUniqueId: supervisorInfo.supervisorUniqueId,
+            cid: supervisorInfo.cid,
+            name: name,
+            countryCode: '+${countryCode.value}',
+            mobileNo: phone,
+            email: email,
+          )).then(
+            (response) {
+              showBtnLoader.value = false;
+              if (response.status == 1) {
+                qrData.value = response.trackUrl ?? "";
+                qrMessage.value = response.message ?? "";
+                showQrCode.value = true;
+              } else {
+                showDefaultDialog(
+                  context: Get.context!,
+                  title: "Alert",
+                  message: response.message ?? "Something went wrong...",
+                );
+              }
+            },
+          ).onError(
+            (error, stackTrace) {
+              print("onError ${error.toString()}");
+              showBtnLoader.value = false;
               showDefaultDialog(
                 context: Get.context!,
                 title: "Alert",
-                message: response.message ?? "Something went wrong...",
+                message: error.toString(),
               );
-            }
-          },
-        ).onError(
-          (error, stackTrace) {
-            print("onError ${error.toString()}");
-            showBtnLoader.value = false;
-            showDefaultDialog(
-              context: Get.context!,
-              title: "Alert",
-              message: error.toString(),
-            );
-          },
-        );
+            },
+          );
+        }
       }
     }
   }

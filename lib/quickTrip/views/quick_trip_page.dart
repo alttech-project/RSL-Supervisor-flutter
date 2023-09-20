@@ -45,8 +45,8 @@ class QuickTripPage extends GetView<QuickTripController> {
                         children: [
                           _tripIdWidget(),
                           _dropLocationWidget(),
-                          _labelAndTextFieldWidget('Fare', 'Fixed Fare',
-                              'Enter Fixed Fare (Optional)',
+                          _labelAndTextFieldWidget(
+                              'Fare', 'Fare', 'Enter Fare (Optional)',
                               txtEditingController: controller.fareController,
                               keyboardType: TextInputType.number),
                           _nameWidget(),
@@ -123,13 +123,14 @@ class QuickTripPage extends GetView<QuickTripController> {
     );
   }
 
-  Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
+  /*Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
       required TextEditingController txtEditingController,
       TextInputType keyboardType = TextInputType.text,
       TextInputAction textInputAction = TextInputAction.next,
       FormFieldValidator? validator,
-      bool readOnly = false, GestureTapCallback? onTap}) {
+      bool readOnly = false,
+      GestureTapCallback? onTap}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -145,6 +146,43 @@ class QuickTripPage extends GetView<QuickTripController> {
         suffix: suffix,
         validator: validator,
         readOnly: readOnly,
+        onTap: onTap,
+      ),
+    );
+  }*/
+
+  Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
+      {Widget? suffix,
+      required TextEditingController txtEditingController,
+      TextInputType keyboardType = TextInputType.text,
+      TextInputAction textInputAction = TextInputAction.next,
+      FormFieldValidator? validator,
+      bool readOnly = false,
+      GestureTapCallback? onTap,
+      Function(String)? onChanged,
+      Color? borderColor,
+      Color? focusColor,
+      TextStyle? textStyle}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: UnderlinedTextField(
+        controller: txtEditingController,
+        hint: hint,
+        inputLblTxt: label,
+        inputLblStyle: AppFontStyle.subHeading(
+            color: AppColors.kPrimaryColor.value,
+            size: AppFontSize.medium.value),
+        keyboardType: keyboardType,
+        onSubmit: (value) {},
+        textInputAction: textInputAction,
+        suffix: suffix,
+        validator: validator,
+        readOnly: readOnly,
+        onTap: onTap,
+        onChanged: onChanged,
+        borderColor: borderColor,
+        focusColor: focusColor,
+        textStyle: textStyle,
       ),
     );
   }
@@ -201,7 +239,7 @@ class QuickTripPage extends GetView<QuickTripController> {
 
   Widget _dropLocationWidget() {
     return _labelAndTextFieldWidget(
-        'Drop Location', 'Drop Location', 'Enter Trip Id',
+        'Drop Location', 'Drop Location', 'Enter Drop Location',
         txtEditingController: controller.dropLocationController,
         readOnly: true,
         onTap: () => Get.back(),
@@ -212,12 +250,13 @@ class QuickTripPage extends GetView<QuickTripController> {
             size: 20.r,
             color: AppColors.kPrimaryColor.value,
           ),
-        ), validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please select a valid Drop Location!';
-      }
-      return null;
-    });
+        ),
+        validator: (value) {
+          /*  if (value == null || value.isEmpty) {
+            return 'Please select a valid Drop Location!';
+          }*/
+          return null;
+        });
   }
 
   Widget _tripIdWidget() {

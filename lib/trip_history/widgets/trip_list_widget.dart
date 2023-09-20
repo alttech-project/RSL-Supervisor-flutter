@@ -13,6 +13,7 @@ import '../data/trip_history_data.dart';
 
 class TripListWidget extends GetView<TripHistoryController> {
   const TripListWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -101,7 +102,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                 ),
               ),
               TextSpan(
-                text: "Trips: 3",
+                text: "Trips: ${controller.totalTrips.toString()}",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: FontWeight.bold,
@@ -125,7 +126,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                 ),
               ),
               TextSpan(
-                text: " 3",
+                text: controller.dispatchedTrips.toString(),
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: FontWeight.bold,
@@ -149,7 +150,7 @@ class TripListWidget extends GetView<TripHistoryController> {
                 ),
               ),
               TextSpan(
-                text: "Trips: 3",
+                text: "Trips: ${controller.cancelledTrips.toString()}",
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: FontWeight.bold,
@@ -163,7 +164,6 @@ class TripListWidget extends GetView<TripHistoryController> {
   }
 
   Widget _listRowWidget(TripDetails details) {
-
     print("completeTripMap: ${details?.completeTripMap}");
     print("tripType: ${details?.tripType}");
 
@@ -211,8 +211,9 @@ class TripListWidget extends GetView<TripHistoryController> {
         margin: EdgeInsets.symmetric(vertical: 8.h),
         child: icon != null
             ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes the text and icon apart
-          children: [
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Pushes the text and icon apart
+                children: [
                   Text(
                     title,
                     style: TextStyle(
@@ -224,12 +225,13 @@ class TripListWidget extends GetView<TripHistoryController> {
                     ),
                   ),
                   details?.completeTripMap != null &&
-                          details?.tripType != "Offline Trip"
+                          details!.completeTripMap!.trim().isNotEmpty &&
+                          details.tripType != "Offline Trip"
                       ? GestureDetector(
                           onTap: () {
                             controller.moveToMapPage(tripId ?? "");
                           },
-                          child:  Icon(
+                          child: Icon(
                             icon,
                             size: 20.0, // Adjust the size as needed
                             color: Colors.white,
@@ -274,7 +276,7 @@ class TripListWidget extends GetView<TripHistoryController> {
             child: Center(
               child: Text(
                 details.travelStatusMessage ?? "",
-                textAlign:TextAlign.center,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: AppFontSize.mini.value,
                   fontWeight: AppFontWeight.semibold.value,

@@ -6,9 +6,9 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import '../../widgets/app_textfields.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../controllers/dashboard_controller.dart';
+import 'controllers/dispatch_controller.dart';
 
-class DropSearchBar extends GetView<DashBoardController> {
+class DropSearchBar extends GetView<DispatchController> {
   int pageType;
 
   DropSearchBar({required this.pageType, Key? key}) : super(key: key);
@@ -16,15 +16,10 @@ class DropSearchBar extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => InkWell(
+          () => InkWell(
         onTap: () {
           if (controller.useCustomDrop.value) {
-            if (pageType == 1) {
-              //dispatch
-              controller.moveToPlaceSearchDispatch();
-            } else {
-              controller.moveToPlaceSearch();
-            }
+            controller.moveToPlaceSearchDispatch();
           }
         },
         child: Padding(

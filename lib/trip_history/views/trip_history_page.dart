@@ -48,7 +48,7 @@ class TripHistoryPage extends GetView<TripHistoryController> {
                   ),
                 ),
                 const TripListFilterWidget(),
-              Obx(
+                Obx(
                   () => Expanded(
                     child: (controller.showLoader.value)
                         ? const Center(
@@ -88,17 +88,16 @@ void showAlertDialog(BuildContext context) {
       Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
-
-
         children: [
           TextButton(
             child: Text(
               "No",
-              style: TextStyle(color: AppColors.kPrimaryColor.value,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold),
             ),
             onPressed: () {
-              final controller = Get.find<TripHistoryController>();
-              controller.callExportPdfApi();
+              Navigator.of(context).pop();
             },
           ),
           const SizedBox(
@@ -106,8 +105,12 @@ void showAlertDialog(BuildContext context) {
           ),
           TextButton(
             child: Text("Yes",
-                style: TextStyle(color: AppColors.kPrimaryColor.value,fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: AppColors.kPrimaryColor.value,
+                    fontWeight: FontWeight.bold)),
             onPressed: () {
+              final controller = Get.find<TripHistoryController>();
+              controller.callExportPdfApi();
               Navigator.of(context).pop();
             },
           ),

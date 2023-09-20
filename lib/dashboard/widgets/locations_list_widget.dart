@@ -6,12 +6,16 @@ import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../../quickTrip/controllers/quick_trip_controller.dart';
+import '../../location_queue/controllers/location_queue_controller.dart';
+
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../controllers/dashboard_controller.dart';
 
 class LocationsListWidget extends GetView<DashBoardController> {
-  const LocationsListWidget({Key? key}) : super(key: key);
+  int pageType;
+
+  LocationsListWidget({required this.pageType, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +140,30 @@ class LocationsListWidget extends GetView<DashBoardController> {
   }
 
   void moveToQuickTripPage(DropOffList dropLocation) async {
-    final QuickTripController controller = Get.find<QuickTripController>();
-    controller
-      ..dropLocationController.text = dropLocation.name ?? ''
-      ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
-      ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
-      ..fareController.text =
-          (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
-    Get.toNamed(AppRoutes.quickTripPage);
+    if (pageType == 1) {
+      //dispatch
+      final LocationQueueController controller =
+          Get.find<LocationQueueController>();
+      controller
+        ..dropAddress = dropLocation.name ?? ''
+        ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
+        ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
+        ..fare = (dropLocation.fare) ?? ''
+        ..amountController.text =
+            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? ''
+        ..fromDashboard = 0
+        ..zoneFareApplied = dropLocation.zoneFareApplied ?? "0";
+
+      Get.toNamed(AppRoutes.locationQueuePage);
+    } else {
+      final QuickTripController controller = Get.find<QuickTripController>();
+      controller
+        ..dropLocationController.text = dropLocation.name ?? ''
+        ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
+        ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
+        ..fareController.text =
+            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
+      Get.toNamed(AppRoutes.quickTripPage);
+    }
   }
 }

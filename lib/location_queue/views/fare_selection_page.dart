@@ -113,6 +113,32 @@ class FareSelectionPage extends GetView<LocationQueueController> {
                             },
                           ),
                         ),
+                        (controller.zoneFareApplied == "1"
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: 15.h,
+                                  ),
+                                  CustomButton(
+                                    width: ScreenUtil().screenWidth / 2,
+                                    linearColor: primaryButtonLinearColor,
+                                    height: 38.h,
+                                    borderRadius: 38.h / 2,
+                                    // isLoader: controller.showBtnLoader.value,
+                                    style:
+                                        AppFontStyle.body(color: Colors.white),
+                                    text: 'Zone to Zone Fare',
+                                    onTap: () => {
+                                      controller.fixedMeter = 2,
+                                      controller.zoneFareApplied = "1",
+                                      controller.submitAction()
+                                    },
+                                  )
+                                ],
+                              )
+                            : SizedBox(
+                                height: 0.h,
+                              )),
                         SizedBox(
                           height: 30.h,
                         ),

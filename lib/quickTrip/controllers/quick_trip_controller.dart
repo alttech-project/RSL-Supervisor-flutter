@@ -6,6 +6,7 @@ import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 
 import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/alert_helpers.dart';
+import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../data/quick_trip_api_data.dart';
 import '../service/quick_trip_services.dart';
@@ -42,13 +43,15 @@ class QuickTripController extends GetxController {
   @override
   void onClose() {
     print('hiTamil QTC onClose');
-    // tripIdController.dispose();
-    // dropLocationController.dispose();
-    // fareController.dispose();
-    // nameController.dispose();
-    // phoneController.dispose();
-    // emailController.dispose();
-    // paymentIdController.dispose();
+    clearTripId();
+    clearDropLocation();
+    tripIdController.dispose();
+    dropLocationController.dispose();
+    fareController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    paymentIdController.dispose();
     super.onClose();
   }
 
@@ -60,59 +63,69 @@ class QuickTripController extends GetxController {
     dropLocationController.clear();
   }
 
-  void checkValidation() {
+  void checkValidation() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    if (formKey.currentState!.validate()) {
-      final tripID = tripIdController.text.trim();
-      final dropLocation = dropLocationController.text.trim();
-      final fare = fareController.text.trim();
-      final name = nameController.text.trim();
-      final phone = phoneController.text.trim();
-      final email = emailController.text.trim();
-      final paymentId = paymentIdController.text.trim();
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      if (formKey.currentState!.validate()) {
+        final tripID = tripIdController.text.trim();
+        final dropLocation = dropLocationController.text.trim();
+        final fare = fareController.text.trim();
+        final name = nameController.text.trim();
+        final phone = phoneController.text.trim();
+        final email = emailController.text.trim();
+        final paymentId = paymentIdController.text.trim();
 
-      //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
-      if (tripID.isEmpty) {
-        _showSnackBar('Validation!', 'Enter a valid Trip ID!');
-      } else if (dropLocation.isEmpty) {
-        _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
-      } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
-        _showSnackBar('Validation!', 'Enter a valid phone number!');
-      } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
-        _showSnackBar('Validation!', 'Enter a valid Email!');
-      } else {
-        if (supervisorInfo == null) {
-          _showSnackBar('Error!', 'Invalid user login status!');
-          return;
+        //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
+        if (tripID.isEmpty) {
+          _showSnackBar('Validation!', 'Enter a valid Trip ID!');
         }
+        /* else if (dropLocation.isEmpty) {
+        _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
+      } */
+        else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+          _showSnackBar('Validation!', 'Enter a valid phone number!');
+        } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+          _showSnackBar('Validation!', 'Enter a valid Email!');
+        } else {
+          if (supervisorInfo == null) {
+            _showSnackBar('Error!', 'Invalid user login status!');
+            return;
+          }
 
-        apiLoading.value = true;
-        dispatchQuickTripApi(
-          DispatchQuickTripRequestData(
-            tripId: tripID,
-            kioskId: supervisorInfo!.kioskId,
-            companyId: supervisorInfo!.cid,
-            supervisorName: supervisorInfo!.supervisorName,
-            supervisorId: supervisorInfo!.supervisorId,
-            supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-            name: name,
-            countryCode: countryCode.value,
-            mobileNo: phone,
-            email: email,
-            fixedMeter: (fare.isEmpty) ? '2' : '1',
-            kioskFare: fare,
-            paymentId: paymentId,
-            dropLatitude: dropLatitude,
-            dropLongitude: dropLongitude,
-            dropplace: dropLocation,
-          ),
-        ).then((response) {
-          apiLoading.value = false;
-          _handleDispatchQuickTripResponse(response);
-        }).catchError((onError) {
-          apiLoading.value = false;
-          _showSnackBar('Error', 'Server Connection Error!');
-        });
+          apiLoading.value = true;
+          dispatchQuickTripApi(
+            DispatchQuickTripRequestData(
+              tripId: tripID,
+              kioskId: supervisorInfo!.kioskId,
+              companyId: supervisorInfo!.cid,
+              supervisorName: supervisorInfo!.supervisorName,
+              supervisorId: supervisorInfo!.supervisorId,
+              supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+              name: name,
+              countryCode: countryCode.value,
+              mobileNo: phone,
+              email: email,
+              fixedMeter: (fare.isEmpty) ? '2' : '1',
+              kioskFare: fare,
+              paymentId: paymentId,
+              dropLatitude: dropLatitude,
+              dropLongitude: dropLongitude,
+              dropplace: dropLocation,
+            ),
+          ).then((response) {
+            apiLoading.value = false;
+            _handleDispatchQuickTripResponse(response);
+          }).catchError((onError) {
+            apiLoading.value = false;
+            _showSnackBar('Error', 'Server Connection Error!');
+          });
+        }
       }
     }
   }
@@ -139,7 +152,7 @@ class QuickTripController extends GetxController {
     switch (response.status) {
       case 1:
         showAppDialog(
-          title: 'Success',
+          title: '${response.message}',
           message: '${response.message}',
           content: QrImageView(
             data: '${response.trackUrl}',
@@ -148,7 +161,7 @@ class QuickTripController extends GetxController {
           ),
           confirm: defaultAlertConfirm(
             onPressed: () {
-              Get.back();
+              navigateToDashboardPage();
             },
           ),
         );
@@ -156,5 +169,11 @@ class QuickTripController extends GetxController {
       default:
         _showSnackBar('Error', response.message ?? 'Server Connection Error!');
     }
+  }
+
+  void navigateToDashboardPage() async {
+    await Get.toNamed(
+      AppRoutes.dashboardPage,
+    );
   }
 }

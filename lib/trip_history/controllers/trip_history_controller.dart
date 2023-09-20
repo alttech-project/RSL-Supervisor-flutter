@@ -209,13 +209,15 @@ class TripHistoryController extends GetxController {
               title: 'Success',
               msg: response.message ?? "Trip cancelled successfully",
             );
+            messageController.text = "";
+            passwordController.text = "";
+            callTripHistoryApi();
           } else {
             showSnackBar(
               title: 'Error',
               msg: response.message ?? "Something went wrong",
             );
           }
-          callTripHistoryApi();
         },
       ).onError(
         (error, stackTrace) {
@@ -503,8 +505,8 @@ class TripHistoryController extends GetxController {
                 showSnackBar(title: "Alert", msg: "Please Enter Password");
               } else {
                 _callCancelTripApi(tripId);
-                messageController.text = "";
-                passwordController.text = "";
+                /* messageController.text = "";
+                passwordController.text = "";*/
                 Get.back();
               }
             },

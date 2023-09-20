@@ -199,6 +199,14 @@ class OfflineTripController extends GetxController {
           title: "Alert",
           message: response.message ?? "Something went wrong...",
         );
+        dropLatitude = 0.0;
+        dropLongitude = 0.0;
+        dropLocationController.text = "";
+        taxiNoController.text = "";
+        fareController.text = "";
+        nameController.text = "";
+        phoneController.text = "";
+        emailController.text = "";
         break;
       default:
         _showSnackBar('Error', response.message ?? 'Server Connection Error!');

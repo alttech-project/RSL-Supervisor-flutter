@@ -10,6 +10,7 @@ import 'app.dart';
 import 'shared/styles/theme.dart';
 
 Future<void> main() async {
+
   await initServices();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

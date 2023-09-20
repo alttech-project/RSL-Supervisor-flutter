@@ -2,12 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow RSL Supervisor to access your audio.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Get X Sample</string>
+	<string>RSL Supervisor</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,19 +17,27 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>get_x_sample</string>
+	<string>RSL Supervisor</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>RSL Supervisor  needs to access your camera to upload your profile image.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>RSL Supervisor needs user location for pickup and drop marker.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>RSL Supervisor needs user location for pickup and drop marker.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow RSL Supervisor to access your location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>RSL Supervisor needs to access your photo library to upload your profile image.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

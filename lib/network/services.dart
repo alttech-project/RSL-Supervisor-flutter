@@ -32,6 +32,7 @@ class ApiProvider extends GetConnect {
       return request;
     });
     httpClient.maxAuthRetries = 3;
+    httpClient.timeout = const Duration(seconds: 60);
   }
 
   Future<String> httpRequest(

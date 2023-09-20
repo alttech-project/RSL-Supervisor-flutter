@@ -42,7 +42,6 @@ class LocationsListWidget extends GetView<DashBoardController> {
                               width: 130.w,
                               height: 130.h,
                               color: Colors.white54,
-
                             ),
                           ),
                           const SizedBox(height: 15),

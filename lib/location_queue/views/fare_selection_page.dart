@@ -31,6 +31,11 @@ class FareSelectionPage extends GetView<LocationQueueController> {
               qrData: controller.qrData.value,
               qrMessage: controller.qrMessage.value,
               hideQrAction: () {
+                if (controller.fromDashboard == 0) {
+                  controller.goToDashboard();
+                } else {
+                  controller.goToDispatch();
+                }
                 controller.showQrCode.value = false;
               },
               child: SingleChildScrollView(

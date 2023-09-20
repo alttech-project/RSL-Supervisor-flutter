@@ -314,6 +314,19 @@ class LocationQueueController extends GetxController {
     Get.offAllNamed(AppRoutes.dashboardPage);
   }
 
+  void goToDispatch() {
+    amountController.text = "";
+    nameController.text = "";
+    phoneController.text = "";
+    emailController.text = "";
+    messageController.text = "";
+    selectedDriver = DriverDetails();
+    fixedMeter = 1;
+    qrData.value = "";
+    qrMessage.value = "";
+    Get.offNamed(AppRoutes.dispatchPage);
+  }
+
   void submitAction() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     bool shiftStatus = await GetStorageController().getShiftStatus();

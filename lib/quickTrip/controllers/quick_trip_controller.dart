@@ -45,13 +45,13 @@ class QuickTripController extends GetxController {
     print('hiTamil QTC onClose');
     clearTripId();
     clearDropLocation();
-    // tripIdController.dispose();
-    // dropLocationController.dispose();
-    // fareController.dispose();
-    // nameController.dispose();
-    // phoneController.dispose();
-    // emailController.dispose();
-    // paymentIdController.dispose();
+/*    tripIdController.dispose();
+    dropLocationController.dispose();
+    fareController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    paymentIdController.dispose();*/
     super.onClose();
   }
 

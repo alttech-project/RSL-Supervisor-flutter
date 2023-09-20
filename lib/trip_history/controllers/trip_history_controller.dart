@@ -69,9 +69,6 @@ class TripHistoryController extends GetxController {
   }
 
   void moveToMapPage(String tripId) {
-    Get.toNamed(
-      AppRoutes.tripHistoryMapPage,
-    );
     callTripHistoryMapApi(int.parse(tripId), supervisorInfo.cid);
   }
 
@@ -120,36 +117,44 @@ class TripHistoryController extends GetxController {
   }
 
   void callExportPdfApi() async {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
-    showBtnLoader.value = true;
-    exportPdfApi(
-      ExportPdfRequest(
-        kioskId: supervisorInfo.kioskId,
-        driverId: carNoController.text,
-        tripId: tripIdController.text,
-        from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
-        to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-        cid: supervisorInfo.cid,
-      ),
-    ).then(
-      (response) {
-        showBtnLoader.value = false;
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Alert",
-          message: response.message ?? "",
-        );
-      },
-    ).onError(
-      (error, stackTrace) {
-        showBtnLoader.value = false;
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Error",
-          message: error.toString(),
-        );
-      },
-    );
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      FocusScope.of(Get.context!).requestFocus(FocusNode());
+      showBtnLoader.value = true;
+      exportPdfApi(
+        ExportPdfRequest(
+          kioskId: supervisorInfo.kioskId,
+          driverId: carNoController.text,
+          tripId: tripIdController.text,
+          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
+          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
+          cid: supervisorInfo.cid,
+        ),
+      ).then(
+        (response) {
+          showBtnLoader.value = false;
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Alert",
+            message: response.message ?? "",
+          );
+        },
+      ).onError(
+        (error, stackTrace) {
+          showBtnLoader.value = false;
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Error",
+            message: error.toString(),
+          );
+        },
+      );
+    }
   }
 
   String displayTimeFormatter(String pickupTime) {
@@ -179,82 +184,98 @@ class TripHistoryController extends GetxController {
   }
 
   void _callCancelTripApi(int tripId) async {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
-    showLoader.value = true;
-    cancelTripApi(
-      CancelTripRequest(
-        kioskId: supervisorInfo.kioskId,
-        cid: supervisorInfo.cid,
-        cancelPwd: generateMd5(passwordController.text.trim()),
-        cancelMessage: messageController.text.trim(),
-        tripId: tripId,
-      ),
-    ).then(
-      (response) {
-        showLoader.value = false;
-        if (response.status == 1) {
-          showSnackBar(
-            title: 'Success',
-            msg: response.message ?? "Trip cancelled successfully",
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      FocusScope.of(Get.context!).requestFocus(FocusNode());
+      showLoader.value = true;
+      cancelTripApi(
+        CancelTripRequest(
+          kioskId: supervisorInfo.kioskId,
+          cid: supervisorInfo.cid,
+          cancelPwd: generateMd5(passwordController.text.trim()),
+          cancelMessage: messageController.text.trim(),
+          tripId: tripId,
+        ),
+      ).then(
+        (response) {
+          showLoader.value = false;
+          if (response.status == 1) {
+            showSnackBar(
+              title: 'Success',
+              msg: response.message ?? "Trip cancelled successfully",
+            );
+          } else {
+            showSnackBar(
+              title: 'Error',
+              msg: response.message ?? "Something went wrong",
+            );
+          }
+          callTripHistoryApi();
+        },
+      ).onError(
+        (error, stackTrace) {
+          showLoader.value = false;
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Error",
+            message: error.toString(),
           );
-        } else {
-          showSnackBar(
-            title: 'Error',
-            msg: response.message ?? "Something went wrong",
-          );
-        }
-        callTripHistoryApi();
-      },
-    ).onError(
-      (error, stackTrace) {
-        showLoader.value = false;
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Error",
-          message: error.toString(),
-        );
-      },
-    );
+        },
+      );
+    }
   }
 
   void callEditFareApi(String? comments, int? fare, int? tripId) async {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
-    showLoader.value = true;
-    editFareApi(
-      EditFareRequestData(
-        comments: comments,
-        fare: fare,
-        tripId: tripId,
-      ),
-    ).then(
-      (response) {
-        showLoader.value = false;
-        if (response.status == 1) {
-          showSnackBar(
-            title: 'Success',
-            msg: response.details ?? "Trip fare updated successfully",
+    bool shiftStatus = await GetStorageController().getShiftStatus();
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      FocusScope.of(Get.context!).requestFocus(FocusNode());
+      showLoader.value = true;
+      editFareApi(
+        EditFareRequestData(
+          comments: comments,
+          fare: fare,
+          tripId: tripId,
+        ),
+      ).then(
+        (response) {
+          showLoader.value = false;
+          if (response.status == 1) {
+            showSnackBar(
+              title: 'Success',
+              msg: response.details ?? "Trip fare updated successfully",
+            );
+            farEditController.text = "";
+            commentAddController.text = "";
+            removeRoutesUntil(routeName: AppRoutes.tripHistoryPage);
+          } else {
+            showSnackBar(
+              title: 'Error',
+              msg: response.message ?? "Something went wrong",
+            );
+          }
+          callTripHistoryApi();
+        },
+      ).onError(
+        (error, stackTrace) {
+          showLoader.value = false;
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Error",
+            message: error.toString(),
           );
-          farEditController.text = "";
-          commentAddController.text = "";
-          removeRoutesUntil(routeName: AppRoutes.tripHistoryPage);
-        } else {
-          showSnackBar(
-            title: 'Error',
-            msg: response.message ?? "Something went wrong",
-          );
-        }
-        callTripHistoryApi();
-      },
-    ).onError(
-      (error, stackTrace) {
-        showLoader.value = false;
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Error",
-          message: error.toString(),
-        );
-      },
-    );
+        },
+      );
+    }
   }
 
   void callTripHistoryMapApi(int? tripId, String? cid) async {
@@ -268,8 +289,13 @@ class TripHistoryController extends GetxController {
         if (response.status == 1) {
           mapdatas.value = response.detail?.mapDatas ?? [];
           mapdatas.refresh();
-          _pickUpMarker();
-          _dropMarker();
+          if (mapdatas.isNotEmpty) {
+            _pickUpMarker();
+            _dropMarker();
+            Get.toNamed(
+              AppRoutes.tripHistoryMapPage,
+            );
+          }
         } else {
           showSnackBar(
             title: 'Error',
@@ -340,7 +366,8 @@ class TripHistoryController extends GetxController {
     //   addMarker(endLocation, "Drop", await getDropIcons());
     // } else {
     LatLng endLocation = LatLng(
-        mapdatas.value[1].latitude ?? 0, mapdatas.value[1].longitude ?? 0);
+        mapdatas.value[mapdatas.length - 1].latitude ?? 0,
+        mapdatas.value[mapdatas.length - 1].longitude ?? 0);
     addMarker(endLocation, "Drop", await getDropIcons());
     // }
   }
@@ -358,8 +385,8 @@ class TripHistoryController extends GetxController {
 
   Future<BitmapDescriptor> getDropIcons() async {
     final Uint8List customMarker = await getBytesFromAsset(
-      path:
-          'assets/trip_History_map_page/redmarker.png', //paste the custom image path
+      path: 'assets/trip_History_map_page/redmarker.png',
+      //paste the custom image path
       width: 40,
       height: 40,
     );

@@ -53,10 +53,10 @@ class DashBoardController extends GetxController {
     } else {
       isShiftIn.value = true;
     }
-    _callDashboardApi();
+    callDashboardApi();
   }
 
-  void _callDashboardApi() async {
+  void callDashboardApi() async {
     apiLoading.value = true;
     dashboardApi(DasboardApiRequest(
       kioskId: supervisorInfo.value.kioskId,

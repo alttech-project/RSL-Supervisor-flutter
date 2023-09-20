@@ -58,7 +58,7 @@ class LocationsListWidget extends GetView<DashBoardController> {
                             visible: !controller.useCustomDrop.value,
                             child: TextButton(
                               onPressed: () {
-                                //controller.callDashboardApi();
+                                controller.callDashboardApi();
                                 controller.searchController.value.text = "";
                               },
                               style: ButtonStyle(
@@ -80,7 +80,7 @@ class LocationsListWidget extends GetView<DashBoardController> {
                                   SizedBox(
                                       width: 8
                                           .w), // Add some spacing between text and icon
-                                  Icon(Icons.refresh,
+                                  const Icon(Icons.refresh,
                                       color: Colors
                                           .white), // Add the trailing refresh icon
                                 ],

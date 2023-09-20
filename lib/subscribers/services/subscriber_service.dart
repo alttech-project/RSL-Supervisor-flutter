@@ -14,7 +14,7 @@ Future<SubscriberListResponseData> subscribeListApi(
     SubscriberListRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://web.limor.us/supervisorapp/index/?lang=en&type=driver_list_by_taxi_subscription',
+      url:'${AppConfig.webBaseUrl}driver_list_by_taxi_subscription',
       request: subscriberListRequestToJson(requestData),
     ),
   );

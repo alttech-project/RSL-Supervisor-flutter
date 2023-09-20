@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
@@ -139,52 +140,50 @@ class SubscribersPage extends GetView<SubscribersController> {
                                 child: AppLoader(),
                               ),
                             )
+                          : controller.filteredDriverList.isEmpty
+                              ?  Center(
+                        child: SizedBox(
+                          height: 400.h,
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [Text(
+                              "No Data found",
+                              style: TextStyle(color: Colors.white54),
+                            )],
+                          ),
+                        ),
+                      )
+
                           : Flexible(
-                              child: ListView.builder(
-                                itemCount: controller.filteredDriverList.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final driver =
-                                      controller.filteredDriverList[index];
-                                  String? modelName = driver.modelName;
-                                  if (modelName == "SEDAN") {
-                                    modelName = "S";
-                                  } else if (modelName == "VIP PLUS") {
-                                    modelName = "VIP +";
-                                  } else {
-                                    modelName = "XL";
-                                  }
-                                  return Container(
-                                    margin: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF353535),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: ListTile(
-                                      title: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            driver.driverName ?? '',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight:
-                                                  AppFontWeight.bold.value,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Row(
+                                  child: ListView.builder(
+                                    itemCount:
+                                        controller.filteredDriverList.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      final driver =
+                                          controller.filteredDriverList[index];
+                                      String? modelName = driver.modelName;
+                                      if (modelName == "SEDAN") {
+                                        modelName = "S";
+                                      } else if (modelName == "VIP PLUS") {
+                                        modelName = "VIP +";
+                                      } else {
+                                        modelName = "XL";
+                                      }
+                                      return Container(
+                                        margin: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF353535),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: ListTile(
+                                          title: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Image.asset(
-                                                'assets/subscriber_page/car.png',
-                                                width: 17,
-                                                height: 17,
-                                              ),
-                                              const SizedBox(width: 8),
                                               Text(
-                                                driver.driverPhone ?? '',
+                                                driver.driverName ?? '',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.white,
@@ -192,52 +191,71 @@ class SubscribersPage extends GetView<SubscribersController> {
                                                       AppFontWeight.bold.value,
                                                 ),
                                               ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/subscriber_page/car.png',
+                                                    width: 17,
+                                                    height: 17,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    driver.driverPhone ?? '',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.white,
+                                                      fontWeight: AppFontWeight
+                                                          .bold.value,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/subscriber_page/tellephone.png',
+                                                    width: 15,
+                                                    height: 15,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    driver.taxiNo ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                          Row(
+                                          trailing: Stack(
+                                            alignment: Alignment.center,
                                             children: [
-                                              Image.asset(
-                                                'assets/subscriber_page/tellephone.png',
-                                                width: 15,
-                                                height: 15,
+                                              CircleAvatar(
+                                                backgroundColor: AppColors
+                                                    .kPrimaryColor.value,
+                                                radius: 25,
                                               ),
-                                              const SizedBox(width: 8),
                                               Text(
-                                                driver.taxiNo ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                                modelName ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                  fontWeight:
+                                                      AppFontWeight.bold.value,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                      trailing: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            backgroundColor:
-                                                AppColors.kPrimaryColor.value,
-                                            radius: 25,
-                                          ),
-                                          Text(
-                                            modelName ?? '',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                              fontWeight:
-                                                  AppFontWeight.bold.value,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                     ],
                   ),
                 ),

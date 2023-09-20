@@ -36,6 +36,7 @@ class TripHistoryController extends GetxController {
   BitmapDescriptor? icons;
   RxInt dispatchedTrips = 0.obs;
   RxInt cancelledTrips = 0.obs;
+
   RxBool showBtnLoader = false.obs;
   Rx<TripDetails> tripDetail = TripDetails().obs;
   RxBool isPasswordVisible = false.obs;
@@ -349,7 +350,6 @@ class TripHistoryController extends GetxController {
       path: 'assets/trip_History_map_page/greenmarker.png',
       width: 40,
       height: 40,
-
     );
     var icon = BitmapDescriptor.fromBytes(customMarker);
     icons = icon;
@@ -380,111 +380,116 @@ class TripHistoryController extends GetxController {
   }
 
   void showCancelBottomSheet(tripId) {
-    showModalBottomSheet<void>(
-      context: Get.context!,
-      shape:  RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0.r), // Adjust the corner radius as needed
-          topRight: Radius.circular(15.0.r),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return SingleChildScrollView( // Wrap the ListView in a SingleChildScrollView
-          child: Padding(
-            padding: const EdgeInsets.only(
-                bottom: 20, right: 10, left: 10, top: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Cancel Trip",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    hintText: 'Message', // Your placeholder text
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.kPrimaryColor.value,
-                        width: 2.0,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                Obx(() => TextField(
-                  controller: passwordController,
-                  obscureText: !isPasswordVisible.value,
-                  decoration: InputDecoration(
-                    hintText: 'Enter the Password',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.kPrimaryColor.value,
-                        width: 2.0,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.kPrimaryColor.value,
-                        width: 2.0,
-                      ),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        isPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        print(isPasswordVisible.value);
-                        isPasswordVisible.value =
-                        !isPasswordVisible.value;
-                      },
-                    ),
-                  ),
-                )
-                ),
-                ElevatedButton(
-
-                  onPressed: () {
-                    if (messageController.text == "") {
-                      showSnackBar(
-                          title: "Alert", msg: "Please Enter Message");
-                    } else if (passwordController.text == "") {
-                      showSnackBar(
-                          title: "Alert", msg: "Please Enter Password");
-                    } else {
-                      _callCancelTripApi(tripId);
-                      messageController.text.isEmpty;
-                      passwordController.text.isEmpty;
-                      Get.back();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColors.kPrimaryColor.value,
-
-                  ),
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    Get.bottomSheet(
+        Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.r),
+                    topRight: Radius.circular(10.r))),
+            margin: EdgeInsets.only(top: 70.h),
+            child: bottomsheetWidget(tripId)),
+        isScrollControlled: true);
   }
 
-
+  Widget bottomsheetWidget(tripId) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20, right: 10, left: 10, top: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Cancel Trip",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          TextField(
+            controller: messageController,
+            decoration: InputDecoration(
+              hintText: 'Message',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey,
+                  width: 1.0.w,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.kPrimaryColor.value,
+                  width: 1.0.w,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+            ),
+            maxLines: 5,
+            minLines: 3,
+          ),
+          SizedBox(height: 20.h),
+          Obx(() => TextField(
+                controller: passwordController,
+                obscureText: !isPasswordVisible.value,
+                decoration: InputDecoration(
+                  hintText: 'Enter the Password',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0.w,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.kPrimaryColor.value,
+                      width: 1.0.w,
+                    ),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      print(isPasswordVisible.value);
+                      isPasswordVisible.value = !isPasswordVisible.value;
+                    },
+                  ),
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+                ),
+              )),
+          ElevatedButton(
+            onPressed: () {
+              if (messageController.text == "") {
+                showSnackBar(title: "Alert", msg: "Please Enter Message");
+              } else if (passwordController.text == "") {
+                showSnackBar(title: "Alert", msg: "Please Enter Password");
+              } else {
+                _callCancelTripApi(tripId);
+                messageController.text = "";
+                passwordController.text = "";
+                Get.back();
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.kPrimaryColor.value,
+            ),
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 void removeRoutesUntil({String? routeName}) {

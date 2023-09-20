@@ -43,7 +43,7 @@ Future<CancelTripResponse> cancelTripApi(CancelTripRequest requestData) async {
 Future<EditFareResponseData> editFareApi(EditFareRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=update_trip_fare',
+      url: '${AppConfig.webBaseUrl}update_trip_fare',
       request: editFareRequestToJson(requestData),
     ),
   );
@@ -54,7 +54,7 @@ Future<EditFareResponseData> editFareApi(EditFareRequestData requestData) async 
 Future<TripHistoryMapResponseData> tripHistoryMapApi(TripHistoryMapRequestedData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=trip_map_datas',
+      url:'${AppConfig.webBaseUrl}trip_map_datas',
       request: tripHistoryMapRequestToJson(requestData),
     ),
   );

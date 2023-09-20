@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
@@ -101,13 +100,14 @@ class TripListWidget extends GetView<TripHistoryController> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // TextSpan(
-              //   text: "Trips: ${controller.totalTrips.toString()}",
-              //   style: TextStyle(
-              //     color: AppColors.kPrimaryColor.value,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
+              TextSpan(
+                text:
+                    "Trips: ${controller.dispatchedTrips.value + controller.cancelledTrips.value}",
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         )),
@@ -299,20 +299,32 @@ class TripListWidget extends GetView<TripHistoryController> {
                 padding: EdgeInsets.all(5.r),
                 margin: EdgeInsets.only(bottom: 8.h),
                 child: Center(
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(
-                      fontSize: AppFontSize.mini.value,
-                      fontWeight: AppFontWeight.semibold.value,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Align both text and icon to the center
+                    children: [
+                      Text(
+                        "Cancel",
+                        style: TextStyle(
+                          fontSize: AppFontSize.mini.value,
+                          fontWeight: AppFontWeight.semibold.value,
+                          color: Colors.white,
+                        ),
+                      ),
+                       SizedBox(
+                          width: 5.0.w), // Add some space between text and icon
+                      const Icon(
+                        Icons
+                            .close, // You can use a different icon if you prefer
+                        color: Colors.white,
+                        size: 16.0, // Adjust the size of the icon as needed
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-
-
         ],
       ),
     );
@@ -334,12 +346,4 @@ class TripListWidget extends GetView<TripHistoryController> {
         return const Color(0xFFEF3E36);
     }
   }
-
-
-
-
-
 }
-
-
-

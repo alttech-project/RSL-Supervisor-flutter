@@ -14,7 +14,7 @@ Future<RiderReferralResponseData> riderReferralApi(
     RiderReferralRequest requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://passnode.limor.us/passenger/supervisorReferral',
+      url:'${AppConfig.nodeUrl}supervisorReferral',
       request: riderReferralRequestToJson(requestData),
     ),
   );
@@ -26,7 +26,7 @@ Future<RiderReferraMessageResponseData> riderRefferalMsgApi(
     RiderReferralMessageRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://passnode.limor.us/passenger/shareReferralCode',
+      url: '${AppConfig.nodeUrl}shareReferralCode',
       request: riderReferralMsgRequestToJson(requestData),
     ),
   );

@@ -58,7 +58,7 @@ class LocationsListWidget extends GetView<DashBoardController> {
                             visible: !controller.useCustomDrop.value,
                             child: TextButton(
                               onPressed: () {
-                                controller.callDashboardApi();
+                                //controller.callDashboardApi();
                                 controller.searchController.value.text = "";
                               },
                               style: ButtonStyle(

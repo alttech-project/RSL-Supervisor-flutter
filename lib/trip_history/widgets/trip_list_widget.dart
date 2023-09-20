@@ -101,13 +101,13 @@ class TripListWidget extends GetView<TripHistoryController> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextSpan(
-                text: "Trips: ${controller.totalTrips.toString()}",
-                style: TextStyle(
-                  color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // TextSpan(
+              //   text: "Trips: ${controller.totalTrips.toString()}",
+              //   style: TextStyle(
+              //     color: AppColors.kPrimaryColor.value,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
             ],
           ),
         )),

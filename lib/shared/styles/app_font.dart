@@ -5,10 +5,10 @@ class AppFontStyle {
   static TextStyle subHeading(
       {double? size, Color? color, FontWeight? weight}) {
     return TextStyle(
-      fontSize: size ?? AppFontSize.large.value,
-      fontWeight: weight ?? AppFontWeight.semibold.value,
-      color: color ?? Colors.black,
-    );
+        fontSize: size ?? AppFontSize.large.value,
+        fontWeight: weight ?? AppFontWeight.semibold.value,
+        color: color ?? Colors.black,
+        decoration: TextDecoration.none);
   }
 
   static TextStyle heading({double? size, Color? color, FontWeight? weight}) {

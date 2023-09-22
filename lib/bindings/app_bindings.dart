@@ -10,6 +10,7 @@ import 'package:rsl_supervisor/rider_refferral/controllers/rider_referral_contro
 import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 import 'package:rsl_supervisor/subscribers/controllers/subscriberpage_controller.dart';
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
+import 'package:rsl_supervisor/video/controller/upload_video_controller.dart';
 
 import '../controllers/app_start_controller.dart';
 import '../dispatch/controllers/dispatch_controller.dart';
@@ -40,5 +41,6 @@ class AppBind extends Bindings {
     Get.lazyPut<CaptureImageController>(() => CaptureImageController());
     Get.lazyPut<FeedsController>(() => FeedsController());
     Get.lazyPut<DispatchController>(() => DispatchController());
+    Get.lazyPut<UploadVideoController>(() => UploadVideoController());
   }
 }

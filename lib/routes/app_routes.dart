@@ -22,6 +22,7 @@ import '../place_search/views/place_search_view.dart';
 import '../rider_refferral/views/referral_history_page.dart';
 import '../scanner/views/scanner_page.dart';
 import '../trip_details/views/edit_fare_page.dart';
+import '../video/upload_video_page.dart';
 
 class AppRoutes {
   static const home = '/';
@@ -45,6 +46,7 @@ class AppRoutes {
   static const feedsPage = '/feedsPage';
   static const tripHistoryMapPage = '/tripHistoryMapPage';
   static const dispatchPage = '/dispatchPage';
+  static const uploadVideoPage = '/uploadVideoPage';
 }
 
 List<GetPage> routes = [
@@ -187,7 +189,14 @@ List<GetPage> routes = [
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
-  )
+  ),
+  GetPage(
+    name: AppRoutes.uploadVideoPage,
+    page: () => const UploadVideoPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
 ];
 
 class SizeTransitions extends CustomTransition {

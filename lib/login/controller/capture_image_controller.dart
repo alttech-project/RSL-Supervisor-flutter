@@ -43,7 +43,7 @@ class CaptureImageController extends GetxController {
     final storageRef = FirebaseStorage.instance.ref();
     final metadata = SettableMetadata(contentType: "image/jpeg");
     final imagePath =
-        "Supervisor/PhotosVerification/Photos_${DateFormat('yyyy-MM-dd').format(DateTime.now())}/photo_${Random().nextInt(100000000)}";
+        "Supervisor/PhotosVerification/Photos_${DateFormat('dd-MM-yyyy').format(DateTime.now())}/photo_${Random().nextInt(100000000)}";
     final uploadTask = storageRef.child(imagePath).putFile(fileName, metadata);
 
     uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {

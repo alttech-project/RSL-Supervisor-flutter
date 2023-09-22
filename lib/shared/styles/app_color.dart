@@ -12,6 +12,7 @@ enum AppColors {
   kLightTextSecondary,
   kLightTextDisabled,
   kPrimaryColor,
+  kPrimaryTransparentColor,
   kPrimaryButtonColor,
   kSecondaryButtonColor,
   khintTextColor,
@@ -34,7 +35,9 @@ enum AppColors {
   kBackgroundColorNew,
   kGetSnackBarColor,
   kWhite,
-  kOtpFieldColor
+  kOtpFieldColor,
+  kRedColor,
+  kSalmonColor
 }
 
 extension AppColorHelper on AppColors {
@@ -94,6 +97,9 @@ extension AppColorHelper on AppColors {
       case AppColors.kPrimaryColor:
         return const Color(0xFF7AC6BF);
 
+      case AppColors.kPrimaryTransparentColor:
+        return const Color(0x177AC6BF);
+
       case AppColors.kIndicatorColor:
         return const Color(0xFFCDE5A5);
 
@@ -117,6 +123,12 @@ extension AppColorHelper on AppColors {
 
       case AppColors.kOtpFieldColor:
         return const Color(0xFF203428);
+
+      case AppColors.kRedColor:
+        return const Color(0xFFEF3E36);
+
+      case AppColors.kSalmonColor:
+        return const Color(0xFF208CF8);
 
       case AppColors.kGetSnackBarColor:
         return const Color(0xFFF5F5F5).withOpacity(0.90);

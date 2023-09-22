@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
@@ -52,14 +53,14 @@ class QuickTripPage extends GetView<QuickTripController> {
                           _nameWidget(),
                           _phoneNumberWidget(),
                           _emailIdWidget(),
-                          _labelAndTextFieldWidget(
+                          /*_labelAndTextFieldWidget(
                             'Payment ID',
                             'Payment ID',
                             'Enter Payment ID (Optional)',
                             txtEditingController:
                                 controller.paymentIdController,
                             textInputAction: TextInputAction.done,
-                          ),
+                          ),*/
                           SizedBox(
                             height: 24.h,
                           ),
@@ -210,6 +211,7 @@ class QuickTripPage extends GetView<QuickTripController> {
       'Enter Email (Optional)',
       txtEditingController: controller.emailController,
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return null;
@@ -242,7 +244,8 @@ class QuickTripPage extends GetView<QuickTripController> {
         'Drop Location', 'Drop Location', 'Enter Drop Location',
         txtEditingController: controller.dropLocationController,
         readOnly: true,
-        onTap: () => Get.back(),
+        onTap: () => Get.toNamed(AppRoutes.dropLocationPage),
+        /*Get.back()*/
         suffix: IconButton(
           onPressed: () => controller.clearDropLocation(),
           icon: Icon(

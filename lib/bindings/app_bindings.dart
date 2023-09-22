@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
+import 'package:rsl_supervisor/driver_list/controller/driver_list_controller.dart';
 import 'package:rsl_supervisor/leaderboard/controllers/leaderboard_controller.dart';
 import 'package:rsl_supervisor/feeds/controller/feeds_controller.dart';
 import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
@@ -18,6 +19,7 @@ import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
 import '../offlineTrip/controllers/offline_trip_controller.dart';
+import '../quickTrip/controllers/DropLocationController.dart';
 import '../utils/helpers/getx_storage.dart';
 
 class AppBind extends Bindings {
@@ -42,5 +44,7 @@ class AppBind extends Bindings {
     Get.lazyPut<FeedsController>(() => FeedsController());
     Get.lazyPut<DispatchController>(() => DispatchController());
     Get.lazyPut<UploadVideoController>(() => UploadVideoController());
+    Get.lazyPut<DriverListController>(() => DriverListController());
+    Get.lazyPut<DropLocationController>(() => DropLocationController());
   }
 }

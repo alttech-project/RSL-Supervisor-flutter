@@ -22,7 +22,11 @@ class DropSearchBar extends GetView<DashBoardController> {
             if (pageType == 1) {
               //dispatch
               controller.moveToPlaceSearchDispatch();
+            } else if (pageType == 3) {
+              //quickTrip
+              controller.moveToQuickTrip();
             } else {
+              //dashboard
               controller.moveToPlaceSearch();
             }
           }

@@ -154,7 +154,20 @@ class LocationsListWidget extends GetView<DashBoardController> {
         ..zoneFareApplied = dropLocation.zoneFareApplied ?? "0";
 
       Get.toNamed(AppRoutes.locationQueuePage);
+    } else if (pageType == 3) {
+      //quickTrip
+      print("hi quickTripPage");
+      final QuickTripController controller = Get.find<QuickTripController>();
+      controller
+        ..dropLocationController.text = dropLocation.name ?? ''
+        ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
+        ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
+        ..fareController.text =
+            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
+      Get.back();
+      // Get.offAndToNamed(AppRoutes.quickTripPage);
     } else {
+      //dashboard
       final QuickTripController controller = Get.find<QuickTripController>();
       controller
         ..dropLocationController.text = dropLocation.name ?? ''

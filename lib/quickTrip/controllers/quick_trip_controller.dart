@@ -43,8 +43,7 @@ class QuickTripController extends GetxController {
   @override
   void onClose() {
     print('hiTamil QTC onClose');
-    clearTripId();
-    clearDropLocation();
+    clearDatas();
 /*    tripIdController.dispose();
     dropLocationController.dispose();
     fareController.dispose();
@@ -151,6 +150,7 @@ class QuickTripController extends GetxController {
       DispatchQuickTripResponseData response) {
     switch (response.status) {
       case 1:
+        clearDatas();
         showAppDialog(
           title: '${response.message}',
           message: '${response.message}',
@@ -175,5 +175,17 @@ class QuickTripController extends GetxController {
     await Get.toNamed(
       AppRoutes.dashboardPage,
     );
+  }
+
+  void clearDatas() {
+    clearTripId();
+    clearDropLocation();
+    dropLatitude = 0.0;
+    dropLongitude = 0.0;
+    fareController.clear();
+    nameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    paymentIdController.clear();
   }
 }

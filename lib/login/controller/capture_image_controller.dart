@@ -19,12 +19,10 @@ class CaptureImageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initializeFirebase();
+    initializeCamera();
   }
 
-  Future<void> initializeFirebase() async {
-    await Firebase.initializeApp();
-    // date = GetStorageController().getSupervisorInfo().toString();
+  Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final firstCamera = cameras[1]; //front camera
     cameraController = CameraController(firstCamera, ResolutionPreset.medium);

@@ -79,7 +79,7 @@ class TripHistoryPage extends GetView<TripHistoryController> {
 void showAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(
     content: const Text(
-      "Are you sure want to export Pdf?",
+      "Are you sure want to export report?",
       style: TextStyle(
         fontWeight: FontWeight.bold,
       ),

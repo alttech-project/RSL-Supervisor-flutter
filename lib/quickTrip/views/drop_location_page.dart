@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
+import 'package:rsl_supervisor/quickTrip/widgets/drop_location_search_bar.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 
 import '../../dashboard/widgets/drop_search_bar.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/safe_area_container.dart';
-import '../controllers/DropLocationController.dart';
+import '../controllers/drop_location_controller.dart';
 import '../widgets/drop_location_app_bar.dart';
 
 class DropLocationPage extends GetView<DropLocationController> {
@@ -61,7 +61,7 @@ class DropLocationPage extends GetView<DropLocationController> {
                         ),
                       ],
                     ),
-                    DropSearchBar(
+                    DropLocationSearchBar(
                       pageType: 3,
                     ),
                     LocationsListWidget(

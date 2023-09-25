@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
-import 'package:rsl_supervisor/routes/app_routes.dart';
-import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
-
+import 'package:rsl_supervisor/quickTrip/controllers/quick_trip_controller.dart';
 import '../../dashboard/data/dashboard_api_data.dart';
 import '../../dashboard/service/dashboard_service.dart';
-import '../../location_queue/controllers/location_queue_controller.dart';
-import '../../place_search/data/get_place_details_response.dart';
-import '../../quickTrip/controllers/quick_trip_controller.dart';
+import '../../routes/app_routes.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
@@ -75,6 +68,7 @@ class DropLocationController extends GetxController {
   }
 
   customDropAction(bool newValue) {
+    print("hi customDropAction ${newValue}");
     useCustomDrop.value = newValue;
 
     if (useCustomDrop.value) {
@@ -101,5 +95,21 @@ class DropLocationController extends GetxController {
             (dropoff.address ?? "").toLowerCase().contains(text.toLowerCase()))
         .toList();
     dropSearchList.refresh();
+  }
+
+  void moveToQuickTrips() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    final QuickTripController controller = Get.find<QuickTripController>();
+    controller
+      ..dropLocationController.text = '${result.formattedAddress}'
+      ..dropLatitude =
+          double.tryParse('${result.geometry?.location?.lat}') ?? 0.0
+      ..dropLongitude =
+          double.tryParse('${result.geometry?.location?.lng}') ?? 0.0
+      ..fareController.text = '';
+    Get.back();
   }
 }

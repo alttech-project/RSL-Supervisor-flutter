@@ -9,7 +9,7 @@ import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
 import 'package:rsl_supervisor/location_queue/views/location_queue_page.dart';
 import 'package:rsl_supervisor/login/view/capture_image_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
-import 'package:rsl_supervisor/quickTrip/views/drop_location.dart';
+import 'package:rsl_supervisor/quickTrip/views/drop_location_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 import 'package:rsl_supervisor/rider_refferral/views/rider_referral_page.dart';
 import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';

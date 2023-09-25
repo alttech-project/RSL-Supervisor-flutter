@@ -156,7 +156,6 @@ class LocationsListWidget extends GetView<DashBoardController> {
       Get.toNamed(AppRoutes.locationQueuePage);
     } else if (pageType == 3) {
       //quickTrip
-      print("hi quickTripPage");
       final QuickTripController controller = Get.find<QuickTripController>();
       controller
         ..dropLocationController.text = dropLocation.name ?? ''

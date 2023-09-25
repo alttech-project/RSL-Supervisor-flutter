@@ -19,7 +19,7 @@ import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
 import '../offlineTrip/controllers/offline_trip_controller.dart';
-import '../quickTrip/controllers/DropLocationController.dart';
+import '../quickTrip/controllers/drop_location_controller.dart';
 import '../utils/helpers/getx_storage.dart';
 
 class AppBind extends Bindings {

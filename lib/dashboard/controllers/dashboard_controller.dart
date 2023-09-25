@@ -178,6 +178,23 @@ class DashBoardController extends GetxController {
     Get.toNamed(AppRoutes.locationQueuePage);
   }
 
+  void moveToQuickTrip() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    if (result is PlaceDetails) {
+      final QuickTripController controller = Get.find<QuickTripController>();
+      controller
+        ..dropLocationController.text = '${result.formattedAddress}'
+        ..dropLatitude = result.geometry?.location?.lat ?? 0.0
+        ..dropLongitude = result.geometry?.location?.lng ?? 0.0
+        ..fareController.text = '';
+      Get.back();
+      // Get.offAndToNamed(AppRoutes.quickTripPage);
+    }
+  }
+
   openMenu() {
     scaffoldKey.currentState?.openDrawer();
   }
@@ -217,6 +234,9 @@ class DashBoardController extends GetxController {
         break;
       case "Dispatch":
         Get.toNamed(AppRoutes.dispatchPage);
+        break;
+      case "Driver List":
+        Get.toNamed(AppRoutes.driverListPage);
         break;
       default:
         break;

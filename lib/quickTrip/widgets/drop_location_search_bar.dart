@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:rsl_supervisor/quickTrip/controllers/drop_location_controller.dart';
 
 import '../../widgets/app_textfields.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../controllers/dashboard_controller.dart';
 
-class DropSearchBar extends GetView<DashBoardController> {
+class DropLocationSearchBar extends GetView<DropLocationController> {
   int pageType;
 
-  DropSearchBar({required this.pageType, Key? key}) : super(key: key);
+  DropLocationSearchBar({required this.pageType, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +19,7 @@ class DropSearchBar extends GetView<DashBoardController> {
       () => InkWell(
         onTap: () {
           if (controller.useCustomDrop.value) {
-            if (pageType == 1) {
-              //dispatch
-              controller.moveToPlaceSearchDispatch();
-            } else if (pageType == 3) {
-              //quickTrip
-              controller.moveToQuickTrip();
-            } else {
-              //dashboard
-              controller.moveToPlaceSearch();
-            }
+            controller.moveToQuickTrips();
           }
         },
         child: Padding(

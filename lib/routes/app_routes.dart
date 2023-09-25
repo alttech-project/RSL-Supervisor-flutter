@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
 import 'package:rsl_supervisor/feeds/view/feeds_page.dart';
 import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
@@ -10,6 +11,7 @@ import 'package:rsl_supervisor/login/view/capture_image_page.dart';
 import 'package:rsl_supervisor/my_trip/views/my_trip_list_edit_fare_page.dart';
 import 'package:rsl_supervisor/my_trip/views/my_trip_list_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
+import 'package:rsl_supervisor/quickTrip/views/drop_location_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 import 'package:rsl_supervisor/rider_refferral/views/rider_referral_page.dart';
 import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';
@@ -60,6 +62,8 @@ class AppRoutes {
 
 
 
+  static const driverListPage = '/driverListPage';
+  static const dropLocationPage = '/dropLocationPage';
 }
 
 List<GetPage> routes = [
@@ -206,6 +210,20 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.uploadVideoPage,
     page: () => const UploadVideoPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.driverListPage,
+    page: () => const DriverListScreen(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.dropLocationPage,
+    page: () => const DropLocationPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

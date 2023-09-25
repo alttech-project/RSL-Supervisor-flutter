@@ -23,7 +23,7 @@ class UploadVideoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initializeFirebase();
+    // initializeFirebase();
   }
 
   Future<void> initializeFirebase() async {

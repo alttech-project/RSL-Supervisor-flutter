@@ -11,12 +11,13 @@ final _storageController = Get.find<GetStorageController>();
 
 Future<GetPlacesResponse> getPlacesApi(String text) async {
   String url = await _storageController.getNodeUrl();
+  String countries = 'AE';
   url = url.replaceAll('passnode', 'ridenode');
   final response = await _apiProvider.httpRequest(
     requestType: RequestType.kGet,
     resource: Resource(
       url:
-          '${url}getPlaces?input=$text&region=IN%2C+AE&key=${AppConfig.googleMapKey}',
+          '${url}getPlaces?input=$text&components=country:$countries&key=${AppConfig.googleMapKey}',
       request: '',
     ),
   );
@@ -30,7 +31,7 @@ Future<GetPlaceDetailsResponse> getPlaceDetailsApi(String placeId) async {
     requestType: RequestType.kGet,
     resource: Resource(
       url:
-          '${url}getPlaceDetails?placeid=$placeId&key=${AppConfig.googleMapKey}',
+      '${url}getPlaceDetails?placeid=$placeId&key=${AppConfig.googleMapKey}',
       request: '',
     ),
   );

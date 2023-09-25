@@ -39,7 +39,9 @@ class TripListHeaderWidget extends GetView<TripHistoryController> {
           ),
           Expanded(
             child: CustomButton(
-              onTap: () {},
+              onTap: () {
+                controller.callExportPdfApi();
+              },
               height: 25.h,
               width: 70.w,
               text: "Export",

@@ -1,15 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_text_field.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
 import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../data/verify_user_api_data.dart';
@@ -40,6 +44,7 @@ class LoginController extends GetxController {
     super.onInit();
     currentView.value = LoginViews.emailPage;
     getDeviceToken();
+    checkCameraPermission();
   }
 
   getDeviceToken() async {
@@ -374,6 +379,19 @@ class LoginController extends GetxController {
     kioskName = "";
     kioskId = 0;
     phoneNumber = "";
+  }
+  void checkCameraPermission() async {
+    var status = await Permission.camera.status;
+    printLogs("CAMERA CHECK STATUS CHECKER : $status");
+    if (status != PermissionStatus.granted) {
+      status = await requestCameraPermission();
+    }
+  }
+
+  Future<PermissionStatus> requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    printLogs("CAMERA REQUEST STATUS CHECKER : $status");
+    return status;
   }
 }
 

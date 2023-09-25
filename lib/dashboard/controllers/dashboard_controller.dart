@@ -206,6 +206,9 @@ class DashBoardController extends GetxController {
       case "Subscribers":
         Get.toNamed(AppRoutes.subscriberPage);
         break;
+      case "My Trips":
+        Get.toNamed(AppRoutes.tripListPage);
+        break;
       case "Rider Referral":
         Get.toNamed(AppRoutes.riderRefferalPage);
         break;

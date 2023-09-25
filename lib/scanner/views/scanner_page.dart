@@ -41,7 +41,9 @@ class ScannerPage extends GetView<ScannerController> {
                           QrResult(status: PermissionStatus.permanentlyDenied));
                 } else {
                   showSnackBar(
-                      msg: "Please allow to access the camera for Scanning QR Code", title: 'Alert');
+                      msg:
+                          "Please allow to access the camera for Scanning QR Code",
+                      title: 'Alert');
                   Get.back();
                 }
 
@@ -74,19 +76,24 @@ class ScannerPage extends GetView<ScannerController> {
       key: GlobalKey(debugLabel: 'QR'),
       onQRViewCreated: (QRViewController qrController) {
         controller.controller = qrController;
-
         qrController.scannedDataStream.listen((scanData) async {
+          print("scanData -> ${scanData.code} ** ${scanData.format} ** ${scanData.toString()}");
           controller.barcodeResult.value = scanData;
           if (scanData.code!.isNotEmpty) {
-            qrController.stopCamera().then(
-              (value) {
-                printLogs("FROM SCANENR RESPONSE${scanData.code}");
-                Get.back(
-                  result: QrResult(
-                    data: scanData,
-                  ),
-                );
-              },
+            printLogs("FROM SCANENR RESPONSE ${scanData.code}");
+
+            // qrController.stopCamera().then(
+            //   (value) {
+            //     printLogs("FROM SCANENR then ");
+            //   },
+            // ).catchError((onError) {
+            //   printLogs("FROM SCANENR error ${onError}");
+            // });
+            qrController.dispose();
+            Get.back(
+              result: QrResult(
+                data: scanData,
+              ),
             );
           }
         });
@@ -109,7 +116,7 @@ class ScannerPage extends GetView<ScannerController> {
 
     if (!p/*== false && controller.has.value == false*/) {
       controller.has.value = true;
-      showSnackBar(msg:"No Permission", title: "Alert");
+      showSnackBar(msg: "No Permission", title: "Alert");
       ctrl.dispose();
       Get.back();
     }

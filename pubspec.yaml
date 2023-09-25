@@ -73,13 +73,15 @@ dependencies:
   percent_indicator: ^4.2.3
   camera: ^0.10.5+4
   flutter_native_image: ^0.0.6+1
-  firebase_storage: ^11.2.6
-  firebase_core: ^2.15.1
+  firebase_storage: ^11.2.7
+  firebase_core: ^2.16.0
   video_player: ^2.7.1
   video_compress: ^3.1.0
   chewie: ^1.7.1
   google_maps_flutter: ^2.3.0
   timer_count_down: ^2.2.0
+  fluttertoast: ^8.2.2
+
 
 
 dev_dependencies:

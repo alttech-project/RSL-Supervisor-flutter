@@ -6,8 +6,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rsl_supervisor/views/splash_screen.dart';
 
-import 'app.dart';
 import 'local_notification/flutter_local_notification.dart';
 import 'shared/styles/theme.dart';
 
@@ -40,7 +40,7 @@ class AppMain extends StatelessWidget {
       designSize: const Size(360, 640),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: const AppStart(),
+      child: const SplashScreen(),
       builder: (BuildContext context, Widget? child) {
         return _runMainApp(child: child);
       },

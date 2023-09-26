@@ -73,7 +73,7 @@ class GetStorageController extends GetxController {
     storage.write("riderReferralUrl", url);
   }
 
-  Future<String> getRiderReferralUrl() async {
+  Future<int> getRiderReferralUrl() async {
     return await storage.read("riderReferralUrl");
   }
 

@@ -380,6 +380,7 @@ class LoginController extends GetxController {
     kioskId = 0;
     phoneNumber = "";
   }
+
   void checkCameraPermission() async {
     var status = await Permission.camera.status;
     printLogs("CAMERA CHECK STATUS CHECKER : $status");

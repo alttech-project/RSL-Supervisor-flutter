@@ -20,15 +20,11 @@ import '../data/my_trip_list_export_pdf_data.dart';
 import '../service/my_trip_list_service.dart';
 import 'dart:ui' as ui;
 
-
 class MyTripListController extends GetxController {
-
   SupervisorInfo supervisorInfo = SupervisorInfo();
-
-
-
-
   RxList<ListTripDetails> tripList = <ListTripDetails>[].obs;
+  RxList<ListTripDetails> existingDataList = <ListTripDetails>[].obs;
+
   RxBool showLoader = false.obs;
   Rx<DateTime> fromDate = DateTime.now().obs;
   Rx<DateTime> toDate = DateTime.now().obs;
@@ -41,49 +37,56 @@ class MyTripListController extends GetxController {
   BitmapDescriptor? icons;
   RxInt dispatchedTrips = 0.obs;
   RxInt cancelledTrips = 0.obs;
-
   RxBool showBtnLoader = false.obs;
-  Rx<ListTripDetails> selectedtripDetail = ListTripDetails().obs;
+  Rx<ListTripDetails> selectedTripDetail = ListTripDetails().obs;
   RxBool isPasswordVisible = false.obs;
   TextEditingController messageController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  int currentPage = 1; // Initialize the page number.
-
-
+  RxInt currentPage = 1.obs;
+  RxInt limit = 10.obs;
+  RxInt totalCount = 10.obs;
+  RxBool pageNationLoader = false.obs;
 
 // Initially, the password is hidden.
 
   @override
   void onInit() {
     super.onInit();
+    _scrollListenerTripList();
     _getUserInfos();
-    scrollController.addListener(_onScroll);
-
   }
-  void _onScroll() {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-      currentPage++;
 
-    callTripListApi(currentPage);
+  void _scrollListenerTripList() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        loadTripListNextPage();
+      }
+    });
+  }
+
+  void loadTripListNextPage() {
+    if (currentPage.value * limit.value < totalCount.value) {
+      currentPage.value++;
+      callTripListApi(pageNation: true);
+    } else {
+      pageNationLoader.value = false;
     }
   }
 
   @override
   void onClose() {
-    scrollController.dispose(); // Don't forget to dispose of the ScrollController.
+    scrollController.dispose();
+    existingDataList.refresh();
     super.onClose();
   }
 
-
-
-
-
-_getUserInfos() async {
+  _getUserInfos() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     fromDate.value = DateTime.now().subtract(const Duration(days: 1));
     toDate.value = DateTime.now();
-    callTripListApi(currentPage);
+    callTripListApi();
   }
 
   void goBack() {
@@ -100,9 +103,22 @@ _getUserInfos() async {
     callTripHistoryMapApi(int.parse(tripId), supervisorInfo.cid);
   }
 
-  void callTripListApi(int page) async {
+  void callTripListApi({bool pageNation = false}) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-    showLoader.value = true;
+
+    switch (pageNation) {
+      case false:
+        showLoader.value = false;
+        pageNationLoader.value = false;
+        currentPage.value = 1;
+        break;
+      case true:
+        pageNationLoader.value = true;
+        showLoader.value = false;
+        break;
+      default:
+    }
+    // showLoader.value = true;
     tripListApi(
       MyTripsRequestData(
         driverName: carNoController.text,
@@ -111,30 +127,43 @@ _getUserInfos() async {
         to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
         locationId: "180",
         supervisorId: "74",
-        limit: 10,
-        start:page
+        limit: limit.value,
+        start: currentPage.value,
       ),
-    ).then(
-          (response) {
-        showLoader.value = false;
-        if ((response.status ?? 0) == 1) {
-          tripList.value = response.details?.tripDetails ?? [];
-          tripList.refresh();
-          print("DEEPAK ${tripList.length}");
-        } else {
-          tripList.value = [];
-          dispatchedTrips.value = 0;
-          cancelledTrips.value = 0;
-          showSnackBar(
-            title: 'Alert',
-            msg: response.message ?? "Something went wrong...",
-          );
-        }
-        tripList.refresh();
-      },
-    ).onError(
-          (error, stackTrace) {
-            printLogs("$error");
+    ).then((response) {
+      switch (pageNation) {
+        case false:
+          showLoader.value = false;
+          pageNationLoader.value = false;
+          if ((response.status ?? 0) == 1) {
+            tripList.value = response.details?.tripDetails ?? [];
+            totalCount.value = response.details!.totalCount ?? 0;
+            tripList.refresh();
+            print("DEEPAK tripList ${tripList.length}");
+          } else {
+            tripList.value = [];
+            dispatchedTrips.value = 0;
+            cancelledTrips.value = 0;
+            showLoader.value = false;
+            pageNationLoader.value = false;
+            showSnackBar(
+              title: 'Alert',
+              msg: response.message ?? "Something went wrong...",
+            );
+          }
+          break;
+
+        case true:
+          if (response.status == 1) {
+            tripList?.addAll(response.details?.tripDetails ?? []);
+            tripList.refresh();
+            showLoader.value = false;
+          }
+          break;
+      }
+    }).onError(
+      (error, stackTrace) {
+        printLogs("$error");
         showLoader.value = false;
         tripList.value = [];
         dispatchedTrips.value = 0;
@@ -169,7 +198,7 @@ _getUserInfos() async {
           cid: supervisorInfo.cid,
         ),
       ).then(
-            (response) {
+        (response) {
           showBtnLoader.value = false;
           showDefaultDialog(
             context: Get.context!,
@@ -178,7 +207,7 @@ _getUserInfos() async {
           );
         },
       ).onError(
-            (error, stackTrace) {
+        (error, stackTrace) {
           showBtnLoader.value = false;
           showDefaultDialog(
             context: Get.context!,
@@ -235,7 +264,7 @@ _getUserInfos() async {
           tripId: tripId,
         ),
       ).then(
-            (response) {
+        (response) {
           showLoader.value = false;
           if (response.status == 1) {
             showSnackBar(
@@ -244,7 +273,7 @@ _getUserInfos() async {
             );
             messageController.text = "";
             passwordController.text = "";
-            callTripListApi(currentPage);
+            callTripListApi();
           } else {
             showSnackBar(
               title: 'Error',
@@ -253,7 +282,7 @@ _getUserInfos() async {
           }
         },
       ).onError(
-            (error, stackTrace) {
+        (error, stackTrace) {
           showLoader.value = false;
           showDefaultDialog(
             context: Get.context!,
@@ -282,7 +311,7 @@ _getUserInfos() async {
           tripId: tripId,
         ),
       ).then(
-            (response) {
+        (response) {
           showLoader.value = false;
           if (response.status == 1) {
             showSnackBar(
@@ -298,10 +327,10 @@ _getUserInfos() async {
               msg: response.message ?? "Something went wrong",
             );
           }
-          callTripListApi(currentPage);
+          callTripListApi();
         },
       ).onError(
-            (error, stackTrace) {
+        (error, stackTrace) {
           showLoader.value = false;
           showDefaultDialog(
             context: Get.context!,
@@ -319,7 +348,7 @@ _getUserInfos() async {
     tripHistoryMapApi(
       TripHistoryMapRequestedData(tripId: tripId, cid: cid),
     ).then(
-          (response) {
+      (response) {
         showLoader.value = false;
         if (response.status == 1) {
           mapdatas.value = response.detail?.mapDatas ?? [];
@@ -339,7 +368,7 @@ _getUserInfos() async {
         }
       },
     ).onError(
-          (error, stackTrace) {
+      (error, stackTrace) {
         showLoader.value = false;
         showDefaultDialog(
           context: Get.context!,
@@ -355,8 +384,8 @@ _getUserInfos() async {
   }
 
   void getTripDetailFromList({required ListTripDetails detail}) {
-    selectedtripDetail.value = detail;
-    selectedtripDetail.refresh();
+    selectedTripDetail.value = detail;
+    selectedTripDetail.refresh();
   }
 
   void fareSumbitValidation() {
@@ -368,7 +397,7 @@ _getUserInfos() async {
       callEditFareApi(
           commentAddController.text.trim(),
           int.parse(farEditController.text.trim()),
-          int.parse(selectedtripDetail.value.tripId.toString()));
+          int.parse(selectedTripDetail.value.tripId.toString()));
     }
   }
 
@@ -497,39 +526,39 @@ _getUserInfos() async {
           ),
           SizedBox(height: 20.h),
           Obx(() => TextField(
-            controller: passwordController,
-            obscureText: !isPasswordVisible.value,
-            decoration: InputDecoration(
-              hintText: 'Enter the Password',
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                  width: 1.0.w,
+                controller: passwordController,
+                obscureText: !isPasswordVisible.value,
+                decoration: InputDecoration(
+                  hintText: 'Enter the Password',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0.w,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.kPrimaryColor.value,
+                      width: 1.0.w,
+                    ),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      print(isPasswordVisible.value);
+                      isPasswordVisible.value = !isPasswordVisible.value;
+                    },
+                  ),
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.kPrimaryColor.value,
-                  width: 1.0.w,
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isPasswordVisible.value
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  print(isPasswordVisible.value);
-                  isPasswordVisible.value = !isPasswordVisible.value;
-                },
-              ),
-              contentPadding:
-              const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
-            ),
-          )),
+              )),
           ElevatedButton(
             onPressed: () {
               if (messageController.text == "") {
@@ -562,6 +591,3 @@ void removeRoutesUntil({String? routeName}) {
 
   Get.until(condition);
 }
-
-
-

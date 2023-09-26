@@ -6,6 +6,7 @@ import 'package:rsl_supervisor/leaderboard/controllers/leaderboard_controller.da
 import 'package:rsl_supervisor/feeds/controller/feeds_controller.dart';
 import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
+import 'package:rsl_supervisor/my_trip/controller/my_trip_list_map_controller.dart';
 import 'package:rsl_supervisor/place_search/controller/place_search_controller.dart';
 import 'package:rsl_supervisor/quickTrip/controllers/quick_trip_controller.dart';
 import 'package:rsl_supervisor/rider_refferral/controllers/rider_referral_controller.dart';
@@ -46,8 +47,10 @@ class AppBind extends Bindings {
     Get.lazyPut<DispatchController>(() => DispatchController());
     Get.lazyPut<UploadVideoController>(() => UploadVideoController());
     Get.lazyPut<MyTripListController>(() => MyTripListController());
-
     Get.lazyPut<DriverListController>(() => DriverListController());
     Get.lazyPut<DropLocationController>(() => DropLocationController());
+    Get.lazyPut<MyTripListMapController>(() => MyTripListMapController());
+
+
   }
 }

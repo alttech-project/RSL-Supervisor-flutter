@@ -135,10 +135,10 @@ class UploadVideoController extends GetxController {
       (response) {
         loading.value = false;
         if ((response.status ?? 0) == 1) {
-          showSnackBar(
+          /*showSnackBar(
             title: 'Alert',
             msg: response.message ?? "Something went wrong...",
-          );
+          );*/
           Get.back();
         } else {
           showSnackBar(

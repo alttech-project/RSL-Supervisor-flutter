@@ -52,15 +52,15 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
                   ];
                 }*/
                 polylinePoints = [
-                  LatLng(controller.mapdatas.value[0].latitude ?? 0,
-                      controller.mapdatas.value[0].longitude ?? 0),
+                  LatLng(controller.mapdatas.value[0].latitude ?? 0.0,
+                      controller.mapdatas.value[0].longitude ?? 0.0),
                   LatLng(
                       controller.mapdatas.value[controller.mapdatas.length - 1]
                               .latitude ??
-                          0,
+                          0.0,
                       controller.mapdatas.value[controller.mapdatas.length - 1]
                               .longitude ??
-                          0),
+                          0.0),
                 ];
 
                 Polyline polyline = Polyline(

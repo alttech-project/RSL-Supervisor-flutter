@@ -124,7 +124,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                       controller.callEditFareApi(
                           controller.commentAddController.text.trim(),
                           int.parse(controller.farEditController.text.trim()),
-                          controller.selectedtripDetail.value.tripId );
+                          controller.selectedTripDetail.value.tripId );
                     }
                   },
                 ),

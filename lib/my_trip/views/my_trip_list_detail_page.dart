@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,10 +29,9 @@ class ListTripDetailsPage extends GetView<MyTripListController> {
               onTap: () {
                 Get.toNamed(AppRoutes.mytripQrPage);
               },
-              child: Image.asset(
-                'assets/trip_details/scanner.png',
-                width: 30,
-                height: 30,
+              child: Icon(
+               CupertinoIcons.qrcode,
+                size: 20.r,
                 color: AppColors.kPrimaryColor.value,
               ),
             ),
@@ -57,70 +57,70 @@ class ListTripDetailsPage extends GetView<MyTripListController> {
           children: [
             CommonWidgetForDetails(
               leadingText: "Trip Id",
-              trailingText: controller.selectedtripDetail.value.tripId.toString(),
+              trailingText: controller.selectedTripDetail.value.tripId.toString(),
             ),
             CommonWidgetForDetails(
               leadingText: "Trip type",
-              trailingText: controller.selectedtripDetail.value.tripType ?? "",
+              trailingText: controller.selectedTripDetail.value.tripType ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Supervisor Name',
               trailingText:
-              controller.selectedtripDetail.value.supervisorDisplayName ?? "",
+              controller.selectedTripDetail.value.supervisorDisplayName ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Driver Name',
-              trailingText: controller.selectedtripDetail.value.driverName ?? "",
+              trailingText: controller.selectedTripDetail.value.driverName ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'From',
-              trailingText: controller.selectedtripDetail.value.pickupLocation ?? "",
+              trailingText: controller.selectedTripDetail.value.pickupLocation ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'To',
-              trailingText: controller.selectedtripDetail.value.dropLocation ?? "",
+              trailingText: controller.selectedTripDetail.value.dropLocation ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Start Time',
-              trailingText: controller.selectedtripDetail.value.pickupTime ?? "",
+              trailingText: controller.selectedTripDetail.value.pickupTime ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'End Time',
-              trailingText: controller.selectedtripDetail.value.dropTime ?? "",
+              trailingText: controller.selectedTripDetail.value.dropTime ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Car',
-              trailingText: controller.selectedtripDetail.value.taxiNo ?? "",
+              trailingText: controller.selectedTripDetail.value.taxiNo ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Fare Type',
-              trailingText: controller.selectedtripDetail.value.tripType ?? "",
+              trailingText: controller.selectedTripDetail.value.tripType ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Payment Type',
-              trailingText: controller.selectedtripDetail.value.paymentText ?? "",
+              trailingText: controller.selectedTripDetail.value.paymentText ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Total Distance',
               trailingText:
-              '${controller.selectedtripDetail.value.distance ?? "-"} ${controller.selectedtripDetail.value.distanceUnit ?? "-"}',
+              '${controller.selectedTripDetail.value.distance ?? "-"} ${controller.selectedTripDetail.value.distanceUnit ?? "-"}',
             ),
             CommonWidgetForDetails(
               leadingText: 'Vehicle Waiting Time',
-              trailingText: controller.selectedtripDetail.value.waitingtime ?? "",
+              trailingText: controller.selectedTripDetail.value.waitingtime ?? "",
             ),
             CommonWidgetForDetails(
               leadingText: 'Vehicle Waiting Time Cost',
-              trailingText: "AED ${controller.selectedtripDetail.value.waitingCost ?? ""}",
+              trailingText: "AED ${controller.selectedTripDetail.value.waitingCost ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Toll Fare',
-              trailingText: "AED ${controller.selectedtripDetail.value.tollAmount ?? ""}",
+              trailingText: "AED ${controller.selectedTripDetail.value.tollAmount ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Total Fare',
-              trailingText: 'AED ${controller.selectedtripDetail.value.tripFare ?? ""}',
-              trailingWidget: (controller.selectedtripDetail.value.travelStatus == 1)
+              trailingText: 'AED ${controller.selectedTripDetail.value.tripFare ?? ""}',
+              trailingWidget: (controller.selectedTripDetail.value.travelStatus == 1)
                   ? GestureDetector(
                 onTap: () => Get.toNamed(AppRoutes.mytripEditfarepage),
                 child: Icon(

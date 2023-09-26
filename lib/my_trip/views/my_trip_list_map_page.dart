@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
+import 'package:rsl_supervisor/my_trip/controller/my_trip_list_map_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 
 class MyTripListMapPage extends GetView<MyTripListController> {
@@ -40,7 +41,6 @@ class MyTripListMapPage extends GetView<MyTripListController> {
                 double zoom =
                 _calculateZoom(bounds, MediaQuery.of(context).size);
                 if (zoom > 15.0) {
-                  // Set a maximum zoom level to ensure both markers are visible
                   zoom = 20.0;
                 }
 

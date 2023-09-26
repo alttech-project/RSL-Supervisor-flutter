@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,12 +27,11 @@ class TripDetailsPage extends GetView<TripHistoryController> {
               onTap: () {
                 Get.toNamed(AppRoutes.qrPage);
               },
-              child: Image.asset(
-                'assets/trip_details/scanner.png',
-                width: 30,
-                height: 30,
-                color: AppColors.kPrimaryColor.value,
-              ),
+              child:  Icon(
+              CupertinoIcons.qrcode,
+              size: 20.r,
+              color: AppColors.kPrimaryColor.value,
+            ),
             ),
           ),
         ],

@@ -85,6 +85,8 @@ PODS:
 
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - Firebase/Auth
+  - Firebase/Database
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
@@ -196,6 +198,6 @@ SPEC CHECKSUMS:
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 
-PODFILE CHECKSUM: e669b11a8bde80ff55103ce81767fba3447130d6
+PODFILE CHECKSUM: f5e5baa919d90dc56602fb5abe34c5e9373bb14e
 
 COCOAPODS: 1.12.1

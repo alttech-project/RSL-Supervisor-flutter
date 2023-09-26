@@ -85,6 +85,10 @@ config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         ## dart: PermissionGroup.criticalAlerts
         # 'PERMISSION_CRITICAL_ALERTS=1'
       ]
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
+
+
   end
 
   end

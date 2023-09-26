@@ -90,7 +90,7 @@ class MyTripListFilterWidget extends GetView<MyTripListController> {
         ),
         const Spacer(),
         CustomButton(
-          onTap: () => controller.callTripListApi(controller.currentPage),
+          onTap: () => controller.callTripListApi(),
           height: 25.h,
           width: 70.w,
           text: "Submit",

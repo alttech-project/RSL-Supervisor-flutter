@@ -35,7 +35,7 @@ class MyTripListQRCodeGenerator extends GetView<MyTripListController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               QrImageView(
-                data: controller.selectedtripDetail.value.trackUrl ?? "",
+                data: controller.selectedTripDetail.value.trackUrl ?? "",
                 version: QrVersions.auto,
                 size: 200.0,
                 backgroundColor:AppColors.kPrimaryColor.value,

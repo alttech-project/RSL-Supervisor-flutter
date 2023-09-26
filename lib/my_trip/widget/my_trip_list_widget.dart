@@ -1,18 +1,15 @@
-
-
-
-
-
-
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
+import 'package:rsl_supervisor/my_trip/controller/my_trip_list_map_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
+import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../../routes/app_routes.dart';
 import '../data/my_trip_list_data.dart';
@@ -22,6 +19,7 @@ class MyTripListWidget extends GetView<MyTripListController> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         SizedBox(
@@ -42,23 +40,37 @@ class MyTripListWidget extends GetView<MyTripListController> {
         padding: const EdgeInsets.only(
           top: 0,
         ),
-        child: ListView.builder(
-          controller: controller.scrollController, // Use the controller here.
+        child: Obx(
+          () {
+            print('Deepak -> ${controller.pageNationLoader.value}');
+            return ListView.builder(
+              controller: controller.scrollController, // Use the controller here.
 
-          itemCount: controller.tripList.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final tripData = controller.tripList[index];
-            return InkWell(
-              onTap: () {
-                controller.getTripDetailFromList(
-                  detail: tripData,
+              itemCount: controller.tripList.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final tripData = controller.tripList[index];
+
+                return Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        controller.getTripDetailFromList(
+                          detail: tripData,
+                        );
+                        Get.toNamed(AppRoutes.mytripDetailPage);
+                      },
+                      child: _tripHistoryListWidget(tripData),
+                    ),
+                    (controller.pageNationLoader.value &&
+                        controller.tripList.length - 1 == index)
+                        ? const AppLoader()
+                        : const SizedBox.shrink()
+                  ],
                 );
-                Get.toNamed(AppRoutes.mytripDetailPage);
               },
-              child: _tripHistoryListWidget(tripData),
             );
-          },
+          }
         ),
       ),
     );
@@ -81,42 +93,36 @@ class MyTripListWidget extends GetView<MyTripListController> {
   Widget _tripListDetailsWidget() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding:
-              const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey, // Set the border color
-                  width: 1, // Set the border width
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Row(
-                children: [
-                  const Text(
-                    'Total:',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                  Obx(
-                        () => Container(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: Text(
-                        "${controller.tripList.value.length}",
-                        style: AppFontStyle.body(
-                            color: AppColors.kPrimaryColor.value),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey, // Set the border color
+              width: 1, // Set the border width
             ),
-
-
-          ],
-
-
-
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            children: [
+              const Text(
+                'Total:',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              Obx(
+                () => Container(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Text(
+                    "${controller.tripList.value.length}",
+                    style:
+                        AppFontStyle.body(color: AppColors.kPrimaryColor.value),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -135,7 +141,7 @@ class MyTripListWidget extends GetView<MyTripListController> {
                 icon: Icons.map),
             _listRowTextWidget(
                 title:
-                controller.displayTimeFormatter(details.pickupTime ?? "")),
+                    controller.displayTimeFormatter(details.pickupTime ?? "")),
             _listRowTextWidget(title: details.taxiNo ?? ""),
             _listRowTextWidget(title: details.tripFare.toString()),
             _listStatusRow(details: details),
@@ -160,9 +166,9 @@ class MyTripListWidget extends GetView<MyTripListController> {
       child: Container(
         decoration: isStatus
             ? BoxDecoration(
-          color: AppColors.kPrimaryColor.value,
-          borderRadius: BorderRadius.circular(5.r),
-        )
+                color: AppColors.kPrimaryColor.value,
+                borderRadius: BorderRadius.circular(5.r),
+              )
             : null,
         padding: EdgeInsets.all(5.r),
         margin: EdgeInsets.symmetric(vertical: 8.h),
@@ -186,6 +192,8 @@ class MyTripListWidget extends GetView<MyTripListController> {
                 details.tripType != "Offline Trip"
                 ? GestureDetector(
               onTap: () {
+                final tripListMapController = Get.find<MyTripListMapController>();
+
                 controller.moveToMapPage(tripId ?? "");
               },
               child: Icon(
@@ -198,23 +206,23 @@ class MyTripListWidget extends GetView<MyTripListController> {
           ],
         )
             : Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: isStatus
-                  ? AppFontSize.mini.value
-                  : AppFontSize.verySmall.value,
-              fontWeight: AppFontWeight.semibold.value,
-              color: Colors.white,
-            ),
-          ),
-          // child: Row(
-          //   children: [
-          //
-          //
-          //   ],
-          // ),
-        ),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: isStatus
+                        ? AppFontSize.mini.value
+                        : AppFontSize.verySmall.value,
+                    fontWeight: AppFontWeight.semibold.value,
+                    color: Colors.white,
+                  ),
+                ),
+                // child: Row(
+                //   children: [
+                //
+                //
+                //   ],
+                // ),
+              ),
       ),
     );
   }
@@ -406,11 +414,14 @@ class MyTripListWidget extends GetView<MyTripListController> {
   }
 
   Widget _listStatusRow({required ListTripDetails details}) {
+    final tripListMapController = Get.find<MyTripListMapController>();
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+
+    mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if(details.travelStatus == 9)...[
+        if (details.travelStatus == 9) ...[
           InkWell(
             onTap: () => controller.showCancelTripAlert(
               int.parse(details.tripId.toString()),
@@ -447,10 +458,14 @@ class MyTripListWidget extends GetView<MyTripListController> {
               ),
             ),
           ),
-          SizedBox(width: 12.w,),
+          SizedBox(
+            width: 12.w,
+          ),
         ],
-        if(details.travelStatus == 1 && (details.completeTripMap?.isNotEmpty ?? false) &&
-            details.tripType != "Offline Trip")...[
+
+    if (details.travelStatus == 1 &&
+            (details.completeTripMap?.isNotEmpty ?? false) &&
+            details.tripType != "Offline Trip") ...[
           InkWell(
             onTap: () => controller.moveToMapPage(details.tripId.toString()),
             child: Container(
@@ -485,7 +500,9 @@ class MyTripListWidget extends GetView<MyTripListController> {
               ),
             ),
           ),
-          SizedBox(width: 12.w,),
+          SizedBox(
+            width: 12.w,
+          ),
         ],
         Container(
           decoration: BoxDecoration(

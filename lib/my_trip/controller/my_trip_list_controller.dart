@@ -43,6 +43,7 @@ class MyTripListController extends GetxController {
   TextEditingController messageController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+
   RxInt currentPage = 1.obs;
   RxInt limit = 10.obs;
   RxInt totalCount = 10.obs;
@@ -125,8 +126,8 @@ class MyTripListController extends GetxController {
         tripId: tripIdController.text,
         from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
         to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-        locationId: "180",
-        supervisorId: "74",
+        locationId: supervisorInfo.kioskId.toString(),
+        supervisorId: supervisorInfo.supervisorId,
         limit: limit.value,
         start: currentPage.value,
       ),
@@ -189,8 +190,8 @@ class MyTripListController extends GetxController {
       showBtnLoader.value = true;
       listexportPdfApi(
         ExportPdfRequestData(
-          supervisorId: "74",
-          locationId: "180",
+          supervisorId: supervisorInfo.supervisorId,
+          locationId: supervisorInfo.kioskId,
           driverId: carNoController.text,
           tripId: tripIdController.text,
           from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),

@@ -34,6 +34,8 @@ class AppMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlutterLocalNotify flutterLocalNotify = FlutterLocalNotify();
+    flutterLocalNotify.initializeNotifications();
     return ScreenUtilInit(
       designSize: const Size(360, 640),
       minTextAdapt: true,

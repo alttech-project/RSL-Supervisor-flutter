@@ -9,7 +9,8 @@ final _storageController = Get.find<GetStorageController>();
 Future<FeedsApiResponse> feedsApi(FeedsApiRequest requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: '${await _storageController.getNodeUrl()}supervisorMonitorList',
+      url:
+          '${await _storageController.getMonitorNodeUrl()}supervisorMonitorList',
       request: feedsApiRequestToJson(requestData),
     ),
   );

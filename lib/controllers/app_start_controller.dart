@@ -6,6 +6,7 @@ import '../utils/helpers/getx_storage.dart';
 import '../views/services/splash_services.dart';
 
 class AppStartController extends GetxController {
+/*
   Future<Status> callGetCoreApi(storageController) async {
     await getCoreApi().then(
       (response) {
@@ -54,6 +55,7 @@ class AppStartController extends GetxController {
       },
     );
   }
+*/
 
   Future<Status> checkLoginStatus(
       GetStorageController storageController) async {

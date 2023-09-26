@@ -5,6 +5,8 @@ import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
+import '../../utils/helpers/getx_storage.dart';
+
 class SideMenuPage extends GetView<DashBoardController> {
   const SideMenuPage({super.key});
 
@@ -59,7 +61,9 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.subscribers, 'Subscribers'),
             _menuListRow(SideMenuIcon.feeds, 'Feeds'),
             _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
-            _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral'),
+            Get.find<GetStorageController>().getRiderReferralUrl() == 1
+                ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
+                : const Spacer(),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(
               () => ListTile(

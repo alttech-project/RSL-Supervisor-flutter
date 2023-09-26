@@ -8,9 +8,11 @@ import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'app.dart';
+import 'local_notification/flutter_local_notification.dart';
 import 'shared/styles/theme.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
   await initServices();
   SystemChrome.setPreferredOrientations([
@@ -24,6 +26,7 @@ Future<void> main() async {
 Future<void> initServices() async {
   await Get.putAsync(() => GetStorage.init());
   await Firebase.initializeApp();
+  FlutterLocalNotify().initializeNotifications();
 }
 
 class AppMain extends StatelessWidget {

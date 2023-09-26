@@ -13,56 +13,62 @@ class UploadVideoPage extends GetView<UploadVideoController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => (controller.loading.value)
-        ? const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Uploading, Please wait...",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        decoration: TextDecoration.none)),
-                Padding(
-                  padding: EdgeInsets.only(top: 25),
-                  child: AppLoader(),
-                )
-              ],
-            ),
-          )
-        : (controller.isCameraInitialized.value == false)
-            ? const Scaffold(
-                backgroundColor: Colors.black,
-                body: AppLoader(),
+    return WillPopScope(
+        onWillPop: () {
+          controller.onClose();
+          return Future.value(true);
+        },
+        child: Obx(() => (controller.loading.value)
+            ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Uploading, Please wait...",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            decoration: TextDecoration.none)),
+                    Padding(
+                      padding: EdgeInsets.only(top: 25),
+                      child: AppLoader(),
+                    )
+                  ],
+                ),
               )
-            : Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Scaffold(
+            : (controller.isCameraInitialized.value == false)
+                ? const Scaffold(
                     backgroundColor: Colors.black,
-                    body: FutureBuilder<void>(
-                      future: controller.initializeControllerFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          // If the Future is complete, display the preview.
-                          final size = MediaQuery.of(context).size;
-                          return SizedBox(
-                              width: size.width,
-                              height: size.height,
-                              child: FittedBox(
-                                fit: BoxFit.cover,
-                                child: SizedBox(
-                                    width: size.width,
-                                    // the actual width is not important here
-                                    child: CameraPreview(
-                                        controller.cameraController)),
-                              ));
-                        } else {
-                          return const Center(child: AppLoader());
-                        }
-                      },
-                    ),
-                    /*floatingActionButton: FloatingActionButton(
+                    body: AppLoader(),
+                  )
+                : Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Scaffold(
+                        backgroundColor: Colors.black,
+                        body: FutureBuilder<void>(
+                          future: controller.initializeControllerFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              // If the Future is complete, display the preview.
+                              final size = MediaQuery.of(context).size;
+                              return SizedBox(
+                                  width: size.width,
+                                  height: size.height,
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: SizedBox(
+                                        width: size.width,
+                                        // the actual width is not important here
+                                        child: CameraPreview(
+                                            controller.cameraController)),
+                                  ));
+                            } else {
+                              return const Center(child: AppLoader());
+                            }
+                          },
+                        ),
+                        /*floatingActionButton: FloatingActionButton(
                         onPressed: () async {
                           try {
                             await controller.startVideoRecording();
@@ -90,34 +96,37 @@ class UploadVideoPage extends GetView<UploadVideoController> {
                               color: Colors.white,
                             ),*/ /*
                         ),*/
-                  ),
-                  controller.isVideoRecording.value
-                      ? Countdown(
-                          seconds: 10,
-                          build: (BuildContext context, double time) =>
-                              Container(
-                            margin: EdgeInsets.only(
-                                bottom: 20.h, left: 10.w, right: 10.w),
-                            padding: EdgeInsets.only(
-                                left: 7.w, right: 7.w, top: 7.h, bottom: 7.h),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Text(
-                                time.round() > 9
-                                    ? "00:${time.round()}"
-                                    : "00:0${time.round()}",
-                                style: AppFontStyle.subHeading(
-                                    color: AppColors.kPrimaryColor.value)),
-                          ),
-                          interval: const Duration(milliseconds: 1000),
-                          onFinished: () {
-                            controller.stopVideoRecording();
-                          },
-                        )
-                      : const SizedBox()
-                ],
-              ));
+                      ),
+                      controller.isVideoRecording.value
+                          ? Countdown(
+                              seconds: 10,
+                              build: (BuildContext context, double time) =>
+                                  Container(
+                                margin: EdgeInsets.only(
+                                    bottom: 20.h, left: 10.w, right: 10.w),
+                                padding: EdgeInsets.only(
+                                    left: 7.w,
+                                    right: 7.w,
+                                    top: 7.h,
+                                    bottom: 7.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                child: Text(
+                                    time.round() > 9
+                                        ? "00:${time.round()}"
+                                        : "00:0${time.round()}",
+                                    style: AppFontStyle.subHeading(
+                                        color: AppColors.kPrimaryColor.value)),
+                              ),
+                              interval: const Duration(milliseconds: 1000),
+                              onFinished: () {
+                                controller.stopVideoRecording();
+                              },
+                            )
+                          : const SizedBox()
+                    ],
+                  )));
   }
 }

@@ -45,11 +45,11 @@ class PlaceSearchController extends GetxController {
     apiLoading.value = true;
     getPlaceDetailsApi(placeId).then((response) {
       apiLoading.value = false;
-      if (response.status == "OK") {
-        placeDetails.value = response.result;
-        Get.back(result: response.result);
+      if (response?.status == "OK") {
+        placeDetails.value = response?.result;
+        Get.back(result: response?.result);
       } else {
-        printLogs("Get places error: ${response.status ?? ""}");
+        printLogs("Get places error: ${response?.status ?? ""}");
         placeDetails.value = null;
       }
     }).onError((error, stackTrace) {

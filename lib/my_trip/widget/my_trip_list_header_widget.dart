@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,9 +14,10 @@ import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.
 
 import '../../shared/styles/app_color.dart';
 import '../../widgets/custom_button.dart';
+import '../controller/my_trip_list_controller.dart';
 
-class TripListHeaderWidget extends GetView<TripHistoryController> {
-  const TripListHeaderWidget({super.key});
+class MyTripListHeaderWidget extends GetView<MyTripListController> {
+  const MyTripListHeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +27,21 @@ class TripListHeaderWidget extends GetView<TripHistoryController> {
         children: [
           Expanded(
             child: Obx(
-              () => _headerContainer(
+                  () => _headerContainer(
                   title: "Total\ntrips: ",
-                  value: "${controller.tripList.length}"),
+                  value: "${1000000}"),
             ),
           ),
           Expanded(
             child: Obx(
-              () => _headerContainer(
-                  title: "Dispatched\ntrips: ",
+                  () => _headerContainer(
+                  title: "\ntrips: ",
                   value: "${controller.dispatchedTrips.value}"),
             ),
           ),
           Expanded(
             child: Obx(
-              () => _headerContainer(
+                  () => _headerContainer(
                   title: "Cancelled\ntrips: ",
                   value: "${controller.cancelledTrips.value}"),
             ),

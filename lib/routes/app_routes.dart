@@ -8,6 +8,8 @@ import 'package:rsl_supervisor/feeds/view/feeds_page.dart';
 import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
 import 'package:rsl_supervisor/location_queue/views/location_queue_page.dart';
 import 'package:rsl_supervisor/login/view/capture_image_page.dart';
+import 'package:rsl_supervisor/my_trip/views/my_trip_list_edit_fare_page.dart';
+import 'package:rsl_supervisor/my_trip/views/my_trip_list_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/drop_location_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
@@ -20,6 +22,9 @@ import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 
 import '../dispatch/dispatch_page.dart';
 import '../login/view/login_page.dart';
+import '../my_trip/views/my_trip_list_map_page.dart';
+import '../my_trip/views/my_trip_list_qr_page.dart';
+import '../my_trip/views/my_trip_list_detail_page.dart';
 import '../place_search/views/place_search_view.dart';
 import '../rider_refferral/views/referral_history_page.dart';
 import '../scanner/views/scanner_page.dart';
@@ -49,6 +54,14 @@ class AppRoutes {
   static const tripHistoryMapPage = '/tripHistoryMapPage';
   static const dispatchPage = '/dispatchPage';
   static const uploadVideoPage = '/uploadVideoPage';
+  static const tripListPage = '/tripListPage';
+  static const tripListMapPage = '/tripListMapPage';
+  static const mytripDetailPage = '/mytripDetailPage';
+  static const mytripQrPage =  '/mytripQrPage';
+  static const mytripEditfarepage = '/mytripEditfarepage';
+
+
+
   static const driverListPage = '/driverListPage';
   static const dropLocationPage = '/dropLocationPage';
 }
@@ -215,6 +228,43 @@ List<GetPage> routes = [
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
+  GetPage(
+    name: AppRoutes.tripListPage,
+    page: () => const MyTripListPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.tripListMapPage,
+    page: () => const MyTripListMapPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.mytripDetailPage,
+    page: () => const ListTripDetailsPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.mytripQrPage,
+    page: () => MyTripListQRCodeGenerator(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.mytripEditfarepage,
+    page: () => const MyTripListEditFarePage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+
+
 ];
 
 class SizeTransitions extends CustomTransition {

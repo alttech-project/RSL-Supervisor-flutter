@@ -132,6 +132,7 @@ class QuickTripController extends GetxController {
   void navigateToScannerAndFetch() async {
     final result = await Get.toNamed(AppRoutes.qrScannerPage);
     if (result is QrResult) {
+      print("navigateToScannerAndFetch -> ${result.data?.code ?? ''}");
       tripIdController.text = result.data?.code ?? '';
     }
   }

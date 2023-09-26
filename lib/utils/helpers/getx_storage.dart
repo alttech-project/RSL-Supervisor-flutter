@@ -57,8 +57,7 @@ class GetStorageController extends GetxController {
   }
 
   Future<String> getDeviceToken() async {
-    final deviceToken = await storage.read("deviceToken") ??
-        "fAjT6KxtTE-hc_txlFPEXu:APA91bG3xT3yRFa0inWCr-frK30bLrea7Jw7BwaKrV_qwd1y-Wy4qY8nPy9AGHXo3BEE9dhlVclNxk3IbE5WL7hTpMfP2moxvZBIMMj7cpiuPKGLgvHadLya4dVKztpzET06LtRgQ4h5";
+    final deviceToken = await storage.read("deviceToken") ?? "";
     return deviceToken;
   }
 
@@ -68,6 +67,38 @@ class GetStorageController extends GetxController {
 
   Future<String> getNodeUrl() async {
     return await storage.read("nodeUrl") ?? AppConfig.nodeUrl;
+  }
+
+  void saveRiderReferralUrl({required int url}) {
+    storage.write("riderReferralUrl", url);
+  }
+
+  Future<String> getRiderReferralUrl() async {
+    return await storage.read("riderReferralUrl");
+  }
+
+  void saveMonitorNodeUrl({required String url}) {
+    storage.write("monitorNodeUrl", url);
+  }
+
+  Future<String> getMonitorNodeUrl() async {
+    return await storage.read("monitorNodeUrl");
+  }
+
+  void saveVideoDate({required String date}) {
+    storage.write("videoDate", date);
+  }
+
+  Future<String> getVideoDate() async {
+    return await storage.read("videoDate");
+  }
+
+  void saveImageDate({required String date}) {
+    storage.write("imageDate", date);
+  }
+
+  Future<String> getImageDate() async {
+    return await storage.read("imageDate");
   }
 }
 

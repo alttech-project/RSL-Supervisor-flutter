@@ -4,6 +4,7 @@ import '../routes/app_routes.dart';
 import '../utils/helpers/basic_utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../utils/helpers/getx_storage.dart';
 import '../video/controller/upload_video_controller.dart';
 
 class FlutterLocalNotify {
@@ -22,7 +23,7 @@ class FlutterLocalNotify {
     await _firebaseMessaging.requestPermission();
     final FCMToken = await _firebaseMessaging.getToken();
     printLogs("FIREBASE TOKEN : ${FCMToken}");
-
+    GetStorageController().saveDeviceToken(value: FCMToken ?? "");
     initNotificationMethod();
     createNotificationChannel();
   }

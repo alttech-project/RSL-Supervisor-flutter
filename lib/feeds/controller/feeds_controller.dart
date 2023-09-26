@@ -29,7 +29,7 @@ class FeedsController extends GetxController {
   void _callFeedsListApi() async {
     apiLoading.value = true;
     feedsApi(FeedsApiRequest(
-            id: supervisorInfo.value.supervisorId, pageLimit: 1, pageNumber: 1))
+            id: supervisorInfo.value.supervisorId, pageLimit: 10, pageNumber: 1))
         .then((response) {
       apiLoading.value = false;
       if ((response.status ?? 0) == 1) {

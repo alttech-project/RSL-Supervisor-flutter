@@ -15,7 +15,7 @@ class AppStart extends StatelessWidget {
     final storageController = Get.find<GetStorageController>();
     final appStartController = Get.find<AppStartController>();
     return FutureBuilder<Status>(
-      future: appStartController.checkLoginStatus(storageController),
+      future: appStartController.callGetCoreApi(storageController),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data?.status == 1) {

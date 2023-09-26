@@ -39,7 +39,7 @@ class LocationQueueController extends GetxController {
 
   double dropLatitude = 0.0, dropLongitude = 0.0;
   String fare = "", dropAddress = "", zoneFareApplied = "0";
-  int fromDashboard = 0;
+  int fromDashboard = 1;
   bool shiftStatus = true;
 
   @override

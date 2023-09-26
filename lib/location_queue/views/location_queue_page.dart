@@ -73,9 +73,11 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                           "You are not shift in.Please make shift in and try again!",
                                     );
                                   } else {
-                                    controller.callDriverQueuePositionApi(
-                                        driverDetails:
-                                            controller.driverList[index]);
+                                    if (controller.fromDashboard != 1) {
+                                      controller.callDriverQueuePositionApi(
+                                          driverDetails:
+                                              controller.driverList[index]);
+                                    }
                                   }
                                 },
                                 removeDriver: () {

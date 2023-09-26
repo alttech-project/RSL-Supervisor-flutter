@@ -35,6 +35,7 @@ class FlutterLocalNotify {
       sound: true,
     );
 
+
     FirebaseMessaging.instance.getInitialMessage().then((handleMessage));
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onMessage.listen((message) {

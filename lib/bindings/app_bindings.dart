@@ -15,7 +15,6 @@ import 'package:rsl_supervisor/subscribers/controllers/subscriberpage_controller
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 import 'package:rsl_supervisor/video/controller/upload_video_controller.dart';
 
-import '../controllers/app_start_controller.dart';
 import '../dispatch/controllers/dispatch_controller.dart';
 import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
@@ -28,7 +27,6 @@ class AppBind extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<HomeController>(() => HomeController());
-    Get.lazyPut<AppStartController>(() => AppStartController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<ApiProvider>(() => ApiProvider());
     Get.lazyPut<GetStorageController>(() => GetStorageController());
@@ -50,7 +48,5 @@ class AppBind extends Bindings {
     Get.lazyPut<DriverListController>(() => DriverListController());
     Get.lazyPut<DropLocationController>(() => DropLocationController());
     Get.lazyPut<MyTripListMapController>(() => MyTripListMapController());
-
-
   }
 }

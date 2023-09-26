@@ -1,11 +1,15 @@
+import 'dart:ui';
+
 import 'package:camera/camera.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/video/data/upload_video_data.dart';
 import 'package:rsl_supervisor/video/service/upload_video_service.dart';
 import '../../utils/helpers/basic_utils.dart';
@@ -19,17 +23,25 @@ class UploadVideoController extends GetxController {
   RxBool isCameraInitialized = false.obs;
   RxBool isVideoRecording = false.obs;
   Timer? _timer;
+  String verificationId = "";
 
-  @override
+/*  @override
   void onInit() {
     super.onInit();
-    // initializeFirebase();
+    initializeCamera();
+    print("hi onInit");
+  }*/
+
+  @override
+  void onClose() {
+    cameraController.dispose();
+    super.onClose();
   }
 
-  Future<void> initializeFirebase() async {
-    await Firebase.initializeApp();
+  Future<void> initializeCamera() async {
+    print("hi initializeCamera");
     final cameras = await availableCameras();
-    final firstCamera = cameras[0]; //front camera
+    final firstCamera = cameras[0];
     cameraController = CameraController(firstCamera, ResolutionPreset.medium);
     initializeControllerFuture = cameraController.initialize();
     isCameraInitialized.value = true;
@@ -45,6 +57,8 @@ class UploadVideoController extends GetxController {
       await initializeControllerFuture;
       await cameraController.startVideoRecording();
       isVideoRecording.value = true;
+      print(
+          'hi startVideoRecording: ${isVideoRecording.value} isRecordingVideo:${cameraController.value.isRecordingVideo}');
     } on CameraException catch (e) {
       print('Error starting to record video: $e');
     }
@@ -116,7 +130,7 @@ class UploadVideoController extends GetxController {
 
   void callVideoUploadApi(url) async {
     uploadVideoApi(
-      UploadVideoRequest(pushId: "", videoURL: url),
+      UploadVideoRequest(pushId: verificationId, videoURL: url),
     ).then(
       (response) {
         loading.value = false;

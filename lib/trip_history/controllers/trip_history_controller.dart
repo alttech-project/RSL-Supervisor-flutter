@@ -356,8 +356,8 @@ class TripHistoryController extends GetxController {
     //   LatLng startLocation = const LatLng(11.0317782,77.0185392);
     //   addMarker(startLocation, "PickUp", await getPickUpIcons());
     // } else {
-    LatLng startLocation = LatLng(
-        mapdatas.value[0].latitude?.toDouble() ?? 0, mapdatas.value[0].longitude?.toDouble() ?? 0);
+    LatLng startLocation = LatLng(mapdatas.value[0].latitude?.toDouble() ?? 0,
+        mapdatas.value[0].longitude?.toDouble() ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
     // }
   }

@@ -45,23 +45,11 @@ class TripHistoryMapPage extends GetView<TripHistoryController> {
                 }
 
                 List<LatLng> polylinePoints = <LatLng>[];
-                /* for (int i = 0; i < controller.mapdatas.length - 1; i++) {
-                  polylinePoints = [
-                    LatLng(controller.mapdatas.value[i].latitude ?? 0,
-                        controller.mapdatas.value[i].longitude ?? 0)
-                  ];
-                }*/
-                polylinePoints = [
-                  LatLng(controller.mapdatas.value[0].latitude?.toDouble() ?? 0.0,
-                      controller.mapdatas.value[0].longitude?.toDouble() ?? 0.0),
-                  LatLng(
-                      controller.mapdatas.value[controller.mapdatas.length - 1]
-                              .latitude?.toDouble() ??
-                          0.0,
-                      controller.mapdatas.value[controller.mapdatas.length - 1]
-                              .longitude?.toDouble() ??
-                          0.0),
-                ];
+                polylinePoints = controller.mapdatas
+                    .map((element) => LatLng(
+                        element.latitude?.toDouble() ?? 0.0,
+                        element.longitude?.toDouble() ?? 0.0))
+                    .toList();
 
                 Polyline polyline = Polyline(
                   polylineId: const PolylineId('polyline'),

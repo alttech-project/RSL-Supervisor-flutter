@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
-
-import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../controllers/dispatch_controller.dart';
 
-class DispatchAppBar extends GetView<DispatchController> {
+class DispatchAppBar extends GetView<DashBoardController> {
   const DispatchAppBar({Key? key}) : super(key: key);
 
   @override

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../controllers/drop_location_controller.dart';
 
-class DropLocationAppBar extends GetView<DropLocationController> {
+class DropLocationAppBar extends GetView<DashBoardController> {
   const DropLocationAppBar({Key? key}) : super(key: key);
 
   @override

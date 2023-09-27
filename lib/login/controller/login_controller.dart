@@ -79,6 +79,8 @@ class LoginController extends GetxController {
           apiLoading.value = false;
           if (response.status == 1) {
             currentView.value = LoginViews.otpPage;
+            Get.snackbar('Alert', '${response.message}',
+                backgroundColor: AppColors.kGetSnackBarColor.value);
           } else {
             Get.snackbar('Alert', '${response.message}',
                 backgroundColor: AppColors.kGetSnackBarColor.value);

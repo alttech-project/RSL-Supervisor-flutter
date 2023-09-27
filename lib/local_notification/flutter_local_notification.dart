@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import '../routes/app_routes.dart';
+import '../utils/helpers/alert_helpers.dart';
 import '../utils/helpers/basic_utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -35,7 +36,6 @@ class FlutterLocalNotify {
       sound: true,
     );
 
-
     FirebaseMessaging.instance.getInitialMessage().then((handleMessage));
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onMessage.listen((message) {
@@ -57,7 +57,7 @@ class FlutterLocalNotify {
       settings,
       onDidReceiveNotificationResponse: (NotificationResponse? payload) {
         printLogs("hi Response From : ${payload.toString()}");
-        navigateVideoUploadScreen(remoteMessage);
+        showDialog(remoteMessage);
       },
     );
     final platform =
@@ -103,13 +103,34 @@ class FlutterLocalNotify {
         payload: from);
   }
 
-  void handleMessage(RemoteMessage? payload) {
+  handleMessage(RemoteMessage? payload) {
     if (payload != null) {
-      navigateVideoUploadScreen(payload);
+      showDialog(payload);
     }
   }
 
-  void navigateVideoUploadScreen(message) {
+  showDialog(message) {
+    try {
+      navigateVideoUploadPage(message);
+      /* showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: "Are you sure want to record now?",
+          isTwoButton: true,
+          acceptBtnTitle: "Record Now",
+          acceptAction: () {
+            navigateVideoUploadPage(message);
+          },
+          cancelBtnTitle: "Not now",
+          cancelAction: () {
+            navigateBack();
+          });*/
+    } catch (e) {
+      e.printError();
+    }
+  }
+
+  navigateVideoUploadPage(message) {
     try {
       final UploadVideoController controller =
           Get.find<UploadVideoController>();
@@ -119,5 +140,9 @@ class FlutterLocalNotify {
     } catch (e) {
       e.printError();
     }
+  }
+
+  navigateBack() {
+    Get.back();
   }
 }

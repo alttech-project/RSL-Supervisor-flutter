@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
 import 'package:rsl_supervisor/dispatch/appbar/dispatch_app_bar.dart';
-import 'package:rsl_supervisor/dispatch/controllers/dispatch_controller.dart';
 import 'package:rsl_supervisor/dashboard/views/side_menu.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 
 import '../../shared/styles/app_font.dart';
 import '../../widgets/safe_area_container.dart';
-import 'drop_search_bar.dart';
+import '../dashboard/widgets/drop_search_bar.dart';
 
-class DispatchPage extends GetView<DispatchController> {
+class DispatchPage extends GetView<DashBoardController> {
   const DispatchPage({Key? key}) : super(key: key);
 
   @override
@@ -24,7 +23,7 @@ class DispatchPage extends GetView<DispatchController> {
         drawer: const SideMenuPage(),
         extendBodyBehindAppBar: false,
         backgroundColor: Colors.black,
-        key: controller.scaffoldKey,
+        key: controller.scaffoldKey1,
         body: Obx(
           () => CommonAppContainer(
             showLoader: controller.showLoader.value,

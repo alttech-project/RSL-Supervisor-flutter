@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
-import 'package:rsl_supervisor/quickTrip/widgets/drop_location_search_bar.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 
+import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../dashboard/widgets/drop_search_bar.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/safe_area_container.dart';
-import '../controllers/drop_location_controller.dart';
 import '../widgets/drop_location_app_bar.dart';
 
-class DropLocationPage extends GetView<DropLocationController> {
+class DropLocationPage extends GetView<DashBoardController> {
   const DropLocationPage({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +21,7 @@ class DropLocationPage extends GetView<DropLocationController> {
       child: Scaffold(
         extendBodyBehindAppBar: false,
         backgroundColor: Colors.black,
-        key: controller.scaffoldKey,
+        key: controller.scaffoldKey2,
         body: Obx(
           () => CommonAppContainer(
             showLoader: controller.showLoader.value,
@@ -61,7 +60,7 @@ class DropLocationPage extends GetView<DropLocationController> {
                         ),
                       ],
                     ),
-                    DropLocationSearchBar(
+                    DropSearchBar(
                       pageType: 3,
                     ),
                     LocationsListWidget(

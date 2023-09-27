@@ -27,6 +27,9 @@ class DashBoardController extends GetxController {
   RxString searchTxt = "".obs;
   RxString noDropOffDataMsg = "No Drop-off found".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey2 = GlobalKey<ScaffoldState>();
+
   final LocationManager locationManager = LocationManager();
 
   Rx<SupervisorInfo> supervisorInfo = SupervisorInfo().obs;
@@ -313,5 +316,21 @@ class DashBoardController extends GetxController {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion.value = packageInfo.version;
     appBuildNumber.value = packageInfo.buildNumber;
+  }
+
+  void moveToQuickTrips() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
+
+    final QuickTripController controller = Get.find<QuickTripController>();
+    controller
+      ..dropLocationController.text = '${result.formattedAddress}'
+      ..dropLatitude =
+          double.tryParse('${result.geometry?.location?.lat}') ?? 0.0
+      ..dropLongitude =
+          double.tryParse('${result.geometry?.location?.lng}') ?? 0.0
+      ..fareController.text = '';
+    Get.back();
   }
 }

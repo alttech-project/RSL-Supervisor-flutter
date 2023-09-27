@@ -27,7 +27,7 @@ class AppBind extends Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<ApiProvider>(() => ApiProvider());
-    Get.lazyPut<GetStorageController>(() => GetStorageController());
+    Get.lazyPut<GetStorageController>(fenix: true, () => GetStorageController());
     Get.lazyPut<DashBoardController>(() => DashBoardController());
     Get.lazyPut<PlaceSearchController>(() => PlaceSearchController());
     Get.lazyPut<QuickTripController>(() => QuickTripController());

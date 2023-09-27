@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
+import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rsl_supervisor/utils/helpers/getx_storage.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'local_notification/flutter_local_notification.dart';
@@ -50,6 +52,7 @@ class AppMain extends StatelessWidget {
 
   GetMaterialApp _runMainApp({required Widget? child}) {
     Get.put(LoginController());
+
     return GetMaterialApp(
       navigatorKey: NavigationService.navigatorKey,
       debugShowCheckedModeBanner: false,

@@ -6,8 +6,6 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_core/firebase_core.dart';
-import '../../utils/helpers/getx_storage.dart';
 
 class CaptureImageController extends GetxController {
   RxBool loading = false.obs;

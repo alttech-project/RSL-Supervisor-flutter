@@ -10,14 +10,20 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
 import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../dashboard/controllers/dashboard_controller.dart';
+import '../../dashboard/data/logout_api_data.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
+import 'dart:io';
+
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -386,6 +392,7 @@ class LoginController extends GetxController {
     printLogs("CAMERA CHECK STATUS CHECKER : $status");
     if (status != PermissionStatus.granted) {
       status = await requestCameraPermission();
+      _camePermissionAlert();
     }
   }
 
@@ -395,5 +402,40 @@ class LoginController extends GetxController {
     return status;
   }
 }
+
+void _camePermissionAlert() {
+  showDefaultDialog(
+    context: Get.context!,
+    title: "Alert",
+    message: "You want to allow the camera to continue with app.",
+    isTwoButton: true,
+    acceptBtnTitle: "Allow",
+    acceptAction: () {
+      openAppSettings();
+    },
+    cancelBtnTitle: "No",
+    cancelAction: () {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+
+    },
+  );
+}
+
+void openAppSettings() async {
+  const url = 'app-settings:';
+  if (Platform.isIOS) {
+    // Use platform-specific code to open iOS settings
+    Process.run('open', ['-a', 'App-Prefs:']);
+  }
+
+  else {
+    print('Could not open app settings.');
+  }
+}
+
+
+
+
+
 
 enum LoginViews { emailPage, otpPage }

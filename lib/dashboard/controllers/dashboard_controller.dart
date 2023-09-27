@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
-import 'package:rsl_supervisor/login/controller/capture_image_controller.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
+import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../../location_queue/controllers/location_queue_controller.dart';
 import '../../place_search/data/get_place_details_response.dart';
@@ -28,6 +28,8 @@ class DashBoardController extends GetxController {
   RxString noDropOffDataMsg = "No Drop-off found".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final LocationManager locationManager = LocationManager();
+  late  LogoutApiResponse logoutApiResponse = LogoutApiResponse();
+
 
   Rx<SupervisorInfo> supervisorInfo = SupervisorInfo().obs;
   var deviceToken = "";
@@ -204,6 +206,7 @@ class DashBoardController extends GetxController {
     switch (title) {
       case "Logout":
         _showLogoutAlert();
+        scaffoldKey.currentState?.openDrawer();
         break;
       case 'Quick Trips':
         Get.toNamed(AppRoutes.quickTripPage);
@@ -260,7 +263,15 @@ class DashBoardController extends GetxController {
   void moveToCaptureImagePage(data) async {
     final imageUrl = await Get.toNamed(AppRoutes.captureImagePage);
     if (imageUrl is String) {
-      showLoader.value = true;
+      Get.dialog(
+        Container(
+          color: Colors.black,
+          child: const Center(
+            child: AppLoader(),
+          ),
+        ),
+        barrierDismissible: false,
+      );
       logoutApi(
         LogoutApiRequest(
           supervisorId: supervisorInfo.value.supervisorId,
@@ -272,9 +283,11 @@ class DashBoardController extends GetxController {
         ),
       ).then(
         (response) {
-          showLoader.value = false;
+          Get.back();
           if ((response.status ?? 0) == 1) {
+             logoutApiResponse =  response;
             GetStorageController().removeSupervisorInfo();
+            showSnackBar(title: "Message", msg: response.message ?? "");
             Get.offAndToNamed(AppRoutes.loginPage);
           } else {
             showSnackBar(
@@ -285,7 +298,7 @@ class DashBoardController extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
-          showLoader.value = false;
+          Get.back();
           showSnackBar(
             title: 'Alert',
             msg: error.toString(),
@@ -296,15 +309,21 @@ class DashBoardController extends GetxController {
   }
 
   void _callLogoutApi() async {
+    Get.dialog(
+      const Center(
+        child: AppLoader(),
+      ),
+      barrierDismissible: false,
+    );
     LocationResult<Position> result =
         await locationManager.getCurrentLocation();
-
+    Get.back();
     if (result.data != null) {
       moveToCaptureImagePage(result.data);
     } else {
       showSnackBar(
         title: 'ERROR!',
-        msg: result.error ?? "Error occured while fetching current location",
+        msg: result.error ?? "Error occurred while fetching current location",
       );
     }
   }

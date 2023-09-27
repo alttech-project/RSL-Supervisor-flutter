@@ -86,6 +86,8 @@ dependencies:
   google_maps_flutter: ^2.3.0
   timer_count_down: ^2.2.0
   fluttertoast: ^8.2.2
+  url_launcher: ^6.0.12
+
 
 
 

@@ -357,7 +357,7 @@ class TripHistoryController extends GetxController {
     //   addMarker(startLocation, "PickUp", await getPickUpIcons());
     // } else {
     LatLng startLocation = LatLng(
-        mapdatas.value[0].latitude ?? 0, mapdatas.value[0].longitude ?? 0);
+        mapdatas.value[0].latitude?.toDouble() ?? 0, mapdatas.value[0].longitude?.toDouble() ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
     // }
   }
@@ -368,8 +368,8 @@ class TripHistoryController extends GetxController {
     //   addMarker(endLocation, "Drop", await getDropIcons());
     // } else {
     LatLng endLocation = LatLng(
-        mapdatas.value[mapdatas.length - 1].latitude ?? 0,
-        mapdatas.value[mapdatas.length - 1].longitude ?? 0);
+        mapdatas.value[mapdatas.length - 1].latitude?.toDouble() ?? 0,
+        mapdatas.value[mapdatas.length - 1].longitude?.toDouble() ?? 0);
     addMarker(endLocation, "Drop", await getDropIcons());
     // }
   }

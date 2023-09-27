@@ -52,14 +52,13 @@ class MyTripListMapPage extends GetView<MyTripListController> {
                   ];
                 }*/
                 polylinePoints = [
-                  LatLng(controller.mapdatas.value[0].latitude ?? 0,
-                      controller.mapdatas.value[0].longitude ?? 0),
+                  LatLng(controller.mapdatas.value[0].latitude!.toDouble(),
+                      controller.mapdatas.value[0].longitude!.toDouble()),
                   LatLng(
                       controller.mapdatas.value[controller.mapdatas.length - 1]
-                          .latitude ??
-                          0,
+                          .latitude?.toDouble() ?? 0,
                       controller.mapdatas.value[controller.mapdatas.length - 1]
-                          .longitude ??
+                          .longitude?.toDouble() ??
                           0),
                 ];
 
@@ -108,18 +107,18 @@ class MyTripListMapPage extends GetView<MyTripListController> {
   }
 
   Future<LatLngBounds> _calculateBounds() async {
-    double minLat = controller.mapdatas.value[0].latitude ?? 0;
-    double maxLat = controller.mapdatas.value[0].latitude ?? 0;
-    double minLng = controller.mapdatas.value[0].longitude ?? 0;
-    double maxLng = controller.mapdatas.value[0].longitude ?? 0;
+    double minLat = controller.mapdatas.value[0].latitude?.toDouble() ?? 0;
+    double maxLat = controller.mapdatas.value[0].latitude?.toDouble() ?? 0;
+    double minLng = controller.mapdatas.value[0].longitude?.toDouble() ?? 0;
+    double maxLng = controller.mapdatas.value[0].longitude?.toDouble() ?? 0;
 
     for (int i = 0; i < controller.mapdatas.value.length; i++) {
-      double lat = controller.mapdatas.value[i].latitude ?? 0;
-      double lng = controller.mapdatas.value[i].longitude ?? 0;
-      minLat = min(minLat, lat);
-      maxLat = max(maxLat, lat);
-      minLng = min(minLng, lng);
-      maxLng = max(maxLng, lng);
+      num lat = controller.mapdatas.value[i].latitude ?? 0;
+      num lng = controller.mapdatas.value[i].longitude ?? 0;
+      minLat = min(minLat, lat.toDouble());
+      maxLat = max(maxLat, lat.toDouble());
+      minLng = min(minLng, lng.toDouble());
+      maxLng = max(maxLng, lng.toDouble());
     }
 
     LatLngBounds bounds = LatLngBounds(

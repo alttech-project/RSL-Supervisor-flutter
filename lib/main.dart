@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'local_notification/flutter_local_notification.dart';
+import 'login/controller/login_controller.dart';
 import 'shared/styles/theme.dart';
 
 Future<void> main() async {
@@ -48,6 +49,7 @@ class AppMain extends StatelessWidget {
   }
 
   GetMaterialApp _runMainApp({required Widget? child}) {
+    Get.put(LoginController());
     return GetMaterialApp(
       navigatorKey: NavigationService.navigatorKey,
       debugShowCheckedModeBanner: false,

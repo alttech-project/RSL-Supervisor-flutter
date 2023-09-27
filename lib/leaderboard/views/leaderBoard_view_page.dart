@@ -249,8 +249,7 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     height: 5,
                   ),
                   Text(
-                    controller.supervisorList.isNotEmpty &&
-                            controller.supervisorList != null
+                            controller.supervisorList != null && controller.supervisorList.length >= 3
                         ? (controller.supervisorList[1]?.completedTrips
                                 .toString() ??
                             "")
@@ -261,8 +260,7 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     ),
                   ),
                   Text(
-                    controller.supervisorList.isNotEmpty &&
-                            controller.supervisorList != null
+                            controller.supervisorList != null && controller.supervisorList.length >= 3
                         ? (controller.supervisorList[1]?.supervisorName ?? "")
                         : "",
                     textAlign: TextAlign.center,
@@ -292,8 +290,7 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   height: 5,
                 ),
                 Text(
-                  controller.supervisorList.isNotEmpty &&
-                          controller.supervisorList != null
+                          controller.supervisorList != null && controller.supervisorList.length >= 3
                       ? (controller.supervisorList[0]?.completedTrips
                               .toString() ??
                           "")
@@ -304,8 +301,7 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Text(
-                  controller.supervisorList.isNotEmpty &&
-                          controller.supervisorList != null
+                          controller.supervisorList != null && controller.supervisorList.length >= 3
                       ? (controller.supervisorList[0]?.supervisorName ?? "")
                       : "",
                   textAlign: TextAlign.center,
@@ -342,22 +338,20 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   height: 5,
                 ),
                 Text(
-                  controller.supervisorList.isNotEmpty &&
-                          controller.supervisorList != null
+                          controller.supervisorList != null && controller.supervisorList.length >= 3
                       ? (controller.supervisorList[2]?.completedTrips
                               .toString() ??
                           "")
-                      : "completedTrips",
+                      : "",
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: AppFontWeight.bold.value,
                   ),
                 ),
                 Text(
-                  controller.supervisorList.isNotEmpty &&
-                          controller.supervisorList != null
+                          controller.supervisorList != null&& controller.supervisorList.length >= 3
                       ? (controller.supervisorList[2]?.supervisorName ?? "")
-                      : "supervisorName",
+                      : "",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,

@@ -49,7 +49,6 @@ class MyTripListController extends GetxController {
   RxInt totalCount = 10.obs;
   RxBool pageNationLoader = false.obs;
 
-// Initially, the password is hidden.
 
   @override
   void onInit() {
@@ -106,10 +105,9 @@ class MyTripListController extends GetxController {
 
   void callTripListApi({bool pageNation = false}) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
-
     switch (pageNation) {
       case false:
-        showLoader.value = false;
+        showLoader.value = true;
         pageNationLoader.value = false;
         currentPage.value = 1;
         break;
@@ -134,11 +132,11 @@ class MyTripListController extends GetxController {
     ).then((response) {
       switch (pageNation) {
         case false:
-          showLoader.value = false;
           pageNationLoader.value = false;
           if ((response.status ?? 0) == 1) {
             tripList.value = response.details?.tripDetails ?? [];
             totalCount.value = response.details!.totalCount ?? 0;
+            showLoader.value = false;
             tripList.refresh();
             print("DEEPAK tripList ${tripList.length}");
           } else {
@@ -147,13 +145,8 @@ class MyTripListController extends GetxController {
             cancelledTrips.value = 0;
             showLoader.value = false;
             pageNationLoader.value = false;
-            showSnackBar(
-              title: 'Alert',
-              msg: response.message ?? "Something went wrong...",
-            );
           }
           break;
-
         case true:
           if (response.status == 1) {
             tripList?.addAll(response.details?.tripDetails ?? []);
@@ -166,6 +159,7 @@ class MyTripListController extends GetxController {
       (error, stackTrace) {
         printLogs("$error");
         showLoader.value = false;
+        pageNationLoader.value = false;
         tripList.value = [];
         dispatchedTrips.value = 0;
         cancelledTrips.value = 0;
@@ -420,7 +414,7 @@ class MyTripListController extends GetxController {
     //   addMarker(startLocation, "PickUp", await getPickUpIcons());
     // } else {
     LatLng startLocation = LatLng(
-        mapdatas.value[0].latitude ?? 0, mapdatas.value[0].longitude ?? 0);
+        mapdatas.value[0].latitude?.toDouble() ?? 0, mapdatas.value[0].longitude?.toDouble() ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
     // }
   }
@@ -431,8 +425,8 @@ class MyTripListController extends GetxController {
     //   addMarker(endLocation, "Drop", await getDropIcons());
     // } else {
     LatLng endLocation = LatLng(
-        mapdatas.value[mapdatas.length - 1].latitude ?? 0,
-        mapdatas.value[mapdatas.length - 1].longitude ?? 0);
+        mapdatas.value[mapdatas.length - 1].latitude?.toDouble() ?? 0,
+        mapdatas.value[mapdatas.length - 1].longitude?.toDouble() ?? 0);
     addMarker(endLocation, "Drop", await getDropIcons());
     // }
   }

@@ -88,8 +88,8 @@ class Detail {
 }
 
 class MapDatas {
-  double? latitude;
-  double? longitude;
+  num? latitude;
+  num? longitude;
 
   MapDatas({this.latitude, this.longitude});
 

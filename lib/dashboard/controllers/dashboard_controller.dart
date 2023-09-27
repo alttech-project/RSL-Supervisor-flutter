@@ -31,8 +31,7 @@ class DashBoardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey2 = GlobalKey<ScaffoldState>();
 
   final LocationManager locationManager = LocationManager();
-  late  LogoutApiResponse logoutApiResponse = LogoutApiResponse();
-
+  late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
 
   Rx<SupervisorInfo> supervisorInfo = SupervisorInfo().obs;
   var deviceToken = "";
@@ -40,6 +39,8 @@ class DashBoardController extends GetxController {
   RxString appBuildNumber = "".obs;
   RxBool apiLoading = false.obs;
   RxBool showLoader = false.obs;
+  RxBool logOutLoader = false.obs;
+
   final GetStorageController controller = Get.find<GetStorageController>();
 
   @override
@@ -266,15 +267,7 @@ class DashBoardController extends GetxController {
   void moveToCaptureImagePage(data) async {
     final imageUrl = await Get.toNamed(AppRoutes.captureImagePage);
     if (imageUrl is String) {
-      Get.dialog(
-        Container(
-          color: Colors.black,
-          child: const Center(
-            child: AppLoader(),
-          ),
-        ),
-        barrierDismissible: false,
-      );
+      logOutLoader.value = true;
       logoutApi(
         LogoutApiRequest(
           supervisorId: supervisorInfo.value.supervisorId,
@@ -286,13 +279,14 @@ class DashBoardController extends GetxController {
         ),
       ).then(
         (response) {
-          Get.back();
           if ((response.status ?? 0) == 1) {
-             logoutApiResponse =  response;
+            logoutApiResponse = response;
             GetStorageController().removeSupervisorInfo();
             showSnackBar(title: "Message", msg: response.message ?? "");
             Get.offAndToNamed(AppRoutes.loginPage);
+            logOutLoader.value = false;
           } else {
+            logOutLoader.value = false;
             showSnackBar(
               title: 'Alert',
               msg: response.message ?? "Something went wrong...",
@@ -301,7 +295,7 @@ class DashBoardController extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
-          Get.back();
+          logOutLoader.value = false;
           showSnackBar(
             title: 'Alert',
             msg: error.toString(),

@@ -24,7 +24,6 @@ import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
 import 'dart:io';
 
-
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final OtpFieldController otpController = OtpFieldController();
@@ -276,7 +275,7 @@ class LoginController extends GetxController {
         ),
         margin: EdgeInsets.only(top: 70.h),
         child: Column(
-          children: [_line(), _kioskList()],
+          children: [_line(), _selectSupervisor(), _kioskList()],
         ),
       ),
       isScrollControlled: true,
@@ -292,6 +291,20 @@ class LoginController extends GetxController {
         color: Colors.black.withOpacity(0.5),
         borderRadius: BorderRadius.circular(5.r),
       ),
+    );
+  }
+
+  Widget _selectSupervisor() {
+    return Column(
+      children: [
+        Padding(
+            padding: EdgeInsets.only(top: 8.h, bottom: 10.h),
+            child: Text(
+              'Select Kiosk',
+              style:
+                  AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+            ))
+      ],
     );
   }
 
@@ -418,7 +431,6 @@ void _camePermissionAlert() {
     cancelBtnTitle: "No",
     cancelAction: () {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-
     },
   );
 }
@@ -428,16 +440,9 @@ void openAppSettings() async {
   if (Platform.isIOS) {
     // Use platform-specific code to open iOS settings
     Process.run('open', ['-a', 'App-Prefs:']);
-  }
-
-  else {
+  } else {
     print('Could not open app settings.');
   }
 }
-
-
-
-
-
 
 enum LoginViews { emailPage, otpPage }

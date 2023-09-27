@@ -63,7 +63,7 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
             Get.find<GetStorageController>().getRiderReferralUrl() == 1
                 ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
-                : const Spacer(),
+                : const SizedBox(),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(
               () => ListTile(

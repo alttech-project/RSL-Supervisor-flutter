@@ -275,7 +275,7 @@ class LoginController extends GetxController {
         ),
         margin: EdgeInsets.only(top: 70.h),
         child: Column(
-          children: [_line(), _selectSupervisor(), _kioskList()],
+          children: [_line(), _showTitle(), _kioskList()],
         ),
       ),
       isScrollControlled: true,
@@ -294,7 +294,7 @@ class LoginController extends GetxController {
     );
   }
 
-  Widget _selectSupervisor() {
+  Widget _showTitle() {
     return Column(
       children: [
         Padding(

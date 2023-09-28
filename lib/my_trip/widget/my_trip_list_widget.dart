@@ -50,7 +50,6 @@ class MyTripListWidget extends GetView<MyTripListController> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final tripData = controller.tripList[index];
-
                 return Column(
                   children: [
                     InkWell(

@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rsl_supervisor/feeds/data/feeds_api_data.dart';
 import 'package:rsl_supervisor/feeds/view/feeds_app_bar.dart';
 import 'package:rsl_supervisor/feeds/view/video_items.dart';
@@ -42,9 +44,18 @@ class FeedsScreen extends GetView<FeedsController> {
                                   child: ListView.separated(
                                     itemCount: controller.feedsList.length,
                                     itemBuilder: (context, index) {
-                                      return FeedsItem(
-                                        feedData: controller.feedsList[index],
-                                        key: Key('$index'),
+                                      return Column(
+                                        children: [
+                                          FeedsItem(
+                                            feedData: controller.feedsList[index],
+                                            key: Key('$index'),
+                                          ),
+                                          controller.pageNationLoader.value &&
+                                              controller.feedsList.length - 1 == index ?
+                                            const AppLoader()
+                                          :
+                                            const SizedBox.shrink(),
+                                        ],
                                       );
                                     },
                                     separatorBuilder: (context, position) {
@@ -90,10 +101,10 @@ class FeedsItem extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.supervised_user_circle_rounded,
-                        size: 30.r,
-                        color: AppColors.kPrimaryColor.value,
+                      Image.asset(
+                       "assets/leaderboard/profileimg.png",
+                        width: 30.w,
+                        height: 30.h,
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -124,14 +135,14 @@ class FeedsItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(
-                              Icons.heart_broken,
+                              CupertinoIcons.heart,
                               size: 22.r,
                               color: AppColors.kBackButtonColor.value,
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 20.w, right: 5.w),
                               child: Icon(
-                                Icons.send_outlined,
+                                Icons.send_rounded,
                                 size: 22.r,
                                 color: AppColors.kBackButtonColor.value,
                               ),
@@ -141,7 +152,7 @@ class FeedsItem extends StatelessWidget {
                         Padding(
                             padding: EdgeInsets.only(top: 8.w, left: 4.w),
                             child: Text(
-                              feedData.createdAt ?? "",
+                              displayTimeFormatter(feedData.createdAt ?? ""),
                               style: AppFontStyle.smallText(),
                             ))
                       ],
@@ -149,4 +160,16 @@ class FeedsItem extends StatelessWidget {
           ]),
     );
   }
+}
+
+String displayTimeFormatter(String pickupTime) {
+  String convertedTime = "";
+  try {
+    DateTime dateTime = DateTime.parse(pickupTime);
+    convertedTime = DateFormat('MMM d, y h:mm a').format(dateTime);
+  } catch (e) {
+    convertedTime = pickupTime;
+  }
+
+  return convertedTime;
 }

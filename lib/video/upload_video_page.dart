@@ -99,7 +99,7 @@ class UploadVideoPage extends GetView<UploadVideoController> {
                       ),
                       controller.isVideoRecording.value
                           ? Countdown(
-                              seconds: 10,
+                              seconds: controller.videoRecordingTime,
                               build: (BuildContext context, double time) =>
                                   Container(
                                 margin: EdgeInsets.only(

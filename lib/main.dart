@@ -29,7 +29,8 @@ Future<void> main() async {
 Future<void> initServices() async {
   await Get.putAsync(() => GetStorage.init());
   await Firebase.initializeApp();
-  FlutterLocalNotify().initializeNotifications();
+  final FlutterLocalNotify flutterLocalNotify = FlutterLocalNotify();
+  flutterLocalNotify.initializeNotifications();
 }
 
 class AppMain extends StatelessWidget {

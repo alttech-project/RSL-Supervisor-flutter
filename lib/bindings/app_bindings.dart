@@ -20,6 +20,7 @@ import '../login/controller/login_controller.dart';
 import '../network/services.dart';
 import '../offlineTrip/controllers/offline_trip_controller.dart';
 import '../utils/helpers/getx_storage.dart';
+import '../views/controller/splash_controller.dart';
 
 class AppBind extends Bindings {
   @override
@@ -27,7 +28,8 @@ class AppBind extends Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<ApiProvider>(() => ApiProvider());
-    Get.lazyPut<GetStorageController>(fenix: true, () => GetStorageController());
+    Get.lazyPut<GetStorageController>(
+        fenix: true, () => GetStorageController());
     Get.lazyPut<DashBoardController>(() => DashBoardController());
     Get.lazyPut<PlaceSearchController>(() => PlaceSearchController());
     Get.lazyPut<QuickTripController>(() => QuickTripController());
@@ -44,5 +46,6 @@ class AppBind extends Bindings {
     Get.lazyPut<MyTripListController>(() => MyTripListController());
     Get.lazyPut<DriverListController>(() => DriverListController());
     Get.lazyPut<MyTripListMapController>(() => MyTripListMapController());
+    Get.lazyPut<SplashController>(() => SplashController());
   }
 }

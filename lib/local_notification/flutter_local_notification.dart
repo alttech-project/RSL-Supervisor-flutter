@@ -1,5 +1,7 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../main.dart';
 import '../routes/app_routes.dart';
 import '../utils/helpers/alert_helpers.dart';
 import '../utils/helpers/basic_utils.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../utils/helpers/getx_storage.dart';
 import '../video/controller/upload_video_controller.dart';
+import '../views/controller/splash_controller.dart';
 
 class FlutterLocalNotify {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -26,7 +29,7 @@ class FlutterLocalNotify {
     printLogs("FIREBASE TOKEN : ${FCMToken}");
     GetStorageController().saveDeviceToken(value: FCMToken ?? "");
     initNotificationMethod();
-    createNotificationChannel();
+    // createNotificationChannel();
   }
 
   Future initNotificationMethod() async {
@@ -43,10 +46,64 @@ class FlutterLocalNotify {
       // printLogs("hi ON MESSAGE :$message  ${notification}");
       if (notification != null) {
         remoteMessage = message;
-        showNotification(notification.title ?? "", notification.body ?? "",
-            message.from ?? "", message);
+        showDialog(message);
+        /* showNotification(notification.title ?? "", notification.body ?? "",
+            message.from ?? "", message);*/
       }
     });
+  }
+
+  handleMessage(RemoteMessage? payload) {
+    if (payload != null) {
+      showDialog(payload);
+    }
+  }
+
+  showDialog(message) {
+    try {
+      final SplashController controller = Get.find<SplashController>();
+      print("hi isSplashScreen ${controller.isSplashScreen.value}");
+      if (controller.isSplashScreen.value == false) {
+        showDefaultDialog(
+            context: NavigationService.navigatorKey.currentContext!,
+            title: "Alert",
+            message: "Are you sure want to record video now?",
+            isTwoButton: true,
+            acceptBtnTitle: "Yes, now",
+            acceptAction: () {
+              Navigator.of(NavigationService.navigatorKey.currentContext!)
+                  .pop(false);
+              navigateVideoUploadPage(message);
+            },
+            cancelBtnTitle: "No",
+            cancelAction: () {
+              Navigator.of(NavigationService.navigatorKey.currentContext!)
+                  .pop(false);
+            });
+      } else {
+        Future.delayed(
+          const Duration(seconds: 2),
+          () async {
+            showDialog(remoteMessage);
+          },
+        );
+      }
+    } catch (e) {
+      e.printError();
+    }
+  }
+
+  navigateVideoUploadPage(message) {
+    try {
+      final UploadVideoController controller =
+          Get.find<UploadVideoController>();
+      controller.verificationId = message.data["verificationId"] ?? "";
+      controller.videoRecordingTime = message.data["verificationTime"] ?? 10;
+      controller.initializeCamera();
+      Get.toNamed(AppRoutes.uploadVideoPage);
+    } catch (e) {
+      e.printError();
+    }
   }
 
   Future createNotificationChannel() async {
@@ -101,47 +158,5 @@ class FlutterLocalNotify {
         '$body', // Body
         platformChannelSpecifics,
         payload: from);
-  }
-
-  handleMessage(RemoteMessage? payload) {
-    if (payload != null) {
-      showDialog(payload);
-    }
-  }
-
-  showDialog(message) {
-    try {
-      showDefaultDialog(
-          context: Get.context!,
-          title: "Alert",
-          message: "Are you sure want to record video now?",
-          isTwoButton: true,
-          acceptBtnTitle: "Yes, now",
-          acceptAction: () {
-            navigateVideoUploadPage(message);
-          },
-          cancelBtnTitle: "No",
-          cancelAction: () {
-            navigateBack();
-          });
-    } catch (e) {
-      e.printError();
-    }
-  }
-
-  navigateVideoUploadPage(message) {
-    try {
-      final UploadVideoController controller =
-          Get.find<UploadVideoController>();
-      controller.verificationId = message!.data["verificationId"] ?? "";
-      controller.initializeCamera();
-      Get.toNamed(AppRoutes.uploadVideoPage);
-    } catch (e) {
-      e.printError();
-    }
-  }
-
-  navigateBack() {
-    Get.back();
   }
 }

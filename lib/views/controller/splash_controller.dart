@@ -1,34 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:ui' as ui;
-
+import '../../routes/app_routes.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../services/splash_services.dart';
 
 class SplashController extends GetxController {
+  RxBool isSplashScreen = true.obs;
+  final storageController = Get.find<GetStorageController>();
+  double? height = 0.h;
+  double? width = 0.w;
+
   @override
   void onInit() {
     super.onInit();
-    callGetCoreApi();
+    Future.delayed(
+      const Duration(seconds: 2),
+      () async {
+        height = ScreenUtil().screenHeight / 2;
+        width = ScreenUtil().screenWidth / 2;
+      },
+    );
+    _callGetCoreApi();
   }
 
-  void callGetCoreApi() {
+  void _callGetCoreApi() {
     getCoreApi().then(
       (response) {
         if ((response.status ?? 0) == 1) {
           if (response.details != null) {
             var details = response.details;
-            GetStorageController()
-                .saveMonitorNodeUrl(url: details?.monitorNodeUrl ?? "");
-            GetStorageController()
-                .saveNodeUrl(url: details?.referralNodeUrl ?? "");
-            GetStorageController().saveRiderReferralUrl(
+            storageController.saveMonitorNodeUrl(
+                url: details?.monitorNodeUrl ?? "");
+            storageController.saveNodeUrl(url: details?.referralNodeUrl ?? "");
+            storageController.saveRiderReferralUrl(
                 url: details?.supervisorRiderReferral ?? 0);
-            GetStorageController()
-                .saveVideoDate(date: details?.videoDate ?? "");
-            GetStorageController().saveImageDate(date: details?.imgDate ?? "");
+            storageController.saveVideoDate(date: details?.videoDate ?? "");
+            storageController.saveImageDate(date: details?.imgDate ?? "");
           }
+          _checkLoginStatus();
         } else {
           showSnackBar(
             title: 'Alert',
@@ -44,5 +56,17 @@ class SplashController extends GetxController {
         );
       },
     );
+  }
+
+  void _checkLoginStatus() async {
+    await Future.delayed(const Duration(seconds: 2));
+    final userInfo = await storageController.getSupervisorInfo();
+    if ((userInfo.supervisorId ?? "").isEmpty) {
+      isSplashScreen.value = false;
+      Get.offAllNamed(AppRoutes.loginPage);
+    } else {
+      isSplashScreen.value = false;
+      Get.offAllNamed(AppRoutes.dashboardPage);
+    }
   }
 }

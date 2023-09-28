@@ -288,7 +288,7 @@ class DashBoardController extends GetxController {
           } else {
             logOutLoader.value = false;
             showSnackBar(
-              title: 'Alert',
+              title: 'Error',
               msg: response.message ?? "Something went wrong...",
             );
           }
@@ -297,24 +297,24 @@ class DashBoardController extends GetxController {
         (error, stackTrace) {
           logOutLoader.value = false;
           showSnackBar(
-            title: 'Alert',
+            title: 'Error',
             msg: error.toString(),
           );
         },
+      );
+    } else {
+      logOutLoader.value = false;
+      showSnackBar(
+        title: 'Error',
+        msg: "Something went wrong...",
       );
     }
   }
 
   void _callLogoutApi() async {
-    Get.dialog(
-      const Center(
-        child: AppLoader(),
-      ),
-      barrierDismissible: false,
-    );
+    logOutLoader.value = true;
     LocationResult<Position> result =
         await locationManager.getCurrentLocation();
-    Get.back();
     if (result.data != null) {
       moveToCaptureImagePage(result.data);
     } else {

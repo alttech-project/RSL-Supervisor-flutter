@@ -24,6 +24,7 @@ class UploadVideoController extends GetxController {
   RxBool isVideoRecording = false.obs;
   Timer? _timer;
   String verificationId = "";
+  int videoRecordingTime = 10;
 
 /*  @override
   void onInit() {

@@ -244,7 +244,7 @@ class QuickTripPage extends GetView<QuickTripController> {
         'Drop Location', 'Drop Location', 'Enter Drop Location',
         txtEditingController: controller.dropLocationController,
         readOnly: true,
-        onTap: () => Get.toNamed(AppRoutes.dropLocationPage),
+        onTap: () => controller.navigateToPlaceSearchPage(),
         /*Get.back()*/
         suffix: IconButton(
           onPressed: () => controller.clearDropLocation(),

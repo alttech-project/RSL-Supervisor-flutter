@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 
+import '../../place_search/data/get_place_details_response.dart';
 import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
@@ -177,7 +178,17 @@ class QuickTripController extends GetxController {
       AppRoutes.dashboardPage,
     );
   }
+  void navigateToPlaceSearchPage() async {
+    final result = await Get.toNamed(
+      AppRoutes.placeSearchPage,
+    );
 
+    if (result is PlaceDetails) {
+      dropLocationController.text = result.formattedAddress ?? '';
+      dropLatitude = result.geometry?.location?.lat ?? 0.0;
+      dropLongitude = result.geometry?.location?.lng ?? 0.0;
+    }
+  }
   void clearDatas() {
     clearTripId();
     clearDropLocation();

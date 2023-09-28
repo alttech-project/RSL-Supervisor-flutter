@@ -48,7 +48,7 @@ class DriverListResponse {
 class DriverList {
   int? driverId;
   String? driverName;
-  int? companyId;
+  String? companyId;
   String? driverStatus;
   String? modelId;
   String? modelName;

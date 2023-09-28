@@ -226,27 +226,37 @@ class OfflineTripPage extends GetView<OfflineTripController> {
   }
 
   Widget _searchCarWidget() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-        child: _labelAndTextFieldWidget(
-            'Search Car No', 'Search Car No', 'Search Car No',
-            txtEditingController: controller.searchCarController,
-            suffix: IconButton(
-              onPressed: () {
-                controller.clearSearchedCarNumber();
-              },
-              icon: Icon(
-                Icons.clear_sharp,
-                size: 20.r,
-                color: AppColors.kPrimaryColor.value,
-              ),
-            ),
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            onChanged: (value) => controller.filterCarNoResults(value),
-            borderColor: Colors.black12,
-            focusColor: Colors.black12,
-            textStyle: AppFontStyle.body(color: Colors.black)));
+    return Column(
+      children: [
+        Text(
+          'Taxi List',
+          style: AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: BoxTextField(
+                hintText: "Search Car No",
+                keyboardType: TextInputType.text,
+                textController: controller.searchCarController,
+                enable: true,
+                autocorrect: false,
+                suffix: IconButton(
+                  onPressed: () {
+                    controller.clearSearchedCarNumber();
+                  },
+                  icon: Icon(
+                    Icons.clear_sharp,
+                    size: 20.r,
+                    color: AppColors.kPrimaryColor.value,
+                  ),
+                ),
+                style: AppFontStyle.subHeading(
+                    color: AppColors.kBlack.value,
+                    size: AppFontSize.medium.value),
+                onChanged: (value) => controller.filterCarNoResults(value),
+                autofocus: false))
+      ],
+    );
   }
 
   Widget _line() {
@@ -289,7 +299,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                 itemCount: controller.taxiList.length,
                 itemBuilder: (context, index) {
                   final taxiData = controller.taxiList[index];
-                  return GestureDetector(
+                  return InkWell(
                       onTap: () {
                         Navigator.pop(context);
                         controller.taxiId.value = '${taxiData.iId}';
@@ -298,7 +308,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                       },
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
+                              horizontal: 10, vertical: 16),
                           //apply padding horizontal or vertical only
                           child: Text(
                             '${taxiData.taxiNo}',
@@ -306,8 +316,8 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                 },
                 separatorBuilder: (context, index) => Divider(
                   color: Colors.grey.withOpacity(0.6),
-                  thickness: 1,
-                  height: 5,
+                  thickness: 0.2,
+                  height: 1,
                 ),
               ),
       ),

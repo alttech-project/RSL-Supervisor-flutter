@@ -54,7 +54,9 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
             _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),
+/*
             _menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
+*/
             _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
             _menuListRow(SideMenuIcon.myTrips, 'My Trips'),
             _menuListRow(SideMenuIcon.driverList, 'Driver List'),

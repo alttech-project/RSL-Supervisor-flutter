@@ -111,20 +111,19 @@ class FlutterLocalNotify {
 
   showDialog(message) {
     try {
-      navigateVideoUploadPage(message);
-      /* showDefaultDialog(
+      showDefaultDialog(
           context: Get.context!,
           title: "Alert",
-          message: "Are you sure want to record now?",
+          message: "Are you sure want to record video now?",
           isTwoButton: true,
-          acceptBtnTitle: "Record Now",
+          acceptBtnTitle: "Yes, now",
           acceptAction: () {
             navigateVideoUploadPage(message);
           },
-          cancelBtnTitle: "Not now",
+          cancelBtnTitle: "No",
           cancelAction: () {
             navigateBack();
-          });*/
+          });
     } catch (e) {
       e.printError();
     }

@@ -10,6 +10,7 @@ class NavigationTitle extends StatelessWidget {
   final String title;
   final Color? color;
   final Widget? rightBarWidget;
+
   const NavigationTitle(
       {super.key,
       this.onTap,
@@ -52,6 +53,7 @@ class NavigationBarWithIcon extends StatelessWidget {
   final void Function()? onTap;
   final Color? color;
   final double? size;
+
   const NavigationBarWithIcon({super.key, this.onTap, this.color, this.size});
 
   @override
@@ -64,7 +66,11 @@ class NavigationBarWithIcon extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text("Location Queue"),
+              child: Image(
+                image: const AssetImage(Assets.appIcon),
+                width: size ?? 70.r,
+                height: size ?? 70.r,
+              ),
             ),
           ),
         ),

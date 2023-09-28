@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/location_queue/data/add_driver_data.dart';
 import 'package:rsl_supervisor/location_queue/data/driver_list_data.dart';
@@ -12,11 +13,13 @@ import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
+import '../../widgets/car_search_widget.dart';
 import '../data/search_driver_data.dart';
 
 class LocationQueueController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
   RxList<DriverDetails> driverList = <DriverDetails>[].obs;
+  RxList<DriverDetails> filteredDriverList = <DriverDetails>[].obs;
   Timer? _timer;
   RxBool showLoader = false.obs;
   RxBool showBtnLoader = false.obs;
@@ -36,6 +39,8 @@ class LocationQueueController extends GetxController {
   RxBool showQrCode = false.obs;
   RxString qrData = "".obs;
   RxString qrMessage = "".obs;
+  RxString searchText = ''.obs;
+  Rx<TextEditingController> searchController = TextEditingController().obs;
 
   double dropLatitude = 0.0, dropLongitude = 0.0;
   String fare = "", dropAddress = "", zoneFareApplied = "0";
@@ -51,7 +56,7 @@ class LocationQueueController extends GetxController {
   _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     shiftStatus = await GetStorageController().getShiftStatus();
-    _callDriverListApi(isOninit: true);
+    callDriverListApi(isOninit: true);
     startTimer();
   }
 
@@ -67,7 +72,7 @@ class LocationQueueController extends GetxController {
     _timer = Timer.periodic(
       timerDuration,
       (Timer timer) {
-        _callDriverListApi();
+        callDriverListApi();
       },
     );
   }
@@ -78,7 +83,7 @@ class LocationQueueController extends GetxController {
     }
   }
 
-  void _callDriverListApi({bool? isOninit}) async {
+  void callDriverListApi({bool? isOninit}) async {
     driverListApi(
       DriverListRequest(
         supervisorId: supervisorInfo.supervisorId,
@@ -89,7 +94,8 @@ class LocationQueueController extends GetxController {
       (response) {
         if ((response.status ?? 0) == 1) {
           driverList.value = response.driverList ?? [];
-          driverList.refresh();
+          filteredDriverList.value = response.driverList ?? [];
+          filteredDriverList.refresh();
         } else if ((response.status ?? 0) == -4) {
           stopTimer();
           GetStorageController().removeSupervisorInfo();
@@ -128,7 +134,8 @@ class LocationQueueController extends GetxController {
         showLoader.value = false;
         if ((response.status ?? 0) == 1) {
           driverList.value = response.driverList ?? [];
-          driverList.refresh();
+          filteredDriverList.value = response.driverList ?? [];
+          filteredDriverList.refresh();
         } else {
           showSnackBar(
             title: 'Alert',
@@ -235,7 +242,7 @@ class LocationQueueController extends GetxController {
             title: 'Success',
             msg: response.message ?? "Something went wrong...",
           );
-          _callDriverListApi();
+          callDriverListApi();
         } else {
           showSnackBar(
             title: 'Error',
@@ -281,6 +288,21 @@ class LocationQueueController extends GetxController {
         printLogs(error.toString());
       },
     );
+  }
+
+  filterDriverList(String text) {
+    if (text.isEmpty) {
+      filteredDriverList.value = driverList;
+      filteredDriverList.refresh();
+      return;
+    }
+
+    filteredDriverList.value = driverList
+        .where((searchName) => (searchName.driverName ?? "")
+            .toLowerCase()
+            .contains(text.toLowerCase()))
+        .toList();
+    filteredDriverList.refresh();
   }
 
   void _moveToFareSelectionPage() {
@@ -398,6 +420,50 @@ class LocationQueueController extends GetxController {
           );
         }
       }
+    }
+  }
+
+  void showAddCarDialog() {
+    if (!shiftStatus) {
+      showSnackBar(
+        title: 'Alert',
+        msg: "You are not shift in.Please make shift in and try again!",
+      );
+    } else {
+      driverSearchText.value = "";
+      callSearchDriverApi();
+
+      Get.bottomSheet(
+        Obx(
+          () => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.r),
+                topRight: Radius.circular(12.r),
+              ),
+            ),
+            margin: EdgeInsets.only(top: 70.h),
+            child: CarSearchView(
+              onChanged: (text) {
+                driverSearchText.value = text;
+                callSearchDriverApi();
+              },
+              showLoader: showDrverSearchLoader.value,
+              listData: driverSearchList
+                  .map((element) =>
+                      ("${element.taxiNo ?? ""} - ${element.driverName ?? ""}"))
+                  .toList(),
+              onSelect: (index) {
+                Get.back();
+                showAddDriverAlert(driverDetails: driverSearchList[index]);
+              },
+              noDataText: "No cars found!",
+            ),
+          ),
+        ),
+        isScrollControlled: true,
+      );
     }
   }
 }

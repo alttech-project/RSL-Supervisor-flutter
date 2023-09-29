@@ -43,7 +43,10 @@ class CaptureImageController extends GetxController {
     final uploadTask = storageRef.child(imagePath).putFile(fileName, metadata);
 
     uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
-      switch (taskSnapshot.state) {
+      if (taskSnapshot.state == TaskState.success) {
+        getImageUrl(imagePath);
+      }
+      /*switch (taskSnapshot.state) {
         case TaskState.running:
           print("Image Upload is running");
           break;
@@ -60,11 +63,11 @@ class CaptureImageController extends GetxController {
           print("Image Upload success success");
           getImageUrl(imagePath);
           break;
-      }
+      }*/
     });
   }
 
-  Future<void> getImageUrl(String fileName) async {
+  void getImageUrl(String fileName) async {
     try {
       final url =
           await FirebaseStorage.instance.ref().child(fileName).getDownloadURL();

@@ -6,11 +6,13 @@ class VideoItems extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
   final bool looping;
   final bool autoplay;
+  final void Function(ChewieController) chewieController;
 
   const VideoItems({
     required this.videoPlayerController,
     required this.looping,
     required this.autoplay,
+    required this.chewieController,
     required Key key,
   }) : super(key: key);
 
@@ -30,6 +32,7 @@ class _VideoItemsState extends State<VideoItems> {
       autoInitialize: true,
       autoPlay: widget.autoplay,
       looping: widget.looping,
+
       errorBuilder: (context, errorMessage) {
         return Center(
           child: Text(
@@ -39,11 +42,13 @@ class _VideoItemsState extends State<VideoItems> {
         );
       },
     );
+   // widget.videoController(_chewieController);
   }
 
   @override
   void dispose() {
     super.dispose();
+    widget.videoPlayerController.dispose();
     _chewieController.dispose();
   }
 

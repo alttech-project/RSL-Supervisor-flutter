@@ -64,7 +64,7 @@ class NavigationBarWithIcon extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text("Location Queue"),
+              child: const Text("Location Queue"),
             ),
           ),
         ),

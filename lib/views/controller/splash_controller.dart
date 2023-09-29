@@ -10,8 +10,8 @@ import '../services/splash_services.dart';
 class SplashController extends GetxController {
   RxBool isSplashScreen = true.obs;
   final storageController = Get.find<GetStorageController>();
-  double? height = 0.h;
-  double? width = 0.w;
+  RxDouble height = 0.0.obs;
+  RxDouble width = 0.0.obs;
 
   @override
   void onInit() {
@@ -19,8 +19,8 @@ class SplashController extends GetxController {
     Future.delayed(
       const Duration(seconds: 2),
       () async {
-        height = ScreenUtil().screenHeight / 2;
-        width = ScreenUtil().screenWidth / 2;
+        height.value = ScreenUtil().screenHeight / 2;
+        width.value = ScreenUtil().screenWidth / 2;
       },
     );
     _callGetCoreApi();

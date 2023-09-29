@@ -18,14 +18,16 @@ class SplashScreen extends GetView<SplashController> {
         body: Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25.r),
-            child: AnimatedContainer(
-              duration: const Duration(seconds: 4),
-              width: controller.width,
-              height: controller.height,
-              curve: Curves.fastOutSlowIn,
-              child: const ClipRRect(
-                child: Image(
-                  image: AssetImage(Assets.appIcon),
+            child: Obx(
+              () => AnimatedContainer(
+                duration: const Duration(seconds: 4),
+                width: controller.width.value,
+                height: controller.height.value,
+                curve: Curves.fastOutSlowIn,
+                child: const ClipRRect(
+                  child: Image(
+                    image: AssetImage(Assets.appIcon),
+                  ),
                 ),
               ),
             ),

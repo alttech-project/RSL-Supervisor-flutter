@@ -245,6 +245,9 @@ class DashBoardController extends GetxController {
       case "Driver List":
         Get.toNamed(AppRoutes.driverListPage);
         break;
+      case 'Reorder List':
+        Get.toNamed(AppRoutes.reOrderPage);
+        break;
       default:
         break;
     }

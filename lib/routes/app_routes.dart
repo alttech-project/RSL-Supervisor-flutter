@@ -13,6 +13,7 @@ import 'package:rsl_supervisor/my_trip/views/my_trip_list_page.dart';
 import 'package:rsl_supervisor/offlineTrip/views/offline_trip_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/drop_location_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
+import 'package:rsl_supervisor/reorderable_list_page.dart';
 import 'package:rsl_supervisor/rider_refferral/views/rider_referral_page.dart';
 import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';
 import 'package:rsl_supervisor/trip_details/views/qr_page.dart';
@@ -64,6 +65,7 @@ class AppRoutes {
 
   static const driverListPage = '/driverListPage';
   static const dropLocationPage = '/dropLocationPage';
+  static const reOrderPage = '/reOrderPage';
 }
 
 List<GetPage> routes = [
@@ -263,7 +265,13 @@ List<GetPage> routes = [
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
-
+  GetPage(
+    name: AppRoutes.reOrderPage,
+    page: () => ReorderableListPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
 
 ];
 

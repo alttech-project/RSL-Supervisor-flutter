@@ -40,7 +40,6 @@ class UploadVideoController extends GetxController {
   }
 
   Future<void> initializeCamera() async {
-    print("hi initializeCamera");
     final cameras = await availableCameras();
     final firstCamera = cameras[0];
     cameraController = CameraController(firstCamera, ResolutionPreset.medium);
@@ -58,8 +57,9 @@ class UploadVideoController extends GetxController {
       await initializeControllerFuture;
       await cameraController.startVideoRecording();
       isVideoRecording.value = true;
-      print(
+    /*  print(
           'hi startVideoRecording: ${isVideoRecording.value} isRecordingVideo:${cameraController.value.isRecordingVideo}');
+   */
     } on CameraException catch (e) {
       print('Error starting to record video: $e');
     }

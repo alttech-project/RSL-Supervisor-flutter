@@ -62,7 +62,6 @@ class FlutterLocalNotify {
   showDialog(message) {
     try {
       final SplashController controller = Get.find<SplashController>();
-      print("hi isSplashScreen ${controller.isSplashScreen.value}");
       if (controller.isSplashScreen.value == false) {
         showDefaultDialog(
             context: NavigationService.navigatorKey.currentContext!,

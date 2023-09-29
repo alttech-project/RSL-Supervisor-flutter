@@ -13,40 +13,54 @@ class EmailInputWidget extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Welcome!',
-          style: AppFontStyle.heading(
-            color: AppColors.kPrimaryColor.value,
+    return Stack(children: <Widget>[
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Welcome!',
+            style: AppFontStyle.heading(
+              color: AppColors.kPrimaryColor.value,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.h),
+            child: UnderlinedTextField(
+              controller: controller.emailController,
+              hint: "Enter your email/phone here",
+              inputLblTxt: "Email / Phone",
+              keyboardType: TextInputType.emailAddress,
+              onSubmit: (value) {},
+            ),
+          ),
+          Obx(
+            () => CustomButton(
+              width: double.maxFinite,
+              linearColor: primaryButtonLinearColor,
+              height: 35.h,
+              borderRadius: 35.h / 2,
+              isLoader: controller.apiLoading.value,
+              style: AppFontStyle.body(color: Colors.white),
+              text: 'Sign in',
+              onTap: () {
+                controller.checkValidationAndCallApi();
+              },
+            ),
+          ),
+        ],
+      ),
+      Align(
+        alignment: Alignment.bottomLeft,
+        child: Obx(
+          () => ListTile(
+            title: Text(
+              "App Version: ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
+              style: AppFontStyle.smallText(
+                  weight: AppFontWeight.semibold.value, color: Colors.white54),
+            ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: UnderlinedTextField(
-            controller: controller.emailController,
-            hint: "Enter your email/phone here",
-            inputLblTxt: "Email / Phone",
-            keyboardType: TextInputType.emailAddress,
-            onSubmit: (value) {},
-          ),
-        ),
-        Obx(
-          () => CustomButton(
-            width: double.maxFinite,
-            linearColor: primaryButtonLinearColor,
-            height: 35.h,
-            borderRadius: 35.h / 2,
-            isLoader: controller.apiLoading.value,
-            style: AppFontStyle.body(color: Colors.white),
-            text: 'Sign in', onTap:() {
-
-              controller.checkValidationAndCallApi();
-    },
-          ),
-        )
-      ],
-    );
+      )
+    ]);
   }
 }

@@ -71,8 +71,8 @@ class SideMenuPage extends GetView<DashBoardController> {
             Obx(
               () => ListTile(
                 title: Text(
-                  "App Version - ${controller.appVersion.value}",
-                  style: AppFontStyle.body(
+                  "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
+                  style: AppFontStyle.smallText(
                       weight: AppFontWeight.semibold.value,
                       color: Colors.white),
                 ),

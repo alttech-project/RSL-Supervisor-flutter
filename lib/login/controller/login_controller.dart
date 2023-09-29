@@ -19,6 +19,8 @@ import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
+import '../../network/app_config.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -39,16 +41,27 @@ class LoginController extends GetxController {
   var kioskId = 0;
   var phoneNumber = "";
   var deviceToken = "";
+  RxString appVersion = "".obs;
+  RxString appBuildNumber = "".obs;
+  RxString apk = "".obs;
 
   @override
   Future<void> onInit() async {
     super.onInit();
     currentView.value = LoginViews.emailPage;
     getDeviceToken();
+    _getAppInfo();
     requestCameraPermission();
     final status = await Permission.camera.request();
     print("On init status$status");
+  }
 
+  void _getAppInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion.value = packageInfo.version;
+    appBuildNumber.value = packageInfo.buildNumber;
+    apk.value =
+        AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
   }
 
   getDeviceToken() async {
@@ -401,8 +414,6 @@ class LoginController extends GetxController {
     phoneNumber = "";
   }
 
-
-
   void requestCameraPermission() async {
     final status = await Permission.camera.request();
     printLogs("CAMERA REQUEST STATUS CHECKER: $status");
@@ -417,24 +428,27 @@ class LoginController extends GetxController {
   }
 }
 
-
 void _cameraPermissionAlert() {
   showDialog(
     context: Get.context!,
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text("Camera Permission Required"),
-        content: const Text("You need to allow camera access for this app to function properly."),
+        content: const Text(
+            "You need to allow camera access for this app to function properly."),
         actions: <Widget>[
           TextButton(
-            child:  Text(style: TextStyle(color:AppColors.kPrimaryColor.value),
+            child: Text(
+                style: TextStyle(color: AppColors.kPrimaryColor.value),
                 "Cancel"),
             onPressed: () {
               exit(0);
             },
           ),
           TextButton(
-            child:  Text(style: TextStyle(color:AppColors.kPrimaryColor.value),"Open Settings"),
+            child: Text(
+                style: TextStyle(color: AppColors.kPrimaryColor.value),
+                "Open Settings"),
             onPressed: () {
               Get.back();
               openAppSettings();
@@ -445,7 +459,6 @@ void _cameraPermissionAlert() {
     },
   );
 }
-
 
 void openAppSettings() async {
   AppSettings.openAppSettings();

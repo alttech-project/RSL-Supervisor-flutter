@@ -9,6 +9,7 @@ import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../../location_queue/controllers/location_queue_controller.dart';
+import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../../utils/helpers/basic_utils.dart';
@@ -37,6 +38,7 @@ class DashBoardController extends GetxController {
   var deviceToken = "";
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
+  RxString apk = "".obs;
   RxBool apiLoading = false.obs;
   RxBool showLoader = false.obs;
   RxBool logOutLoader = false.obs;
@@ -332,6 +334,8 @@ class DashBoardController extends GetxController {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion.value = packageInfo.version;
     appBuildNumber.value = packageInfo.buildNumber;
+    apk.value =
+        AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
   }
 
   void moveToQuickTrips() async {

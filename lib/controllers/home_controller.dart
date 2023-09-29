@@ -33,22 +33,22 @@ class HomeController extends GetxController
   }
 
   incrementCartCount() {
-    print("hiTamil incrementCartCount");
+    // print("hiTamil incrementCartCount");
     if (product.value.cartCount <= 0) {
       animationController.forward();
     }
 
     product.update((val) {
-      print("hiTamil incrementCartCount2: ${val?.cartCount}");
+      // print("hiTamil incrementCartCount2: ${val?.cartCount}");
       val!.cartCount += 1;
     });
   }
 
   decrementCartCount() {
-    print("hiTamil decrementCartCount");
+    // print("hiTamil decrementCartCount");
     if (product.value.cartCount > 0) {
       product.update((val) {
-        print("hiTamil decrementCartCount2: ${val?.cartCount}");
+        // print("hiTamil decrementCartCount2: ${val?.cartCount}");
         val!.cartCount -= 1;
       });
     }

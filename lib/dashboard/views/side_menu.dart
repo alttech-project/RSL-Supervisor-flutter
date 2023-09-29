@@ -63,7 +63,7 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.subscribers, 'Subscribers'),
             _menuListRow(SideMenuIcon.feeds, 'Feeds'),
             _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
-            _menuListRow(SideMenuIcon.leaderBoard, 'Reorder List'),
+            // _menuListRow(SideMenuIcon.leaderBoard, 'Reorder List'),
             Get.find<GetStorageController>().getRiderReferralUrl() == 1
                 ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
                 : const SizedBox(),

@@ -35,6 +35,15 @@ class AppFontStyle {
     );
   }
 
+  static TextStyle normalText(
+      {double? size, Color? color, FontWeight? weight}) {
+    return TextStyle(
+      fontSize: size ?? AppFontSize.normal.value,
+      fontWeight: weight ?? AppFontWeight.normal.value,
+      color: color ?? Colors.black,
+    );
+  }
+
   static TextStyle hint({double? size, Color? color, FontWeight? weight}) {
     return TextStyle(
       fontSize: size ?? AppFontSize.mini.value,
@@ -48,6 +57,7 @@ enum AppFontSize {
   mini,
   verySmall,
   small,
+  normal,
   medium,
   large,
   veryLarge,
@@ -65,6 +75,8 @@ extension FontSizeHelper on AppFontSize {
         return 12.sp;
       case AppFontSize.small:
         return 14.sp;
+      case AppFontSize.normal:
+        return 15.sp;
       case AppFontSize.medium:
         return 16.sp;
       case AppFontSize.large:

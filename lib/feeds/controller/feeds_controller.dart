@@ -68,11 +68,11 @@ class FeedsController extends GetxController {
       pageNationLoader.value = false;
       currentPage.value = 1;
     } else {
-    pageNationLoader.value = true;
-    apiLoading.value = false;
-       }
-       feedsApi(FeedsApiRequest(
-            id: supervisorInfo.value.supervisorId, pageLimit: limit.value, pageNumber: currentPage.value))
+      pageNationLoader.value = true;
+      apiLoading.value = false;
+    }
+    feedsApi(FeedsApiRequest(
+        id: supervisorInfo.value.supervisorId, pageLimit: limit.value, pageNumber: currentPage.value))
         .then((response) {
       if (pageNation == false) {
         apiLoading.value = false;

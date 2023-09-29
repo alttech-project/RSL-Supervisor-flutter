@@ -27,7 +27,7 @@ class DriverListWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: ((driverDetails.currentTripId ?? "").isNotEmpty)
               ? Colors.red
-              : AppColors.kPrimaryColor.value,
+              : AppColors.kPrimaryTransparentColor.value,
           borderRadius: BorderRadius.all(
             Radius.circular(12.r),
           ),
@@ -36,18 +36,20 @@ class DriverListWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 35.r,
-              height: 35.r,
+              width: 32.r,
+              height: 32.r,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Colors.white54,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(35.r / 2),
+                  Radius.circular(32.r / 2),
                 ),
               ),
               child: Center(
                 child: Text(
                   "$position",
-                  style: AppFontStyle.heading(color: Colors.white),
+                  style: AppFontStyle.normalText(
+                      color: Colors.white,
+                      weight: AppFontWeight.semibold.value),
                 ),
               ),
             ),
@@ -62,7 +64,7 @@ class DriverListWidget extends StatelessWidget {
                       Text(
                         driverDetails.taxiNo ?? "",
                         style: AppFontStyle.body(
-                          color: Colors.white,
+                          color: AppColors.kPrimaryColor.value,
                           weight: AppFontWeight.semibold.value,
                         ),
                         textAlign: TextAlign.left,
@@ -73,6 +75,7 @@ class DriverListWidget extends StatelessWidget {
                       Text(
                         driverDetails.driverName ?? "",
                         style: AppFontStyle.body(
+                          color: Colors.white,
                           weight: AppFontWeight.semibold.value,
                         ),
                         textAlign: TextAlign.left,
@@ -87,17 +90,17 @@ class DriverListWidget extends StatelessWidget {
                 InkWell(
                   onTap: removeDriver,
                   child: Container(
-                    width: 28.r,
-                    height: 28.r,
+                    width: 23.r,
+                    height: 23.r,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14.r),
-                      border: Border.all(color: Colors.black, width: 2),
+                      border: Border.all(color: Colors.white54, width: 1.5),
                     ),
                     child: Center(
                       child: Icon(
                         Icons.close,
-                        size: 20.r,
-                        color: Colors.black,
+                        size: 15.r,
+                        color: Colors.white54,
                       ),
                     ),
                   ),
@@ -109,7 +112,7 @@ class DriverListWidget extends StatelessWidget {
                   modelName(),
                   style: AppFontStyle.body(
                       weight: AppFontWeight.semibold.value,
-                      color: Colors.purple),
+                      color: AppColors.kPrimaryColor.value),
                 ),
               ],
             ),
@@ -139,6 +142,7 @@ class DriverListWidget extends StatelessWidget {
 class AddCarBtnWidget extends StatelessWidget {
   final String? title;
   final void Function()? onTap;
+
   const AddCarBtnWidget({
     super.key,
     this.title,

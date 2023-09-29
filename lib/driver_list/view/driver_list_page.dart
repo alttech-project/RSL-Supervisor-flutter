@@ -4,6 +4,7 @@ import 'package:rsl_supervisor/driver_list/controller/driver_list_controller.dar
 import 'package:rsl_supervisor/driver_list/data/driver_list_api_data.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_app_bar.dart';
 import 'package:rsl_supervisor/widgets/safe_area_container.dart';
+import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_loader.dart';
 
@@ -79,12 +80,24 @@ class DriverListItem extends StatelessWidget {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Car Plate: ${driverData.taxiNo.toString()}",
-                style: const TextStyle(color: Colors.white, fontSize: 16)),
-            Text("Driver Name: ${driverData.driverName}",
-                style: const TextStyle(color: Colors.white, fontSize: 16)),
-            Text("Driver Phone: ${driverData.driverPhone}",
-                style: const TextStyle(color: Colors.white, fontSize: 16)),
+            Row(children: [
+              Text("Car Plate: ",
+                  style: AppFontStyle.normalText(color: Colors.white54)),
+              Text(driverData.taxiNo.toString(),
+                  style: AppFontStyle.normalText(color: Colors.white))
+            ]),
+            Row(children: [
+              Text("Driver Name: ",
+                  style: AppFontStyle.normalText(color: Colors.white54)),
+              Text(driverData.driverName.toString(),
+                  style: AppFontStyle.normalText(color: Colors.white))
+            ]),
+            Row(children: [
+              Text("Driver Phone: ",
+                  style: AppFontStyle.normalText(color: Colors.white54)),
+              Text(driverData.driverPhone.toString(),
+                  style: AppFontStyle.normalText(color: Colors.white))
+            ]),
           ]),
     );
   }

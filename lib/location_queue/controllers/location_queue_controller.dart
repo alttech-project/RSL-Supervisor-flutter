@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -24,6 +23,7 @@ class LocationQueueController extends GetxController {
   RxBool showLoader = false.obs;
   RxBool showBtnLoader = false.obs;
   RxBool showDrverSearchLoader = false.obs;
+  RxBool showDriverListLoader = false.obs;
   RxBool isReorder = false.obs;
   RxList<DriverDetails> driverSearchList = <DriverDetails>[].obs;
   RxString driverSearchText = "".obs;
@@ -41,6 +41,7 @@ class LocationQueueController extends GetxController {
   RxString qrMessage = "".obs;
   RxString searchText = ''.obs;
   Rx<TextEditingController> searchController = TextEditingController().obs;
+  final scrollController = ScrollController();
 
   double dropLatitude = 0.0, dropLongitude = 0.0;
   String fare = "", dropAddress = "", zoneFareApplied = "0";
@@ -67,7 +68,7 @@ class LocationQueueController extends GetxController {
 
   void startTimer() {
     stopTimer();
-    const timerDuration = Duration(seconds: 7);
+    const timerDuration = Duration(seconds: 10);
 
     _timer = Timer.periodic(
       timerDuration,
@@ -84,6 +85,11 @@ class LocationQueueController extends GetxController {
   }
 
   void callDriverListApi({bool? isOninit}) async {
+    if (isOninit == true) {
+      showDriverListLoader.value = true;
+    } else {
+      showDriverListLoader.value = false;
+    }
     driverListApi(
       DriverListRequest(
         supervisorId: supervisorInfo.supervisorId,
@@ -92,6 +98,7 @@ class LocationQueueController extends GetxController {
       ),
     ).then(
       (response) {
+        showDriverListLoader.value = false;
         if ((response.status ?? 0) == 1) {
           driverList.value = response.driverList ?? [];
           filteredDriverList.value = response.driverList ?? [];
@@ -111,6 +118,7 @@ class LocationQueueController extends GetxController {
       },
     ).onError(
       (error, stackTrace) {
+        showDriverListLoader.value = false;
         if (isOninit ?? false) {
           showSnackBar(
             title: 'Error',
@@ -290,19 +298,41 @@ class LocationQueueController extends GetxController {
     );
   }
 
-  filterDriverList(String text) {
-    if (text.isEmpty) {
+  void scrollToItem(String query) {
+    if (query.isEmpty) {
       filteredDriverList.value = driverList;
       filteredDriverList.refresh();
       return;
     }
 
-    filteredDriverList.value = driverList
-        .where((searchName) => (searchName.driverName ?? "")
-            .toLowerCase()
-            .contains(text.toLowerCase()))
-        .toList();
-    filteredDriverList.refresh();
+    final matchingItemIndexDriverName = filteredDriverList.indexWhere((item) =>
+        (item.driverName ?? "").toLowerCase().contains(query.toLowerCase()));
+
+    final matchingItemIndexTaxiNo = filteredDriverList.indexWhere((item) =>
+        (item.taxiNo ?? "").toLowerCase().contains(query.toLowerCase()));
+    if (matchingItemIndexDriverName != -1) {
+      scrollController.animateTo(
+        matchingItemIndexDriverName * filteredDriverList.length.toDouble() * 10,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else if (matchingItemIndexTaxiNo != -1) {
+      scrollController.animateTo(
+        matchingItemIndexTaxiNo * filteredDriverList.length.toDouble() * 10,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  bool highlightedColor(item) {
+    if (searchText.isNotEmpty) {
+      return (item.driverName ?? "")
+              .toLowerCase()
+              .contains(searchText.toLowerCase()) ||
+          (item.taxiNo ?? "").toLowerCase().contains(searchText.toLowerCase());
+    }
+    return false;
   }
 
   void _moveToFareSelectionPage() {
@@ -409,7 +439,6 @@ class LocationQueueController extends GetxController {
             },
           ).onError(
             (error, stackTrace) {
-              print("onError ${error.toString()}");
               showBtnLoader.value = false;
               showDefaultDialog(
                 context: Get.context!,

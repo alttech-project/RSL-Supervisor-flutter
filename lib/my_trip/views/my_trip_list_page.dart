@@ -82,7 +82,7 @@ class MyTripListPage extends GetView<MyTripListController> {
 void showAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(
     content: const Text(
-      "Are you sure want to export the report?",
+      "Are you sure want to export report?",
       style: TextStyle(
         fontWeight: FontWeight.bold,
       ),

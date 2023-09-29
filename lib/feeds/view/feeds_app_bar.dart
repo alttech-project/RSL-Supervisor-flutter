@@ -16,6 +16,8 @@ class FeedsAppBar extends GetView<FeedsController> {
         InkWell(
           onTap: () {
             controller.onClose();
+            controller.feedsList.value = [];
+            controller.feedsList.refresh();
             Get.back();
           },
           radius: 24.r,

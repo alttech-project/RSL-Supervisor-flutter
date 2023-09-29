@@ -10,19 +10,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
 import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../dashboard/controllers/dashboard_controller.dart';
-import '../../dashboard/data/logout_api_data.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
 import 'dart:io';
+import 'package:app_settings/app_settings.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -45,11 +41,14 @@ class LoginController extends GetxController {
   var deviceToken = "";
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     currentView.value = LoginViews.emailPage;
     getDeviceToken();
-    checkCameraPermission();
+    requestCameraPermission();
+    final status = await Permission.camera.request();
+    print("On init status$status");
+
   }
 
   getDeviceToken() async {
@@ -223,7 +222,7 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
             resetView();
-            Get.offNamed(AppRoutes.dashboardPage);
+            Get.offAllNamed(AppRoutes.dashboardPage);
           } else {
             Get.snackbar('Alert', '${response.message}',
                 backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -386,7 +385,7 @@ class LoginController extends GetxController {
     );
   }
 
-  resetView() {
+  void resetView() {
     emailController.clear();
     otpController.clear();
     currentView.value = LoginViews.emailPage;
@@ -402,47 +401,54 @@ class LoginController extends GetxController {
     phoneNumber = "";
   }
 
-  void checkCameraPermission() async {
-    var status = await Permission.camera.status;
-    printLogs("CAMERA CHECK STATUS CHECKER : $status");
-    if (status != PermissionStatus.granted) {
-      status = await requestCameraPermission();
-      _camePermissionAlert();
-    }
-  }
 
-  Future<PermissionStatus> requestCameraPermission() async {
+
+  void requestCameraPermission() async {
     final status = await Permission.camera.request();
-    printLogs("CAMERA REQUEST STATUS CHECKER : $status");
-    return status;
+    printLogs("CAMERA REQUEST STATUS CHECKER: $status");
+
+    if ((status == PermissionStatus.denied) ||
+        (status == PermissionStatus.permanentlyDenied)) {
+      print("If called");
+      _cameraPermissionAlert();
+    } else {
+      print("Permission Granted");
+    }
   }
 }
 
-void _camePermissionAlert() {
-  showDefaultDialog(
+
+void _cameraPermissionAlert() {
+  showDialog(
     context: Get.context!,
-    title: "Alert",
-    message: "You want to allow the camera to continue with app.",
-    isTwoButton: true,
-    acceptBtnTitle: "Allow",
-    acceptAction: () {
-      openAppSettings();
-    },
-    cancelBtnTitle: "No",
-    cancelAction: () {
-      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Camera Permission Required"),
+        content: const Text("You need to allow camera access for this app to function properly."),
+        actions: <Widget>[
+          TextButton(
+            child:  Text(style: TextStyle(color:AppColors.kPrimaryColor.value),
+                "Cancel"),
+            onPressed: () {
+              exit(0);
+            },
+          ),
+          TextButton(
+            child:  Text(style: TextStyle(color:AppColors.kPrimaryColor.value),"Open Settings"),
+            onPressed: () {
+              Get.back();
+              openAppSettings();
+            },
+          ),
+        ],
+      );
     },
   );
 }
 
+
 void openAppSettings() async {
-  const url = 'app-settings:';
-  if (Platform.isIOS) {
-    // Use platform-specific code to open iOS settings
-    Process.run('open', ['-a', 'App-Prefs:']);
-  } else {
-    print('Could not open app settings.');
-  }
+  AppSettings.openAppSettings();
 }
 
 enum LoginViews { emailPage, otpPage }

@@ -40,8 +40,10 @@ class EmailInputWidget extends GetView<LoginController> {
             borderRadius: 35.h / 2,
             isLoader: controller.apiLoading.value,
             style: AppFontStyle.body(color: Colors.white),
-            text: 'Sign in',
-            onTap: () => controller.checkValidationAndCallApi(),
+            text: 'Sign in', onTap:() {
+
+              controller.checkValidationAndCallApi();
+    },
           ),
         )
       ],

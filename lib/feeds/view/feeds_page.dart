@@ -40,8 +40,8 @@ class FeedsScreen extends GetView<FeedsController> {
                               child: AppLoader(),
                             )
                           : (controller.feedsList.isNotEmpty)
-                              ? Flexible(
-                                  child: ListView.separated(
+                              ?
+                                   ListView.separated(
                                     itemCount: controller.feedsList.length,
                                     itemBuilder: (context, index) {
                                       return Column(
@@ -61,7 +61,7 @@ class FeedsScreen extends GetView<FeedsController> {
                                     separatorBuilder: (context, position) {
                                       return const Divider(color: Colors.white);
                                     },
-                                  ),
+
                                 )
                               : Center(
                                   child: Text(
@@ -117,9 +117,12 @@ class FeedsItem extends StatelessWidget {
                   ),
                 )),
             VideoItems(
+              chewieController: (chewieController){
+
+              },
               videoPlayerController: VideoPlayerController.networkUrl(
                   Uri.parse(feedData.videoUrl ?? "")),
-              looping: true,
+              looping: false,
               autoplay: false,
               key: key!,
             ),
@@ -161,6 +164,7 @@ class FeedsItem extends StatelessWidget {
     );
   }
 }
+
 
 String displayTimeFormatter(String pickupTime) {
   String convertedTime = "";

@@ -15,6 +15,7 @@ import '../../shared/styles/app_font.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
+import '../../views/controller/splash_controller.dart';
 import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
 import 'dart:io';
@@ -52,8 +53,6 @@ class LoginController extends GetxController {
     getDeviceToken();
     _getAppInfo();
     requestCameraPermission();
-    final status = await Permission.camera.request();
-    print("On init status$status");
   }
 
   void _getAppInfo() async {
@@ -429,35 +428,45 @@ class LoginController extends GetxController {
 }
 
 void _cameraPermissionAlert() {
-  showDialog(
-    context: Get.context!,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Camera Permission Required"),
-        content: const Text(
-            "You need to allow camera access for this app to function properly."),
-        actions: <Widget>[
-          TextButton(
-            child: Text(
-                style: TextStyle(color: AppColors.kPrimaryColor.value),
-                "Cancel"),
-            onPressed: () {
-              exit(0);
-            },
-          ),
-          TextButton(
-            child: Text(
-                style: TextStyle(color: AppColors.kPrimaryColor.value),
-                "Open Settings"),
-            onPressed: () {
-              Get.back();
-              openAppSettings();
-            },
-          ),
-        ],
-      );
-    },
-  );
+  final SplashController controller = Get.find<SplashController>();
+  if (controller.isSplashScreen.value == false) {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Camera Permission Required"),
+          content: const Text(
+              "You need to allow camera access for this app to function properly."),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                  style: TextStyle(color: AppColors.kPrimaryColor.value),
+                  "Cancel"),
+              onPressed: () {
+                exit(0);
+              },
+            ),
+            TextButton(
+              child: Text(
+                  style: TextStyle(color: AppColors.kPrimaryColor.value),
+                  "Open Settings"),
+              onPressed: () {
+                openAppSettings();
+                exit(0);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () async {
+        _cameraPermissionAlert();
+      },
+    );
+  }
 }
 
 void openAppSettings() async {

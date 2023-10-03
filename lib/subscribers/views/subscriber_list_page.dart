@@ -196,7 +196,7 @@ class SubscribersPage extends GetView<SubscribersController> {
                                               Row(
                                                 children: [
                                                   Image.asset(
-                                                    'assets/subscriber_page/car.png',
+                                                    'assets/subscriber_page/sedan.png',
                                                     width: 17,
                                                     height: 17,
                                                   ),

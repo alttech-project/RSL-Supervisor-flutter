@@ -68,6 +68,23 @@ class DashboardPage extends GetView<DashBoardController> {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 20),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        controller.showCustomDialog(Get.context!);
+                                      },
+                                      child: Icon(
+                                        Icons.car_crash,
+                                        size: 30,
+                                        color: AppColors.kPrimaryColor.value,
+                                      ),
+                                    )
+                                  ]),
+                            ),
                             Row(
                               children: [
                                 const Spacer(),

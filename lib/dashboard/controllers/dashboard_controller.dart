@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
+import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 
@@ -18,6 +20,15 @@ import '../../utils/helpers/location_manager.dart';
 import '../data/dashboard_api_data.dart';
 import '../data/shift_in_api_data.dart';
 import '../service/dashboard_service.dart';
+
+
+class Car {
+  final String name;
+  final String imageUrl;
+
+  Car({required this.name, required this.imageUrl});
+}
+
 
 class DashBoardController extends GetxController {
   RxBool isShiftIn = true.obs;
@@ -42,6 +53,16 @@ class DashBoardController extends GetxController {
   RxBool apiLoading = false.obs;
   RxBool showLoader = false.obs;
   RxBool logOutLoader = false.obs;
+  int selectedCarIndex = 0;
+
+  final List<Car> cars = [
+    Car(name: 'SEDAN', imageUrl: 'assets/dashboard_page/sedan.png'),
+    Car(name: 'XL', imageUrl: 'assets/dashboard_page/xl.png'),
+    Car(name: 'XXL', imageUrl: 'assets/dashboard_page/xxl.png'),
+    Car(name: 'VIP', imageUrl: 'assets/dashboard_page/vip.png'),
+    Car(name: 'VIP PLUS', imageUrl: 'assets/dashboard_page/vipplus.png'),
+    Car(name: 'AE EXPRESS PICKUP', imageUrl: 'assets/dashboard_page/truck.png'),
+  ];
 
   final GetStorageController controller = Get.find<GetStorageController>();
 
@@ -103,13 +124,13 @@ class DashBoardController extends GetxController {
         type: type,
       ),
     ).then(
-      (response) {
+          (response) {
         showLoader.value = false;
         controller.saveShiftStatus(value: shiftType);
         printLogs("Shift in message: ${response.message ?? ""}");
       },
     ).onError(
-      (error, stackTrace) {
+          (error, stackTrace) {
         showLoader.value = false;
         printLogs("Shift in error: ${error.toString()}");
       },
@@ -145,7 +166,7 @@ class DashBoardController extends GetxController {
 
     dropSearchList.value = dropList
         .where((dropoff) =>
-            (dropoff.address ?? "").toLowerCase().contains(text.toLowerCase()))
+        (dropoff.address ?? "").toLowerCase().contains(text.toLowerCase()))
         .toList();
     dropSearchList.refresh();
   }
@@ -172,7 +193,7 @@ class DashBoardController extends GetxController {
     );
 
     final LocationQueueController controller =
-        Get.find<LocationQueueController>();
+    Get.find<LocationQueueController>();
     controller
       ..dropAddress = '${result.formattedAddress}'
       ..dropLatitude =
@@ -283,7 +304,7 @@ class DashBoardController extends GetxController {
           photoUrl: imageUrl,
         ),
       ).then(
-        (response) {
+            (response) {
           if ((response.status ?? 0) == 1) {
             logoutApiResponse = response;
             GetStorageController().removeSupervisorInfo();
@@ -299,7 +320,7 @@ class DashBoardController extends GetxController {
           }
         },
       ).onError(
-        (error, stackTrace) {
+            (error, stackTrace) {
           logOutLoader.value = false;
           showSnackBar(
             title: 'Error',
@@ -319,7 +340,7 @@ class DashBoardController extends GetxController {
   void _callLogoutApi() async {
     logOutLoader.value = true;
     LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
+    await locationManager.getCurrentLocation();
     if (result.data != null) {
       moveToCaptureImagePage(result.data);
     } else {
@@ -335,7 +356,7 @@ class DashBoardController extends GetxController {
     appVersion.value = packageInfo.version;
     appBuildNumber.value = packageInfo.buildNumber;
     apk.value =
-        AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
+    AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
   }
 
   void moveToQuickTrips() async {
@@ -353,4 +374,121 @@ class DashBoardController extends GetxController {
       ..fareController.text = '';
     Get.back();
   }
+
+  void showCustomDialog(BuildContext context) {
+    final AnimationController animationController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: Navigator.of(context),
+    );
+
+    final Tween<double> verticalPositionTween = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AnimatedBuilder(
+              animation: animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, MediaQuery.of(context).size.height * verticalPositionTween.evaluate(animationController)),
+                  child: AlertDialog(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Adjust padding as needed
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Available Cars',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child:Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                selectPreviousCar();
+                                setState(() {});
+                              },
+                              icon: Icon(Icons.chevron_left,
+                                  color:AppColors.kPrimaryColor.value,
+                                size: 35.r,
+                              ),
+                            ),
+                            // SizedBox(width: 16.w),
+                            Image.asset(
+                              cars[selectedCarIndex].imageUrl,
+                              width: 170.w,
+                              height: 170.h,
+                            ),
+                             // SizedBox(width: 10.w),
+                            IconButton(
+                              onPressed: () {
+                                selectNextCar();
+                                setState(() {});
+                              },
+                              icon: Icon(Icons.chevron_right,
+                                  color:AppColors.kPrimaryColor.value,
+                                size: 35.r,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ),
+                        Text(
+                          cars[selectedCarIndex].name,
+                          style:  TextStyle(fontSize: 20.r),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          animationController.reverse().then((value) {
+                            Navigator.of(context).pop();
+                          });
+                        },
+                        child: Text('Close', style: TextStyle(color: AppColors.kPrimaryColor.value,fontSize: 16.r )),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+
+    animationController.forward(); // Start the animation
+  }
+
+
+
+  void selectNextCar() {
+    if (selectedCarIndex < cars.length - 1) {
+      selectedCarIndex++;
+    }
+  }
+  void selectPreviousCar() {
+    if (selectedCarIndex > 0) {
+      selectedCarIndex--;
+    }
+  }
+
+
+
+
+
+
+
 }

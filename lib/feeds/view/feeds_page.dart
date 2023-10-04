@@ -10,7 +10,9 @@ import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 import 'package:video_player/video_player.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/alert_helpers.dart';
 import '../../widgets/app_loader.dart';
+import '../../widgets/custom_button.dart';
 import '../controller/feeds_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -34,44 +36,44 @@ class FeedsScreen extends GetView<FeedsController> {
             body: Column(
               children: [
                 const FeedsAppBar(),
-                Obx(() => Expanded(
+                Obx(() =>
+                    Expanded(
                       child: (controller.apiLoading.value)
                           ? const Center(
-                              child: AppLoader(),
-                            )
+                        child: AppLoader(),
+                      )
                           : (controller.feedsList.isNotEmpty)
-                              ?
-                                   ListView.separated(
-                                    itemCount: controller.feedsList.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          FeedsItem(
-                                            feedData: controller.feedsList[index],
-                                            key: Key('$index'),
-                                          ),
-                                          controller.pageNationLoader.value &&
-                                              controller.feedsList.length - 1 == index ?
-                                            const AppLoader()
-                                          :
-                                            const SizedBox.shrink(),
-                                        ],
-                                      );
-                                    },
-                                    separatorBuilder: (context, position) {
-                                      return const Divider(color: Colors.white);
-                                    },
-
-                                )
-                              : Center(
-                                  child: Text(
-                                    "No data found",
-                                    style: AppFontStyle.body(
-                                      color: Colors.white,
-                                      weight: AppFontWeight.semibold.value,
-                                    ),
-                                  ),
-                                ),
+                          ? ListView.separated(
+                        itemCount: controller.feedsList.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              FeedsItem(
+                                feedData: controller.feedsList[index],
+                                key: Key('$index'),
+                              ),
+                              controller.pageNationLoader.value &&
+                                  controller.feedsList.length -
+                                      1 ==
+                                      index
+                                  ? const AppLoader()
+                                  : const SizedBox.shrink(),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, position) {
+                          return const Divider(color: Colors.white);
+                        },
+                      )
+                          : Center(
+                        child: Text(
+                          "No data found",
+                          style: AppFontStyle.body(
+                            color: Colors.white,
+                            weight: AppFontWeight.semibold.value,
+                          ),
+                        ),
+                      ),
                     ))
               ],
             ),
@@ -83,7 +85,9 @@ class FeedsScreen extends GetView<FeedsController> {
 }
 
 class FeedsItem extends StatelessWidget {
-  const FeedsItem({required Key key, required this.feedData}) : super(key: key);
+  final FeedsController controller = Get.put(FeedsController());
+
+  FeedsItem({required Key key, required this.feedData}) : super(key: key);
   final FeedsList feedData;
 
   @override
@@ -96,30 +100,80 @@ class FeedsItem extends StatelessWidget {
             Container(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 10.h, bottom: 10.h, left: 5.w, right: 5.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                       "assets/leaderboard/profileimg.png",
-                        width: 30.w,
-                        height: 30.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: Text(
-                          feedData.name ?? "",
-                          style: AppFontStyle.body(),
+                    padding: EdgeInsets.only(
+                        top: 10.h, bottom: 10.h, left: 5.w, right: 5.w),
+                    child: Stack(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              "assets/leaderboard/profileimg.png",
+                              width: 30.w,
+                              height: 30.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                              child: Text(
+                                feedData.name ?? "",
+                                style: AppFontStyle.body(),
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                )),
-            VideoItems(
-              chewieController: (chewieController){
-
-              },
+                        feedData.videoUrl == ""
+                            ? Align(
+                          alignment: Alignment.topRight,
+                          child: CustomIconButton(
+                              title: "Upload",
+                              backgroundColor: Colors.white,
+                              icon: Icons.upload,
+                              onTap: () =>
+                                  showDefaultDialog(
+                                    context: Get.context!,
+                                    title: "Alert!",
+                                    message:
+                                    "Are you sure want to upload video now?",
+                                    acceptAction: () {
+                                      controller
+                                          .navigateVideoUploadScreen(
+                                          feedData.pushId);
+                                    },
+                                    isTwoButton: true,
+                                    acceptBtnTitle: "Yes",
+                                    cancelBtnTitle: "No",
+                                  )),
+                        )
+                            : const SizedBox()
+                      ],
+                    ))),
+            feedData.videoUrl == ""
+                ? SizedBox(
+                height: 300,
+                child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.videocam_off_outlined,
+                          size: 40,
+                          color: Colors.white54,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.h),
+                          child: Text(
+                            "Video not available/found",
+                            style: AppFontStyle.smallText(
+                              color: Colors.white,
+                              weight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        )
+                      ],
+                    )))
+                : VideoItems(
+              chewieController: (chewieController) {},
               videoPlayerController: VideoPlayerController.networkUrl(
                   Uri.parse(feedData.videoUrl ?? "")),
               looping: false,
@@ -134,9 +188,9 @@ class FeedsItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                          /* children: [
                             Icon(
                               CupertinoIcons.heart,
                               size: 22.r,
@@ -150,12 +204,13 @@ class FeedsItem extends StatelessWidget {
                                 color: AppColors.kBackButtonColor.value,
                               ),
                             ),
-                          ],
+                          ],*/
                         ),
                         Padding(
-                            padding: EdgeInsets.only(top: 8.w, left: 4.w),
+                            padding: EdgeInsets.only(
+                                left: 4.w, right: 4.w, top: 3.h, bottom: 3.h),
                             child: Text(
-                              displayTimeFormatter(feedData.createdAt ?? ""),
+                              displayTimeFormatter(feedData.updatedAt ?? ""),
                               style: AppFontStyle.smallText(),
                             ))
                       ],
@@ -164,7 +219,6 @@ class FeedsItem extends StatelessWidget {
     );
   }
 }
-
 
 String displayTimeFormatter(String pickupTime) {
   String convertedTime = "";

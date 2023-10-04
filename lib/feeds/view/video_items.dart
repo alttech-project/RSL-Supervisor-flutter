@@ -2,6 +2,8 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../utils/helpers/basic_utils.dart';
+
 class VideoItems extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
   final bool looping;
@@ -29,20 +31,19 @@ class _VideoItemsState extends State<VideoItems> {
     _chewieController = ChewieController(
       videoPlayerController: widget.videoPlayerController,
       aspectRatio: 5 / 8,
-      autoInitialize: true,
       autoPlay: widget.autoplay,
       looping: widget.looping,
-
       errorBuilder: (context, errorMessage) {
-        return Center(
+        printLogs("Video Player Error : ${errorMessage}");
+        return const Center(
           child: Text(
-            errorMessage,
-            style: const TextStyle(color: Colors.white),
+            "Something went wrong!",
+            style: TextStyle(color: Colors.white),
           ),
         );
       },
     );
-   // widget.videoController(_chewieController);
+    // widget.videoController(_chewieController);
   }
 
   @override

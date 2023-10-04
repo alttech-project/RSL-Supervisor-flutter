@@ -7,8 +7,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rsl_supervisor/feeds/data/feeds_api_data.dart';
 
+import '../../routes/app_routes.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
+import '../../video/controller/upload_video_controller.dart';
 import '../service/feeds_services.dart';
 
 class FeedsController extends GetxController {
@@ -22,18 +24,14 @@ class FeedsController extends GetxController {
   RxBool pageNationLoader = false.obs;
   final ScrollController scrollController = ScrollController();
 
-
-
   @override
   void onInit() {
     super.onInit();
-    _getUserInfo();
-    _scrollListenerFeedsList();
+    getUserInfo();
+    scrollListenerFeedsList();
   }
 
-
-  void _scrollListenerFeedsList() {
-
+  void scrollListenerFeedsList() {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -48,16 +46,10 @@ class FeedsController extends GetxController {
       _callFeedsListApi(pageNation: true);
     } else {
       pageNationLoader.value = false;
-
     }
   }
 
-
-
-
-
-
-  _getUserInfo() async {
+  getUserInfo() async {
     supervisorInfo.value = await GetStorageController().getSupervisorInfo();
     _callFeedsListApi();
   }
@@ -72,13 +64,15 @@ class FeedsController extends GetxController {
       apiLoading.value = false;
     }
     feedsApi(FeedsApiRequest(
-        id: supervisorInfo.value.supervisorId, pageLimit: limit.value, pageNumber: currentPage.value))
+            id: supervisorInfo.value.supervisorId,
+            pageLimit: limit.value,
+            pageNumber: currentPage.value))
         .then((response) {
       if (pageNation == false) {
         apiLoading.value = false;
         if ((response.status ?? 0) == 1) {
           feedsList.value = response.feedsList ?? [];
-          totalCount.value =  feedsList.length;
+          totalCount.value = feedsList.length;
           feedsList.refresh();
           noDataMsg.value = response.message ?? "";
         } else {
@@ -86,13 +80,11 @@ class FeedsController extends GetxController {
           feedsList.value = [];
           feedsList.refresh();
           pageNationLoader.value = false;
-
         }
       } else {
         feedsList?.addAll(response.feedsList ?? []);
         feedsList.refresh();
         apiLoading.value = false;
-
       }
     }).onError((error, stackTrace) {
       apiLoading.value = false;
@@ -102,5 +94,25 @@ class FeedsController extends GetxController {
       feedsList.value = [];
       feedsList.refresh();
     });
+  }
+
+  navigateVideoUploadScreen(pushId) async {
+    try {
+      final UploadVideoController controller =
+          Get.find<UploadVideoController>();
+      controller.verificationId = pushId ?? "";
+      controller.initializeCamera();
+
+      final result = await Get.toNamed(AppRoutes.uploadVideoPage);
+      if (result is String) {
+        // if (result == "1") {
+        print("hi result ${result}");
+        getUserInfo();
+        scrollListenerFeedsList();
+        // }
+      }
+    } catch (e) {
+      e.printError();
+    }
   }
 }

@@ -58,21 +58,32 @@ class FeedsApiResponse {
 class FeedsList {
   String? name;
   String? createdAt;
+  String? updatedAt;
   String? videoUrl;
+  String? pushId;
 
-  FeedsList({this.name, this.createdAt, this.videoUrl});
+  FeedsList(
+      {this.name,
+      this.createdAt,
+      this.updatedAt,
+      this.videoUrl,
+      this.pushId});
 
   FeedsList.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
     videoUrl = json['videoUrl'];
+    pushId = json['pushId'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     data['videoUrl'] = videoUrl;
+    data['pushId'] = pushId;
     return data;
   }
 }

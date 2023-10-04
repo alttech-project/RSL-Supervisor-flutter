@@ -29,16 +29,17 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
           ),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black54,
-              ), // You can use any icon you prefer hera
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 showRadioButtonBottomSheet(context);
               },
-              color: AppColors.kPrimaryTextColor.value,
-            ),
+              child: Image.asset(
+                LeaderboardIcons.sideMenu,
+                width: 30,
+                height: 30,
+              ),
+            )
+            ,
           ],
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -563,4 +564,6 @@ class LeaderboardIcons {
   static const String upArrow = 'assets/leaderboard/uparrow.png';
   static const String profileIcon = 'assets/leaderboard/profileimg.png';
   static const String smileIcon = 'assets/rider_referral/smile.png';
+  static const String sideMenu = 'assets/leaderboard/sidemenu.png';
+
 }

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -452,7 +451,12 @@ void _cameraPermissionAlert() {
                   "Open Settings"),
               onPressed: () {
                 openAppSettings();
-                exit(0);
+
+                Future.delayed(Duration(seconds: 1), () {
+                  exit(0);
+                });
+
+
               },
             ),
           ],

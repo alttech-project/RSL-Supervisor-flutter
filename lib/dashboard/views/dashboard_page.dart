@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,7 +79,7 @@ class DashboardPage extends GetView<DashBoardController> {
                                         controller.showCustomDialog(Get.context!);
                                       },
                                       child: Icon(
-                                        Icons.car_crash,
+                                        CupertinoIcons.car_detailed,
                                         size: 30,
                                         color: AppColors.kPrimaryColor.value,
                                       ),

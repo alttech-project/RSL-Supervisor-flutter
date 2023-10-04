@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/dashboard/data/car_model_type_api.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
 import 'package:rsl_supervisor/dashboard/data/shift_in_api_data.dart';
 
@@ -38,4 +39,16 @@ Future<LogoutApiResponse> logoutApi(LogoutApiRequest requestData) async {
     ),
   );
   return logoutApiResponseFromJson(response);
+}
+
+
+
+Future<CarModelTypeResponseData> carModelApi(CarModelTypeRequestData requestData) async {
+  final response = await _apiProvider.httpRequest(
+    resource: Resource(
+      url: 'https://web.limor.us/supervisorapp/index/?lang=en&type=carmodel_list_new',
+      request: carModelApiRequestToJson(requestData),
+    ),
+  );
+  return carModelApiResponseFromJson(response);
 }

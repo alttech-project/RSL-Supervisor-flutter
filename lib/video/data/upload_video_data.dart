@@ -3,18 +3,21 @@ import 'dart:convert';
 class UploadVideoRequest {
   String? pushId;
   String? videoURL;
+  int? type;
 
-  UploadVideoRequest({this.pushId, this.videoURL});
+  UploadVideoRequest({this.pushId, this.videoURL, this.type});
 
   UploadVideoRequest.fromJson(Map<String, dynamic> json) {
     pushId = json['pushId'];
     videoURL = json['videoURL'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['pushId'] = pushId;
     data['videoURL'] = videoURL;
+    data['type'] = type;
     return data;
   }
 }

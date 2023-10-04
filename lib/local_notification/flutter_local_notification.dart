@@ -9,6 +9,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../utils/helpers/getx_storage.dart';
 import '../video/controller/upload_video_controller.dart';
+import '../video/data/upload_video_data.dart';
+import '../video/service/upload_video_service.dart';
 import '../views/controller/splash_controller.dart';
 
 class FlutterLocalNotify {
@@ -76,6 +78,8 @@ class FlutterLocalNotify {
             },
             cancelBtnTitle: "No",
             cancelAction: () {
+              callVideoUploadApi(message.data["verificationId"] ?? "",
+                  message.data["verificationTime"] ?? 10);
               Navigator.of(NavigationService.navigatorKey.currentContext!)
                   .pop(false);
             });
@@ -103,6 +107,25 @@ class FlutterLocalNotify {
     } catch (e) {
       e.printError();
     }
+  }
+
+  void callVideoUploadApi(verificationId, verificationTime) async {
+    uploadVideoApi(
+      UploadVideoRequest(pushId: verificationId, videoURL: "", type: 2),
+    ).then(
+      (response) {
+        if ((response.status ?? 0) == 1) {
+          printLogs("supervisorMonitorLogUpdate success");
+        } else {
+          printLogs(
+              "supervisorMonitorLogUpdate failure: Api status=> ${response.status}");
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        printLogs("supervisorMonitorLogUpdate error: $error");
+      },
+    );
   }
 
   Future createNotificationChannel() async {

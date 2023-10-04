@@ -57,7 +57,7 @@ class UploadVideoController extends GetxController {
       await initializeControllerFuture;
       await cameraController.startVideoRecording();
       isVideoRecording.value = true;
-    /*  print(
+      /*  print(
           'hi startVideoRecording: ${isVideoRecording.value} isRecordingVideo:${cameraController.value.isRecordingVideo}');
    */
     } on CameraException catch (e) {
@@ -131,7 +131,7 @@ class UploadVideoController extends GetxController {
 
   void callVideoUploadApi(url) async {
     uploadVideoApi(
-      UploadVideoRequest(pushId: verificationId, videoURL: url),
+      UploadVideoRequest(pushId: verificationId, videoURL: url, type: 1),
     ).then(
       (response) {
         loading.value = false;
@@ -140,7 +140,7 @@ class UploadVideoController extends GetxController {
             title: 'Alert',
             msg: response.message ?? "Something went wrong...",
           );*/
-          Get.back();
+          Get.back(result: "1");
         } else {
           showSnackBar(
             title: 'Alert',

@@ -41,12 +41,11 @@ Future<LogoutApiResponse> logoutApi(LogoutApiRequest requestData) async {
   return logoutApiResponseFromJson(response);
 }
 
-
-
-Future<CarModelTypeResponseData> carModelApi(CarModelTypeRequestData requestData) async {
+Future<CarModelTypeResponseData> carModelApi(
+    CarModelTypeRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
     resource: Resource(
-      url: 'https://web.limor.us/supervisorapp/index/?lang=en&type=carmodel_list_new',
+      url: '${AppConfig.webBaseUrl}carmodel_list_new',
       request: carModelApiRequestToJson(requestData),
     ),
   );

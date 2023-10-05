@@ -123,7 +123,7 @@ class DashboardPage extends GetView<DashBoardController> {
                               },
                               backgroundColor: AppColors.kPrimaryColor.value,
                               child: Image.asset(
-                                "assets/dashboard_page/car.png",
+                                "assets/dashboard_page/ic_car.png",
                                 width: 27.w,
                                 height: 27.h,
                                 color: Colors.black,

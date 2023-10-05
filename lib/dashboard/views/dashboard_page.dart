@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,27 +107,43 @@ class DashboardPage extends GetView<DashBoardController> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              left: 10.0, right: 5.0, bottom: 10.0),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: FloatingActionButton(
-                              mini: true,
+                        if (controller.carModelList.isNotEmpty)
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right: 15.w, bottom: 25.h),
+                            child: ElevatedButton(
                               onPressed: () async {
                                 try {
                                   controller.showCustomDialog(Get.context!);
                                 } catch (e) {
-                                  // If an error occurs, log the error to the console.
                                   print(e);
                                 }
                               },
-                              backgroundColor: AppColors.kPrimaryColor.value,
-                              child: Image.asset(
-                                "assets/dashboard_page/car.png",
-                                width: 27.w,
-                                height: 27.h,
-                                color: Colors.black,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        AppColors.kPrimaryColor.value),
+                                shape:
+                                    MaterialStateProperty.all<OutlinedBorder>(
+                                  const CircleBorder(),
+                                ),
+                                fixedSize: MaterialStateProperty.all<Size>(
+                                  Size(45.r, 45.r),
+                                ),
+                                elevation: MaterialStateProperty.all<double>(6),
+                                shadowColor: MaterialStateProperty.all<Color>(AppColors.kFloatingIconColor.value),
+                              ),
+                              child: SizedBox(
+                                width: 40.r,
+                                height: 40.r,
+                                child: Image.asset(
+                                  "assets/dashboard_page/car.png",
+                                  width: 25.0.w,
+                                  height: 20.0.h,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),

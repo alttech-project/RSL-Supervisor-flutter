@@ -37,7 +37,8 @@ enum AppColors {
   kWhite,
   kOtpFieldColor,
   kRedColor,
-  kSalmonColor
+  kSalmonColor,
+  kFloatingIconColor
 }
 
 extension AppColorHelper on AppColors {
@@ -132,6 +133,9 @@ extension AppColorHelper on AppColors {
 
       case AppColors.kGetSnackBarColor:
         return const Color(0xFFF5F5F5).withOpacity(0.90);
+
+      case AppColors.kFloatingIconColor:
+        return const Color(0xFF7AC6BF).withOpacity(0.90);
 
       default:
         return const Color(0xFF212B36);

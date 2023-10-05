@@ -395,13 +395,13 @@ class DashBoardController extends GetxController {
 
   void showCustomDialog(BuildContext context) {
     final List<dynamic> staticImageUrls = [
-      {'motor_id': 1, 'image': "assets/dashboard_page/sedan.jpeg"},
+      {'motor_id': 1, 'image': "assets/dashboard_page/sedan.png"},
       {'motor_id': 10, 'image': "assets/dashboard_page/xl.png"},
       {'motor_id': 23, 'image': "assets/dashboard_page/vip.png"},
-      {'motor_id': 19, 'image': "assets/dashboard_page/vipplus.png"},
+      {'motor_id': 19, 'image': "assets/dashboard_page/vip_plus.png"},
     ];
     final List<Car> cars = [];
-    for (final carModel in carModelList.value) {
+    for (final carModel in carModelList) {
       final imageUrl = staticImageUrls.firstWhere(
           (element) => element['motor_id'] == carModel.motorId,
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
@@ -427,7 +427,7 @@ class DashBoardController extends GetxController {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AnimatedBuilder(
+            return (selectedCarIndex >= cars.length) ? const SizedBox.shrink(): AnimatedBuilder(
               animation: animationController,
               builder: (context, child) {
                 return Transform.translate(
@@ -438,9 +438,10 @@ class DashBoardController extends GetxController {
                   ),
                   child: AlertDialog(
                     contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+                        EdgeInsets.symmetric(horizontal: 30.w, vertical: 24.h),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -469,8 +470,8 @@ class DashBoardController extends GetxController {
                         ),
                         Image.asset(
                           cars[selectedCarIndex].imageUrl,
-                          width: 300.w,
-                          height: 300.h,
+                          width: 250.w,
+                          height: 250.h,
                         ),
                         // SizedBox(width: 10.w),
                         Row(

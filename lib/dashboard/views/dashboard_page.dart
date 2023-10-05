@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +42,7 @@ class DashboardPage extends GetView<DashBoardController> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 10.w, right: 10.w, top: 24.h, bottom: 50.h),
+                              left: 10.w, right: 10.w, top: 24.h, bottom: 65.h),
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
@@ -108,46 +107,48 @@ class DashboardPage extends GetView<DashBoardController> {
                           ),
                         ),
                         if (controller.carModelList.isNotEmpty)
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                right: 15.w, bottom: 25.h),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                try {
-                                  controller.showCustomDialog(Get.context!);
-                                } catch (e) {
-                                  print(e);
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        AppColors.kPrimaryColor.value),
-                                shape:
-                                    MaterialStateProperty.all<OutlinedBorder>(
-                                  const CircleBorder(),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.only(right: 15.w, bottom: 15.h),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  try {
+                                    controller.showCustomDialog(Get.context!);
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          AppColors.kPrimaryColor.value),
+                                  shape:
+                                      MaterialStateProperty.all<OutlinedBorder>(
+                                    const CircleBorder(),
+                                  ),
+                                  fixedSize: MaterialStateProperty.all<Size>(
+                                    Size(45.r, 45.r),
+                                  ),
+                                  elevation:
+                                      MaterialStateProperty.all<double>(6),
+                                  shadowColor: MaterialStateProperty.all<Color>(
+                                      AppColors.kFloatingIconColor.value),
                                 ),
-                                fixedSize: MaterialStateProperty.all<Size>(
-                                  Size(45.r, 45.r),
-                                ),
-                                elevation: MaterialStateProperty.all<double>(6),
-                                shadowColor: MaterialStateProperty.all<Color>(AppColors.kFloatingIconColor.value),
-                              ),
-                              child: SizedBox(
-                                width: 40.r,
-                                height: 40.r,
-                                child: Image.asset(
-                                  "assets/dashboard_page/car.png",
-                                  width: 25.0.w,
-                                  height: 20.0.h,
-                                  color: Colors.black,
+                                child: SizedBox(
+                                  width: 40.r,
+                                  height: 40.r,
+                                  child: Image.asset(
+                                    "assets/dashboard_page/ic_car.png",
+                                    width: 25.0.w,
+                                    height: 20.0.h,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
+                          )
                       ],
                     ),
                   ),

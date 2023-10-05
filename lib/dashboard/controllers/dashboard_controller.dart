@@ -460,7 +460,8 @@ class DashBoardController extends GetxController {
                               },
                               child: Icon(
                                 CupertinoIcons.multiply_circle,
-                                color: AppColors.kPrimaryColor.value,
+                                color:
+                                    AppColors.kSecondaryContainerBorder.value,
                                 size: 35.r,
                               ),
                             ),

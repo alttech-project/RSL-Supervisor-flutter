@@ -28,7 +28,7 @@ class FlutterLocalNotify {
   Future<void> initializeNotifications() async {
     await _firebaseMessaging.requestPermission();
     final FCMToken = await _firebaseMessaging.getToken();
-    printLogs("FIREBASE TOKEN : ${FCMToken}");
+    printLogs("DEVICE TOKEN : ${FCMToken}");
     GetStorageController().saveDeviceToken(value: FCMToken ?? "");
     initNotificationMethod();
     // createNotificationChannel();
@@ -72,16 +72,12 @@ class FlutterLocalNotify {
             isTwoButton: true,
             acceptBtnTitle: "Yes, now",
             acceptAction: () {
-              Navigator.of(NavigationService.navigatorKey.currentContext!)
-                  .pop(false);
               navigateVideoUploadPage(message);
             },
             cancelBtnTitle: "No",
             cancelAction: () {
               callVideoUploadApi(message.data["verificationId"] ?? "",
                   message.data["verificationTime"] ?? 10);
-              Navigator.of(NavigationService.navigatorKey.currentContext!)
-                  .pop(false);
             });
       } else {
         Future.delayed(

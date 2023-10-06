@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,7 +48,7 @@ class LoginController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     currentView.value = LoginViews.emailPage;
-    getDeviceToken();
+    // getDeviceToken();
     _getAppInfo();
     requestCameraPermission();
   }
@@ -62,9 +61,9 @@ class LoginController extends GetxController {
         AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
   }
 
-  getDeviceToken() async {
+/*  getDeviceToken() async {
     deviceToken = await GetStorageController().getDeviceToken();
-  }
+  }*/
 
   onBackPressed() {
     if (apiLoading.value) return;
@@ -76,7 +75,7 @@ class LoginController extends GetxController {
     }
   }
 
-  checkValidationAndCallApi() {
+  checkValidationAndCallApi() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     String text = emailController.text.trim();
     if (GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)) {
@@ -87,7 +86,7 @@ class LoginController extends GetxController {
           companyMainDomain: 'limor.us',
           cid: '',
           username: text,
-          deviceToken: deviceToken,
+          deviceToken: await GetStorageController().getDeviceToken(),
         ),
       ).then(
         (response) {
@@ -114,7 +113,7 @@ class LoginController extends GetxController {
     }
   }
 
-  callResendOtpApi() {
+  callResendOtpApi() async {
     otpController.clear();
     otp.value = "";
     FocusManager.instance.primaryFocus?.unfocus();
@@ -126,7 +125,7 @@ class LoginController extends GetxController {
         companyMainDomain: 'limor.us',
         cid: '',
         username: text,
-        deviceToken: deviceToken,
+        deviceToken: await GetStorageController().getDeviceToken(),
       ),
     ).then(
       (response) {
@@ -163,7 +162,7 @@ class LoginController extends GetxController {
           otp: otp.value,
           latitude: result.data!.latitude,
           longitude: result.data!.longitude,
-          deviceToken: deviceToken,
+          deviceToken: await GetStorageController().getDeviceToken(),
         ),
       ).then(
         (response) {
@@ -212,7 +211,7 @@ class LoginController extends GetxController {
             latitude: result.data!.latitude,
             longitude: result.data!.longitude,
             accuracy: result.data!.altitude,
-            deviceToken: deviceToken,
+            deviceToken: await GetStorageController().getDeviceToken(),
             photoUrl: imageUrl),
       ).then(
         (response) {
@@ -455,8 +454,6 @@ void _cameraPermissionAlert() {
                 Future.delayed(Duration(seconds: 1), () {
                   exit(0);
                 });
-
-
               },
             ),
           ],

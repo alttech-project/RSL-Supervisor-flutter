@@ -27,8 +27,8 @@ class EmailInputWidget extends GetView<LoginController> {
             padding: EdgeInsets.symmetric(vertical: 16.h),
             child: UnderlinedTextField(
               controller: controller.emailController,
-              hint: "Enter your email/phone here",
-              inputLblTxt: "Email / Phone",
+              hint: "Enter your email",
+              inputLblTxt: "Email",
               keyboardType: TextInputType.emailAddress,
               onSubmit: (value) {},
             ),

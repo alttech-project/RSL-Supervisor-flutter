@@ -94,14 +94,27 @@ Map<String, String> defaultApiHeaders(token) {
 
 Map<String, String> appQueryParam({Map<String, String>? customQuery}) {
   Map<String, String> appQueryParam;
-  final data = {
-    "lang": "en",
-    'dID': AppInfo.appInfo?.deviceId ?? "",
-    'dt': AppInfo.appInfo?.deviceType ?? "",
-    'vn': AppInfo.appInfo?.versionName ?? "",
-    'vc': AppInfo.appInfo?.versionCode ?? "",
-    'cid': AppInfo.appInfo?.cid ?? "",
-  };
+  Map<String, String> data;
+
+  if (AppInfo.appInfo!.cid!.isNotEmpty) {
+    data = {
+      "lang": "en",
+      'dID': AppInfo.appInfo?.deviceId ?? "",
+      'dt': AppInfo.appInfo?.deviceType ?? "",
+      'vn': AppInfo.appInfo?.versionName ?? "",
+      'vc': AppInfo.appInfo?.versionCode ?? "",
+      'cid': AppInfo.appInfo?.cid ?? "",
+    };
+  } else {
+    data = {
+      "lang": "en",
+      'dID': AppInfo.appInfo?.deviceId ?? "",
+      'dt': AppInfo.appInfo?.deviceType ?? "",
+      'vn': AppInfo.appInfo?.versionName ?? "",
+      'vc': AppInfo.appInfo?.versionCode ?? ""
+    };
+  }
+
   appQueryParam = {...?customQuery, ...data};
   return appQueryParam;
 }

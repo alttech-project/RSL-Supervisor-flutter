@@ -66,6 +66,7 @@ class DashBoardController extends GetxController {
   }
 
   _getUserInfo() async {
+    await getAppInfo();
     supervisorInfo.value = await GetStorageController().getSupervisorInfo();
     deviceToken = await GetStorageController().getDeviceToken();
     bool shiftStatus = await GetStorageController().getShiftStatus();

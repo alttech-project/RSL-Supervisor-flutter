@@ -33,21 +33,21 @@ Future<ShiftInResponse> shiftInApi(ShiftInRequest requestData) async {
 
 Future<LogoutApiResponse> logoutApi(LogoutApiRequest requestData) async {
   final response = await _apiProvider.httpRequest(
-    resource: Resource(
-      url: '${AppConfig.webBaseUrl}unassign_acting_supervisor',
-      request: logoutApiRequestToJson(requestData),
-    ),
-  );
+      resource: Resource(
+        url: '${AppConfig.webBaseUrl}unassign_acting_supervisor',
+        request: logoutApiRequestToJson(requestData),
+      ),
+      queryParam: {"type": "unassign_acting_supervisor"});
   return logoutApiResponseFromJson(response);
 }
 
 Future<CarModelTypeResponseData> carModelApi(
     CarModelTypeRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
-    resource: Resource(
-      url: '${AppConfig.webBaseUrl}carmodel_list_new',
-      request: carModelApiRequestToJson(requestData),
-    ),
-  );
+      resource: Resource(
+        url: '${AppConfig.webBaseUrl}carmodel_list_new',
+        request: carModelApiRequestToJson(requestData),
+      ),
+      queryParam: {"type": "carmodel_list_new"});
   return carModelApiResponseFromJson(response);
 }

@@ -10,6 +10,7 @@ import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/app_info.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
@@ -108,7 +109,7 @@ class LoginController extends GetxController {
         },
       );
     } else {
-      Get.snackbar('Alert', 'Enter valid Email/Phone!',
+      Get.snackbar('Alert', 'Enter valid Email!',
           backgroundColor: AppColors.kGetSnackBarColor.value);
     }
   }

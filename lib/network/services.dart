@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rsl_supervisor/network/app_config.dart';
+import '../utils/helpers/app_info.dart';
 import '../utils/helpers/basic_utils.dart';
 import '../utils/helpers/getx_storage.dart';
 
@@ -8,19 +11,16 @@ class ApiProvider extends GetConnect {
   @override
   void onInit() {
     super.onInit();
-    // httpClient.baseUrl = BaseUrls.demo.rawValue;
     httpClient.addAuthenticator<Object?>((request) async {
-      // printLogs("Authenticator API Call 401 OCCURED");
-      final response = await httpClient.post("token",
-          body: {
-            "username": "sap",
-            "password": "Sap@12345",
-            "grant_type": "password"
-          },
-          contentType: 'application/x-www-form-urlencoded');
-      /*if (response.statusCode == 200) {
-        printLogs("Token API Success ${response.body["access_token"]}");
-      }*/
+      final response = await httpClient.post(
+        "token",
+        body: {
+          "username": "sap",
+          "password": "Sap@12345",
+          "grant_type": "password"
+        },
+        contentType: 'application/x-www-form-urlencoded',
+      );
       controller.saveTokenData(value: response.body["access_token"].toString());
       request.headers['Authorization'] = "Bearer ${controller.getTokenData()}";
       return request;
@@ -39,21 +39,27 @@ class ApiProvider extends GetConnect {
       {RequestType requestType = RequestType.kPost,
       required Resource resource,
       bool encryptParams = true,
-      bool decryptResponse = false}) async {
+      bool decryptResponse = false,
+      Map<String, String>? queryParam}) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
     printLogs("Request Url : ${resource.url}");
     printLogs("Request Data : ${resource.request}");
     switch (requestType) {
       case RequestType.kGet:
         Response response = await get(resource.url);
+        printLogs("Response Url: ${response.request?.url}");
         return response.bodyString ?? '';
 
       case RequestType.kPut:
         Response response = await put(resource.url, "");
+        printLogs("Response Url: ${response.request?.url}");
         return response.bodyString ?? '';
 
       default:
-        Response response = await post(resource.url, resource.request);
-        printLogs("Response data : ${response.bodyString}");
+        Response response = await post(resource.url, resource.request,
+            query: _query(customQuery: queryParam));
+        printLogs("Response Url: ${response.request?.url}");
+        printLogs("Response Data : ${response.bodyString}");
         return response.bodyString ?? '';
     }
   }
@@ -75,10 +81,27 @@ class Request<T> {
 
 enum RequestType { kGet, kPost, kPut }
 
+Map<String, String> _query({Map<String, String>? customQuery}) =>
+    appQueryParam(customQuery: customQuery);
+
 Map<String, String> defaultApiHeaders(token) {
   final defaultApiHeaders = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token'
   };
   return defaultApiHeaders;
+}
+
+Map<String, String> appQueryParam({Map<String, String>? customQuery}) {
+  Map<String, String> appQueryParam;
+  final data = {
+    "lang": "en",
+    'dID': AppInfo.appInfo?.deviceId ?? "",
+    'dt': AppInfo.appInfo?.deviceType ?? "",
+    'vn': AppInfo.appInfo?.versionName ?? "",
+    'vc': AppInfo.appInfo?.versionCode ?? "",
+    'cid': AppInfo.appInfo?.cid ?? "",
+  };
+  appQueryParam = {...?customQuery, ...data};
+  return appQueryParam;
 }

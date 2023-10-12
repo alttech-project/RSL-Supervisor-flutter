@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rsl_supervisor/utils/helpers/app_info.dart';
 import 'package:rsl_supervisor/views/splash_screen.dart';
 
 import 'local_notification/flutter_local_notification.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
 Future<void> initServices() async {
   await Get.putAsync(() => GetStorage.init());
   await Firebase.initializeApp();
+  await getAppInfo();
   final FlutterLocalNotify flutterLocalNotify = FlutterLocalNotify();
   flutterLocalNotify.initializeNotifications();
 }

@@ -9,10 +9,10 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 Future<DispatchQuickTripResponseData> dispatchQuickTripApi(
     DispatchQuickTripRequestData requestData) async {
   final response = await _apiProvider.httpRequest(
-    resource: Resource(
-      url: '${AppConfig.webBaseUrl}dispatchquicktrips_new',
-      request: dispatchQuickTripRequestToJson(requestData),
-    ),
-  );
+      resource: Resource(
+        url: '${AppConfig.webBaseUrl}dispatchquicktrips_new',
+        request: dispatchQuickTripRequestToJson(requestData),
+      ),
+      queryParam: {"type": "dispatchquicktrips_new"});
   return dispatchQuickTripResponseFromJson(response);
 }

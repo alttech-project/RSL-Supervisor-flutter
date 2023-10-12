@@ -8,10 +8,10 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 
 Future<DriverListResponse> driverListApi(DriverListRequest requestData) async {
   final response = await _apiProvider.httpRequest(
-    resource: Resource(
-      url: '${AppConfig.webBaseUrl}location_driver_list',
-      request: driverListApiRequestToJson(requestData),
-    ),
-  );
+      resource: Resource(
+        url: '${AppConfig.webBaseUrl}location_driver_list',
+        request: driverListApiRequestToJson(requestData),
+      ),
+      queryParam: {"type": "location_driver_list"});
   return driverListApiResponseFromJson(response);
 }

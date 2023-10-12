@@ -16,6 +16,7 @@ import '../../location_queue/controllers/location_queue_controller.dart';
 import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../quickTrip/controllers/quick_trip_controller.dart';
+import '../../utils/helpers/app_info.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';

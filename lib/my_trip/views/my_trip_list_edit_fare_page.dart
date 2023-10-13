@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,16 +33,15 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
           ],
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: AppColors.kPrimaryColor.value),
+          icon: Icon(Icons.arrow_back, color: AppColors.kPrimaryColor.value),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
-      body:SingleChildScrollView (
-        child:Padding(
+      body: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -53,7 +50,6 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: AppFontWeight.bold.value,
-
                 ),
               ),
               const SizedBox(height: 20),
@@ -67,8 +63,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                   decoration: const InputDecoration(
                       hintText: 'Enter new fare',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 10)
-                  ),
+                      contentPadding: EdgeInsets.only(left: 10)),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -81,7 +76,6 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: AppFontWeight.bold.value,
-
                 ),
               ),
               const SizedBox(height: 20),
@@ -90,7 +84,6 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7.0),
                   color: Colors.white,
-
                 ),
                 child: TextField(
                   controller: controller.commentAddController,
@@ -98,7 +91,6 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                     hintText: 'Enter Comments',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 10),
-
                   ),
                 ),
               ),
@@ -122,9 +114,10 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                           title: "Information", msg: "Enter Your Comments");
                     } else {
                       controller.callEditFareApi(
-                          controller.commentAddController.text.trim(),
-                          int.parse(controller.farEditController.text.trim()),
-                          controller.selectedTripDetail.value.tripId );
+                        controller.commentAddController.text.trim(),
+                        int.tryParse(controller.farEditController.text.trim()) ?? 0,
+                    int.tryParse(controller.selectedTripDetail.value.tripId ?? '') ?? 0,
+                      );
                     }
                   },
                 ),

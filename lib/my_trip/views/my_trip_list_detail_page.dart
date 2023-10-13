@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
 import 'package:rsl_supervisor/my_trip/data/my_trip_list_data.dart';
-import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
-import 'package:rsl_supervisor/trip_history/data/trip_history_data.dart';
 
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';

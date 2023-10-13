@@ -79,7 +79,7 @@ class LoginController extends GetxController {
   checkValidationAndCallApi() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     String text = emailController.text.trim();
-    if (GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)) {
+    if (GetUtils.isEmail(text)) {
       apiLoading.value = true;
       verifyUserNameApi(
         VerifyUserNameRequestData(

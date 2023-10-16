@@ -4,7 +4,7 @@ enum CompanyType { RSL, PLIMO }
 
 const Map<Environment, String> baseUrls = {
   Environment.demo:
-      'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=',
+  'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=',
   Environment.live: 'https://web.limor.us/supervisorapp/index/?lang=en&type=',
 };
 
@@ -19,7 +19,7 @@ const Map<CompanyType, String> companyIds = {
 };
 
 class AppConfig {
-  static Environment currentEnvironment = Environment.live;
+  static Environment currentEnvironment = Environment.demo;
   static CompanyType companyType = CompanyType.RSL;
 
   static String get webBaseUrl => baseUrls[currentEnvironment]!;

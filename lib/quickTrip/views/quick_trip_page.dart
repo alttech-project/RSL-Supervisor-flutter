@@ -228,14 +228,15 @@ class QuickTripPage extends GetView<QuickTripController> {
   Widget _nameWidget() {
     return _labelAndTextFieldWidget('Name', 'Name', 'Enter Name (Optional)',
         txtEditingController: controller.nameController, validator: (value) {
-      if (value == null || value.isEmpty) {
+      return null;
+      /*  if (value == null || value.isEmpty) {
         return null;
       }
-      if (GetUtils.isUsername(value)) {
+      if (GetUtils.isUsername(value.trim())) {
         return null;
       } else {
         return 'Please enter a valid Name';
-      }
+      }*/
     });
   }
 

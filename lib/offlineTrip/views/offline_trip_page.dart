@@ -172,14 +172,15 @@ class OfflineTripPage extends GetView<OfflineTripController> {
   Widget _nameWidget() {
     return _labelAndTextFieldWidget('Name', 'Name', 'Enter Name (Optional)',
         txtEditingController: controller.nameController, validator: (value) {
-      if (value == null || value.isEmpty) {
+      return null;
+      /*   if (value == null || value.isEmpty) {
         return null;
       }
       if (GetUtils.isUsername(value)) {
         return null;
       } else {
         return 'Please enter a valid Name';
-      }
+      }*/
     });
   }
 

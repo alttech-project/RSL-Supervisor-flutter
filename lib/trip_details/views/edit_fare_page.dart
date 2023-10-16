@@ -32,103 +32,104 @@ class EditFarePage extends GetView<TripHistoryController> {
           ],
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: AppColors.kPrimaryColor.value),
+          icon: Icon(Icons.arrow_back, color: AppColors.kPrimaryColor.value),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
-      body:SingleChildScrollView (
-      child:Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Fare',
-              style: TextStyle(
-                color: AppColors.kPrimaryColor.value,
-                fontWeight: AppFontWeight.bold.value,
-
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7.0),
-                color: Colors.white,
-              ),
-              child: TextField(
-                controller: controller.farEditController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter new fare',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(left: 10)
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Fare',
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: AppFontWeight.bold.value,
                 ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Comments',
-              style: TextStyle(
-                color: AppColors.kPrimaryColor.value,
-                fontWeight: AppFontWeight.bold.value,
-
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7.0),
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: controller.farEditController,
+                  decoration: const InputDecoration(
+                      hintText: 'Enter new fare',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 10)),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 150.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7.0),
-                color: Colors.white,
-
+              const SizedBox(height: 20),
+              Text(
+                'Comments',
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                  fontWeight: AppFontWeight.bold.value,
+                ),
               ),
-              child: TextField(
-                controller: controller.commentAddController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Comments',
-                  border: InputBorder.none,
+              const SizedBox(height: 20),
+              Container(
+                height: 150.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7.0),
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: controller.commentAddController,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Comments',
+                    border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 10),
-
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 40),
-            Container(
-              height: 50.h,
-              margin: EdgeInsets.all(10),
-              child: CustomButton(
-                width: double.maxFinite,
-                linearColor: primaryButtonLinearColor,
-                height: 38.h,
-                borderRadius: 38.h / 2,
-                style: AppFontStyle.body(color: Colors.white),
-                text: 'Submit',
-                onTap: () {
-                  if (controller.farEditController.text == "") {
-                    showSnackBar(
-                        title: "Information", msg: "Enter Your Edited Fare");
-                  } else if (controller.commentAddController.text == "") {
-                    showSnackBar(
-                        title: "Information", msg: "Enter Your Comments");
-                  } else {
-                    controller.callEditFareApi(
-                        controller.commentAddController.text.trim(),
-                        int.parse(controller.farEditController.text.trim()),
-                        int.parse(controller.tripDetail.value.tripId ?? ''));
-                  }
-                },
+              const SizedBox(height: 40),
+              Obx(() =>
+                  Container(
+                    height: 50.h,
+                    margin: EdgeInsets.all(10),
+                    child: CustomButton(
+                      width: double.maxFinite,
+                      linearColor: primaryButtonLinearColor,
+                      height: 38.h,
+                      borderRadius: 38.h / 2,
+                      style: AppFontStyle.body(color: Colors.white),
+                      text: 'Submit',
+                      isLoader: controller.showLoader.value,
+                      onTap: () {
+                      if (controller.farEditController.text == "") {
+                          showSnackBar(
+                              title: "Information",
+                              msg: "Enter Your Edited Fare");
+                        } else if (controller.commentAddController.text == "") {
+                          showSnackBar(
+                              title: "Information",
+                              msg: "Enter Your Comments");
+                        } else {
+                          controller.callEditFareApi(
+                              controller.commentAddController.text.trim(),
+                              int.parse(
+                                  controller.farEditController.text.trim()),
+                              int.parse(
+                                  controller.tripDetail.value.tripId ?? ''));
+                        }
+                      },
+                    ),
+                  ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

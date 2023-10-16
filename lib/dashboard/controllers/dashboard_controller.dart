@@ -52,7 +52,7 @@ class DashBoardController extends GetxController {
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
   RxString apk = "".obs;
-  RxBool apiLoading = false.obs;
+  RxBool apiLoading = true.obs;
   RxBool showLoader = false.obs;
   RxBool logOutLoader = false.obs;
   int selectedCarIndex = 0;
@@ -88,17 +88,18 @@ class DashBoardController extends GetxController {
       cid: supervisorInfo.value.cid,
       deviceToken: await GetStorageController().getDeviceToken(),
     )).then((response) {
-      apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         dropList = response.dropOffList ?? [];
         dropSearchList.value = response.dropOffList ?? [];
         dropSearchList.refresh();
+        apiLoading.value = false;
         noDropOffDataMsg.value = response.message ?? "";
       } else {
         noDropOffDataMsg.value = response.message ?? "No Dropoff found";
         dropList = [];
         dropSearchList.value = [];
         dropSearchList.refresh();
+        apiLoading.value = false;
       }
     }).onError((error, stackTrace) {
       apiLoading.value = false;
@@ -110,7 +111,7 @@ class DashBoardController extends GetxController {
   }
 
   void callCarModelApi() async {
-    apiLoading.value = true;
+    // apiLoading.value = true;
     carModelApi(CarModelTypeRequestData(
       kioskId: supervisorInfo.value.kioskId,
       supervisorId: supervisorInfo.value.supervisorId,
@@ -119,7 +120,7 @@ class DashBoardController extends GetxController {
       cid: supervisorInfo.value.cid,
       deviceToken: await GetStorageController().getDeviceToken(),
     )).then((response) {
-      apiLoading.value = false;
+      // apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         carModelList.value = response.carmodelList ?? [];
         carModelList.refresh();
@@ -129,7 +130,7 @@ class DashBoardController extends GetxController {
         carModelList.refresh();
       }
     }).onError((error, stackTrace) {
-      apiLoading.value = false;
+      // apiLoading.value = false;
       printLogs("CarModel api error: ${error.toString()}");
       carModelList.value = [];
       carModelList.refresh();

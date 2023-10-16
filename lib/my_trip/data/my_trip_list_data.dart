@@ -106,15 +106,15 @@ class Details {
 }
 
 class ListTripDetails {
-  int? iId;
-  int? tripId;
-  int? driverId;
+  String? iId;
+  String? tripId;
+  String? driverId;
   String? waitingtime;
   String? driverName;
   String? driverRslNo;
-  int? taxiId;
+  String? taxiId;
   String? taxiNo;
-  int? taxiModelid;
+  String? taxiModelid;
   String? distance;
   String? distanceUnit;
   String? tripMinutes;
@@ -124,9 +124,9 @@ class ListTripDetails {
   String? pickupTime;
   String? createdate;
   String? dropTime;
-  int? tripFare;
-  int? waitingCost;
-  int? tollAmount;
+  num? tripFare;
+  num? waitingCost;
+  num? tollAmount;
   String? kioskAddress;
   String? kioskName;
   int? paymentType;
@@ -144,15 +144,15 @@ class ListTripDetails {
   String? paymentText;
   String? completeTripMap;
   String? tripType;
-  int? actingSupervisorId;
+  String? actingSupervisorId;
   String? actingSupervisorName;
   String? supervisorTripMessage;
   String? supervisorCancelMessage;
   String? supervisorUniqueId;
   String? supervisorDisplayName;
   String? trackUrl;
-  int? cancelledTrips;
-  int? dispatchedTrips;
+  String? cancelledTrips;
+  String? dispatchedTrips;
   String? driverReply;
   String? travelStatusMessage;
 
@@ -208,36 +208,16 @@ class ListTripDetails {
         this.travelStatusMessage});
 
   ListTripDetails.fromJson(Map<String, dynamic> json) {
-    try {
-      iId = int.parse(json['_id'].toString());
-    } catch (error){
-
-    }
-    try {
-      tripId = int.parse(json['trip_id'].toString());
-    } catch (error){
-
-    }
-    try {
-      driverId = int.parse(json['driver_id'].toString());
-    } catch (error){
-
-    }
+    iId = '${json['_id']}';
+    tripId = '${json['trip_id']}';
+    driverId = '${json['driver_id']}';
 
     waitingtime = json['waitingtime'].toString();
     driverName = json['driver_name'].toString();
     driverRslNo = json['driver_rsl_no'].toString();
-    try {
-      taxiId = int.parse(json['taxi_id'].toString());
-    } catch (error){
-
-    }
+    taxiId = '${json['taxi_id']}';
     taxiNo = json['taxi_no'].toString();
-    try {
-      taxiModelid = int.parse(json['taxi_modelid'].toString());
-    } catch (error){
-
-    }
+    taxiModelid= '${json['taxi_modelid']}';
     distance = json['distance'].toString();
     distanceUnit = json['distance_unit'].toString();
     tripMinutes = json['trip_minutes'].toString();
@@ -247,46 +227,18 @@ class ListTripDetails {
     pickupTime = json['pickup_time'].toString();
     createdate = json['createdate'].toString();
     dropTime = json['drop_time'].toString();
-    try {
-      tripFare = int.parse(json['trip_fare'].toString());
-    } catch (error){
-
-    }
-    try {
-      waitingCost = int.parse(json['waiting_cost'].toString());
-    } catch (error){
-
-    }
-    try {
-      tollAmount = int.parse(json['toll_amount'].toString());
-    } catch (error){
-
-    }
+    tripFare = num.tryParse('${json['trip_fare']}') ?? 0;
+    waitingCost = num.tryParse('${json['waiting_cost']}') ?? 0;
+    tollAmount = num.tryParse('${json['toll_amount']}') ?? 0;
     kioskAddress = json['kiosk_address'].toString();
     kioskName = json['kiosk_name'].toString();
-    try {
-      paymentType = int.parse(json['payment_type'].toString());
-    } catch (error){
-
-    }
+    paymentType = int.tryParse('${json['payment_type']}') ?? 0;
     quickOffline = json['quick_offline'].toString();
-    try {
-      kioskFareType = int.parse(json['kiosk_fare_type'].toString());
-    } catch (error){
-
-    }
-    try {
-      zoneFareApplied = int.parse(json['zone_fare_applied'].toString());
-    } catch (error){
-
-    }
+    kioskFareType = int.tryParse('${json['kiosk_fare_type']}') ?? 0;
+    zoneFareApplied = int.tryParse('${json['zone_fare_applied']}') ?? 0;
     roomNo = json['room_no'].toString();
     hourlyFareDuration = json['hourly_fare_duration'].toString();
-    try {
-      travelStatus = int.parse(json['travel_status'].toString());
-    } catch (error){
-
-    }
+    travelStatus = int.tryParse('${json['travel_status']}') ?? 0;
     paymentId = json['payment_id'].toString();
     flightNumber = json['flight_number'].toString();
     referenceNumber = json['reference_number'].toString();
@@ -295,28 +247,16 @@ class ListTripDetails {
     paymentText = json['payment_text'].toString();
     completeTripMap = json['complete_trip_map'].toString();
     tripType = json['trip_type'].toString();
-    try {
-      actingSupervisorId = int.parse(json['acting_supervisor_id'].toString());
-    } catch (error){
-
-    }
-    actingSupervisorName = json['acting_supervisor_name'].toString();
+    actingSupervisorId ='${json['acting_supervisor_id']}';
+        actingSupervisorName = json['acting_supervisor_name'].toString();
     supervisorTripMessage = json['supervisor_trip_message'].toString();
     supervisorCancelMessage = json['supervisor_cancel_message'].toString();
     supervisorUniqueId = json['supervisor_unique_id'].toString();
     supervisorDisplayName = json['supervisor_display_name'].toString();
     trackUrl = json['track_url'].toString();
-    try {
-      cancelledTrips = int.parse(json['cancelled_trips'].toString());
-    } catch (error){
-
-    }
-    try {
-      dispatchedTrips = int.parse(json['dispatched_trips'].toString());
-    } catch (error){
-
-    }
-    driverReply = json['driver_reply'].toString();
+    cancelledTrips = '${json['cancelled_trips']}';
+    dispatchedTrips= '${json['dispatched_trips']}';
+    driverReply = '${json['driver_reply']}';
     travelStatusMessage = json['travel_status_message'].toString();
   }
 

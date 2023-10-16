@@ -3,6 +3,8 @@ PODS:
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
+  - device_info_plus (0.0.1):
+    - Flutter
   - Firebase/Analytics (10.15.0):
     - Firebase/Core
   - Firebase/Core (10.15.0):
@@ -183,6 +185,7 @@ PODS:
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Firebase/Auth
   - Firebase/Database
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -236,6 +239,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_settings/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -284,6 +289,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   firebase_analytics: 84fbf469b4964adb5410e25f3f45433dac480ccf
   firebase_core: 77172d0a9d8d19d07606e24406e4c2fc14d3265b

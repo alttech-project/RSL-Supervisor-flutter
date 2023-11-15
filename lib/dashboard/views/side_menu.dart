@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
+import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
@@ -52,8 +53,18 @@ class SideMenuPage extends GetView<DashBoardController> {
             ),
             _menuListRow(SideMenuIcon.home, 'Home'),
             _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
-            _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
-            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),
+
+            controller.locationType.value == LocationType.GENERAL.toString()
+                ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
+                : const SizedBox(),
+
+            controller.locationType.value == LocationType.GENERAL.toString()
+                ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
+                : const SizedBox(),
+
+            controller.locationType.value == LocationType.HOTEL.toString()
+                ? _menuListRow(SideMenuIcon.myTrips, 'Bookings')
+                : const SizedBox(),
 /*
             _menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
 */

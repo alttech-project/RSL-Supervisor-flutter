@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
 import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
+import '../../network/app_config.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../utils/helpers/app_info.dart';
@@ -19,7 +20,6 @@ import '../data/verify_user_api_data.dart';
 import '../service/login_services.dart';
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
-import '../../network/app_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginController extends GetxController {
@@ -232,6 +232,14 @@ class LoginController extends GetxController {
                 .saveSupervisorInfo(supervisorInfo: supervisorInfo);
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
+
+            if (response.locationType != null && response.locationType == 1) {
+              GetStorageController()
+                  .saveLocationType(type: LocationType.GENERAL.toString());
+            } else {
+              GetStorageController()
+                  .saveLocationType(type: LocationType.HOTEL.toString());
+            }
             resetView();
             Get.offAllNamed(AppRoutes.dashboardPage);
           } else {

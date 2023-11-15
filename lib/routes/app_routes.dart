@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
+import 'package:rsl_supervisor/bookings/bookings_page.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const fareSelectionPage = '/fareSelectionPage';
   static const qrScannerPage = '/qrScannerPage';
   static const offlineTripPage = '/offlineTripPage';
+  static const bookings = "/bookings";
   static const tripHistoryPage = '/tripHistoryPage';
   static const subscriberPage = '/subscriberPage';
   static const tripDetailPage = '/tripDetailPage';
@@ -58,10 +60,8 @@ class AppRoutes {
   static const tripListPage = '/tripListPage';
   static const tripListMapPage = '/tripListMapPage';
   static const mytripDetailPage = '/mytripDetailPage';
-  static const mytripQrPage =  '/mytripQrPage';
+  static const mytripQrPage = '/mytripQrPage';
   static const mytripEditfarepage = '/mytripEditfarepage';
-
-
 
   static const driverListPage = '/driverListPage';
   static const dropLocationPage = '/dropLocationPage';
@@ -121,6 +121,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.offlineTripPage,
     page: () => const OfflineTripPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.bookings,
+    page: () => const BookingsPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
@@ -272,7 +279,6 @@ List<GetPage> routes = [
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
   ),
-
 ];
 
 class SizeTransitions extends CustomTransition {

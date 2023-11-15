@@ -69,6 +69,15 @@ class GetStorageController extends GetxController {
     return await storage.read("nodeUrl") ?? AppConfig.nodeUrl;
   }
 
+  void saveLocationType({required String type}) {
+    storage.write("LocationType", type);
+  }
+
+  Future<String> getLocationType() async {
+    return await storage.read("LocationType") ??
+        LocationType.GENERAL.toString();
+  }
+
   void saveRiderReferralUrl({required int url}) {
     storage.write("riderReferralUrl", url);
   }

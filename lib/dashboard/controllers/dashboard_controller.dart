@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/car_model_type_api.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
@@ -42,6 +43,7 @@ class DashBoardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> scaffoldKey2 = GlobalKey<ScaffoldState>();
+  RxString locationType = "".obs;
 
   final LocationManager locationManager = LocationManager();
   late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
@@ -71,6 +73,7 @@ class DashBoardController extends GetxController {
     supervisorInfo.value = await GetStorageController().getSupervisorInfo();
     deviceToken = await GetStorageController().getDeviceToken();
     bool shiftStatus = await GetStorageController().getShiftStatus();
+    locationType.value = await GetStorageController().getLocationType();
     if (!shiftStatus) {
       isShiftIn.value = false;
     } else {
@@ -264,6 +267,9 @@ class DashBoardController extends GetxController {
       case 'Offline Trips':
         Get.toNamed(AppRoutes.offlineTripPage);
         break;
+      case 'Bookings':
+        Get.toNamed(AppRoutes.bookings);
+        break;
       case "Location Queue":
         Get.toNamed(AppRoutes.locationQueuePage);
         break;
@@ -294,6 +300,7 @@ class DashBoardController extends GetxController {
       case 'Reorder List':
         Get.toNamed(AppRoutes.reOrderPage);
         break;
+
       default:
         break;
     }

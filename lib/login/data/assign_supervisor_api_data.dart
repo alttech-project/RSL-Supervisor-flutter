@@ -49,16 +49,22 @@ class AssignSupervisorResponse {
   String? message;
   String? supervisorMonitorLogUrl;
   int? status;
+  int? locationType;
   String? authKey;
 
   AssignSupervisorResponse(
-      {this.message, this.supervisorMonitorLogUrl, this.status, this.authKey});
+      {this.message,
+      this.supervisorMonitorLogUrl,
+      this.status,
+      this.authKey,
+      this.locationType});
 
   AssignSupervisorResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     supervisorMonitorLogUrl = json['supervisor_monitor_log_url'];
     status = json['status'];
     authKey = json['auth_key'];
+    locationType = json['locationType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +73,7 @@ class AssignSupervisorResponse {
     data['supervisor_monitor_log_url'] = supervisorMonitorLogUrl;
     data['status'] = status;
     data['auth_key'] = authKey;
+    data['locationType'] = locationType;
     return data;
   }
 }

@@ -15,6 +15,7 @@ import 'package:rsl_supervisor/subscribers/controllers/subscriberpage_controller
 import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 import 'package:rsl_supervisor/video/controller/upload_video_controller.dart';
 
+import '../bookings/controller/bookings_controller.dart';
 import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
@@ -47,5 +48,6 @@ class AppBind extends Bindings {
     Get.lazyPut<DriverListController>(() => DriverListController());
     Get.lazyPut<MyTripListMapController>(() => MyTripListMapController());
     Get.lazyPut<SplashController>(() => SplashController());
+    Get.lazyPut<BookingsController>(() => BookingsController());
   }
 }

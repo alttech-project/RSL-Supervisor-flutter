@@ -2,9 +2,11 @@ enum Environment { demo, live }
 
 enum CompanyType { RSL, PLIMO }
 
+enum LocationType { GENERAL, HOTEL }
+
 const Map<Environment, String> baseUrls = {
   Environment.demo:
-  'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=',
+      'https://webdemo1.limor.us/supervisorapp/index/?lang=en&type=',
   Environment.live: 'https://web.limor.us/supervisorapp/index/?lang=en&type=',
 };
 

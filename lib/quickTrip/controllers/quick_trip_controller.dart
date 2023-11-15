@@ -22,6 +22,8 @@ class QuickTripController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController paymentIdController = TextEditingController();
+  final TextEditingController referenceNumberController =
+      TextEditingController();
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
@@ -80,6 +82,7 @@ class QuickTripController extends GetxController {
         final phone = phoneController.text.trim();
         final email = emailController.text.trim();
         final paymentId = paymentIdController.text.trim();
+        final referenceNumber = referenceNumberController.text.trim();
 
         //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
         if (tripID.isEmpty) {
@@ -101,23 +104,23 @@ class QuickTripController extends GetxController {
           apiLoading.value = true;
           dispatchQuickTripApi(
             DispatchQuickTripRequestData(
-              tripId: tripID,
-              kioskId: supervisorInfo!.kioskId,
-              companyId: supervisorInfo!.cid,
-              supervisorName: supervisorInfo!.supervisorName,
-              supervisorId: supervisorInfo!.supervisorId,
-              supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-              name: name,
-              countryCode: countryCode.value,
-              mobileNo: phone,
-              email: email,
-              fixedMeter: (fare.isEmpty) ? '2' : '1',
-              kioskFare: fare,
-              paymentId: paymentId,
-              dropLatitude: dropLatitude,
-              dropLongitude: dropLongitude,
-              dropplace: dropLocation,
-            ),
+                tripId: tripID,
+                kioskId: supervisorInfo!.kioskId,
+                companyId: supervisorInfo!.cid,
+                supervisorName: supervisorInfo!.supervisorName,
+                supervisorId: supervisorInfo!.supervisorId,
+                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                name: name,
+                countryCode: countryCode.value,
+                mobileNo: phone,
+                email: email,
+                fixedMeter: (fare.isEmpty) ? '2' : '1',
+                kioskFare: fare,
+                paymentId: paymentId,
+                dropLatitude: dropLatitude,
+                dropLongitude: dropLongitude,
+                dropplace: dropLocation,
+                referenceNumber: referenceNumber),
           ).then((response) {
             apiLoading.value = false;
             _handleDispatchQuickTripResponse(response);
@@ -178,6 +181,7 @@ class QuickTripController extends GetxController {
       AppRoutes.dashboardPage,
     );
   }
+
   void navigateToPlaceSearchPage() async {
     final result = await Get.toNamed(
       AppRoutes.placeSearchPage,
@@ -189,6 +193,7 @@ class QuickTripController extends GetxController {
       dropLongitude = result.geometry?.location?.lng ?? 0.0;
     }
   }
+
   void clearDatas() {
     clearTripId();
     clearDropLocation();

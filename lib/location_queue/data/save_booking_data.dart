@@ -23,6 +23,7 @@ class SaveBookingRequest {
   String? countryCode;
   String? mobileNo;
   String? email;
+  String? referenceNumber;
 
   SaveBookingRequest(
       {this.driverId,
@@ -45,7 +46,8 @@ class SaveBookingRequest {
       this.name,
       this.countryCode,
       this.mobileNo,
-      this.email});
+      this.email,
+      this.referenceNumber});
 
   SaveBookingRequest.fromJson(Map<String, dynamic> json) {
     driverId = json['driver_id'];
@@ -69,6 +71,7 @@ class SaveBookingRequest {
     countryCode = json['country_code'];
     mobileNo = json['mobile_no'];
     email = json['email'];
+    referenceNumber = json['reference_number'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +97,7 @@ class SaveBookingRequest {
     data['country_code'] = countryCode;
     data['mobile_no'] = mobileNo;
     data['email'] = email;
+    data['reference_number'] = referenceNumber;
     return data;
   }
 }

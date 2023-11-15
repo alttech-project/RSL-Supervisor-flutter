@@ -24,6 +24,9 @@ class OfflineTripController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController searchCarController = TextEditingController();
+  final TextEditingController referenceNumberController =
+      TextEditingController();
+
   var taxiModel = ''.obs;
   var taxiId = ''.obs;
   var countryCode = '971'.obs;
@@ -96,6 +99,7 @@ class OfflineTripController extends GetxController {
         final phone = phoneController.text.trim();
         final email = emailController.text.trim();
         final date = dateController.text.trim();
+        final referenceNumber = referenceNumberController.text.trim();
 
         //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
         if (taxiNo.isEmpty) {
@@ -129,7 +133,8 @@ class OfflineTripController extends GetxController {
                 countryCode: countryCode.value,
                 mobileNo: phone,
                 email: email,
-                pickupDateTime: date),
+                pickupDateTime: date,
+                referenceNumber: referenceNumber),
           ).then((response) {
             apiLoading.value = false;
             _handleOfflineTripResponse(response);

@@ -68,6 +68,14 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                             _nameWidget(),
                             _phoneNumberWidget(),
                             _emailIdWidget(),
+                            _labelAndTextFieldWidget(
+                                'Reference Number',
+                                'Reference Number',
+                                'Reference Number (Optional)',
+                                txtEditingController:
+                                    controller.referenceNumberController,
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.done),
                             SizedBox(
                               height: 24.h,
                             ),
@@ -156,6 +164,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
       'Enter Email (Optional)',
       txtEditingController: controller.emailController,
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return null;

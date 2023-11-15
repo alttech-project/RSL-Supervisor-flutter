@@ -16,24 +16,25 @@ class DispatchOfflineTripRequestData {
   String? mobileNo;
   String? email;
   String? pickupDateTime;
+  String? referenceNumber;
 
-  DispatchOfflineTripRequestData({
-    this.dropLatitude,
-    this.dropLongitude,
-    this.fare,
-    this.kioskId,
-    this.taxiId,
-    this.supervisorName,
-    this.supervisorId,
-    this.supervisorUniqueId,
-    this.taxiModel,
-    this.cid,
-    this.name,
-    this.countryCode,
-    this.mobileNo,
-    this.email,
-    this.pickupDateTime,
-  });
+  DispatchOfflineTripRequestData(
+      {this.dropLatitude,
+      this.dropLongitude,
+      this.fare,
+      this.kioskId,
+      this.taxiId,
+      this.supervisorName,
+      this.supervisorId,
+      this.supervisorUniqueId,
+      this.taxiModel,
+      this.cid,
+      this.name,
+      this.countryCode,
+      this.mobileNo,
+      this.email,
+      this.pickupDateTime,
+      this.referenceNumber});
 
   DispatchOfflineTripRequestData.fromJson(Map<String, dynamic> json) {
     dropLatitude = json['drop_latitude'];
@@ -51,6 +52,7 @@ class DispatchOfflineTripRequestData {
     mobileNo = json['mobile_no'];
     email = json['email'];
     pickupDateTime = json['pickup_date_time'];
+    referenceNumber = json['reference_number'];
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +72,7 @@ class DispatchOfflineTripRequestData {
     data['mobile_no'] = mobileNo;
     data['email'] = email;
     data['pickup_date_time'] = pickupDateTime;
+    data['reference_number'] = referenceNumber;
     return data;
   }
 }

@@ -32,6 +32,9 @@ class LocationQueueController extends GetxController {
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
+  final TextEditingController referenceNumberController =
+      TextEditingController();
+
   RxString countryCode = "971".obs;
   DriverDetails selectedDriver = DriverDetails();
   int fixedMeter = 1;
@@ -394,6 +397,8 @@ class LocationQueueController extends GetxController {
         final phone = phoneController.text.trim();
         final email = emailController.text.trim();
         final message = messageController.text.trim();
+        final referenceNumber = referenceNumberController.text.trim();
+
         if (fixedMeter == 1 && amount.isEmpty) {
           showSnackBar(title: "Alert", msg: "Enter valid fare");
         } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
@@ -401,28 +406,29 @@ class LocationQueueController extends GetxController {
         } else {
           showBtnLoader.value = true;
           saveBookingApi(SaveBookingRequest(
-            driverId: selectedDriver.driverId,
-            dropLatitude: dropLatitude,
-            dropLongitude: dropLongitude,
-            dropPlace: dropAddress,
-            fixedMeter: fixedMeter,
-            kioskFare: amount,
-            kioskId: supervisorInfo.kioskId,
-            motorModel: selectedDriver.modelId,
-            pickupTime: "",
-            pickupplace: supervisorInfo.kioskAddress,
-            tripMessage: message,
-            supervisorName: supervisorInfo.supervisorName,
-            supervisorId: supervisorInfo.supervisorId,
-            approxFare: fare,
-            zoneFareApplied: int.parse(zoneFareApplied),
-            supervisorUniqueId: supervisorInfo.supervisorUniqueId,
-            cid: supervisorInfo.cid,
-            name: name,
-            countryCode: '+${countryCode.value}',
-            mobileNo: phone,
-            email: email,
-          )).then(
+                  driverId: selectedDriver.driverId,
+                  dropLatitude: dropLatitude,
+                  dropLongitude: dropLongitude,
+                  dropPlace: dropAddress,
+                  fixedMeter: fixedMeter,
+                  kioskFare: amount,
+                  kioskId: supervisorInfo.kioskId,
+                  motorModel: selectedDriver.modelId,
+                  pickupTime: "",
+                  pickupplace: supervisorInfo.kioskAddress,
+                  tripMessage: message,
+                  supervisorName: supervisorInfo.supervisorName,
+                  supervisorId: supervisorInfo.supervisorId,
+                  approxFare: fare,
+                  zoneFareApplied: int.parse(zoneFareApplied),
+                  supervisorUniqueId: supervisorInfo.supervisorUniqueId,
+                  cid: supervisorInfo.cid,
+                  name: name,
+                  countryCode: '+${countryCode.value}',
+                  mobileNo: phone,
+                  email: email,
+                  referenceNumber: referenceNumber))
+              .then(
             (response) {
               showBtnLoader.value = false;
               if (response.status == 1) {

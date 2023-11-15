@@ -98,6 +98,13 @@ class FareSelectionPage extends GetView<LocationQueueController> {
                           onSubmit: (text) {},
                           maxLines: 3,
                         ),
+                        _formFields(
+                          controller: controller.referenceNumberController,
+                          hint: "Reference Number (optional)",
+                          lblTxt: "Reference Number (optional)",
+                          keyboardtype: TextInputType.number,
+                          onSubmit: (text) {},
+                        ),
                         Padding(
                           padding: EdgeInsets.only(top: 15.h),
                           child: ToggleButton(

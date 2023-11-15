@@ -53,6 +53,12 @@ class QuickTripPage extends GetView<QuickTripController> {
                           _nameWidget(),
                           _phoneNumberWidget(),
                           _emailIdWidget(),
+                          _labelAndTextFieldWidget('Reference Number',
+                              'Reference Number', 'Reference Number (Optional)',
+                              txtEditingController:
+                                  controller.referenceNumberController,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done),
                           /*_labelAndTextFieldWidget(
                             'Payment ID',
                             'Payment ID',
@@ -211,7 +217,7 @@ class QuickTripPage extends GetView<QuickTripController> {
       'Enter Email (Optional)',
       txtEditingController: controller.emailController,
       keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.done,
+      textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return null;

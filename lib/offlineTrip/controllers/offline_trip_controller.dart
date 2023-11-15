@@ -209,6 +209,7 @@ class OfflineTripController extends GetxController {
         dropLocationController.text = "";
         taxiNoController.text = "";
         fareController.text = "";
+        referenceNumberController.text = "";
         nameController.text = "";
         phoneController.text = "";
         emailController.text = "";

@@ -200,6 +200,7 @@ class QuickTripController extends GetxController {
     dropLatitude = 0.0;
     dropLongitude = 0.0;
     fareController.clear();
+    referenceNumberController.clear();
     nameController.clear();
     phoneController.clear();
     emailController.clear();

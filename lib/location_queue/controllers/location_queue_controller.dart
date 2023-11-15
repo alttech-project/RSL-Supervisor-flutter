@@ -350,6 +350,7 @@ class LocationQueueController extends GetxController {
     phoneController.text = "";
     emailController.text = "";
     messageController.text = "";
+    referenceNumberController.text = "";
     selectedDriver = DriverDetails();
     fixedMeter = 1;
     Get.back();
@@ -362,6 +363,7 @@ class LocationQueueController extends GetxController {
     phoneController.text = "";
     emailController.text = "";
     messageController.text = "";
+    referenceNumberController.text = "";
     selectedDriver = DriverDetails();
     fixedMeter = 1;
     qrData.value = "";
@@ -375,6 +377,7 @@ class LocationQueueController extends GetxController {
     phoneController.text = "";
     emailController.text = "";
     messageController.text = "";
+    referenceNumberController.text = "";
     selectedDriver = DriverDetails();
     fixedMeter = 1;
     qrData.value = "";

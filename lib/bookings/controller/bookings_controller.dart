@@ -1,36 +1,70 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../../dashboard/controllers/dashboard_controller.dart';
+import '../../dashboard/data/car_model_type_api.dart';
+import '../../dashboard/service/dashboard_service.dart';
 import '../../routes/app_routes.dart';
+import '../../shared/styles/app_color.dart';
+import '../../shared/styles/app_font.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
+import '../../widgets/custom_button.dart';
 
 class BookingsController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final LocationManager locationManager = LocationManager();
+  var selectedTabBar = 0.obs;
+  TabController? tabController;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController pickupLocationController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController fareController = TextEditingController();
+  final TextEditingController carModelController = TextEditingController();
 
-  double pickupLatitude = 0.0, pickupLongitude = 0.0;
-  double dropLatitude = 0.0, dropLongitude = 0.0;
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController extraChargesController = TextEditingController();
+
+  final TextEditingController noteToDriverController = TextEditingController();
+  final TextEditingController flightNumberController = TextEditingController();
+  final TextEditingController refNumberController = TextEditingController();
+  final TextEditingController noteToAdminController = TextEditingController();
+  final TextEditingController remarksController = TextEditingController();
+
+  RxBool showCustomPricing = false.obs;
+  RxBool showAdditionalElements = false.obs;
+
+  double pickupLatitude = 0.0,
+      pickupLongitude = 0.0;
+  double dropLatitude = 0.0,
+      dropLongitude = 0.0;
   var countryCode = '971'.obs;
+
   var taxiModel = ''.obs;
   var taxiId = ''.obs;
 
+  var selectedPaymentMethod = 'Select Payment Method'.obs;
+
   var apiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
+
+  int selectedCarIndex = 0;
+  RxList<CarmodelList> carModelList = <CarmodelList>[].obs;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -43,6 +77,14 @@ class BookingsController extends GetxController {
     _getUserInfo();
   }
 
+  void goBack() {
+    Get.back();
+  }
+
+  changeTabIndex(int value) {
+    selectedTabBar.value = value;
+  }
+
   void clearTaxiNumber() {
     taxiModel.value = "";
     taxiId.value = "";
@@ -50,6 +92,10 @@ class BookingsController extends GetxController {
 
   void clearDropLocation() {
     dropLocationController.clear();
+  }
+
+  void clearCarModel() {
+    carModelController.clear();
   }
 
   void clearPickUpLocation() {
@@ -94,20 +140,48 @@ class BookingsController extends GetxController {
     }
   }
 
+  void callCarModelApi(SupervisorInfo? supervisorInfo) async {
+    carModelApi(CarModelTypeRequestData(
+      kioskId: supervisorInfo?.kioskId ?? "",
+      supervisorId: supervisorInfo?.supervisorId ?? "",
+      dropLatitude: "",
+      dropLongitude: "",
+      cid: supervisorInfo?.cid ?? "",
+      deviceToken: await GetStorageController().getDeviceToken(),
+    )).then((response) {
+      // apiLoading.value = false;
+      if ((response.status ?? 0) == 1) {
+        carModelList.value = response.carmodelList ?? [];
+        carModelList.refresh();
+      } else {
+        carModelList.value = [];
+        carModelList.refresh();
+      }
+    }).onError((error, stackTrace) {
+      // apiLoading.value = false;
+      printLogs("CarModel api error: ${error.toString()}");
+      carModelList.value = [];
+      carModelList.refresh();
+    });
+  }
+
   void _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     if (supervisorInfo == null) {
       return;
     }
+    callCarModelApi(supervisorInfo);
 
     LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
+    await locationManager.getCurrentLocation();
     pickupLatitude = result.data!.latitude ?? 0.0;
     pickupLongitude = result.data!.longitude ?? 0.0;
 
     List<Placemark> locations =
-        await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
-    print("locations ${locations}");
+    await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
+    pickupLocationController.text =
+    "${locations[0].name},${locations[0].locality} ${locations[0].country}";
+    print("locations ${locations[0]}");
   }
 
   void getDate() {
@@ -138,6 +212,191 @@ class BookingsController extends GetxController {
       dropLocationController.text = result.formattedAddress ?? '';
       dropLatitude = result.geometry?.location?.lat ?? 0.0;
       dropLongitude = result.geometry?.location?.lng ?? 0.0;
+    }
+  }
+
+  void showCustomDialog(BuildContext context) {
+    final List<dynamic> staticImageUrls = [
+      {'motor_id': 1, 'image': "assets/dashboard_page/sedan.png"},
+      {'motor_id': 10, 'image': "assets/dashboard_page/xl.png"},
+      {'motor_id': 23, 'image': "assets/dashboard_page/vip.png"},
+      {'motor_id': 19, 'image': "assets/dashboard_page/vip_plus.png"},
+    ];
+    final List<Car> cars = [];
+    for (final carModel in carModelList) {
+      final imageUrl = staticImageUrls.firstWhere(
+              (element) => element['motor_id'] == carModel.motorId,
+          orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
+
+      final car = Car(
+          name: carModel.motorName ?? "",
+          imageUrl: imageUrl,
+          modelId: carModel.motorId?.toString() ?? "");
+      cars.add(car);
+    }
+
+    final AnimationController animationController = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: Navigator.of(context),
+    );
+
+    final Tween<double> verticalPositionTween = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return (selectedCarIndex >= cars.length)
+                ? const SizedBox.shrink()
+                : AnimatedBuilder(
+              animation: animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    MediaQuery
+                        .of(context)
+                        .size
+                        .height *
+                        verticalPositionTween
+                            .evaluate(animationController),
+                  ),
+                  child: AlertDialog(
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 30.w, vertical: 24.h),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Available Cars',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: AppFontWeight.bold.value,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                animationController
+                                    .reverse()
+                                    .then((value) {
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              child: Icon(
+                                CupertinoIcons.multiply_circle,
+                                color: AppColors
+                                    .kSecondaryContainerBorder.value,
+                                size: 35.r,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Image.asset(
+                          cars[selectedCarIndex].imageUrl,
+                          width: 250.w,
+                          height: 250.h,
+                        ),
+                        // SizedBox(width: 10.w),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                selectPreviousCar();
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                CupertinoIcons.chevron_left,
+                                color: selectedCarIndex > 0
+                                    ? AppColors.kPrimaryColor.value
+                                    : Colors
+                                    .grey, // Gray if not available
+                                size: 30.r,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  cars[selectedCarIndex].name,
+                                  style: TextStyle(
+                                    fontSize: 17.r,
+                                    fontWeight: AppFontWeight.bold.value,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                selectNextCar(cars);
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                CupertinoIcons.chevron_right,
+                                color: selectedCarIndex < cars.length - 1
+                                    ? AppColors.kPrimaryColor.value
+                                    : Colors.grey,
+                                size: 30.r,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        CustomButton(
+                            width: double.maxFinite,
+                            linearColor: primaryButtonLinearColor,
+                            height: 38.h,
+                            borderRadius: 38.h / 2,
+                            style: AppFontStyle.body(color: Colors.white),
+                            text: 'Submit',
+                            onTap: () =>
+                            {
+                              carModelController.text =
+                                  cars[selectedCarIndex].name,
+                              taxiModel.value =
+                                  cars[selectedCarIndex].name,
+                              taxiId.value =
+                                  cars[selectedCarIndex].modelId,
+                              animationController.reverse().then(
+                                    (value) {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            }),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+    animationController.forward(); // Start the animation
+  }
+
+  void selectNextCar(cars) {
+    if (selectedCarIndex < cars.length - 1) {
+      selectedCarIndex++;
+    }
+  }
+
+  void selectPreviousCar() {
+    if (selectedCarIndex > 0) {
+      selectedCarIndex--;
     }
   }
 }

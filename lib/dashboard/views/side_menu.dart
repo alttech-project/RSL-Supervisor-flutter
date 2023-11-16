@@ -53,9 +53,9 @@ class SideMenuPage extends GetView<DashBoardController> {
             ),
             _menuListRow(SideMenuIcon.home, 'Home'),
             _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
-            _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
-            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),
-            /*  controller.locationType.value == LocationType.GENERAL.toString()
+            /* _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
+            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
+            controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
                 : const SizedBox(),
 
@@ -65,7 +65,7 @@ class SideMenuPage extends GetView<DashBoardController> {
 
             controller.locationType.value == LocationType.HOTEL.toString()
                 ? _menuListRow(SideMenuIcon.myTrips, 'Bookings')
-                : const SizedBox(),*/
+                : const SizedBox(),
 /*
             _menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
 */

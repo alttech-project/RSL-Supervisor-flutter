@@ -155,7 +155,8 @@ class CountryCodeTextField extends StatelessWidget {
     required this.hint,
     required this.inputLblTxt,
     this.onChanged,
-    this.isEnabled,this.decoration,
+    this.isEnabled,
+    this.decoration,
     this.textStyle,
     this.suffix,
     this.keyboardType,
@@ -189,21 +190,23 @@ class CountryCodeTextField extends StatelessWidget {
         color: Colors.white,
         size: 14.r,
       ),
-      decoration:decoration ?? InputDecoration(
-        labelText: inputLblTxt,
-        labelStyle: inputLblStyle ??
-            AppFontStyle.body(
-                weight: AppFontWeight.semibold.value, color: Colors.white70),
-        hintText: hint,
-        hintStyle: AppFontStyle.hint(color: Colors.white70),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: borderColor ?? Colors.white70),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white70),
-        ),
-        focusColor: focusColor ?? Colors.white,
-      ),
+      decoration: decoration ??
+          InputDecoration(
+            labelText: inputLblTxt,
+            labelStyle: inputLblStyle ??
+                AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                    color: Colors.white70),
+            hintText: hint,
+            hintStyle: AppFontStyle.hint(color: Colors.white70),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: borderColor ?? Colors.white70),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white70),
+            ),
+            focusColor: focusColor ?? Colors.white,
+          ),
       textInputAction: textInputAction,
       onCountryChanged: onCountryChanged,
     );
@@ -270,6 +273,66 @@ class BoxTextField extends StatelessWidget {
               borderSide: BorderSide(color: AppColors.kPrimaryColor.value),
               borderRadius: BorderRadius.all(Radius.circular(8.r)),
             ),
+            suffixIcon: suffix,
+            //isDense: true,
+            contentPadding: contentPadding ?? EdgeInsets.all(10.r),
+          ),
+    );
+  }
+}
+
+class BoxTextFieldTransparent extends StatelessWidget {
+  const BoxTextFieldTransparent({
+    this.hintText,
+    this.keyboardType,
+    this.textController,
+    this.decoration,
+    this.enable = false,
+    this.autocorrect,
+    super.key,
+    this.suffix,
+    this.style,
+    this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
+    this.autofocus = false,
+    this.contentPadding,
+  });
+
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController? textController;
+  final InputDecoration? decoration;
+  final bool? enable;
+  final bool? autocorrect;
+  final TextStyle? style;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final Widget? suffix;
+  final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
+  final EdgeInsetsGeometry? contentPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: focusNode,
+      enabled: enable,
+      autofocus: autofocus ?? false,
+      keyboardType: keyboardType ?? TextInputType.text,
+      cursorColor: AppColors.kPrimaryColor.value,
+      controller: textController,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      style: style ?? AppFontStyle.body(color: Colors.white),
+      autocorrect: autocorrect ?? false,
+      textAlignVertical: TextAlignVertical.top,
+      decoration: decoration ??
+          InputDecoration(
+            hintText: hintText ?? "search...",
+            hintStyle: AppFontStyle.body(color: Colors.white70),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
             suffixIcon: suffix,
             //isDense: true,
             contentPadding: contentPadding ?? EdgeInsets.all(10.r),

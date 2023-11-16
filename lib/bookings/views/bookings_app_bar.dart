@@ -31,10 +31,7 @@ class BookingsAppBar extends GetView<BookingsController> {
             ),
           ),
         ),
-        /*const Spacer(),*/
-
         Expanded(
-          flex: 1,
           child: Text(
             'Bookings',
             style:

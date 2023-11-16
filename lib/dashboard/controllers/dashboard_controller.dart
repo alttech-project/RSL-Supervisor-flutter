@@ -28,8 +28,9 @@ import '../service/dashboard_service.dart';
 class Car {
   final String name;
   final String imageUrl;
+  final String modelId;
 
-  Car({required this.name, required this.imageUrl});
+  Car({required this.name, required this.imageUrl, required this.modelId});
 }
 
 class DashBoardController extends GetxController {
@@ -419,9 +420,9 @@ class DashBoardController extends GetxController {
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
 
       final car = Car(
-        name: carModel.motorName ?? "",
-        imageUrl: imageUrl,
-      );
+          name: carModel.motorName ?? "",
+          imageUrl: imageUrl,
+          modelId: carModel.motorId?.toString() ?? "");
       cars.add(car);
     }
 

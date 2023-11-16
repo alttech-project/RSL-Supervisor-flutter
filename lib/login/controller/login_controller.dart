@@ -233,13 +233,13 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
 
-            /* if (response.locationType != null && response.locationType == 1) {
+            if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());
             } else {
               GetStorageController()
                   .saveLocationType(type: LocationType.HOTEL.toString());
-            }*/
+            }
             resetView();
             Get.offAllNamed(AppRoutes.dashboardPage);
           } else {

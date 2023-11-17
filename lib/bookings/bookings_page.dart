@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
-import 'package:rsl_supervisor/bookings/views/bookings_app_bar.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
@@ -112,6 +111,8 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 10.h),
         _locationInfo(context),
         SizedBox(height: 10.h),
+        _carModelInfo(),
+        SizedBox(height: 10.h),
         _customPricingInfo(context),
         SizedBox(height: 10.h),
         _additionalElementsInfo(context),
@@ -125,7 +126,7 @@ class BookingsPage extends GetView<BookingsController> {
             isLoader: controller.apiLoading.value,
             style: AppFontStyle.body(color: Colors.white),
             text: 'Submit',
-            onTap: () => controller.checkValidation(),
+            onTap: () => controller.checkNewBookingValidation(),
           ),
         ),
         SizedBox(height: 20.h),
@@ -188,14 +189,180 @@ class BookingsPage extends GetView<BookingsController> {
                   color: AppColors.kPrimaryColor.value,
                 ),
               )),
-          _selectCarModelWidget(),
+          /*_selectCarModelWidget(),
           _paymentDropDown(
             selectedOption: controller.selectedPaymentMethod.value,
             onTap: (value) {
               controller.selectedPaymentMethod.value = value;
             },
-          ),
+          ),*/
         ]),
+      ),
+    );
+  }
+
+  Widget _carModelInfo() {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 8,
+        ), // Adjust left and right padding
+        child: Row(children: [
+          _layoutCarModelInfo(),
+          const SizedBox(
+            width: 20,
+          ),
+          _labelPaymentOptionInfo()
+        ]),
+      ),
+    );
+  }
+
+  Widget _layoutCarModelInfo() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            _labelCarModel(),
+            const SizedBox(
+              height: 8,
+            ),
+            _selectedCarModel()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _labelPaymentOptionInfo() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Column(
+          children: [
+            _labelPaymentOption(),
+            const SizedBox(
+              height: 8,
+            ),
+            _selectedPaymentOption()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _labelCarModel() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        'Car Model',
+        style: AppFontStyle.subHeading(
+          size: AppFontSize.medium.value,
+          color: AppColors.kPrimaryColor.value,
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedCarModel() {
+    return SizedBox(
+      width: double.maxFinite,
+      height: 57,
+      child: Card(
+          elevation: 8,
+          margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              12,
+            ),
+          ),
+          color: AppColors.kSecondaryBackGroundColor.value,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 10,
+            ), // Adjust left and right padding
+            child: Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => controller.showCustomDialog(Get.context!),
+                    child: Text(
+                      controller.taxiModel.value,
+                      style: AppFontStyle.normalText(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => controller.showCustomDialog(Get.context!),
+                  child: Icon(
+                    Icons.arrow_drop_down_sharp,
+                    size: 20.r,
+                    color: AppColors.kPrimaryColor.value,
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _labelPaymentOption() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        'Payment Option',
+        style: AppFontStyle.subHeading(
+          size: AppFontSize.medium.value,
+          color: AppColors.kPrimaryColor.value,
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedPaymentOption() {
+    return SizedBox(
+      width: double.maxFinite,
+      height: 57,
+      child: Card(
+        elevation: 8,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kSecondaryBackGroundColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 10,
+          ), // Adjust left and right padding
+          child: Row(
+            children: [
+              Expanded(
+                child: _paymentDropDown(
+                  selectedOption: controller.selectedPaymentMethod.value,
+                  onTap: (value) {
+                    controller.selectedPaymentMethod.value = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -249,25 +416,30 @@ class BookingsPage extends GetView<BookingsController> {
   Widget _paymentDropDown(
       {required String? selectedOption,
       required Function(String value) onTap}) {
-    return Container(
-      height: 50.h,
-      /* decoration: BoxDecoration(
-        border: Border(
-            bottom: BorderSide(color: AppColors.kWhite.value, width: 1.0)),
-      )*/
+    return SizedBox(
       child: DropdownButton<String>(
         value: selectedOption,
         isExpanded: true,
+        underline: Container(
+          height: 1.0,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide.none),
+          ),
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down_sharp,
+          size: 20.r,
+          color: AppColors.kPrimaryColor.value,
+        ),
+        dropdownColor: Colors.black,
+        iconDisabledColor: AppColors.kPrimaryColor.value,
+        iconEnabledColor: AppColors.kPrimaryColor.value,
         alignment: Alignment.center,
         onChanged: (newValue) {
           onTap(newValue ?? "");
         },
-        items: <String>[
-          'Select Payment Method',
-          'Cash',
-          'Bill',
-          'Complimentary'
-        ].map<DropdownMenuItem<String>>((String value) {
+        items: <String>['CASH', 'BILL', 'COMPLIMENTARY']
+            .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             onTap: () {
               onTap(value);
@@ -279,9 +451,9 @@ class BookingsPage extends GetView<BookingsController> {
                 value,
                 style: GoogleFonts.outfit(
                   textStyle: TextStyle(
-                      fontSize: AppFontSize.medium.value,
-                      fontWeight: AppFontWeight.semibold.value,
-                      color: AppColors.kPrimaryColor.value),
+                      fontSize: AppFontSize.normal.value,
+                      fontWeight: AppFontWeight.normal.value,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -320,7 +492,7 @@ class BookingsPage extends GetView<BookingsController> {
         readOnly: readOnly,
         onTap: onTap,
         onChanged: onChanged,
-        borderColor: borderColor,
+        borderColor: AppColors.kLightTextSecondary.value,
         focusColor: focusColor,
         textStyle: textStyle,
       ),
@@ -329,25 +501,23 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _nameWidget() {
     return _labelAndTextFieldWidget(
-        'Guest Name', 'Guest Name', 'Enter Guest Name (Optional)',
-        txtEditingController: controller.nameController, validator: (value) {
+        'Guest Name', 'Guest Name', 'Enter Guest Name',
+        txtEditingController: controller.nameController,
+        textInputAction: TextInputAction.next, validator: (value) {
       if (value == null || value.isEmpty) {
-        return 'Please enter a valid guest name';
-      } else {
-        return null;
+        return 'Please enter guest name';
       }
+      return null;
     });
   }
 
   Widget _phoneNumberWidget() {
     return CountryCodeTextField(
       controller: controller.phoneController,
-      hint: 'Guest Phone Number (Optional)',
+      hint: 'Guest Phone Number',
       inputLblTxt: 'Guest Phone Number',
       inputLblStyle: AppFontStyle.subHeading(
           color: AppColors.kPrimaryColor.value, size: AppFontSize.medium.value),
-      keyboardType: TextInputType.text,
-      onSubmit: (value) {},
       textInputAction: TextInputAction.next,
       onCountryChanged: (country) {
         controller.countryCode.value = country.dialCode;
@@ -357,20 +527,20 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _emailIdWidget() {
     return _labelAndTextFieldWidget(
-      'Guest Email Id',
-      'Guest Email Id',
-      'Guest Enter Email (Optional)',
+      'Guest Email',
+      'Guest Email',
+      'Enter Guest Email',
       txtEditingController: controller.emailController,
-      textInputAction: TextInputAction.next,
+      textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return null;
+          return "Please enter email";
         }
         if (GetUtils.isEmail(value)) {
           return null;
         } else {
-          return 'Please enter a valid Email ID';
+          return 'Please enter valid email';
         }
       },
     );
@@ -392,7 +562,7 @@ class BookingsPage extends GetView<BookingsController> {
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please select a valid pickup Location!';
+            return 'Please select pickup location!';
           }
           return null;
         });
@@ -413,14 +583,14 @@ class BookingsPage extends GetView<BookingsController> {
           ),
         ),
         validator: (value) {
-          /*  if (value == null || value.isEmpty) {
-            return 'Please select a valid Drop Location!';
-          }*/
+          if (value == null || value.isEmpty) {
+            return 'Please select drop location!';
+          }
           return null;
         });
   }
 
-  Widget _selectCarModelWidget() {
+  /* Widget _selectCarModelWidget() {
     return _labelAndTextFieldWidget(
         'Select Car Model', 'Select Car Model', 'Select Car Model',
         txtEditingController: controller.carModelController,
@@ -440,7 +610,7 @@ class BookingsPage extends GetView<BookingsController> {
           }
           return null;
         });
-  }
+  }*/
 
   Widget _priceWidget() {
     return BoxTextFieldTransparent(
@@ -449,6 +619,7 @@ class BookingsPage extends GetView<BookingsController> {
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
+        textInputAction: TextInputAction.next,
         // onChanged: (value) => controller.priceController.text = value,
         autofocus: false);
   }
@@ -460,6 +631,7 @@ class BookingsPage extends GetView<BookingsController> {
         textController: controller.extraChargesController,
         enable: true,
         autocorrect: false,
+        textInputAction: TextInputAction.done,
         // onChanged: (value) => controller.extraChargesController.text = value,
         autofocus: false);
   }
@@ -490,7 +662,7 @@ class BookingsPage extends GetView<BookingsController> {
     return _labelAndTextFieldWidget(
         'Flight Number', 'Flight Number', 'Enter Flight Number (Optional)',
         txtEditingController: controller.flightNumberController,
-        keyboardType: TextInputType.number, validator: (value) {
+        keyboardType: TextInputType.text, validator: (value) {
       return null;
     });
   }
@@ -540,7 +712,7 @@ class BookingsPage extends GetView<BookingsController> {
   Widget _remarksWidget() {
     return BoxTextFieldTransparent(
         hintText: "Remarks",
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         textController: controller.remarksController,
         enable: true,
         autocorrect: false,
@@ -552,14 +724,23 @@ class BookingsPage extends GetView<BookingsController> {
     return Row(
       children: [
         Expanded(
+          child: InkWell(
+            onTap: () => {
+              if (controller.showCustomPricing.value)
+                controller.showCustomPricing.value = false
+              else
+                controller.showCustomPricing.value = true
+            },
             child: Text(
-          'Custom Pricing',
-          style: AppFontStyle.subHeading(
-            size: AppFontSize.medium.value,
-            color: AppColors.kPrimaryColor.value,
+              'Custom Pricing',
+              style: AppFontStyle.subHeading(
+                size: AppFontSize.medium.value,
+                color: AppColors.kPrimaryColor.value,
+              ),
+              textAlign: TextAlign.start,
+            ),
           ),
-          textAlign: TextAlign.start,
-        )),
+        ),
         Obx(() => InkWell(
               onTap: () => {
                 if (controller.showCustomPricing.value)
@@ -636,29 +817,40 @@ class BookingsPage extends GetView<BookingsController> {
     return Row(
       children: [
         Expanded(
+          child: InkWell(
+            onTap: () => {
+              if (controller.showAdditionalElements.value)
+                controller.showAdditionalElements.value = false
+              else
+                controller.showAdditionalElements.value = true
+            },
             child: Text(
-          'Additional Elements',
-          style: AppFontStyle.subHeading(
-            size: AppFontSize.medium.value,
-            color: AppColors.kPrimaryColor.value,
-          ),
-          textAlign: TextAlign.start,
-        )),
-        Obx(() => InkWell(
-              onTap: () => {
-                if (controller.showAdditionalElements.value)
-                  controller.showAdditionalElements.value = false
-                else
-                  controller.showAdditionalElements.value = true
-              },
-              child: Icon(
-                controller.showAdditionalElements.value
-                    ? Icons.arrow_drop_up_sharp
-                    : Icons.arrow_drop_down_sharp,
-                size: 20.r,
+              'Additional Elements',
+              style: AppFontStyle.subHeading(
+                size: AppFontSize.medium.value,
                 color: AppColors.kPrimaryColor.value,
               ),
-            ))
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ),
+        Obx(
+          () => InkWell(
+            onTap: () => {
+              if (controller.showAdditionalElements.value)
+                controller.showAdditionalElements.value = false
+              else
+                controller.showAdditionalElements.value = true
+            },
+            child: Icon(
+              controller.showAdditionalElements.value
+                  ? Icons.arrow_drop_up_sharp
+                  : Icons.arrow_drop_down_sharp,
+              size: 20.r,
+              color: AppColors.kPrimaryColor.value,
+            ),
+          ),
+        ),
       ],
     );
   }

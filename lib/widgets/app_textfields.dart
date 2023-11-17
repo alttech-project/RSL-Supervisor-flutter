@@ -114,7 +114,9 @@ class UnderlinedTextField extends StatelessWidget {
         hintText: hint,
         hintStyle: AppFontStyle.hint(color: hintColor ?? Colors.white70),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: borderColor ?? Colors.white70),
+          borderSide: BorderSide(
+              color: borderColor ?? AppColors.kLightTextSecondary.value,
+              width: 0.5),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: focusColor ?? Colors.white),
@@ -200,7 +202,9 @@ class CountryCodeTextField extends StatelessWidget {
             hintText: hint,
             hintStyle: AppFontStyle.hint(color: Colors.white70),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: borderColor ?? Colors.white70),
+              borderSide: BorderSide(
+                  color: borderColor ?? AppColors.kLightTextSecondary.value,
+                  width: 0.5),
             ),
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white70),
@@ -297,6 +301,7 @@ class BoxTextFieldTransparent extends StatelessWidget {
     this.focusNode,
     this.autofocus = false,
     this.contentPadding,
+    this.textInputAction = TextInputAction.done,
   });
 
   final String? hintText;
@@ -312,6 +317,7 @@ class BoxTextFieldTransparent extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
   final EdgeInsetsGeometry? contentPadding;
+  final TextInputAction textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -327,6 +333,7 @@ class BoxTextFieldTransparent extends StatelessWidget {
       style: style ?? AppFontStyle.body(color: Colors.white),
       autocorrect: autocorrect ?? false,
       textAlignVertical: TextAlignVertical.top,
+      textInputAction: textInputAction,
       decoration: decoration ??
           InputDecoration(
             hintText: hintText ?? "search...",

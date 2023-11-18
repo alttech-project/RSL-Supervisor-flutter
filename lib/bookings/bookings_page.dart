@@ -23,13 +23,16 @@ class BookingsPage extends GetView<BookingsController> {
           controller.onClose();
           return Future.value(true);
         },
-        child: Obx(
-          () => CommonAppContainer(
-            showLoader: controller.apiLoading.value,
-            child: Scaffold(
-                extendBodyBehindAppBar: false,
-                backgroundColor: Colors.black,
-                body: SingleChildScrollView(
+        child: SafeAreaContainer(
+          statusBarColor: Colors.black,
+          themedark: true,
+          child: Scaffold(
+            extendBodyBehindAppBar: false,
+            backgroundColor: Colors.black,
+            body: Obx(
+              () => CommonAppContainer(
+                showLoader: controller.apiLoading.value,
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       Padding(
@@ -63,7 +66,9 @@ class BookingsPage extends GetView<BookingsController> {
                       ),
                     ],
                   ),
-                )),
+                ),
+              ),
+            ),
           ),
         ),
       ),

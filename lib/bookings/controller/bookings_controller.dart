@@ -58,9 +58,6 @@ class BookingsController extends GetxController {
   var taxiModel = 'SEDAN'.obs;
   var taxiId = '1'.obs;
 
-/*  var selectedPaymentMethod = 'CASH'.obs;
-  var selectedPaymentId = '1'.obs;*/
-
   Rx<Payments> selectedPayment = paymentList[0].obs;
 
   RxBool showCustomPricing = false.obs;
@@ -70,6 +67,8 @@ class BookingsController extends GetxController {
   // final selectedRadio = 1.obs;
   int selectedCarIndex = 0;
   RxList<CarmodelList> carModelList = <CarmodelList>[].obs;
+
+  List<FareDetailList> motorModelList = <FareDetailList>[];
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -187,11 +186,9 @@ class BookingsController extends GetxController {
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isEmpty || int.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
-      }
-      /* else if (remarks.isEmpty) {
+      } else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
-      }*/
-      else {
+      } else {
         if (supervisorInfo == null) {
           _showSnackBar('Error!', 'Invalid user login status!');
           return;
@@ -301,26 +298,8 @@ class BookingsController extends GetxController {
           .then((response) {
         apiLoading.value = false;
         if ((response.status ?? 0) == 1) {
-          var motorModelList = response.fareDetailList ?? [];
-          if (motorModelList.isNotEmpty) {
-            for (var model in motorModelList) {
-              if (taxiId.value.toString() == model.modelId.toString()) {
-                approximateFare.value = model.fare?.toString() ?? "0";
-                zoneFareApplied = model.zoneFareApplied ?? 0;
-
-                if (zoneFareApplied == 1) {
-                  rslShare = model.rslShare ?? 0;
-                  driverShare = model.driverShare ?? 0;
-                  corporateShare = model.corporateShare ?? 0;
-                  pickupZoneId = model.pickupZoneId ?? 0;
-                  pickupZoneGroupId = model.pickupZoneGroupId ?? 0;
-                  dropZoneId = model.dropZoneId ?? 0;
-                  dropZoneGroupId = model.dropZoneGroupId ?? 0;
-                  priceController.text = model.fare?.toString() ?? "";
-                }
-              }
-            }
-          }
+          motorModelList = response.fareDetailList ?? [];
+          updateModelFareDetails();
         }
       }).onError((error, stackTrace) {
         apiLoading.value = false;
@@ -352,6 +331,37 @@ class BookingsController extends GetxController {
       carModelList.value = [];
       carModelList.refresh();
     });
+  }
+
+  void updateModelFareDetails() {
+    if (motorModelList.isNotEmpty) {
+      for (var model in motorModelList) {
+        if (taxiId.value.toString() == model.modelId.toString()) {
+          approximateFare.value = model.fare?.toString() ?? "0";
+          zoneFareApplied = model.zoneFareApplied ?? 0;
+
+          if (zoneFareApplied == 1) {
+            rslShare = model.rslShare ?? 0;
+            driverShare = model.driverShare ?? 0;
+            corporateShare = model.corporateShare ?? 0;
+            pickupZoneId = model.pickupZoneId ?? 0;
+            pickupZoneGroupId = model.pickupZoneGroupId ?? 0;
+            dropZoneId = model.dropZoneId ?? 0;
+            dropZoneGroupId = model.dropZoneGroupId ?? 0;
+            priceController.text = model.fare?.toString() ?? "";
+          } else {
+            rslShare = 0;
+            driverShare = 0;
+            corporateShare = 0;
+            pickupZoneId = 0;
+            pickupZoneGroupId = 0;
+            dropZoneId = 0;
+            dropZoneGroupId = 0;
+            priceController.clear();
+          }
+        }
+      }
+    }
   }
 
   void _calculateTimeAndDistance() async {
@@ -423,6 +433,7 @@ class BookingsController extends GetxController {
     approximateDistance.value = 0;
     overViewPolyLine.value = "";
     approximateFare.value = "0";
+    motorModelList.clear();
     zoneFareApplied = 0;
     rslShare = 0;
     driverShare = 0;
@@ -641,7 +652,7 @@ class BookingsController extends GetxController {
                                             cars[selectedCarIndex].name,
                                         taxiId.value =
                                             cars[selectedCarIndex].modelId,
-                                        callMotorModelApi(),
+                                        updateModelFareDetails(),
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

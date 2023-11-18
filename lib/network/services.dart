@@ -43,7 +43,7 @@ class ApiProvider extends GetConnect {
       Map<String, String>? queryParam}) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     printLogs("Request Url : ${resource.url}");
-    printLogs("Request Data : ${resource.request}\n");
+    printLogs("Request Data : ${resource.request}");
     switch (requestType) {
       case RequestType.kGet:
         Response response = await get(resource.url);

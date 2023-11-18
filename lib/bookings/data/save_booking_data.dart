@@ -107,7 +107,6 @@ class SaveBookingRequest {
     flight_number = json['flight_number'];
     reference_number = json['reference_number'];
     customer_price = json['customer_price'];
-    route_polyline = json['route_polyline'];
     customer_rate = json['customer_rate'];
     rsl_share = json['rsl_share'];
     driver_share = json['driver_share'];
@@ -121,6 +120,7 @@ class SaveBookingRequest {
     supervisorId = json['supervisor_id'];
     kioskId = json['kiosk_id'];
     cid = json['company_id'];
+    route_polyline = json['route_polyline'];
   }
 
   Map<String, dynamic> toJson() {
@@ -149,7 +149,6 @@ class SaveBookingRequest {
     data['flight_number'] = flight_number;
     data['reference_number'] = reference_number;
     data['customer_price'] = customer_price;
-    data['route_polyline'] = route_polyline;
     data['customer_rate'] = customer_rate;
     data['rsl_share'] = rsl_share;
     data['driver_share'] = driver_share;
@@ -163,6 +162,7 @@ class SaveBookingRequest {
     data['supervisor_id'] = supervisorId;
     data['kiosk_id'] = kioskId;
     data['company_id'] = cid;
+    data['route_polyline'] = route_polyline;
     return data;
   }
 }

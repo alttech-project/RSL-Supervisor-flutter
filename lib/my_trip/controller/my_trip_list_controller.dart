@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +52,52 @@ class MyTripListController extends GetxController {
   RxInt totalCountOngoing = 10.obs;
   RxBool pageNationLoader = false.obs;
 
+  Timer? _timer;
+  Timer? _timerOngoing;
 
   @override
   void onInit() {
     super.onInit();
     _scrollListenerTripList();
     _getUserInfos();
+  }
+
+  void startTripListTimer() {
+    stopTripListTimer();
+    stopTripListOngoingTimer();
+    const timerDuration = Duration(seconds: 10);
+
+    _timer = Timer.periodic(
+      timerDuration,
+      (Timer timer) {
+        callTripListApi();
+      },
+    );
+  }
+
+  void stopTripListTimer() {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
+  }
+
+  void startTripListOngoingTimer() {
+    stopTripListTimer();
+    stopTripListOngoingTimer();
+    const timerDuration = Duration(seconds: 10);
+
+    _timerOngoing = Timer.periodic(
+      timerDuration,
+      (Timer timer) {
+        callTripListApi();
+      },
+    );
+  }
+
+  void stopTripListOngoingTimer() {
+    if (_timerOngoing != null && _timerOngoing!.isActive) {
+      _timerOngoing!.cancel();
+    }
   }
 
   void _scrollListenerTripList() {
@@ -81,6 +122,8 @@ class MyTripListController extends GetxController {
   void onClose() {
     scrollController.dispose();
     existingDataList.refresh();
+    stopTripListOngoingTimer();
+    stopTripListTimer();
     super.onClose();
   }
 
@@ -122,16 +165,15 @@ class MyTripListController extends GetxController {
     // showLoader.value = true;
     tripListApi(
       MyTripsRequestData(
-        driverName: carNoController.text,
-        tripId: tripIdController.text,
-        from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
-        to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-        locationId: supervisorInfo.kioskId.toString(),
-        supervisorId: supervisorInfo.supervisorId,
-        limit: limit.value,
-        start: currentPage.value,
-        type: 1
-      ),
+          driverName: carNoController.text,
+          tripId: tripIdController.text,
+          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
+          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
+          locationId: supervisorInfo.kioskId.toString(),
+          supervisorId: supervisorInfo.supervisorId,
+          limit: limit.value,
+          start: currentPage.value,
+          type: 1),
     ).then((response) {
       switch (pageNation) {
         case false:
@@ -200,8 +242,7 @@ class MyTripListController extends GetxController {
           supervisorId: supervisorInfo.supervisorId,
           limit: limit.value,
           start: currentPage.value,
-          type: 2
-      ),
+          type: 2),
     ).then((response) {
       switch (pageNation) {
         case false:
@@ -229,7 +270,7 @@ class MyTripListController extends GetxController {
           break;
       }
     }).onError(
-          (error, stackTrace) {
+      (error, stackTrace) {
         printLogs("$error");
         showLoader.value = false;
         pageNationLoader.value = false;
@@ -486,8 +527,8 @@ class MyTripListController extends GetxController {
     //   LatLng startLocation = const LatLng(11.0317782,77.0185392);
     //   addMarker(startLocation, "PickUp", await getPickUpIcons());
     // } else {
-    LatLng startLocation = LatLng(
-        mapdatas.value[0].latitude?.toDouble() ?? 0, mapdatas.value[0].longitude?.toDouble() ?? 0);
+    LatLng startLocation = LatLng(mapdatas.value[0].latitude?.toDouble() ?? 0,
+        mapdatas.value[0].longitude?.toDouble() ?? 0);
     addMarker(startLocation, "PickUp", await getPickUpIcons());
     // }
   }

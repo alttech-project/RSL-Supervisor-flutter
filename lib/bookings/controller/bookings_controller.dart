@@ -13,6 +13,7 @@ import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../dashboard/data/car_model_type_api.dart';
 import '../../dashboard/service/dashboard_service.dart';
+import '../../my_trip/controller/my_trip_list_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -265,7 +266,14 @@ class BookingsController extends GetxController {
         showDefaultDialog(
           context: Get.context!,
           title: "Alert",
-          message: response.message ?? "Something went wrong...",
+          message: "Do you want to track that trip?",
+          isTwoButton: true,
+          acceptBtnTitle: "Yes",
+          acceptAction: () {
+            Get.find<MyTripListController>().callTripListApi();
+            changeTabIndex(1);
+          },
+          cancelBtnTitle: "No",
         );
       } else {
         showDefaultDialog(

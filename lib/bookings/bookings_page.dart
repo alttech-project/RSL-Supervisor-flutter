@@ -30,51 +30,55 @@ class BookingsPage extends GetView<BookingsController> {
           statusBarColor: Colors.black,
           themedark: true,
           child: Scaffold(
-              extendBodyBehindAppBar: false,
-              backgroundColor: Colors.black,
-              body: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    //Fill the code of padding
-                    Padding(
-                      padding:
-                      EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
-                      child: NavigationTitle(
-                        title: "Bookings",
-                        onTap: () => controller.goBack(),
+            extendBodyBehindAppBar: false,
+            backgroundColor: Colors.black,
+            body: Obx(
+              () => CommonAppContainer(
+                showLoader: controller.apiLoading.value,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      //Fill the code of padding
+                      Padding(
+                        padding:
+                            EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
+                        child: NavigationTitle(
+                          title: "Bookings",
+                          onTap: () => controller.goBack(),
+                        ),
                       ),
-                    ),
-                    DefaultTabController(
-                      length: 3,
-                      initialIndex: controller.selectedTabBar.value,
-                      child: Column(
-                        children: [
-                          _tabBarWidget(tabs: [
-                            _tabBarTextWidget(text: "New Booking"),
-                            _tabBarTextWidget(text: "Upcoming Bookings"),
-                            _tabBarTextWidget(text: "Ongoing Bookings"),
-                          ]),
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Obx(
-                                () =>
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.w),
-                                  child: _tabView(
-                                    controller.selectedTabBar.value,
-                                    context,
-                                  ),
+                      DefaultTabController(
+                        length: 3,
+                        initialIndex: controller.selectedTabBar.value,
+                        child: Column(
+                          children: [
+                            _tabBarWidget(tabs: [
+                              _tabBarTextWidget(text: "New Booking"),
+                              _tabBarTextWidget(text: "Upcoming Bookings"),
+                              _tabBarTextWidget(text: "Ongoing Bookings"),
+                            ]),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Obx(
+                              () => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                child: _tabView(
+                                  controller.selectedTabBar.value,
+                                  context,
                                 ),
-                          ),
-                        ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -86,9 +90,9 @@ class BookingsPage extends GetView<BookingsController> {
       isScrollable: true,
       onTap: (value) {
         controller.changeTabIndex(value);
-        if(value == 1){
+        if (value == 1) {
           tripListController.callTripListApi();
-        }else{
+        } else {
           tripListController.callTripListOngoingApi();
         }
       },
@@ -104,7 +108,7 @@ class BookingsPage extends GetView<BookingsController> {
   Widget _tabView(int value, context) {
     switch (value) {
       case 0:
-        return newBookingWidget(context);
+        return newBookingsTab(context);
       case 1:
         return const UpcomingBookingsTab();
       case 2:
@@ -113,12 +117,11 @@ class BookingsPage extends GetView<BookingsController> {
     return const SizedBox.shrink();
   }
 
-  _tabBarTextWidget({String? text}) =>
-      Padding(
+  _tabBarTextWidget({String? text}) => Padding(
         padding: EdgeInsets.symmetric(vertical: 4.h),
         child: Row(
           children: [
-            Text("${text}",
+            Text("$text",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.outfit(
                     textStyle: TextStyle(
@@ -128,7 +131,7 @@ class BookingsPage extends GetView<BookingsController> {
         ),
       );
 
-  Widget newBookingWidget(context) {
+  Widget newBookingsTab(context) {
     return Column(
       children: [
         _personalInfo(context),
@@ -149,7 +152,7 @@ class BookingsPage extends GetView<BookingsController> {
             borderRadius: 38.h / 2,
             isLoader: controller.saveBookingApiLoading.value,
             style: AppFontStyle.body(color: Colors.white),
-            text: 'Book now',
+            text: 'Submit',
             onTap: () => controller.checkNewBookingValidation(),
           ),
         ),
@@ -489,16 +492,16 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
-        required TextEditingController txtEditingController,
-        TextInputType keyboardType = TextInputType.text,
-        TextInputAction textInputAction = TextInputAction.next,
-        FormFieldValidator? validator,
-        bool readOnly = false,
-        GestureTapCallback? onTap,
-        Function(String)? onChanged,
-        Color? borderColor,
-        Color? focusColor,
-        TextStyle? textStyle}) {
+      required TextEditingController txtEditingController,
+      TextInputType keyboardType = TextInputType.text,
+      TextInputAction textInputAction = TextInputAction.next,
+      FormFieldValidator? validator,
+      bool readOnly = false,
+      GestureTapCallback? onTap,
+      Function(String)? onChanged,
+      Color? borderColor,
+      Color? focusColor,
+      TextStyle? textStyle}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -696,8 +699,8 @@ class BookingsPage extends GetView<BookingsController> {
         'Enter Reference Number (Optional)',
         txtEditingController: controller.refNumberController,
         keyboardType: TextInputType.number, validator: (value) {
-          return null;
-        });
+      return null;
+    });
   }
 
   Widget _remarksLabel() {
@@ -793,56 +796,55 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _layoutCustomPricing() {
-    return Obx(() =>
-    controller.showCustomPricing.value
+    return Obx(() => controller.showCustomPricing.value
         ? Column(
-      children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          children: [
-            Expanded(
-                child: Card(
-                  elevation: 8,
-                  margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      12,
+            children: [
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Card(
+                    elevation: 8,
+                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      ),
                     ),
+                    color: AppColors.kSecondaryBackGroundColor.value,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 5,
+                        ), // Adjust left and right padding
+                        child: Expanded(child: _priceWidget())),
+                  )),
+                  const SizedBox(
+                    width: 20,
                   ),
-                  color: AppColors.kSecondaryBackGroundColor.value,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 5,
-                      ), // Adjust left and right padding
-                      child: Expanded(child: _priceWidget())),
-                )),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-                child: Card(
-                  elevation: 8,
-                  margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      12,
+                  Expanded(
+                      child: Card(
+                    elevation: 8,
+                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      ),
                     ),
-                  ),
-                  color: AppColors.kSecondaryBackGroundColor.value,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 5,
-                      ), // Adjust left and right padding
-                      child: Expanded(child: _extraChargesWidget())),
-                )),
-          ],
-        )
-      ],
-    )
+                    color: AppColors.kSecondaryBackGroundColor.value,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 5,
+                        ), // Adjust left and right padding
+                        child: Expanded(child: _extraChargesWidget())),
+                  )),
+                ],
+              )
+            ],
+          )
         : const SizedBox.shrink());
   }
 
@@ -897,24 +899,23 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _layoutAdditionalElements() {
-    return Obx(() =>
-    controller.showAdditionalElements.value
+    return Obx(() => controller.showAdditionalElements.value
         ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        _noteToDriverWidget(),
-        _noteToAdminWidget(),
-        _flightNumberWidget(),
-        _refNumberWidget(),
-        SizedBox(height: 10.h),
-        _remarksLabel(),
-        SizedBox(height: 7.h),
-        _remarksCardView(),
-      ],
-    )
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10.h,
+              ),
+              _noteToDriverWidget(),
+              _noteToAdminWidget(),
+              _flightNumberWidget(),
+              _refNumberWidget(),
+              SizedBox(height: 10.h),
+              _remarksLabel(),
+              SizedBox(height: 7.h),
+              _remarksCardView(),
+            ],
+          )
         : const SizedBox.shrink());
   }
 

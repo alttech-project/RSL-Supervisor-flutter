@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
+import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
@@ -29,9 +30,12 @@ class BookingsPage extends GetView<BookingsController> {
               backgroundColor: Colors.black,
               body: SingleChildScrollView(
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
+                    //Fill the code of padding
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.w),
+                      padding:
+                          EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
                       child: NavigationTitle(
                         title: "Bookings",
                         onTap: () => controller.goBack(),
@@ -44,17 +48,21 @@ class BookingsPage extends GetView<BookingsController> {
                         children: [
                           _tabBarWidget(tabs: [
                             _tabBarTextWidget(text: "New Booking"),
-                            _tabBarTextWidget(text: "Ongoing Booking"),
-                            _tabBarTextWidget(text: "Completed Trips"),
+                            _tabBarTextWidget(text: "Upcoming Bookings"),
+                            _tabBarTextWidget(text: "Ongoing Bookings"),
                           ]),
                           SizedBox(
                             height: 5.h,
                           ),
-                          Obx(() => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                child: _tabView(
-                                    controller.selectedTabBar.value, context),
-                              )),
+                          Obx(
+                            () => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.w),
+                              child: _tabView(
+                                controller.selectedTabBar.value,
+                                context,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -68,14 +76,15 @@ class BookingsPage extends GetView<BookingsController> {
 
   TabBar _tabBarWidget({required List<Widget> tabs}) {
     return TabBar(
-        isScrollable: true,
-        onTap: (value) => controller.changeTabIndex(value),
-        controller: controller.tabController,
-        indicatorSize: TabBarIndicatorSize.label,
-        indicatorColor: AppColors.kPrimaryColor.value,
-        labelColor: AppColors.kPrimaryColor.value,
-        unselectedLabelColor: AppColors.kBackGroundColor.value,
-        tabs: tabs);
+      isScrollable: true,
+      onTap: (value) => controller.changeTabIndex(value),
+      controller: controller.tabController,
+      indicatorSize: TabBarIndicatorSize.label,
+      indicatorColor: AppColors.kPrimaryColor.value,
+      labelColor: AppColors.kPrimaryColor.value,
+      unselectedLabelColor: AppColors.kBackGroundColor.value,
+      tabs: tabs,
+    );
   }
 
   Widget _tabView(int value, context) {
@@ -83,7 +92,7 @@ class BookingsPage extends GetView<BookingsController> {
       case 0:
         return newBookingWidget(context);
       case 1:
-        return newBookingWidget(context);
+        return const OnGoingBookingsTab();
       case 2:
         return newBookingWidget(context);
     }

@@ -101,13 +101,13 @@ class DriverListScreen extends GetView<DriverListController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _rowWidget(heading: "Car Plate:", value: "${driverData.taxiNo}"),
+            _rowWidget(heading: "Car Plate", value: "${driverData.taxiNo}"),
             SizedBox(height: 4.h),
             _rowWidget(
-                heading: "Driver Name:", value: "${driverData.driverName}"),
+                heading: "Driver Name", value: "${driverData.driverName}"),
             SizedBox(height: 4.h),
             _rowWidget(
-                heading: "Driver Phone:", value: "${driverData.driverPhone}"),
+                heading: "Driver Phone", value: "${driverData.driverPhone}"),
             /*Row(children: [
               Text("Car Plate: ",
                   style: AppFontStyle.normalText(color: Colors.white54)),
@@ -144,6 +144,9 @@ class DriverListScreen extends GetView<DriverListController> {
           child: Text(heading ?? "",
               style: AppFontStyle.normalText(color: Colors.white54)),
         ),
+         Text(":",
+              style: AppFontStyle.normalText(color: Colors.white54)),
+        SizedBox(width: 8.w),
         Expanded(
             flex: 2,
             child: Text(value ?? "",

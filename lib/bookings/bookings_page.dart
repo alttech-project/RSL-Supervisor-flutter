@@ -91,9 +91,9 @@ class BookingsPage extends GetView<BookingsController> {
       onTap: (value) {
         controller.changeTabIndex(value);
         if (value == 1) {
-          tripListController.callTripListApi();
+          tripListController.callTripListOngoingApi(type: value);
         } else {
-          tripListController.callTripListOngoingApi();
+          tripListController.callTripListOngoingApi(type: value);
         }
       },
       controller: controller.tabController,

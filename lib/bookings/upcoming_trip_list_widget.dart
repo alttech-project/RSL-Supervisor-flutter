@@ -46,10 +46,10 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
             controller: controller.scrollController,
             // Use the controller here.
 
-            itemCount: controller.tripList.length,
+            itemCount: controller.tripListOngoing.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              final tripData = controller.tripList[index];
+              final tripData = controller.tripListOngoing[index];
               return Column(
                 children: [
                   InkWell(
@@ -62,7 +62,7 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
                     child: _tripHistoryListWidget(tripData),
                   ),
                   (controller.pageNationLoader.value &&
-                          controller.tripList.length - 1 == index)
+                          controller.tripListOngoing.length - 1 == index)
                       ? const AppLoader()
                       : const SizedBox.shrink()
                 ],

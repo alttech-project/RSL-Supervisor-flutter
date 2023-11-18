@@ -15,6 +15,11 @@ const Map<Environment, String> nodeUrls = {
   Environment.live: 'https://ridenodeauth.limor.us/passenger/',
 };
 
+const Map<Environment, String> newBookingUrls = {
+  Environment.demo: 'http://34.197.71.192:3009/newBooking/',
+  Environment.live: 'http://34.197.71.192:3009/newBooking/',
+};
+
 const Map<CompanyType, String> companyIds = {
   CompanyType.RSL: '0',
   CompanyType.PLIMO: '194',
@@ -27,6 +32,8 @@ class AppConfig {
   static String get webBaseUrl => baseUrls[currentEnvironment]!;
 
   static String get nodeUrl => nodeUrls[currentEnvironment]!;
+
+  static String get newBookingUrl => newBookingUrls[currentEnvironment]!;
 
   static String get companyId => companyIds[companyType]!;
 

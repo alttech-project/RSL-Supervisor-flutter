@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
+import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 
 import '../../dashboard/controllers/dashboard_controller.dart';
@@ -14,10 +16,16 @@ import '../../dashboard/service/dashboard_service.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../../widgets/custom_button.dart';
+import '../data/motor_details_data.dart';
+import '../service/booking_service.dart';
+
+double doubleWithTwoDigits(double value) =>
+    double.parse(value.toStringAsFixed(2));
 
 class BookingsController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -50,8 +58,10 @@ class BookingsController extends GetxController {
   var taxiModel = 'SEDAN'.obs;
   var taxiId = '1'.obs;
 
-  var selectedPaymentMethod = 'CASH'.obs;
-  var selectedPaymentId = '1'.obs;
+/*  var selectedPaymentMethod = 'CASH'.obs;
+  var selectedPaymentId = '1'.obs;*/
+
+  Rx<Payments> selectedPayment = paymentList[0].obs;
 
   RxBool showCustomPricing = false.obs;
   RxBool showAdditionalElements = false.obs;
@@ -65,7 +75,23 @@ class BookingsController extends GetxController {
   TimeOfDay selectedTime = TimeOfDay.now();
   DateTime dateTime = DateTime.now();
 
+  var overViewPolyLine = "".obs;
+  var approximateTime = 0.0.obs;
+  var approximateTrafficTime = 0.0.obs;
+  var approximateDistance = 0.0.obs;
+  var approximateFare = "0".obs;
+
+  int zoneFareApplied = 0;
+  num rslShare = 0;
+  num driverShare = 0;
+  num corporateShare = 0;
+  int pickupZoneId = 0;
+  int pickupZoneGroupId = 0;
+  int dropZoneId = 0;
+  int dropZoneGroupId = 0;
+
   var apiLoading = false.obs;
+  var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
 
   @override
@@ -86,8 +112,7 @@ class BookingsController extends GetxController {
   void clearAllData() {
     taxiModel.value = "SEDAN";
     taxiId.value = "1";
-    selectedPaymentMethod.value = "CASH";
-    selectedPaymentId.value = "1";
+    selectedPayment.value = paymentList[0];
     countryCode.value = "971";
     nameController.clear();
     phoneController.clear();
@@ -104,10 +129,16 @@ class BookingsController extends GetxController {
   }
 
   void clearPickUpLocation() {
+    _resetApproximateTimeDistance();
+    pickupLatitude = 0.0;
+    pickupLongitude = 0.0;
     pickupLocationController.clear();
   }
 
   void clearDropLocation() {
+    _resetApproximateTimeDistance();
+    dropLatitude = 0.0;
+    dropLongitude = 0.0;
     dropLocationController.clear();
   }
 
@@ -116,6 +147,7 @@ class BookingsController extends GetxController {
   }*/
 
   void checkNewBookingValidation() async {
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
     bool shiftStatus = await GetStorageController().getShiftStatus();
     if (!shiftStatus) {
       showSnackBar(
@@ -123,49 +155,177 @@ class BookingsController extends GetxController {
         msg: "You are not shift in.Please make shift in and try again!",
       );
     } else {
-      FocusScope.of(Get.context!).requestFocus(FocusNode());
-      if (formKey.currentState!.validate()) {
-        final name = nameController.text.trim();
-        final phone = phoneController.text.trim();
-        final email = emailController.text.trim();
-        final pickupLocation = pickupLocationController.text.trim();
-        final dropLocation = dropLocationController.text.trim();
-        final date = dateController.text.trim();
-        final price = priceController.text.trim();
-        final extraCharges = extraChargesController.text.trim();
-        final noteToDriver = noteToDriverController.text.trim();
-        final noteToAdmin = noteToAdminController.text.trim();
-        final flightNumber = flightNumberController.text.trim();
-        final refNumber = refNumberController.text.trim();
-        final remarks = remarksController.text.trim();
+      final name = nameController.text.trim();
+      final phone = phoneController.text.trim();
+      final email = emailController.text.trim();
+      final pickupLocation = pickupLocationController.text.trim();
+      final dropLocation = dropLocationController.text.trim();
+      final date = dateController.text.trim();
+      final price = priceController.text.trim();
+      final extraCharges = extraChargesController.text.trim();
+      final noteToDriver = noteToDriverController.text.trim();
+      final noteToAdmin = noteToAdminController.text.trim();
+      final flightNumber = flightNumberController.text.trim();
+      final refNumber = refNumberController.text.trim();
+      final remarks = remarksController.text.trim();
 
-        if (name.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid name!');
-        } else if (phone.isEmpty || !GetUtils.isPhoneNumber(phone)) {
-          _showSnackBar('Validation!', 'Enter a valid phone number!');
-        } else if (email.isEmpty || !GetUtils.isEmail(email)) {
-          _showSnackBar('Validation!', 'Enter a valid Email!');
-        } else if (pickupLocation.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid pickup location!');
-        } else if (dropLocation.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid drop location!');
-        } else if (date.isEmpty) {
-          _showSnackBar('Validation!', 'Kindly select date!');
-        } else if (price.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid price!');
-        } else if (extraCharges.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid extra charges!');
-        } else if (remarks.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid remarks!');
-        } else {
-          if (supervisorInfo == null) {
-            _showSnackBar('Error!', 'Invalid user login status!');
-            return;
-          }
-          apiLoading.value = true;
-          // callNewBookingApi();
-        }
+      if (name.isEmpty) {
+        _showSnackBar('Validation!', 'Enter a valid name!');
+      } else if (phone.isEmpty || !GetUtils.isPhoneNumber(phone)) {
+        _showSnackBar('Validation!', 'Enter a valid phone number!');
+      } else if (email.isEmpty || !GetUtils.isEmail(email)) {
+        _showSnackBar('Validation!', 'Enter a valid Email!');
+      } else if ((pickupLatitude == 0.0 && pickupLongitude == 0.0) ||
+          pickupLocation.isEmpty) {
+        _showSnackBar('Validation!', 'Enter a valid pickup location!');
+      } else if ((dropLatitude == 0.0 && dropLongitude == 0.0) ||
+          dropLocation.isEmpty) {
+        _showSnackBar('Validation!', 'Enter a valid drop location!');
+      } else if (date.isEmpty) {
+        _showSnackBar('Validation!', 'Kindly select date!');
+      } else if (price.isEmpty || int.parse(price) <= 0) {
+        _showSnackBar('Validation!', 'Enter a valid price!');
+      } else if (extraCharges.isEmpty || int.parse(extraCharges) <= 0) {
+        _showSnackBar('Validation!', 'Enter a valid extra charges!');
       }
+      /* else if (remarks.isEmpty) {
+        _showSnackBar('Validation!', 'Enter a valid remarks!');
+      }*/
+      else {
+        if (supervisorInfo == null) {
+          _showSnackBar('Error!', 'Invalid user login status!');
+          return;
+        }
+        callSaveBookingApi();
+      }
+    }
+  }
+
+  void callSaveBookingApi() async {
+    saveBookingApiLoading.value = true;
+    final name = nameController.text.trim();
+    final phone = phoneController.text.trim();
+    final email = emailController.text.trim();
+    final pickupLocation = pickupLocationController.text.trim();
+    final dropLocation = dropLocationController.text.trim();
+    final date = dateController.text.trim();
+    final price = priceController.text.trim();
+    final extraCharges = extraChargesController.text.trim();
+    final noteToDriver = noteToDriverController.text.trim();
+    final noteToAdmin = noteToAdminController.text.trim();
+    final flightNumber = flightNumberController.text.trim();
+    final refNumber = refNumberController.text.trim();
+    final remarks = remarksController.text.trim();
+    var corporateId = await GetStorageController().getCorporateId();
+    supervisorInfo = await GetStorageController().getSupervisorInfo();
+    var customerPrice = "0";
+    if (price.isNotEmpty) {
+      customerPrice = price;
+    }
+    saveBookingApi(SaveBookingRequest(
+      approx_distance: "${approximateDistance.value.toString()} km",
+      approx_duration: "${approximateTime.value.toString()} mins",
+      approx_trip_fare: double.parse(approximateFare.value),
+      drop_latitude: dropLatitude,
+      drop_longitude: dropLongitude,
+      dropplace: dropLocation,
+      guest_name: name,
+      guest_country_code: countryCode.value,
+      guest_phone: phone,
+      guest_email: email,
+      latitude: pickupLatitude,
+      longitude: pickupLongitude,
+      motor_model: int.parse(taxiId.value),
+      now_after: 1,
+      corporate_id: int.parse(corporateId),
+      passenger_payment_option: int.parse(selectedPayment.value.paymentId),
+      pickupplace: pickupLocation,
+      pickup_time: date,
+      note_to_driver: noteToDriver,
+      note_to_admin: noteToAdmin,
+      flight_number: flightNumber,
+      reference_number: refNumber,
+      customer_price: double.parse(customerPrice),
+      route_polyline: overViewPolyLine.value,
+      customer_rate: "",
+      extra_charge: extraCharges,
+      remarks: remarks,
+      zone_fare_applied: zoneFareApplied,
+      rsl_share: rslShare,
+      driver_share: driverShare,
+      corporate_share: corporateShare,
+      pickup_zone_id: pickupZoneId,
+      pickup_zone_group_id: pickupZoneGroupId,
+      drop_zone_id: dropZoneId,
+      drop_zone_group_id: dropZoneGroupId,
+      supervisorId: supervisorInfo?.supervisorId ?? "",
+      kioskId: supervisorInfo?.kioskId ?? "",
+      cid: supervisorInfo?.cid ?? "",
+    )).then((response) {
+      saveBookingApiLoading.value = false;
+      if ((response.status ?? 0) == 1) {
+        clearAllData();
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: response.message ?? "Something went wrong...",
+        );
+      } else {
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: response.message ?? "Something went wrong...",
+        );
+      }
+    }).onError((error, stackTrace) {
+      saveBookingApiLoading.value = false;
+      printLogs("SaveBooking api error: ${error.toString()}");
+    });
+  }
+
+  void callMotorModelApi() async {
+    if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
+      apiLoading.value = true;
+      var corporateId = await GetStorageController().getCorporateId();
+      supervisorInfo = await GetStorageController().getSupervisorInfo();
+      motorDetailsApi(MotorDetailsRequest(
+              supervisorId: supervisorInfo?.supervisorId ?? "",
+              kioskId: supervisorInfo?.kioskId ?? "",
+              corporateId: corporateId,
+              cid: supervisorInfo?.cid ?? "",
+              pickup_latitude: pickupLatitude,
+              pickup_longitude: pickupLongitude,
+              drop_latitude: dropLatitude,
+              drop_longitude: dropLongitude,
+              distance: approximateDistance.value))
+          .then((response) {
+        apiLoading.value = false;
+        if ((response.status ?? 0) == 1) {
+          var motorModelList = response.fareDetailList ?? [];
+          if (motorModelList.isNotEmpty) {
+            for (var model in motorModelList) {
+              if (taxiId.value.toString() == model.modelId.toString()) {
+                approximateFare.value = model.fare?.toString() ?? "0";
+                zoneFareApplied = model.zoneFareApplied ?? 0;
+
+                if (zoneFareApplied == 1) {
+                  rslShare = model.rslShare ?? 0;
+                  driverShare = model.driverShare ?? 0;
+                  corporateShare = model.corporateShare ?? 0;
+                  pickupZoneId = model.pickupZoneId ?? 0;
+                  pickupZoneGroupId = model.pickupZoneGroupId ?? 0;
+                  dropZoneId = model.dropZoneId ?? 0;
+                  dropZoneGroupId = model.dropZoneGroupId ?? 0;
+                  priceController.text = model.fare?.toString() ?? "";
+                }
+              }
+            }
+          }
+        }
+      }).onError((error, stackTrace) {
+        apiLoading.value = false;
+        printLogs("CarModel api error: ${error.toString()}");
+      });
     }
   }
 
@@ -194,6 +354,85 @@ class BookingsController extends GetxController {
     });
   }
 
+  void _calculateTimeAndDistance() async {
+    apiLoading.value = true;
+    googleMapApi(pickupLatitude, pickupLongitude, dropLatitude, dropLongitude)
+        .then((response) {
+      fetchOverviewPolyline(response);
+    });
+  }
+
+  void fetchOverviewPolyline(Map<String, dynamic> response) {
+    double time = 0.0, distance = 0.0, trafficTime = 0.0;
+    try {
+      apiLoading.value = false;
+      if (response['routes'] != null) {
+        final routeArray = response['routes'] as List<dynamic>;
+        if (routeArray.isNotEmpty) {
+          final routes = routeArray[0] as Map<String, dynamic>;
+
+          final overviewPolyLines =
+              routes['overview_polyline'] as Map<String, dynamic>;
+
+          final overViewPoly = overviewPolyLines['points'] as String? ?? '';
+
+          overViewPolyLine.value = overViewPoly;
+
+          final legsArray = routes['legs'] as List<dynamic>;
+          for (var i = 0; i < legsArray.length; i++) {
+            final timeObject =
+                legsArray[i]['duration'] as Map<String, dynamic>?;
+            final legTime = timeObject?['value'] as int?;
+            if (legTime != null) {
+              time += legTime;
+            }
+
+            final distanceObject =
+                legsArray[i]['distance'] as Map<String, dynamic>?;
+            final legDistance = distanceObject?['value'] as int?;
+            if (legDistance != null) {
+              distance += legDistance;
+            }
+
+            final trafficTimeObject =
+                legsArray[i]['duration_in_traffic'] as Map<String, dynamic>?;
+            final legTrafficTime = trafficTimeObject?['value'] as int?;
+            if (legTrafficTime != null) {
+              trafficTime += legTrafficTime;
+            }
+          }
+
+          approximateTime.value = doubleWithTwoDigits((time / 60));
+          approximateTrafficTime.value = doubleWithTwoDigits(trafficTime / 60);
+          approximateDistance.value = doubleWithTwoDigits(distance / 1000);
+          callMotorModelApi();
+          print(
+              "POLYLINE  Time:${approximateTime.value} Distance:${approximateDistance.value} RoutePolyline:${overViewPoly.toString()}");
+        }
+      }
+    } catch (e) {
+      printLogs(e);
+      _resetApproximateTimeDistance();
+      apiLoading.value = false;
+    }
+  }
+
+  void _resetApproximateTimeDistance() {
+    approximateTime.value = 0;
+    approximateTrafficTime.value = 0;
+    approximateDistance.value = 0;
+    overViewPolyLine.value = "";
+    approximateFare.value = "0";
+    zoneFareApplied = 0;
+    rslShare = 0;
+    driverShare = 0;
+    corporateShare = 0;
+    pickupZoneId = 0;
+    pickupZoneGroupId = 0;
+    dropZoneId = 0;
+    dropZoneGroupId = 0;
+  }
+
   void _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     if (supervisorInfo == null) {
@@ -201,15 +440,17 @@ class BookingsController extends GetxController {
     }
     callCarModelApi(supervisorInfo);
 
-    LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
-    pickupLatitude = result.data!.latitude ?? 0.0;
-    pickupLongitude = result.data!.longitude ?? 0.0;
+    if (pickupLatitude == 0.0 && pickupLongitude == 0.0) {
+      LocationResult<Position> result =
+          await locationManager.getCurrentLocation();
+      pickupLatitude = result.data!.latitude ?? 0.0;
+      pickupLongitude = result.data!.longitude ?? 0.0;
 
-    List<Placemark> locations =
-        await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
-    pickupLocationController.text =
-        "${locations[0].name},${locations[0].locality} ${locations[0].country}";
+      List<Placemark> locations =
+          await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
+      pickupLocationController.text =
+          "${locations[0].name},${locations[0].locality} ${locations[0].country}";
+    }
   }
 
   void getDate() {
@@ -228,6 +469,9 @@ class BookingsController extends GetxController {
       pickupLocationController.text = result.formattedAddress ?? '';
       pickupLatitude = result.geometry?.location?.lat ?? 0.0;
       pickupLongitude = result.geometry?.location?.lng ?? 0.0;
+      if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
+        _calculateTimeAndDistance();
+      }
     }
   }
 
@@ -240,6 +484,10 @@ class BookingsController extends GetxController {
       dropLocationController.text = result.formattedAddress ?? '';
       dropLatitude = result.geometry?.location?.lat ?? 0.0;
       dropLongitude = result.geometry?.location?.lng ?? 0.0;
+
+      if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
+        _calculateTimeAndDistance();
+      }
     }
   }
 
@@ -393,6 +641,7 @@ class BookingsController extends GetxController {
                                             cars[selectedCarIndex].name,
                                         taxiId.value =
                                             cars[selectedCarIndex].modelId,
+                                        callMotorModelApi(),
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

@@ -233,6 +233,9 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
 
+            GetStorageController()
+                .saveCorporateId(url: (response.corporateId ?? "").toString());
+
             if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());

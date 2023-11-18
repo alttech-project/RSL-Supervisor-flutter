@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
+import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
+import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
@@ -21,46 +23,48 @@ class BookingsPage extends GetView<BookingsController> {
           controller.onClose();
           return Future.value(true);
         },
-        child: SafeAreaContainer(
-          statusBarColor: Colors.black,
-          themedark: true,
-          child: Scaffold(
-              extendBodyBehindAppBar: true,
-              backgroundColor: Colors.black,
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.w),
-                      child: NavigationTitle(
-                        title: "Bookings",
-                        onTap: () => controller.goBack(),
+        child: Obx(
+          () => CommonAppContainer(
+            showLoader: controller.apiLoading.value,
+            child: Scaffold(
+                extendBodyBehindAppBar: false,
+                backgroundColor: Colors.black,
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 22.w),
+                        child: NavigationTitle(
+                          title: "Bookings",
+                          onTap: () => controller.goBack(),
+                        ),
                       ),
-                    ),
-                    DefaultTabController(
-                      length: 3,
-                      initialIndex: controller.selectedTabBar.value,
-                      child: Column(
-                        children: [
-                          _tabBarWidget(tabs: [
-                            _tabBarTextWidget(text: "New Booking"),
-                            _tabBarTextWidget(text: "Ongoing Booking"),
-                            _tabBarTextWidget(text: "Completed Trips"),
-                          ]),
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Obx(() => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                child: _tabView(
-                                    controller.selectedTabBar.value, context),
-                              )),
-                        ],
+                      DefaultTabController(
+                        length: 3,
+                        initialIndex: controller.selectedTabBar.value,
+                        child: Column(
+                          children: [
+                            _tabBarWidget(tabs: [
+                              _tabBarTextWidget(text: "New Booking"),
+                              _tabBarTextWidget(text: "Ongoing Booking"),
+                              _tabBarTextWidget(text: "Completed Trips"),
+                            ]),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Obx(() => Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.w),
+                                  child: _tabView(
+                                      controller.selectedTabBar.value, context),
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )),
+                    ],
+                  ),
+                )),
+          ),
         ),
       ),
     );
@@ -123,9 +127,9 @@ class BookingsPage extends GetView<BookingsController> {
             linearColor: primaryButtonLinearColor,
             height: 38.h,
             borderRadius: 38.h / 2,
-            isLoader: controller.apiLoading.value,
+            isLoader: controller.saveBookingApiLoading.value,
             style: AppFontStyle.body(color: Colors.white),
-            text: 'Submit',
+            text: 'Book now',
             onTap: () => controller.checkNewBookingValidation(),
           ),
         ),
@@ -300,6 +304,7 @@ class BookingsPage extends GetView<BookingsController> {
                     child: Text(
                       controller.taxiModel.value,
                       style: AppFontStyle.normalText(
+                        size: AppFontSize.verySmall.value,
                         color: Colors.white,
                       ),
                     ),
@@ -354,9 +359,9 @@ class BookingsPage extends GetView<BookingsController> {
             children: [
               Expanded(
                 child: _paymentDropDown(
-                  selectedOption: controller.selectedPaymentMethod.value,
+                  selectedOption: controller.selectedPayment.value,
                   onTap: (value) {
-                    controller.selectedPaymentMethod.value = value;
+                    controller.selectedPayment.value = value;
                   },
                 ),
               ),
@@ -414,10 +419,10 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _paymentDropDown(
-      {required String? selectedOption,
-      required Function(String value) onTap}) {
+      {required Payments? selectedOption,
+      required Function(Payments value) onTap}) {
     return SizedBox(
-      child: DropdownButton<String>(
+      child: DropdownButton<Payments>(
         value: selectedOption,
         isExpanded: true,
         underline: Container(
@@ -436,11 +441,10 @@ class BookingsPage extends GetView<BookingsController> {
         iconEnabledColor: AppColors.kPrimaryColor.value,
         alignment: Alignment.center,
         onChanged: (newValue) {
-          onTap(newValue ?? "");
+          onTap(newValue!);
         },
-        items: <String>['CASH', 'BILL', 'COMPLIMENTARY']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
+        items: paymentList.map<DropdownMenuItem<Payments>>((Payments value) {
+          return DropdownMenuItem<Payments>(
             onTap: () {
               onTap(value);
             },
@@ -448,10 +452,10 @@ class BookingsPage extends GetView<BookingsController> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 0.w),
               child: Text(
-                value,
+                value.name.toString(),
                 style: GoogleFonts.outfit(
                   textStyle: TextStyle(
-                      fontSize: AppFontSize.normal.value,
+                      fontSize: AppFontSize.verySmall.value,
                       fontWeight: AppFontWeight.normal.value,
                       color: Colors.white),
                 ),
@@ -721,42 +725,50 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _labelCustomPricing() {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: () => {
-              if (controller.showCustomPricing.value)
-                controller.showCustomPricing.value = false
-              else
-                controller.showCustomPricing.value = true
-            },
-            child: Text(
-              'Custom Pricing',
-              style: AppFontStyle.subHeading(
-                size: AppFontSize.medium.value,
-                color: AppColors.kPrimaryColor.value,
-              ),
-              textAlign: TextAlign.start,
-            ),
-          ),
-        ),
-        Obx(() => InkWell(
+    return InkWell(
+      onTap: () => {
+        if (controller.showCustomPricing.value)
+          controller.showCustomPricing.value = false
+        else
+          controller.showCustomPricing.value = true
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
               onTap: () => {
                 if (controller.showCustomPricing.value)
                   controller.showCustomPricing.value = false
                 else
                   controller.showCustomPricing.value = true
               },
-              child: Icon(
-                controller.showCustomPricing.value
-                    ? Icons.arrow_drop_up_sharp
-                    : Icons.arrow_drop_down_sharp,
-                size: 20.r,
-                color: AppColors.kPrimaryColor.value,
+              child: Text(
+                'Custom Pricing',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.medium.value,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+                textAlign: TextAlign.start,
               ),
-            ))
-      ],
+            ),
+          ),
+          Obx(() => InkWell(
+                onTap: () => {
+                  if (controller.showCustomPricing.value)
+                    controller.showCustomPricing.value = false
+                  else
+                    controller.showCustomPricing.value = true
+                },
+                child: Icon(
+                  controller.showCustomPricing.value
+                      ? Icons.arrow_drop_up_sharp
+                      : Icons.arrow_drop_down_sharp,
+                  size: 20.r,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+              ))
+        ],
+      ),
     );
   }
 
@@ -814,44 +826,52 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _labelAdditionalElements() {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: () => {
-              if (controller.showAdditionalElements.value)
-                controller.showAdditionalElements.value = false
-              else
-                controller.showAdditionalElements.value = true
-            },
-            child: Text(
-              'Additional Elements',
-              style: AppFontStyle.subHeading(
-                size: AppFontSize.medium.value,
+    return InkWell(
+      onTap: () => {
+        if (controller.showAdditionalElements.value)
+          controller.showAdditionalElements.value = false
+        else
+          controller.showAdditionalElements.value = true
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () => {
+                if (controller.showAdditionalElements.value)
+                  controller.showAdditionalElements.value = false
+                else
+                  controller.showAdditionalElements.value = true
+              },
+              child: Text(
+                'Additional Elements',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.medium.value,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ),
+          Obx(
+            () => InkWell(
+              onTap: () => {
+                if (controller.showAdditionalElements.value)
+                  controller.showAdditionalElements.value = false
+                else
+                  controller.showAdditionalElements.value = true
+              },
+              child: Icon(
+                controller.showAdditionalElements.value
+                    ? Icons.arrow_drop_up_sharp
+                    : Icons.arrow_drop_down_sharp,
+                size: 20.r,
                 color: AppColors.kPrimaryColor.value,
               ),
-              textAlign: TextAlign.start,
             ),
           ),
-        ),
-        Obx(
-          () => InkWell(
-            onTap: () => {
-              if (controller.showAdditionalElements.value)
-                controller.showAdditionalElements.value = false
-              else
-                controller.showAdditionalElements.value = true
-            },
-            child: Icon(
-              controller.showAdditionalElements.value
-                  ? Icons.arrow_drop_up_sharp
-                  : Icons.arrow_drop_down_sharp,
-              size: 20.r,
-              color: AppColors.kPrimaryColor.value,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -911,8 +931,8 @@ class BookingsPage extends GetView<BookingsController> {
     final selected = await showDatePicker(
       context: context,
       initialDate: controller.selectedDate,
-      firstDate: controller.dateTime.subtract(const Duration(days: 62)),
-      lastDate: controller.dateTime,
+      firstDate: controller.dateTime.subtract(const Duration(days: 0)),
+      lastDate: controller.dateTime.add(const Duration(days: 62)),
     );
     if (selected != null && selected != controller.selectedDate) {
       controller.selectedDate = selected;

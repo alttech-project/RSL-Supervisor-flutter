@@ -70,7 +70,7 @@ class MyTripListController extends GetxController {
     _timer = Timer.periodic(
       timerDuration,
       (Timer timer) {
-        callTripListApi();
+        callTripListOngoingApi(isTimer: true, type: 1);
       },
     );
   }
@@ -89,7 +89,7 @@ class MyTripListController extends GetxController {
     _timerOngoing = Timer.periodic(
       timerDuration,
       (Timer timer) {
-        callTripListApi();
+        callTripListOngoingApi(isTimer: true, type: 2);
       },
     );
   }
@@ -165,16 +165,15 @@ class MyTripListController extends GetxController {
     // showLoader.value = true;
     tripListApi(
       MyTripsRequestData(
-        driverName: carNoController.text,
-        tripId: tripIdController.text,
-        from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
-        to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-        locationId: supervisorInfo.kioskId.toString(),
-        supervisorId: supervisorInfo.supervisorId,
-        limit: limit.value,
-        start: currentPage.value,
-        type: 0
-      ),
+          driverName: carNoController.text,
+          tripId: tripIdController.text,
+          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
+          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
+          locationId: supervisorInfo.kioskId.toString(),
+          supervisorId: supervisorInfo.supervisorId,
+          limit: limit.value,
+          start: currentPage.value,
+          type: 0),
     ).then((response) {
       switch (pageNation) {
         case false:
@@ -218,16 +217,25 @@ class MyTripListController extends GetxController {
     );
   }
 
-  void callTripListOngoingApi({bool pageNation = false,int? type}) async {
+  void callTripListOngoingApi(
+      {bool isTimer = false, bool pageNation = false, int? type}) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     switch (pageNation) {
       case false:
-        showLoader.value = true;
+        if (isTimer) {
+          showLoader.value = false;
+        } else {
+          showLoader.value = true;
+        }
         pageNationLoader.value = false;
         currentPage.value = 1;
         break;
       case true:
-        pageNationLoader.value = true;
+        if (isTimer) {
+          pageNationLoader.value = false;
+        } else {
+          pageNationLoader.value = true;
+        }
         showLoader.value = false;
         break;
       default:
@@ -243,8 +251,7 @@ class MyTripListController extends GetxController {
           supervisorId: supervisorInfo.supervisorId,
           limit: limit.value,
           start: currentPage.value,
-          type: type
-      ),
+          type: type),
     ).then((response) {
       switch (pageNation) {
         case false:

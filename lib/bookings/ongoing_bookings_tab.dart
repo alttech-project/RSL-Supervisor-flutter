@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rsl_supervisor/bookings/upcoming_trip_list_widget.dart';
+import 'package:rsl_supervisor/shared/styles/app_color.dart';
+import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
 import '../my_trip/controller/my_trip_list_controller.dart';
-import '../shared/styles/app_color.dart';
-import '../shared/styles/app_font.dart';
 import '../widgets/app_loader.dart';
+import 'ongoing_trip_list_widget.dart';
 
-class UpcomingBookingsTab extends GetView<MyTripListController> {
-  const UpcomingBookingsTab({super.key});
+class OnGoingBookingsTab extends GetView<MyTripListController> {
+  const OnGoingBookingsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class UpcomingBookingsTab extends GetView<MyTripListController> {
                     child: AppLoader(),
                   ),
                 )
-              : (controller.tripList.isNotEmpty)
-                  ? const UpcomingTripListWidget()
+              : (controller.tripListOngoing.isNotEmpty)
+                  ? const OngoingTripListWidget()
                   : SizedBox(
                       height: 400.h,
                       child: Center(

@@ -23,6 +23,7 @@ import 'dart:ui' as ui;
 class MyTripListController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
   RxList<ListTripDetails> tripList = <ListTripDetails>[].obs;
+  RxList<ListTripDetails> tripListOngoing = <ListTripDetails>[].obs;
   RxList<ListTripDetails> existingDataList = <ListTripDetails>[].obs;
 
   RxBool showLoader = false.obs;
@@ -47,6 +48,7 @@ class MyTripListController extends GetxController {
   RxInt currentPage = 1.obs;
   RxInt limit = 10.obs;
   RxInt totalCount = 10.obs;
+  RxInt totalCountOngoing = 10.obs;
   RxBool pageNationLoader = false.obs;
 
 
@@ -86,7 +88,7 @@ class MyTripListController extends GetxController {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     fromDate.value = DateTime.now().subtract(const Duration(days: 1));
     toDate.value = DateTime.now();
-    callTripListApi();
+    //callTripListApi();
   }
 
   void goBack() {
@@ -128,6 +130,7 @@ class MyTripListController extends GetxController {
         supervisorId: supervisorInfo.supervisorId,
         limit: limit.value,
         start: currentPage.value,
+        type: 1
       ),
     ).then((response) {
       switch (pageNation) {
@@ -149,7 +152,7 @@ class MyTripListController extends GetxController {
           break;
         case true:
           if (response.status == 1) {
-            tripList?.addAll(response.details?.tripDetails ?? []);
+            tripList.addAll(response.details?.tripDetails ?? []);
             tripList.refresh();
             showLoader.value = false;
           }
@@ -164,6 +167,76 @@ class MyTripListController extends GetxController {
         dispatchedTrips.value = 0;
         cancelledTrips.value = 0;
         tripList.refresh();
+        showSnackBar(
+          title: 'Error',
+          msg: error.toString(),
+        );
+      },
+    );
+  }
+
+  void callTripListOngoingApi({bool pageNation = false}) async {
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
+    switch (pageNation) {
+      case false:
+        showLoader.value = true;
+        pageNationLoader.value = false;
+        currentPage.value = 1;
+        break;
+      case true:
+        pageNationLoader.value = true;
+        showLoader.value = false;
+        break;
+      default:
+    }
+    // showLoader.value = true;
+    tripListApi(
+      MyTripsRequestData(
+          driverName: carNoController.text,
+          tripId: tripIdController.text,
+          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
+          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
+          locationId: supervisorInfo.kioskId.toString(),
+          supervisorId: supervisorInfo.supervisorId,
+          limit: limit.value,
+          start: currentPage.value,
+          type: 2
+      ),
+    ).then((response) {
+      switch (pageNation) {
+        case false:
+          pageNationLoader.value = false;
+          if ((response.status ?? 0) == 1) {
+            tripListOngoing.value = response.details?.tripDetails ?? [];
+            totalCountOngoing.value = response.details!.totalCount ?? 0;
+            showLoader.value = false;
+            tripListOngoing.refresh();
+            print("DEEPAK tripList ${tripList.length}");
+          } else {
+            tripListOngoing.value = [];
+            dispatchedTrips.value = 0;
+            cancelledTrips.value = 0;
+            showLoader.value = false;
+            pageNationLoader.value = false;
+          }
+          break;
+        case true:
+          if (response.status == 1) {
+            tripListOngoing.addAll(response.details?.tripDetails ?? []);
+            tripListOngoing.refresh();
+            showLoader.value = false;
+          }
+          break;
+      }
+    }).onError(
+          (error, stackTrace) {
+        printLogs("$error");
+        showLoader.value = false;
+        pageNationLoader.value = false;
+        tripListOngoing.value = [];
+        dispatchedTrips.value = 0;
+        cancelledTrips.value = 0;
+        tripListOngoing.refresh();
         showSnackBar(
           title: 'Error',
           msg: error.toString(),

@@ -1,21 +1,17 @@
-import 'package:get/get.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
-import 'package:rsl_supervisor/my_trip/controller/my_trip_list_map_controller.dart';
 import 'package:rsl_supervisor/my_trip/data/my_trip_list_data.dart';
+import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
-import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 
-import '../../routes/app_routes.dart';
+import '../my_trip/controller/my_trip_list_map_controller.dart';
 
-class UpcomingTripListWidget extends GetView<MyTripListController> {
-  const UpcomingTripListWidget({super.key});
+class OngoingTripListWidget extends GetView<MyTripListController> {
+  const OngoingTripListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +42,10 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
             controller: controller.scrollController,
             // Use the controller here.
 
-            itemCount: controller.tripList.length,
+            itemCount: controller.tripListOngoing.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              final tripData = controller.tripList[index];
+              final tripData = controller.tripListOngoing[index];
               return Column(
                 children: [
                   InkWell(
@@ -62,7 +58,7 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
                     child: _tripHistoryListWidget(tripData),
                   ),
                   (controller.pageNationLoader.value &&
-                          controller.tripList.length - 1 == index)
+                          controller.tripListOngoing.length - 1 == index)
                       ? const AppLoader()
                       : const SizedBox.shrink()
                 ],
@@ -111,7 +107,7 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
                 () => Container(
                   padding: const EdgeInsets.only(left: 4),
                   child: Text(
-                    "${controller.tripListOngoing.length}",
+                    "${controller.tripList.length}",
                     style:
                         AppFontStyle.body(color: AppColors.kPrimaryColor.value),
                   ),
@@ -418,8 +414,8 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
                         SizedBox(height: 3.h),
                         Flexible(
                           child: Text(
-                            overflow: TextOverflow.ellipsis,
                             maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             details.dropLocation ?? "",
                             style: TextStyle(
                               color: Colors.white,
@@ -591,7 +587,7 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
               style: TextStyle(
                 fontSize: AppFontSize.verySmall.value,
                 fontWeight: AppFontWeight.normal.value,
-                color: details.travelStatus == 0 ? Colors.black : Colors.white,
+                color: Colors.white,
               ),
             ),
           ),
@@ -613,7 +609,7 @@ class UpcomingTripListWidget extends GetView<MyTripListController> {
       case "9":
         return const Color(0xFFAD72FC);
       case "0":
-        return Colors.yellowAccent;
+        return const Color(0xFFFCFA72);
       default:
         return AppColors.kRedColor.value;
     }

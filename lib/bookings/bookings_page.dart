@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
+import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
+import '../my_trip/controller/my_trip_list_controller.dart';
 import '../widgets/navigation_title.dart';
 
 class BookingsPage extends GetView<BookingsController> {
@@ -35,7 +37,7 @@ class BookingsPage extends GetView<BookingsController> {
                     //Fill the code of padding
                     Padding(
                       padding:
-                          EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
+                      EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
                       child: NavigationTitle(
                         title: "Bookings",
                         onTap: () => controller.goBack(),
@@ -55,13 +57,15 @@ class BookingsPage extends GetView<BookingsController> {
                             height: 5.h,
                           ),
                           Obx(
-                            () => Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15.w),
-                              child: _tabView(
-                                controller.selectedTabBar.value,
-                                context,
-                              ),
-                            ),
+                                () =>
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.w),
+                                  child: _tabView(
+                                    controller.selectedTabBar.value,
+                                    context,
+                                  ),
+                                ),
                           ),
                         ],
                       ),
@@ -75,9 +79,17 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   TabBar _tabBarWidget({required List<Widget> tabs}) {
+    final tripListController = Get.find<MyTripListController>();
     return TabBar(
       isScrollable: true,
-      onTap: (value) => controller.changeTabIndex(value),
+      onTap: (value) {
+        controller.changeTabIndex(value);
+        if(value == 1){
+          tripListController.callTripListApi();
+        }else{
+          tripListController.callTripListOngoingApi();
+        }
+      },
       controller: controller.tabController,
       indicatorSize: TabBarIndicatorSize.label,
       indicatorColor: AppColors.kPrimaryColor.value,
@@ -92,14 +104,15 @@ class BookingsPage extends GetView<BookingsController> {
       case 0:
         return newBookingWidget(context);
       case 1:
-        return const OnGoingBookingsTab();
+        return const UpcomingBookingsTab();
       case 2:
-        return newBookingWidget(context);
+        return const OnGoingBookingsTab();
     }
     return const SizedBox.shrink();
   }
 
-  _tabBarTextWidget({String? text}) => Padding(
+  _tabBarTextWidget({String? text}) =>
+      Padding(
         padding: EdgeInsets.symmetric(vertical: 4.h),
         child: Row(
           children: [
@@ -127,16 +140,17 @@ class BookingsPage extends GetView<BookingsController> {
         _additionalElementsInfo(context),
         SizedBox(height: 24.h),
         Obx(
-          () => CustomButton(
-            width: double.maxFinite,
-            linearColor: primaryButtonLinearColor,
-            height: 38.h,
-            borderRadius: 38.h / 2,
-            isLoader: controller.apiLoading.value,
-            style: AppFontStyle.body(color: Colors.white),
-            text: 'Submit',
-            onTap: () => controller.checkNewBookingValidation(),
-          ),
+              () =>
+              CustomButton(
+                width: double.maxFinite,
+                linearColor: primaryButtonLinearColor,
+                height: 38.h,
+                borderRadius: 38.h / 2,
+                isLoader: controller.apiLoading.value,
+                style: AppFontStyle.body(color: Colors.white),
+                text: 'Submit',
+                onTap: () => controller.checkNewBookingValidation(),
+              ),
         ),
         SizedBox(height: 20.h),
       ],
@@ -422,9 +436,8 @@ class BookingsPage extends GetView<BookingsController> {
     );
   }
 
-  Widget _paymentDropDown(
-      {required String? selectedOption,
-      required Function(String value) onTap}) {
+  Widget _paymentDropDown({required String? selectedOption,
+    required Function(String value) onTap}) {
     return SizedBox(
       child: DropdownButton<String>(
         value: selectedOption,
@@ -474,16 +487,16 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
-      required TextEditingController txtEditingController,
-      TextInputType keyboardType = TextInputType.text,
-      TextInputAction textInputAction = TextInputAction.next,
-      FormFieldValidator? validator,
-      bool readOnly = false,
-      GestureTapCallback? onTap,
-      Function(String)? onChanged,
-      Color? borderColor,
-      Color? focusColor,
-      TextStyle? textStyle}) {
+        required TextEditingController txtEditingController,
+        TextInputType keyboardType = TextInputType.text,
+        TextInputAction textInputAction = TextInputAction.next,
+        FormFieldValidator? validator,
+        bool readOnly = false,
+        GestureTapCallback? onTap,
+        Function(String)? onChanged,
+        Color? borderColor,
+        Color? focusColor,
+        TextStyle? textStyle}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -681,8 +694,8 @@ class BookingsPage extends GetView<BookingsController> {
         'Enter Reference Number (Optional)',
         txtEditingController: controller.refNumberController,
         keyboardType: TextInputType.number, validator: (value) {
-      return null;
-    });
+          return null;
+        });
   }
 
   Widget _remarksLabel() {
@@ -734,7 +747,8 @@ class BookingsPage extends GetView<BookingsController> {
       children: [
         Expanded(
           child: InkWell(
-            onTap: () => {
+            onTap: () =>
+            {
               if (controller.showCustomPricing.value)
                 controller.showCustomPricing.value = false
               else
@@ -750,8 +764,10 @@ class BookingsPage extends GetView<BookingsController> {
             ),
           ),
         ),
-        Obx(() => InkWell(
-              onTap: () => {
+        Obx(() =>
+            InkWell(
+              onTap: () =>
+              {
                 if (controller.showCustomPricing.value)
                   controller.showCustomPricing.value = false
                 else
@@ -770,55 +786,56 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _layoutCustomPricing() {
-    return Obx(() => controller.showCustomPricing.value
+    return Obx(() =>
+    controller.showCustomPricing.value
         ? Column(
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Card(
-                    elevation: 8,
-                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      ),
+      children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: Card(
+                  elevation: 8,
+                  margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      12,
                     ),
-                    color: AppColors.kSecondaryBackGroundColor.value,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5,
-                        ), // Adjust left and right padding
-                        child: Expanded(child: _priceWidget())),
-                  )),
-                  const SizedBox(
-                    width: 20,
                   ),
-                  Expanded(
-                      child: Card(
-                    elevation: 8,
-                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      ),
+                  color: AppColors.kSecondaryBackGroundColor.value,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 5,
+                      ), // Adjust left and right padding
+                      child: Expanded(child: _priceWidget())),
+                )),
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+                child: Card(
+                  elevation: 8,
+                  margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      12,
                     ),
-                    color: AppColors.kSecondaryBackGroundColor.value,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5,
-                        ), // Adjust left and right padding
-                        child: Expanded(child: _extraChargesWidget())),
-                  )),
-                ],
-              )
-            ],
-          )
+                  ),
+                  color: AppColors.kSecondaryBackGroundColor.value,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 5,
+                      ), // Adjust left and right padding
+                      child: Expanded(child: _extraChargesWidget())),
+                )),
+          ],
+        )
+      ],
+    )
         : const SizedBox.shrink());
   }
 
@@ -827,7 +844,8 @@ class BookingsPage extends GetView<BookingsController> {
       children: [
         Expanded(
           child: InkWell(
-            onTap: () => {
+            onTap: () =>
+            {
               if (controller.showAdditionalElements.value)
                 controller.showAdditionalElements.value = false
               else
@@ -844,44 +862,47 @@ class BookingsPage extends GetView<BookingsController> {
           ),
         ),
         Obx(
-          () => InkWell(
-            onTap: () => {
-              if (controller.showAdditionalElements.value)
-                controller.showAdditionalElements.value = false
-              else
-                controller.showAdditionalElements.value = true
-            },
-            child: Icon(
-              controller.showAdditionalElements.value
-                  ? Icons.arrow_drop_up_sharp
-                  : Icons.arrow_drop_down_sharp,
-              size: 20.r,
-              color: AppColors.kPrimaryColor.value,
-            ),
-          ),
+              () =>
+              InkWell(
+                onTap: () =>
+                {
+                  if (controller.showAdditionalElements.value)
+                    controller.showAdditionalElements.value = false
+                  else
+                    controller.showAdditionalElements.value = true
+                },
+                child: Icon(
+                  controller.showAdditionalElements.value
+                      ? Icons.arrow_drop_up_sharp
+                      : Icons.arrow_drop_down_sharp,
+                  size: 20.r,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+              ),
         ),
       ],
     );
   }
 
   Widget _layoutAdditionalElements() {
-    return Obx(() => controller.showAdditionalElements.value
+    return Obx(() =>
+    controller.showAdditionalElements.value
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              _noteToDriverWidget(),
-              _noteToAdminWidget(),
-              _flightNumberWidget(),
-              _refNumberWidget(),
-              SizedBox(height: 10.h),
-              _remarksLabel(),
-              SizedBox(height: 7.h),
-              _remarksCardView(),
-            ],
-          )
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        _noteToDriverWidget(),
+        _noteToAdminWidget(),
+        _flightNumberWidget(),
+        _refNumberWidget(),
+        SizedBox(height: 10.h),
+        _remarksLabel(),
+        SizedBox(height: 7.h),
+        _remarksCardView(),
+      ],
+    )
         : const SizedBox.shrink());
   }
 

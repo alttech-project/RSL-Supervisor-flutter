@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'dart:convert';
 
 class MyTripsRequestData {
@@ -14,16 +9,18 @@ class MyTripsRequestData {
   String? from;
   String? to;
   String? tripId;
+  int? type;
 
   MyTripsRequestData(
       {this.locationId,
-        this.supervisorId,
-        this.start,
-        this.limit,
-        this.driverName,
-        this.from,
-        this.to,
-        this.tripId});
+      this.supervisorId,
+      this.start,
+      this.limit,
+      this.driverName,
+      this.from,
+      this.to,
+      this.tripId,
+      this.type});
 
   MyTripsRequestData.fromJson(Map<String, dynamic> json) {
     locationId = json['location_id'];
@@ -34,6 +31,7 @@ class MyTripsRequestData {
     from = json['from'];
     to = json['to'];
     tripId = json['trip_id'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,10 +44,10 @@ class MyTripsRequestData {
     data['from'] = from;
     data['to'] = to;
     data['trip_id'] = tripId;
+    data['type'] = type;
     return data;
   }
 }
-
 
 class MyTripsResponseData {
   String? message;
@@ -62,7 +60,7 @@ class MyTripsResponseData {
   MyTripsResponseData.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     details =
-    json['details'] != null ? Details.fromJson(json['details']) : null;
+        json['details'] != null ? Details.fromJson(json['details']) : null;
     status = json['status'];
     authKey = json['auth_key'];
   }
@@ -158,54 +156,54 @@ class ListTripDetails {
 
   ListTripDetails(
       {this.iId,
-        this.tripId,
-        this.driverId,
-        this.waitingtime,
-        this.driverName,
-        this.driverRslNo,
-        this.taxiId,
-        this.taxiNo,
-        this.taxiModelid,
-        this.distance,
-        this.distanceUnit,
-        this.tripMinutes,
-        this.modelName,
-        this.pickupLocation,
-        this.dropLocation,
-        this.pickupTime,
-        this.createdate,
-        this.dropTime,
-        this.tripFare,
-        this.waitingCost,
-        this.tollAmount,
-        this.kioskAddress,
-        this.kioskName,
-        this.paymentType,
-        this.quickOffline,
-        this.kioskFareType,
-        this.zoneFareApplied,
-        this.roomNo,
-        this.hourlyFareDuration,
-        this.travelStatus,
-        this.paymentId,
-        this.flightNumber,
-        this.referenceNumber,
-        this.passengerName,
-        this.noShow,
-        this.paymentText,
-        this.completeTripMap,
-        this.tripType,
-        this.actingSupervisorId,
-        this.actingSupervisorName,
-        this.supervisorTripMessage,
-        this.supervisorCancelMessage,
-        this.supervisorUniqueId,
-        this.supervisorDisplayName,
-        this.trackUrl,
-        this.cancelledTrips,
-        this.dispatchedTrips,
-        this.driverReply,
-        this.travelStatusMessage});
+      this.tripId,
+      this.driverId,
+      this.waitingtime,
+      this.driverName,
+      this.driverRslNo,
+      this.taxiId,
+      this.taxiNo,
+      this.taxiModelid,
+      this.distance,
+      this.distanceUnit,
+      this.tripMinutes,
+      this.modelName,
+      this.pickupLocation,
+      this.dropLocation,
+      this.pickupTime,
+      this.createdate,
+      this.dropTime,
+      this.tripFare,
+      this.waitingCost,
+      this.tollAmount,
+      this.kioskAddress,
+      this.kioskName,
+      this.paymentType,
+      this.quickOffline,
+      this.kioskFareType,
+      this.zoneFareApplied,
+      this.roomNo,
+      this.hourlyFareDuration,
+      this.travelStatus,
+      this.paymentId,
+      this.flightNumber,
+      this.referenceNumber,
+      this.passengerName,
+      this.noShow,
+      this.paymentText,
+      this.completeTripMap,
+      this.tripType,
+      this.actingSupervisorId,
+      this.actingSupervisorName,
+      this.supervisorTripMessage,
+      this.supervisorCancelMessage,
+      this.supervisorUniqueId,
+      this.supervisorDisplayName,
+      this.trackUrl,
+      this.cancelledTrips,
+      this.dispatchedTrips,
+      this.driverReply,
+      this.travelStatusMessage});
 
   ListTripDetails.fromJson(Map<String, dynamic> json) {
     iId = '${json['_id']}';
@@ -217,7 +215,7 @@ class ListTripDetails {
     driverRslNo = json['driver_rsl_no'].toString();
     taxiId = '${json['taxi_id']}';
     taxiNo = json['taxi_no'].toString();
-    taxiModelid= '${json['taxi_modelid']}';
+    taxiModelid = '${json['taxi_modelid']}';
     distance = json['distance'].toString();
     distanceUnit = json['distance_unit'].toString();
     tripMinutes = json['trip_minutes'].toString();
@@ -247,19 +245,18 @@ class ListTripDetails {
     paymentText = json['payment_text'].toString();
     completeTripMap = json['complete_trip_map'].toString();
     tripType = json['trip_type'].toString();
-    actingSupervisorId ='${json['acting_supervisor_id']}';
-        actingSupervisorName = json['acting_supervisor_name'].toString();
+    actingSupervisorId = '${json['acting_supervisor_id']}';
+    actingSupervisorName = json['acting_supervisor_name'].toString();
     supervisorTripMessage = json['supervisor_trip_message'].toString();
     supervisorCancelMessage = json['supervisor_cancel_message'].toString();
     supervisorUniqueId = json['supervisor_unique_id'].toString();
     supervisorDisplayName = json['supervisor_display_name'].toString();
     trackUrl = json['track_url'].toString();
     cancelledTrips = '${json['cancelled_trips']}';
-    dispatchedTrips= '${json['dispatched_trips']}';
+    dispatchedTrips = '${json['dispatched_trips']}';
     driverReply = '${json['driver_reply']}';
     travelStatusMessage = json['travel_status_message'].toString();
   }
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -315,8 +312,6 @@ class ListTripDetails {
     return data;
   }
 }
-
-
 
 String tripListRequestToJson(MyTripsRequestData data) {
   final dyn = data.toJson();

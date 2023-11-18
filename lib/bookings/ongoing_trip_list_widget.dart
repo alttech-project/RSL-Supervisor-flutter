@@ -107,7 +107,7 @@ class OngoingTripListWidget extends GetView<MyTripListController> {
                 () => Container(
                   padding: const EdgeInsets.only(left: 4),
                   child: Text(
-                    "${controller.tripList.length}",
+                    "${controller.tripListOngoing.length}",
                     style:
                         AppFontStyle.body(color: AppColors.kPrimaryColor.value),
                   ),

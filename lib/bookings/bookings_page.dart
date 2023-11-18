@@ -92,10 +92,10 @@ class BookingsPage extends GetView<BookingsController> {
         controller.changeTabIndex(value);
         if (value == 1) {
           tripListController.startTripListTimer();
-          tripListController.callTripListApi();
+          tripListController.callTripListOngoingApi(type: value);
         } else {
           tripListController.startTripListOngoingTimer();
-          tripListController.callTripListOngoingApi();
+          tripListController.callTripListOngoingApi(type: value);
         }
       },
       controller: controller.tabController,

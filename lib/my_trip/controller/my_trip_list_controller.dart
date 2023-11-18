@@ -131,7 +131,7 @@ class MyTripListController extends GetxController {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     fromDate.value = DateTime.now().subtract(const Duration(days: 1));
     toDate.value = DateTime.now();
-    //callTripListApi();
+    callTripListApi();
   }
 
   void goBack() {
@@ -165,15 +165,16 @@ class MyTripListController extends GetxController {
     // showLoader.value = true;
     tripListApi(
       MyTripsRequestData(
-          driverName: carNoController.text,
-          tripId: tripIdController.text,
-          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
-          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-          locationId: supervisorInfo.kioskId.toString(),
-          supervisorId: supervisorInfo.supervisorId,
-          limit: limit.value,
-          start: currentPage.value,
-          type: 1),
+        driverName: carNoController.text,
+        tripId: tripIdController.text,
+        from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
+        to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
+        locationId: supervisorInfo.kioskId.toString(),
+        supervisorId: supervisorInfo.supervisorId,
+        limit: limit.value,
+        start: currentPage.value,
+        type: 0
+      ),
     ).then((response) {
       switch (pageNation) {
         case false:
@@ -217,7 +218,7 @@ class MyTripListController extends GetxController {
     );
   }
 
-  void callTripListOngoingApi({bool pageNation = false}) async {
+  void callTripListOngoingApi({bool pageNation = false,int? type}) async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     switch (pageNation) {
       case false:
@@ -242,7 +243,8 @@ class MyTripListController extends GetxController {
           supervisorId: supervisorInfo.supervisorId,
           limit: limit.value,
           start: currentPage.value,
-          type: 2),
+          type: type
+      ),
     ).then((response) {
       switch (pageNation) {
         case false:

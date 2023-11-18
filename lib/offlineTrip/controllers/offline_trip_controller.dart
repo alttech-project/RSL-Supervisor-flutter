@@ -26,6 +26,7 @@ class OfflineTripController extends GetxController {
   final TextEditingController searchCarController = TextEditingController();
   final TextEditingController referenceNumberController =
       TextEditingController();
+  final TextEditingController remarksController = TextEditingController();
 
   var taxiModel = ''.obs;
   var taxiId = ''.obs;
@@ -100,6 +101,7 @@ class OfflineTripController extends GetxController {
         final email = emailController.text.trim();
         final date = dateController.text.trim();
         final referenceNumber = referenceNumberController.text.trim();
+        final remarks = remarksController.text.trim();
 
         //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
         if (taxiNo.isEmpty) {
@@ -110,6 +112,8 @@ class OfflineTripController extends GetxController {
           _showSnackBar('Validation!', 'Enter a valid phone number!');
         } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
           _showSnackBar('Validation!', 'Enter a valid Email!');
+        } else if (remarks.isEmpty) {
+          _showSnackBar('Validation!', 'Enter a valid remarks!');
         } else {
           if (supervisorInfo == null) {
             _showSnackBar('Error!', 'Invalid user login status!');
@@ -134,7 +138,8 @@ class OfflineTripController extends GetxController {
                 mobileNo: phone,
                 email: email,
                 pickupDateTime: date,
-                referenceNumber: referenceNumber),
+                referenceNumber: referenceNumber,
+                remarks: remarks),
           ).then((response) {
             apiLoading.value = false;
             _handleOfflineTripResponse(response);
@@ -210,6 +215,7 @@ class OfflineTripController extends GetxController {
         taxiNoController.text = "";
         fareController.text = "";
         referenceNumberController.text = "";
+        remarksController.text = "";
         nameController.text = "";
         phoneController.text = "";
         emailController.text = "";

@@ -17,6 +17,7 @@ class DispatchOfflineTripRequestData {
   String? email;
   String? pickupDateTime;
   String? referenceNumber;
+  String? remarks;
 
   DispatchOfflineTripRequestData(
       {this.dropLatitude,
@@ -34,7 +35,8 @@ class DispatchOfflineTripRequestData {
       this.mobileNo,
       this.email,
       this.pickupDateTime,
-      this.referenceNumber});
+      this.referenceNumber,
+      this.remarks});
 
   DispatchOfflineTripRequestData.fromJson(Map<String, dynamic> json) {
     dropLatitude = json['drop_latitude'];
@@ -53,6 +55,7 @@ class DispatchOfflineTripRequestData {
     email = json['email'];
     pickupDateTime = json['pickup_date_time'];
     referenceNumber = json['reference_number'];
+    remarks = json['remarks'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +76,8 @@ class DispatchOfflineTripRequestData {
     data['email'] = email;
     data['pickup_date_time'] = pickupDateTime;
     data['reference_number'] = referenceNumber;
+    data['remarks'] = remarks;
+
     return data;
   }
 }

@@ -347,3 +347,68 @@ class BoxTextFieldTransparent extends StatelessWidget {
     );
   }
 }
+
+class RemarksTextFieldTransparent extends StatelessWidget {
+  const RemarksTextFieldTransparent({
+    this.hintText,
+    this.keyboardType,
+    this.textController,
+    this.decoration,
+    this.enable = false,
+    this.autocorrect,
+    super.key,
+    this.suffix,
+    this.style,
+    this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
+    this.autofocus = false,
+    this.contentPadding,
+    this.textInputAction = TextInputAction.done,
+  });
+
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController? textController;
+  final InputDecoration? decoration;
+  final bool? enable;
+  final bool? autocorrect;
+  final TextStyle? style;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final Widget? suffix;
+  final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
+  final EdgeInsetsGeometry? contentPadding;
+  final TextInputAction textInputAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: focusNode,
+      enabled: enable,
+      autofocus: autofocus ?? false,
+      keyboardType: keyboardType ?? TextInputType.text,
+      cursorColor: AppColors.kPrimaryColor.value,
+      controller: textController,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      style: style ?? AppFontStyle.body(color: Colors.white),
+      autocorrect: autocorrect ?? false,
+      textAlignVertical: TextAlignVertical.top,
+      textInputAction: textInputAction,
+      maxLines: null,
+      expands: true,
+      decoration: decoration ??
+          InputDecoration(
+            hintText: hintText ?? "search...",
+            hintStyle: AppFontStyle.body(color: Colors.white70),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            suffixIcon: suffix,
+            //isDense: true,
+            contentPadding: contentPadding ?? EdgeInsets.all(10.r),
+          ),
+    );
+  }
+}

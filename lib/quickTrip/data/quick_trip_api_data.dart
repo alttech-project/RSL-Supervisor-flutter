@@ -18,6 +18,7 @@ class DispatchQuickTripRequestData {
   double? dropLongitude;
   String? dropplace;
   String? referenceNumber;
+  String? remarks;
 
   DispatchQuickTripRequestData(
       {this.kioskId,
@@ -36,7 +37,8 @@ class DispatchQuickTripRequestData {
       this.dropLatitude,
       this.dropLongitude,
       this.dropplace,
-      this.referenceNumber});
+      this.referenceNumber,
+      this.remarks});
 
   DispatchQuickTripRequestData.fromJson(Map<String, dynamic> json) {
     kioskId = json['kiosk_id'];
@@ -56,6 +58,7 @@ class DispatchQuickTripRequestData {
     dropLongitude = json['drop_longitude'];
     dropplace = json['dropplace'];
     referenceNumber = json['reference_number'];
+    remarks = json['remarks'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +80,7 @@ class DispatchQuickTripRequestData {
     data['drop_longitude'] = this.dropLongitude;
     data['dropplace'] = this.dropplace;
     data['reference_number'] = this.referenceNumber;
+    data['remarks'] = this.remarks;
     return data;
   }
 }

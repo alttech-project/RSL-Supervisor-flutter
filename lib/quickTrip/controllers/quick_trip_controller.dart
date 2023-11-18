@@ -24,6 +24,7 @@ class QuickTripController extends GetxController {
   final TextEditingController paymentIdController = TextEditingController();
   final TextEditingController referenceNumberController =
       TextEditingController();
+  final TextEditingController remarksController = TextEditingController();
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
@@ -83,6 +84,7 @@ class QuickTripController extends GetxController {
         final email = emailController.text.trim();
         final paymentId = paymentIdController.text.trim();
         final referenceNumber = referenceNumberController.text.trim();
+        final remarks = remarksController.text.trim();
 
         //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
         if (tripID.isEmpty) {
@@ -95,6 +97,8 @@ class QuickTripController extends GetxController {
           _showSnackBar('Validation!', 'Enter a valid phone number!');
         } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
           _showSnackBar('Validation!', 'Enter a valid Email!');
+        } else if (remarks.isEmpty) {
+          _showSnackBar('Validation!', 'Enter a valid remarks!');
         } else {
           if (supervisorInfo == null) {
             _showSnackBar('Error!', 'Invalid user login status!');
@@ -120,7 +124,8 @@ class QuickTripController extends GetxController {
                 dropLatitude: dropLatitude,
                 dropLongitude: dropLongitude,
                 dropplace: dropLocation,
-                referenceNumber: referenceNumber),
+                referenceNumber: referenceNumber,
+                remarks: remarks),
           ).then((response) {
             apiLoading.value = false;
             _handleDispatchQuickTripResponse(response);
@@ -201,6 +206,7 @@ class QuickTripController extends GetxController {
     dropLongitude = 0.0;
     fareController.clear();
     referenceNumberController.clear();
+    remarksController.clear();
     nameController.clear();
     phoneController.clear();
     emailController.clear();

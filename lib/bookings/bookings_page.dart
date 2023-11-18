@@ -714,13 +714,13 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _remarksWidget() {
-    return BoxTextFieldTransparent(
-        hintText: "Remarks",
-        keyboardType: TextInputType.text,
+    return RemarksTextFieldTransparent(
+        hintText: "Enter your remarks",
+        keyboardType: TextInputType.multiline,
         textController: controller.remarksController,
         enable: true,
         autocorrect: false,
-        // onChanged: (value) => controller.remarksController.text = value,
+        textInputAction: TextInputAction.newline,
         autofocus: false);
   }
 

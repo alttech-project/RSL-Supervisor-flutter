@@ -73,23 +73,32 @@ class OfflineTripPage extends GetView<OfflineTripController> {
                                 'Reference Number',
                                 'Reference Number (Optional)',
                                 txtEditingController:
-                                    controller.referenceNumberController,
+                                controller.referenceNumberController,
                                 keyboardType: TextInputType.number,
                                 textInputAction: TextInputAction.done),
+                            SizedBox(height: 10.h),
+                            _remarksLabel(),
+                            SizedBox(height: 7.h),
+                            _remarksCardView(),
                             SizedBox(
                               height: 24.h,
                             ),
                             Obx(
-                              () => CustomButton(
-                                width: double.maxFinite,
-                                linearColor: primaryButtonLinearColor,
-                                height: 38.h,
-                                borderRadius: 38.h / 2,
-                                isLoader: controller.apiLoading.value,
-                                style: AppFontStyle.body(color: Colors.white),
-                                text: 'Submit',
-                                onTap: () => controller.checkValidation(),
-                              ),
+                                  () =>
+                                  CustomButton(
+                                    width: double.maxFinite,
+                                    linearColor: primaryButtonLinearColor,
+                                    height: 38.h,
+                                    borderRadius: 38.h / 2,
+                                    isLoader: controller.apiLoading.value,
+                                    style: AppFontStyle.body(
+                                        color: Colors.white),
+                                    text: 'Submit',
+                                    onTap: () => controller.checkValidation(),
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
                             ),
                           ],
                         ),
@@ -105,18 +114,64 @@ class OfflineTripPage extends GetView<OfflineTripController> {
     );
   }
 
+  Widget _remarksLabel() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        'Remarks',
+        style: AppFontStyle.subHeading(
+          size: AppFontSize.medium.value,
+          color: AppColors.kPrimaryColor.value,
+        ),
+      ),
+    );
+  }
+
+  Widget _remarksCardView() {
+    return SizedBox(
+      height: 100.h,
+      child: Card(
+        elevation: 8,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kSecondaryBackGroundColor.value,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 5,
+            ), // Adjust left and right padding
+            child: _remarksWidget()),
+      ),
+    );
+  }
+
+  Widget _remarksWidget() {
+    return RemarksTextFieldTransparent(
+        hintText: "Enter your remarks",
+        keyboardType: TextInputType.multiline,
+        textController: controller.remarksController,
+        enable: true,
+        autocorrect: false,
+        textInputAction: TextInputAction.newline,
+        autofocus: false);
+  }
+
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
-      required TextEditingController txtEditingController,
-      TextInputType keyboardType = TextInputType.text,
-      TextInputAction textInputAction = TextInputAction.next,
-      FormFieldValidator? validator,
-      bool readOnly = false,
-      GestureTapCallback? onTap,
-      Function(String)? onChanged,
-      Color? borderColor,
-      Color? focusColor,
-      TextStyle? textStyle}) {
+        required TextEditingController txtEditingController,
+        TextInputType keyboardType = TextInputType.text,
+        TextInputAction textInputAction = TextInputAction.next,
+        FormFieldValidator? validator,
+        bool readOnly = false,
+        GestureTapCallback? onTap,
+        Function(String)? onChanged,
+        Color? borderColor,
+        Color? focusColor,
+        TextStyle? textStyle}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -181,8 +236,8 @@ class OfflineTripPage extends GetView<OfflineTripController> {
   Widget _nameWidget() {
     return _labelAndTextFieldWidget('Name', 'Name', 'Enter Name (Optional)',
         txtEditingController: controller.nameController, validator: (value) {
-      return null;
-      /*   if (value == null || value.isEmpty) {
+          return null;
+          /*   if (value == null || value.isEmpty) {
         return null;
       }
       if (GetUtils.isUsername(value)) {
@@ -190,7 +245,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
       } else {
         return 'Please enter a valid Name';
       }*/
-    });
+        });
   }
 
   Widget _dropLocationWidget() {
@@ -284,52 +339,54 @@ class OfflineTripPage extends GetView<OfflineTripController> {
   _taxiList() {
     return Expanded(
       child: Obx(
-        () => controller.taxiList.isEmpty
+            () =>
+        controller.taxiList.isEmpty
             ? Center(
-                child: SizedBox(
-                  height: 280.h,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "No cars found!",
-                            style: AppFontStyle.subHeading(color: Colors.grey),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
+          child: SizedBox(
+            height: 280.h,
+            child: Center(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "No cars found!",
+                      style: AppFontStyle.subHeading(color: Colors.grey),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              )
-            : ListView.separated(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemCount: controller.taxiList.length,
-                itemBuilder: (context, index) {
-                  final taxiData = controller.taxiList[index];
-                  return InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        controller.taxiId.value = '${taxiData.iId}';
-                        controller.taxiModel.value = '${taxiData.taxiModel}';
-                        controller.taxiNoController.text = '${taxiData.taxiNo}';
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 16),
-                          //apply padding horizontal or vertical only
-                          child: Text(
-                            '${taxiData.taxiNo}',
-                          )));
-                },
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.grey.withOpacity(0.6),
-                  thickness: 0.2,
-                  height: 1,
-                ),
+                ],
               ),
+            ),
+          ),
+        )
+            : ListView.separated(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemCount: controller.taxiList.length,
+          itemBuilder: (context, index) {
+            final taxiData = controller.taxiList[index];
+            return InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.taxiId.value = '${taxiData.iId}';
+                  controller.taxiModel.value = '${taxiData.taxiModel}';
+                  controller.taxiNoController.text = '${taxiData.taxiNo}';
+                },
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 16),
+                    //apply padding horizontal or vertical only
+                    child: Text(
+                      '${taxiData.taxiNo}',
+                    )));
+          },
+          separatorBuilder: (context, index) =>
+              Divider(
+                color: Colors.grey.withOpacity(0.6),
+                thickness: 0.2,
+                height: 1,
+              ),
+        ),
       ),
     );
   }

@@ -700,7 +700,7 @@ class BookingsPage extends GetView<BookingsController> {
     return _labelAndTextFieldWidget('Reference Number', 'Reference Number',
         'Enter Reference Number (Optional)',
         txtEditingController: controller.refNumberController,
-        keyboardType: TextInputType.number, validator: (value) {
+        keyboardType: TextInputType.text, validator: (value) {
       return null;
     });
   }

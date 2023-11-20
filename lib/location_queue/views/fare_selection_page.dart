@@ -102,7 +102,7 @@ class FareSelectionPage extends GetView<LocationQueueController> {
                           controller: controller.referenceNumberController,
                           hint: "Reference Number (optional)",
                           lblTxt: "Reference Number (optional)",
-                          keyboardtype: TextInputType.number,
+                          keyboardtype: TextInputType.text,
                           onSubmit: (text) {},
                         ),
                         Padding(

@@ -56,9 +56,9 @@ class QuickTripPage extends GetView<QuickTripController> {
                           _labelAndTextFieldWidget('Reference Number',
                               'Reference Number', 'Reference Number (Optional)',
                               txtEditingController:
-                              controller.referenceNumberController,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done),
+                                  controller.referenceNumberController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next),
                           /*_labelAndTextFieldWidget(
                             'Payment ID',
                             'Payment ID',
@@ -75,17 +75,16 @@ class QuickTripPage extends GetView<QuickTripController> {
                             height: 24.h,
                           ),
                           Obx(
-                                () =>
-                                CustomButton(
-                                  width: double.maxFinite,
-                                  linearColor: primaryButtonLinearColor,
-                                  height: 38.h,
-                                  borderRadius: 38.h / 2,
-                                  isLoader: controller.apiLoading.value,
-                                  style: AppFontStyle.body(color: Colors.white),
-                                  text: 'Submit',
-                                  onTap: () => controller.checkValidation(),
-                                ),
+                            () => CustomButton(
+                              width: double.maxFinite,
+                              linearColor: primaryButtonLinearColor,
+                              height: 38.h,
+                              borderRadius: 38.h / 2,
+                              isLoader: controller.apiLoading.value,
+                              style: AppFontStyle.body(color: Colors.white),
+                              text: 'Submit',
+                              onTap: () => controller.checkValidation(),
+                            ),
                           ),
                           SizedBox(
                             height: 20.h,
@@ -149,8 +148,8 @@ class QuickTripPage extends GetView<QuickTripController> {
         autofocus: false);
   }
 
-  Widget _labelAndTextFieldColumnWidget(String fieldLabel, String label,
-      String hint,
+  Widget _labelAndTextFieldColumnWidget(
+      String fieldLabel, String label, String hint,
       {Widget? suffix}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +161,7 @@ class QuickTripPage extends GetView<QuickTripController> {
             child: Text(
               fieldLabel,
               style:
-              AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+                  AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             ),
           ),
         ),
@@ -214,16 +213,16 @@ class QuickTripPage extends GetView<QuickTripController> {
 
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
-        required TextEditingController txtEditingController,
-        TextInputType keyboardType = TextInputType.text,
-        TextInputAction textInputAction = TextInputAction.next,
-        FormFieldValidator? validator,
-        bool readOnly = false,
-        GestureTapCallback? onTap,
-        Function(String)? onChanged,
-        Color? borderColor,
-        Color? focusColor,
-        TextStyle? textStyle}) {
+      required TextEditingController txtEditingController,
+      TextInputType keyboardType = TextInputType.text,
+      TextInputAction textInputAction = TextInputAction.next,
+      FormFieldValidator? validator,
+      bool readOnly = false,
+      GestureTapCallback? onTap,
+      Function(String)? onChanged,
+      Color? borderColor,
+      Color? focusColor,
+      TextStyle? textStyle}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -288,8 +287,8 @@ class QuickTripPage extends GetView<QuickTripController> {
   Widget _nameWidget() {
     return _labelAndTextFieldWidget('Name', 'Name', 'Enter Name (Optional)',
         txtEditingController: controller.nameController, validator: (value) {
-          return null;
-          /*  if (value == null || value.isEmpty) {
+      return null;
+      /*  if (value == null || value.isEmpty) {
         return null;
       }
       if (GetUtils.isUsername(value.trim())) {
@@ -297,7 +296,7 @@ class QuickTripPage extends GetView<QuickTripController> {
       } else {
         return 'Please enter a valid Name';
       }*/
-        });
+    });
   }
 
   Widget _dropLocationWidget() {

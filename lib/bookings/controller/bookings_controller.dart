@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
 import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
 import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
@@ -235,7 +236,7 @@ class BookingsController extends GetxController {
       longitude: pickupLongitude,
       motor_model: int.parse(taxiId.value),
       now_after: 1,
-      corporate_id: int.parse(corporateId),
+      corporate_id: 168 /*int.parse(corporateId ?? "0")*/,
       passenger_payment_option: int.parse(selectedPayment.value.paymentId),
       pickupplace: pickupLocation,
       pickup_time: date,
@@ -270,12 +271,13 @@ class BookingsController extends GetxController {
           isTwoButton: true,
           acceptBtnTitle: "Yes",
           acceptAction: () {
-            Get.find<MyTripListController>().callTripListApi();
+            Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
             changeTabIndex(1);
           },
           cancelBtnTitle: "No",
         );
       } else {
+        saveBookingApiLoading.value = false;
         showDefaultDialog(
           context: Get.context!,
           title: "Alert",

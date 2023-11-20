@@ -6,9 +6,10 @@ import 'package:rsl_supervisor/shared/styles/app_font.dart';
 
 import '../my_trip/controller/my_trip_list_controller.dart';
 import '../widgets/app_loader.dart';
+import 'controller/booking_list_controller.dart';
 import 'ongoing_trip_list_widget.dart';
 
-class OnGoingBookingsTab extends GetView<MyTripListController> {
+class OnGoingBookingsTab extends GetView<BookingsListController> {
   const OnGoingBookingsTab({super.key});
 
   @override

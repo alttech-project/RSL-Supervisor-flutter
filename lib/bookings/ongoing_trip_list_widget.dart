@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
+import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
 import 'package:rsl_supervisor/my_trip/data/my_trip_list_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
@@ -10,7 +12,7 @@ import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../my_trip/controller/my_trip_list_map_controller.dart';
 
-class OngoingTripListWidget extends GetView<MyTripListController> {
+class OngoingTripListWidget extends GetView<BookingsListController> {
   const OngoingTripListWidget({super.key});
 
   @override
@@ -53,7 +55,7 @@ class OngoingTripListWidget extends GetView<MyTripListController> {
                       controller.getTripDetailFromList(
                         detail: tripData,
                       );
-                      Get.toNamed(AppRoutes.mytripDetailPage);
+                      Get.toNamed(AppRoutes.myTripListDetailPage);
                     },
                     child: _tripHistoryListWidget(tripData),
                   ),

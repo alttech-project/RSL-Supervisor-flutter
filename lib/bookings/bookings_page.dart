@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
 import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
@@ -12,7 +13,6 @@ import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
-import '../my_trip/controller/my_trip_list_controller.dart';
 import '../widgets/navigation_title.dart';
 
 class BookingsPage extends GetView<BookingsController> {
@@ -85,17 +85,19 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   TabBar _tabBarWidget({required List<Widget> tabs}) {
-    final tripListController = Get.find<MyTripListController>();
+    final bookingListController = Get.find<BookingsListController>();
     return TabBar(
       isScrollable: true,
       onTap: (value) {
         controller.changeTabIndex(value);
-        if (value == 1) {
-          tripListController.startTripListTimer();
-          tripListController.callTripListOngoingApi(type: value);
+        if(value == 0){
+          bookingListController.stopTripListTimer();
+        } else if (value == 1) {
+          bookingListController.startTripListTimer();
+          bookingListController.callTripListOngoingApi(type: value);
         } else {
-          tripListController.startTripListOngoingTimer();
-          tripListController.callTripListOngoingApi(type: value);
+          bookingListController.startTripListOngoingTimer();
+          bookingListController.callTripListOngoingApi(type: value);
         }
       },
       controller: controller.tabController,

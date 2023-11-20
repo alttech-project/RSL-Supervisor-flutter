@@ -62,36 +62,10 @@ class MyTripListController extends GetxController {
     _getUserInfos();
   }
 
-  void startTripListTimer() {
-    stopTripListTimer();
-    stopTripListOngoingTimer();
-    const timerDuration = Duration(seconds: 10);
-
-    _timer = Timer.periodic(
-      timerDuration,
-      (Timer timer) {
-        callTripListOngoingApi(isTimer: true, type: 1);
-      },
-    );
-  }
-
   void stopTripListTimer() {
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
-  }
-
-  void startTripListOngoingTimer() {
-    stopTripListTimer();
-    stopTripListOngoingTimer();
-    const timerDuration = Duration(seconds: 10);
-
-    _timerOngoing = Timer.periodic(
-      timerDuration,
-      (Timer timer) {
-        callTripListOngoingApi(isTimer: true, type: 2);
-      },
-    );
   }
 
   void stopTripListOngoingTimer() {
@@ -209,84 +183,6 @@ class MyTripListController extends GetxController {
         dispatchedTrips.value = 0;
         cancelledTrips.value = 0;
         tripList.refresh();
-        showSnackBar(
-          title: 'Error',
-          msg: error.toString(),
-        );
-      },
-    );
-  }
-
-  void callTripListOngoingApi(
-      {bool isTimer = false, bool pageNation = false, int? type}) async {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
-    switch (pageNation) {
-      case false:
-        if (isTimer) {
-          showLoader.value = false;
-        } else {
-          showLoader.value = true;
-        }
-        pageNationLoader.value = false;
-        currentPage.value = 1;
-        break;
-      case true:
-        if (isTimer) {
-          pageNationLoader.value = false;
-        } else {
-          pageNationLoader.value = true;
-        }
-        showLoader.value = false;
-        break;
-      default:
-    }
-    // showLoader.value = true;
-    tripListApi(
-      MyTripsRequestData(
-          driverName: carNoController.text,
-          tripId: tripIdController.text,
-          from: DateFormat('yyyy-MM-d HH:mm').format(fromDate.value),
-          to: DateFormat('yyyy-MM-d HH:mm').format(toDate.value),
-          locationId: supervisorInfo.kioskId.toString(),
-          supervisorId: supervisorInfo.supervisorId,
-          limit: limit.value,
-          start: currentPage.value,
-          type: type),
-    ).then((response) {
-      switch (pageNation) {
-        case false:
-          pageNationLoader.value = false;
-          if ((response.status ?? 0) == 1) {
-            tripListOngoing.value = response.details?.tripDetails ?? [];
-            totalCountOngoing.value = response.details!.totalCount ?? 0;
-            showLoader.value = false;
-            tripListOngoing.refresh();
-            print("DEEPAK tripList ${tripList.length}");
-          } else {
-            tripListOngoing.value = [];
-            dispatchedTrips.value = 0;
-            cancelledTrips.value = 0;
-            showLoader.value = false;
-            pageNationLoader.value = false;
-          }
-          break;
-        case true:
-          if (response.status == 1) {
-            tripListOngoing.addAll(response.details?.tripDetails ?? []);
-            tripListOngoing.refresh();
-            showLoader.value = false;
-          }
-          break;
-      }
-    }).onError(
-      (error, stackTrace) {
-        printLogs("$error");
-        showLoader.value = false;
-        pageNationLoader.value = false;
-        tripListOngoing.value = [];
-        dispatchedTrips.value = 0;
-        cancelledTrips.value = 0;
-        tripListOngoing.refresh();
         showSnackBar(
           title: 'Error',
           msg: error.toString(),

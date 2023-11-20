@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/bookings/bookings_page.dart';
+import 'package:rsl_supervisor/bookings/upcoming_ongoing_list_detail_page.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
@@ -66,6 +67,7 @@ class AppRoutes {
   static const driverListPage = '/driverListPage';
   static const dropLocationPage = '/dropLocationPage';
   static const reOrderPage = '/reOrderPage';
+  static const myTripListDetailPage = '/myTripListDetailPage';
 }
 
 List<GetPage> routes = [
@@ -275,6 +277,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.reOrderPage,
     page: () => ReorderableListPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.myTripListDetailPage,
+    page: () => const TripListDetailsPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

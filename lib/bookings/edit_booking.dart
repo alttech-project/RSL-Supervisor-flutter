@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
-import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
-import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
-import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
@@ -14,9 +10,10 @@ import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
 import '../widgets/navigation_title.dart';
+import 'controller/edit_booking_controller.dart';
 
-class BookingsPage extends GetView<BookingsController> {
-  const BookingsPage({super.key});
+class EditBooking extends GetView<EditBookingController> {
+  const EditBooking({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,35 +41,11 @@ class BookingsPage extends GetView<BookingsController> {
                         padding:
                             EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
                         child: NavigationTitle(
-                          title: "Bookings",
+                          title: "Edit Bookings",
                           onTap: () => controller.goBack(),
                         ),
                       ),
-                      DefaultTabController(
-                        length: 3,
-                        initialIndex: controller.selectedTabBar.value,
-                        child: Column(
-                          children: [
-                            _tabBarWidget(tabs: [
-                              _tabBarTextWidget(text: "New Booking"),
-                              _tabBarTextWidget(text: "Upcoming Bookings"),
-                              _tabBarTextWidget(text: "Ongoing Bookings"),
-                            ]),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Obx(
-                              () => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                child: _tabView(
-                                  controller.selectedTabBar.value,
-                                  context,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      newBookingsTab(context),
                     ],
                   ),
                 ),
@@ -83,57 +56,6 @@ class BookingsPage extends GetView<BookingsController> {
       ),
     );
   }
-
-  TabBar _tabBarWidget({required List<Widget> tabs}) {
-    final bookingListController = Get.find<BookingsListController>();
-    return TabBar(
-      isScrollable: true,
-      onTap: (value) {
-        controller.changeTabIndex(value);
-        if(value == 0){
-          bookingListController.stopTripListTimer();
-        } else if (value == 1) {
-          bookingListController.startTripListTimer();
-          bookingListController.callTripListOngoingApi(type: value);
-        } else {
-          bookingListController.startTripListOngoingTimer();
-          bookingListController.callTripListOngoingApi(type: value);
-        }
-      },
-      controller: controller.tabController,
-      indicatorSize: TabBarIndicatorSize.label,
-      indicatorColor: AppColors.kPrimaryColor.value,
-      labelColor: AppColors.kPrimaryColor.value,
-      unselectedLabelColor: AppColors.kBackGroundColor.value,
-      tabs: tabs,
-    );
-  }
-
-  Widget _tabView(int value, context) {
-    switch (value) {
-      case 0:
-        return newBookingsTab(context);
-      case 1:
-        return const UpcomingBookingsTab();
-      case 2:
-        return const OnGoingBookingsTab();
-    }
-    return const SizedBox.shrink();
-  }
-
-  _tabBarTextWidget({String? text}) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 4.h),
-        child: Row(
-          children: [
-            Text("$text",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                    textStyle: TextStyle(
-                        fontSize: AppFontSize.medium.value,
-                        fontWeight: AppFontWeight.semibold.value))),
-          ],
-        ),
-      );
 
   Widget newBookingsTab(context) {
     return Column(
@@ -156,7 +78,7 @@ class BookingsPage extends GetView<BookingsController> {
             borderRadius: 38.h / 2,
             isLoader: controller.saveBookingApiLoading.value,
             style: AppFontStyle.body(color: Colors.white),
-            text: 'Submit',
+            text: 'Update',
             onTap: () => controller.checkNewBookingValidation(),
           ),
         ),
@@ -388,6 +310,7 @@ class BookingsPage extends GetView<BookingsController> {
                 child: _paymentDropDown(
                   selectedOption: controller.selectedPayment.value,
                   onTap: (value) {
+                    print("hi paymentDropDown ${value}");
                     controller.selectedPayment.value = value;
                   },
                 ),

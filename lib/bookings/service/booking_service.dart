@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
 import '../../network/app_config.dart';
 import '../../network/services.dart';
 import '../../utils/helpers/getx_storage.dart';
+import '../data/edit_details_data.dart';
 import '../data/motor_details_data.dart';
 
 final ApiProvider _apiProvider = Get.find<ApiProvider>();
@@ -49,4 +50,15 @@ Future<SaveBookingResponse> saveBookingApi(
       ),
       queryParam: {"type": ""});
   return saveBookingResponseFromJson(response);
+}
+
+Future<GetByPassengerEditDetailsResponse> getByPassengerEditDetails(
+    GetByPassengerEditDetailsRequest requestData) async {
+  final response = await _apiProvider.httpRequest(
+      resource: Resource(
+        url: '${AppConfig.newBookingUrl}getByPassengerEditDetails',
+        request: getByPassengerEditDetailsRequestToJson(requestData),
+      ),
+      queryParam: {"type": ""});
+  return getByPassengerEditDetailsFromJson(response);
 }

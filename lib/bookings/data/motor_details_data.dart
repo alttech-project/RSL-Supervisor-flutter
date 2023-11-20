@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class Payments {
+  final String name;
+  final String paymentId;
+
   const Payments({
     required this.name,
     required this.paymentId,
   });
-
-  final String name;
-  final String paymentId;
 }
 
 const List<Payments> paymentList = <Payments>[

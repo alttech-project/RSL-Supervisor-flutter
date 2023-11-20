@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/bindings/app_bindings.dart';
 import 'package:rsl_supervisor/bookings/bookings_page.dart';
+import 'package:rsl_supervisor/bookings/edit_booking.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
@@ -44,6 +45,7 @@ class AppRoutes {
   static const qrScannerPage = '/qrScannerPage';
   static const offlineTripPage = '/offlineTripPage';
   static const bookings = "/bookings";
+  static const editBookings = "/editBookings";
   static const tripHistoryPage = '/tripHistoryPage';
   static const subscriberPage = '/subscriberPage';
   static const tripDetailPage = '/tripDetailPage';
@@ -128,6 +130,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.bookings,
     page: () => const BookingsPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.editBookings,
+    page: () => const EditBooking(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

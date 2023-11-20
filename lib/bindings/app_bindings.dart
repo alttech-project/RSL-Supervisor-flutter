@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/bookings/controller/edit_booking_controller.dart';
 import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/driver_list/controller/driver_list_controller.dart';
@@ -49,5 +50,6 @@ class AppBind extends Bindings {
     Get.lazyPut<MyTripListMapController>(() => MyTripListMapController());
     Get.lazyPut<SplashController>(() => SplashController());
     Get.lazyPut<BookingsController>(() => BookingsController());
+    Get.lazyPut<EditBookingController>(() => EditBookingController());
   }
 }

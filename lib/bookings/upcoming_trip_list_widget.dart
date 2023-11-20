@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
+import 'package:rsl_supervisor/bookings/controller/edit_booking_controller.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
 import 'package:rsl_supervisor/my_trip/controller/my_trip_list_map_controller.dart';
 import 'package:rsl_supervisor/my_trip/data/my_trip_list_data.dart';
@@ -61,7 +62,7 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
                       );
                       Get.toNamed(AppRoutes.myTripListDetailPage);
                     },
-                    child: _tripHistoryListWidget(tripData),
+                    child: _tripHistoryListWidget(tripData, index),
                   ),
                   (controller.pageNationLoader.value &&
                           controller.tripListOngoing.length - 1 == index)
@@ -228,7 +229,7 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
     );
   }
 
-  Widget _tripHistoryListWidget(ListTripDetails details) {
+  Widget _tripHistoryListWidget(ListTripDetails details, int index) {
     return Card(
       elevation: 8,
       margin: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -437,7 +438,7 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
               ),
             ),
             SizedBox(height: 8.h),
-            _listStatusRow(details: details),
+            _listStatusRow(details: details, index: index),
             /*SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -491,11 +492,38 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
     );
   }
 
-  Widget _listStatusRow({required ListTripDetails details}) {
-    final tripListMapController = Get.find<MyTripListMapController>();
+  Widget _editButton(int index) {
+    final editListController = Get.find<EditBookingController>();
+    final tripData = controller.tripListOngoing[index];
+    return InkWell(
+      onTap: () {
+        editListController.callGetByPassengerDetailsApi(
+            tripId: tripData.tripId);
+        Get.toNamed(AppRoutes.editBookings);
+      },
+      child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(color: Colors.grey, width: 1),
+            borderRadius: BorderRadius.circular(5.r),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.edit_outlined, color: Colors.grey, size: 16.r),
+              Text(
+                "Edit",
+                style: TextStyle(
+                    color: Colors.grey, fontSize: AppFontSize.small.value),
+              )
+            ],
+          )),
+    );
+  }
 
+  Widget _listStatusRow({required ListTripDetails details, int? index}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      // mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (details.travelStatus == 9) ...[
@@ -598,6 +626,8 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
             ),
           ),
         ),
+        const Spacer(),
+        _editButton(index ?? 0),
       ],
     );
   }

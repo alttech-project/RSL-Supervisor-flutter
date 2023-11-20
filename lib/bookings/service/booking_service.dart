@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:rsl_supervisor/bookings/data/edit_trip_details_data.dart';
 
 import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
 import '../../network/app_config.dart';
@@ -61,4 +62,15 @@ Future<GetByPassengerEditDetailsResponse> getByPassengerEditDetails(
       ),
       queryParam: {"type": ""});
   return getByPassengerEditDetailsFromJson(response);
+}
+
+Future<EditCorporateBookingResponseData> editBookingApi(
+    EditCorporateBookingRequestData requestData) async {
+  final response = await _apiProvider.httpRequest(
+      resource: Resource(
+        url: '${AppConfig.newBookingUrl}editCorporateBooking',
+        request: editCorporateBookingRequestToJson(requestData),
+      ),
+      queryParam: {"type": ""});
+  return editCorporateBookingResponseFromJson(response);
 }

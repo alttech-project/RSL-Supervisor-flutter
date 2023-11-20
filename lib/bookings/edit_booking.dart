@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
+import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
+import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -20,8 +22,27 @@ class EditBooking extends GetView<EditBookingController> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: () {
-          controller.onClose();
-          return Future.value(true);
+          if (controller.isValueChanged.value) {
+            controller.goBack();
+            controller.onClose();
+            return Future.value(true);
+          } else {
+            showDefaultDialog(
+                context: Get.context!,
+                title: "Alert",
+                message: "Do you want save trip detail?",
+                isTwoButton: true,
+                acceptBtnTitle: "Yes",
+                acceptAction: () {
+                  controller.callEditBookingApi();
+                },
+                cancelBtnTitle: "No",
+                cancelAction: () {
+                  Get.back();
+                  controller.onClose();
+                });
+            return Future.value(false);
+          }
         },
         child: SafeAreaContainer(
           statusBarColor: Colors.black,
@@ -42,7 +63,25 @@ class EditBooking extends GetView<EditBookingController> {
                             EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
                         child: NavigationTitle(
                           title: "Edit Bookings",
-                          onTap: () => controller.goBack(),
+                          onTap: () {
+                            if (controller.isValueChanged.value) {
+                              controller.goBack();
+                            } else {
+                              showDefaultDialog(
+                                  context: Get.context!,
+                                  title: "Alert",
+                                  message: "Do you want save trip detail?",
+                                  isTwoButton: true,
+                                  acceptBtnTitle: "Yes",
+                                  acceptAction: () {
+                                    controller.callEditBookingApi();
+                                  },
+                                  cancelBtnTitle: "No",
+                                  cancelAction: () {
+                                    Get.back();
+                                  });
+                            }
+                          },
                         ),
                       ),
                       newBookingsTab(context),
@@ -474,6 +513,7 @@ class EditBooking extends GetView<EditBookingController> {
           color: AppColors.kPrimaryColor.value, size: AppFontSize.medium.value),
       textInputAction: TextInputAction.next,
       onCountryChanged: (country) {
+        controller.isValueChanged.value = true;
         controller.countryCode.value = country.dialCode;
       },
     );
@@ -484,6 +524,10 @@ class EditBooking extends GetView<EditBookingController> {
       'Guest Email',
       'Guest Email',
       'Enter Guest Email',
+      onChanged: (val) {
+        printLogs("onChanged: $val");
+        controller.isValueChanged.value = true;
+      },
       txtEditingController: controller.emailController,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
@@ -514,6 +558,9 @@ class EditBooking extends GetView<EditBookingController> {
             color: AppColors.kPrimaryColor.value,
           ),
         ),
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please select pickup location!';
@@ -536,6 +583,9 @@ class EditBooking extends GetView<EditBookingController> {
             color: AppColors.kPrimaryColor.value,
           ),
         ),
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please select drop location!';
@@ -574,6 +624,9 @@ class EditBooking extends GetView<EditBookingController> {
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.next,
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
         // onChanged: (value) => controller.priceController.text = value,
         autofocus: false);
   }
@@ -586,6 +639,9 @@ class EditBooking extends GetView<EditBookingController> {
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.done,
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
         // onChanged: (value) => controller.extraChargesController.text = value,
         autofocus: false);
   }
@@ -597,6 +653,9 @@ class EditBooking extends GetView<EditBookingController> {
       'Enter Note to Driver (Optional)',
       txtEditingController: controller.noteToDriverController,
       keyboardType: TextInputType.text,
+      onChanged: (val) {
+        controller.isValueChanged.value = true;
+      },
       validator: (value) {
         return null;
       },
@@ -607,27 +666,39 @@ class EditBooking extends GetView<EditBookingController> {
     return _labelAndTextFieldWidget(
         'Note to Admin', 'Note to Admin', 'Enter Note to Admin (Optional)',
         txtEditingController: controller.noteToAdminController,
-        keyboardType: TextInputType.text, validator: (value) {
-      return null;
-    });
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
+        keyboardType: TextInputType.text,
+        validator: (value) {
+          return null;
+        });
   }
 
   Widget _flightNumberWidget() {
     return _labelAndTextFieldWidget(
         'Flight Number', 'Flight Number', 'Enter Flight Number (Optional)',
         txtEditingController: controller.flightNumberController,
-        keyboardType: TextInputType.text, validator: (value) {
-      return null;
-    });
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
+        keyboardType: TextInputType.text,
+        validator: (value) {
+          return null;
+        });
   }
 
   Widget _refNumberWidget() {
     return _labelAndTextFieldWidget('Reference Number', 'Reference Number',
         'Enter Reference Number (Optional)',
         txtEditingController: controller.refNumberController,
-        keyboardType: TextInputType.text, validator: (value) {
-      return null;
-    });
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
+        keyboardType: TextInputType.text,
+        validator: (value) {
+          return null;
+        });
   }
 
   Widget _remarksLabel() {
@@ -671,6 +742,9 @@ class EditBooking extends GetView<EditBookingController> {
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.newline,
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
         autofocus: false);
   }
 
@@ -746,7 +820,7 @@ class EditBooking extends GetView<EditBookingController> {
                           vertical: 5,
                           horizontal: 5,
                         ), // Adjust left and right padding
-                        child: Expanded(child: _priceWidget())),
+                        child: _priceWidget()),
                   )),
                   const SizedBox(
                     width: 20,
@@ -766,7 +840,7 @@ class EditBooking extends GetView<EditBookingController> {
                           vertical: 5,
                           horizontal: 5,
                         ), // Adjust left and right padding
-                        child: Expanded(child: _extraChargesWidget())),
+                        child: _extraChargesWidget()),
                   )),
                 ],
               )

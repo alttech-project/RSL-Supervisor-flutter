@@ -1,19 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
-import 'package:rsl_supervisor/network/app_config.dart';
+import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
+import 'package:rsl_supervisor/bookings/data/edit_trip_details_data.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
-
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../dashboard/data/car_model_type_api.dart';
 import '../../dashboard/service/dashboard_service.dart';
-import '../../my_trip/controller/my_trip_list_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -34,6 +29,7 @@ class EditBookingController extends GetxController {
   final LocationManager locationManager = LocationManager();
   var selectedTabBar = 0.obs;
   TabController? tabController;
+  RxInt editBookingTripId = 0.obs;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -69,6 +65,7 @@ class EditBookingController extends GetxController {
   RxList<CarmodelList> carModelList = <CarmodelList>[].obs;
 
   List<FareDetailList> motorModelList = <FareDetailList>[];
+  Rx<MotorModelInfo> motorModelFare = MotorModelInfo().obs;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -92,29 +89,32 @@ class EditBookingController extends GetxController {
   var apiLoading = false.obs;
   var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
+  RxBool isValueChanged = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     getDate();
     _getUserInfo();
-    callGetByPassengerDetailsApi();
   }
 
   void goBack() {
     Get.back();
   }
 
-  void callGetByPassengerDetailsApi() async {
+  void callGetByPassengerDetailsApi({String? tripId}) async {
     apiLoading.value = true;
     var corporateId = await GetStorageController().getCorporateId();
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     getByPassengerEditDetails(GetByPassengerEditDetailsRequest(
-      id: "4114",
+      id: "$tripId",
     )).then((response) {
       apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         updatePassengerDetails(response.responseData);
+        editBookingTripId.value = response.responseData?.id ?? 0;
+        motorModelFare.value =
+            response.responseData?.motor_model_info ?? MotorModelInfo();
       }
     }).onError((error, stackTrace) {
       apiLoading.value = false;
@@ -145,8 +145,8 @@ class EditBookingController extends GetxController {
       flightNumberController.text = details.flight_number ?? "";
       refNumberController.text = details.reference_number ?? "";
       remarksController.text = details.remarks ?? "";
-      taxiModel.value = details.motor_model_info?.model_name ?? "";
-      taxiId.value = (details.motor_model_info?.model_id ?? "").toString();
+      taxiModel.value = details.motor_model_info?.modelName ?? "";
+      taxiId.value = (details.motor_model_info?.modelId ?? "").toString();
 
       for (var value in paymentList) {
         if (details.passenger_payment_option.toString() == value.paymentId) {
@@ -204,12 +204,22 @@ class EditBookingController extends GetxController {
           _showSnackBar('Error!', 'Invalid user login status!');
           return;
         }
-        callSaveBookingApi();
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: "Do you want edit trip detail?",
+          isTwoButton: true,
+          acceptBtnTitle: "Yes",
+          acceptAction: () {
+            callEditBookingApi();
+          },
+          cancelBtnTitle: "No",
+        );
       }
     }
   }
 
-  void callSaveBookingApi() async {
+  void callEditBookingApi() async {
     saveBookingApiLoading.value = true;
     final name = nameController.text.trim();
     final phone = phoneController.text.trim();
@@ -224,67 +234,43 @@ class EditBookingController extends GetxController {
     final flightNumber = flightNumberController.text.trim();
     final refNumber = refNumberController.text.trim();
     final remarks = remarksController.text.trim();
-    var corporateId = await GetStorageController().getCorporateId();
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     var customerPrice = "0";
     if (price.isNotEmpty) {
       customerPrice = price;
     }
-    saveBookingApi(SaveBookingRequest(
-      approx_distance: "${approximateDistance.value.toString()} km",
-      approx_duration: "${approximateTime.value.toString()} mins",
-      approx_trip_fare: double.parse(approximateFare.value),
-      drop_latitude: dropLatitude,
-      drop_longitude: dropLongitude,
-      dropplace: dropLocation,
-      guest_name: name,
-      guest_country_code: countryCode.value,
-      guest_phone: phone,
-      guest_email: email,
-      latitude: pickupLatitude,
-      longitude: pickupLongitude,
-      motor_model: int.parse(taxiId.value),
-      now_after: 1,
-      corporate_id: int.parse(corporateId),
-      passenger_payment_option: int.parse(selectedPayment.value.paymentId),
-      pickupplace: pickupLocation,
-      pickup_time: date,
-      note_to_driver: noteToDriver,
-      note_to_admin: noteToAdmin,
-      flight_number: flightNumber,
-      reference_number: refNumber,
-      customer_price: double.parse(customerPrice),
-      route_polyline: overViewPolyLine.value,
-      customer_rate: "",
-      extra_charge: extraCharges,
-      remarks: remarks,
-      zone_fare_applied: zoneFareApplied,
-      rsl_share: rslShare,
-      driver_share: driverShare,
-      corporate_share: corporateShare,
-      pickup_zone_id: pickupZoneId,
-      pickup_zone_group_id: pickupZoneGroupId,
-      drop_zone_id: dropZoneId,
-      drop_zone_group_id: dropZoneGroupId,
-      supervisorId: supervisorInfo?.supervisorId ?? "",
-      kioskId: supervisorInfo?.kioskId ?? "",
-      cid: supervisorInfo?.cid ?? "",
-    )).then((response) {
+    editBookingApi(EditCorporateBookingRequestData(
+            currentLocation: pickupLocation,
+            customerPrice: int.parse(priceController.text.trim()),
+            dropLatitude: dropLatitude,
+            dropLocation: dropLocation,
+            dropLongitude: dropLongitude,
+            dropNotes: "",
+            finalPaymentOption: "1",
+            flightNumber: flightNumber,
+            guestCountryCode: "+971",
+            guestEmail: email,
+            guestName: name,
+            guestPhone: phone,
+            motorModelInfo: motorModelFare.value,
+            id: editBookingTripId.value,
+            noteToAdmin: noteToAdmin,
+            noteToDriver: noteToDriver,
+            passengerPaymentOption: "1",
+            pickupLatitude: pickupLatitude,
+            pickupLongitude: pickupLongitude,
+            pickupNotes: noteToAdmin,
+            pickupTime: date,
+            referenceNumber: refNumber,
+            remarks: remarks,
+            extraCharge: int.parse(extraCharges)))
+        .then((response) {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         clearAllData();
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Alert",
-          message: "Do you want to track that trip?",
-          isTwoButton: true,
-          acceptBtnTitle: "Yes",
-          acceptAction: () {
-            Get.find<MyTripListController>().callTripListApi();
-            changeTabIndex(1);
-          },
-          cancelBtnTitle: "No",
-        );
+        Get.back();
+        Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
+        changeTabIndex(1);
       } else {
         showDefaultDialog(
           context: Get.context!,
@@ -294,7 +280,7 @@ class EditBookingController extends GetxController {
       }
     }).onError((error, stackTrace) {
       saveBookingApiLoading.value = false;
-      printLogs("SaveBooking api error: ${error.toString()}");
+      printLogs("EditBooking api error: ${error.toString()}");
     });
   }
 

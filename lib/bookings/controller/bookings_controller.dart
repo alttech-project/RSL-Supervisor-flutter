@@ -236,7 +236,7 @@ class BookingsController extends GetxController {
       longitude: pickupLongitude,
       motor_model: int.parse(taxiId.value),
       now_after: 1,
-      corporate_id: 168 /*int.parse(corporateId ?? "0")*/,
+      corporate_id:  int.parse(corporateId ?? "0"),
       passenger_payment_option: int.parse(selectedPayment.value.paymentId),
       pickupplace: pickupLocation,
       pickup_time: date,

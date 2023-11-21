@@ -4,17 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
-import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/trip_history/data/cancel_trip_data.dart';
 import 'package:rsl_supervisor/trip_history/data/export_pdf_data.dart';
 import 'package:rsl_supervisor/trip_history/data/trip_history_data.dart';
 import 'package:rsl_supervisor/trip_history/data/trip_history_map_data.dart';
 import 'package:rsl_supervisor/trip_history/service/trip_history_services.dart';
-
 import '../../routes/app_routes.dart';
 import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
@@ -522,9 +519,9 @@ class TripHistoryController extends GetxController {
 }
 
 void removeRoutesUntil({String? routeName}) {
-  printLogs("hi Deepak previous route : ${routeName}");
+  printLogs("hi Deepak previous route : $routeName");
   bool condition(Route<dynamic>? route) {
-    return route?.settings.name == '${routeName}';
+    return route?.settings.name == '$routeName';
   }
 
   Get.until(condition);

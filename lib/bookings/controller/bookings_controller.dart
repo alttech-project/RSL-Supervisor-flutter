@@ -195,7 +195,20 @@ class BookingsController extends GetxController {
           _showSnackBar('Error!', 'Invalid user login status!');
           return;
         }
-        callSaveBookingApi();
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Alert",
+          message: "Do you want to track that trip?",
+          isTwoButton: true,
+          acceptBtnTitle: "Yes",
+          acceptAction: () {
+            callSaveBookingApi();
+            Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
+            selectedTabBar.value = 1;
+            changeTabIndex(1);
+          },
+          cancelBtnTitle: "No",
+        );
       }
     }
   }
@@ -236,7 +249,7 @@ class BookingsController extends GetxController {
       longitude: pickupLongitude,
       motor_model: int.parse(taxiId.value),
       now_after: 1,
-      corporate_id:  int.parse(corporateId ?? "0"),
+      corporate_id: int.parse(corporateId ?? "0"),
       passenger_payment_option: int.parse(selectedPayment.value.paymentId),
       pickupplace: pickupLocation,
       pickup_time: date,
@@ -264,7 +277,7 @@ class BookingsController extends GetxController {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         clearAllData();
-        showDefaultDialog(
+        /*showDefaultDialog(
           context: Get.context!,
           title: "Alert",
           message: "Do you want to track that trip?",
@@ -272,10 +285,11 @@ class BookingsController extends GetxController {
           acceptBtnTitle: "Yes",
           acceptAction: () {
             Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
+            selectedTabBar.value = 1;
             changeTabIndex(1);
           },
           cancelBtnTitle: "No",
-        );
+        );*/
       } else {
         saveBookingApiLoading.value = false;
         showDefaultDialog(

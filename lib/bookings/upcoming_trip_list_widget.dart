@@ -498,7 +498,7 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
     return InkWell(
       onTap: () {
         editListController.callGetByPassengerDetailsApi(
-            tripId: tripData.tripId);
+            tripId: "${tripData.tripId}");
         Get.toNamed(AppRoutes.editBookings);
       },
       child: Container(

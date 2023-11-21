@@ -823,7 +823,7 @@ class BookingsPage extends GetView<BookingsController> {
                           vertical: 5,
                           horizontal: 5,
                         ), // Adjust left and right padding
-                        child: Expanded(child: _priceWidget())),
+                        child: _priceWidget()),
                   )),
                   const SizedBox(
                     width: 20,
@@ -843,7 +843,7 @@ class BookingsPage extends GetView<BookingsController> {
                           vertical: 5,
                           horizontal: 5,
                         ), // Adjust left and right padding
-                        child: Expanded(child: _extraChargesWidget())),
+                        child: _extraChargesWidget()),
                   )),
                 ],
               )

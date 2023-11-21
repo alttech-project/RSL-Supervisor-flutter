@@ -21,7 +21,7 @@ class SideMenuPage extends GetView<DashBoardController> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Obx(
-                  () => DrawerHeader(
+              () => DrawerHeader(
                 child: Column(
                   children: [
                     Text(
@@ -54,19 +54,19 @@ class SideMenuPage extends GetView<DashBoardController> {
             _menuListRow(SideMenuIcon.home, 'Home'),
             _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
 
-            /*   _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
-            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
-            controller.locationType.value == LocationType.GENERAL.toString()
-                ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
-                : const SizedBox.shrink(),
-
-            controller.locationType.value == LocationType.GENERAL.toString()
-                ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
-                : const SizedBox.shrink(),
-
-            controller.locationType.value == LocationType.HOTEL.toString()
-                ? _menuListRow(SideMenuIcon.myTrips, 'Bookings')
-                : const SizedBox.shrink(),
+            _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
+            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),
+            // controller.locationType.value == LocationType.GENERAL.toString()
+            //     ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
+            //     : const SizedBox.shrink(),
+            //
+            // controller.locationType.value == LocationType.GENERAL.toString()
+            //     ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
+            //     : const SizedBox.shrink(),
+            //
+            // controller.locationType.value == LocationType.HOTEL.toString()
+            //     ? _menuListRow(SideMenuIcon.myTrips, 'Bookings')
+            //     : const SizedBox.shrink(),
 
             _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
             //_menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
@@ -81,7 +81,7 @@ class SideMenuPage extends GetView<DashBoardController> {
                 : const SizedBox(),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(
-                  () => ListTile(
+              () => ListTile(
                 title: Text(
                   "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
                   style: AppFontStyle.smallText(

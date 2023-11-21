@@ -129,6 +129,10 @@ class TripDetailsPage extends GetView<TripHistoryController> {
                     )
                   : null,
             ),
+            CommonWidgetForDetails(
+              leadingText: 'Comments',
+              trailingText: controller.tripDetail.value.comments ?? "",
+            ),
           ],
         ),
       ),

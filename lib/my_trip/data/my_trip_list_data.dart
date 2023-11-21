@@ -147,6 +147,8 @@ class ListTripDetails {
   String? supervisorTripMessage;
   String? supervisorCancelMessage;
   String? supervisorUniqueId;
+  String? remarks;
+  String? comments;
   String? supervisorDisplayName;
   String? trackUrl;
   String? cancelledTrips;
@@ -198,6 +200,8 @@ class ListTripDetails {
       this.supervisorTripMessage,
       this.supervisorCancelMessage,
       this.supervisorUniqueId,
+      this.remarks,
+      this.comments,
       this.supervisorDisplayName,
       this.trackUrl,
       this.cancelledTrips,
@@ -250,6 +254,8 @@ class ListTripDetails {
     supervisorTripMessage = json['supervisor_trip_message'].toString();
     supervisorCancelMessage = json['supervisor_cancel_message'].toString();
     supervisorUniqueId = json['supervisor_unique_id'].toString();
+    remarks = json['remarks'].toString();
+    comments = json['comments'].toString();
     supervisorDisplayName = json['supervisor_display_name'].toString();
     trackUrl = json['track_url'].toString();
     cancelledTrips = '${json['cancelled_trips']}';
@@ -303,6 +309,8 @@ class ListTripDetails {
     data['supervisor_trip_message'] = supervisorTripMessage;
     data['supervisor_cancel_message'] = supervisorCancelMessage;
     data['supervisor_unique_id'] = supervisorUniqueId;
+    data['remarks'] = remarks;
+    data['comments'] = comments;
     data['supervisor_display_name'] = supervisorDisplayName;
     data['track_url'] = trackUrl;
     data['cancelled_trips'] = cancelledTrips;

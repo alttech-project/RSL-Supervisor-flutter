@@ -30,7 +30,7 @@ class EditBooking extends GetView<EditBookingController> {
             showDefaultDialog(
                 context: Get.context!,
                 title: "Alert",
-                message: "Do you want save trip detail?",
+                message: "Do you want save booking details?",
                 isTwoButton: true,
                 acceptBtnTitle: "Yes",
                 acceptAction: () {
@@ -38,8 +38,7 @@ class EditBooking extends GetView<EditBookingController> {
                 },
                 cancelBtnTitle: "No",
                 cancelAction: () {
-                  Get.back();
-                  controller.onClose();
+                  controller.goBackPage();
                 });
             return Future.value(false);
           }
@@ -70,7 +69,7 @@ class EditBooking extends GetView<EditBookingController> {
                               showDefaultDialog(
                                   context: Get.context!,
                                   title: "Alert",
-                                  message: "Do you want save trip detail?",
+                                  message: "Do you want save booking details?",
                                   isTwoButton: true,
                                   acceptBtnTitle: "Yes",
                                   acceptAction: () {
@@ -78,7 +77,7 @@ class EditBooking extends GetView<EditBookingController> {
                                   },
                                   cancelBtnTitle: "No",
                                   cancelAction: () {
-                                    Get.back();
+                                    controller.goBackPage();
                                   });
                             }
                           },

@@ -33,7 +33,7 @@ class BookingsPage extends GetView<BookingsController> {
             extendBodyBehindAppBar: false,
             backgroundColor: Colors.black,
             body: Obx(
-                  () => CommonAppContainer(
+              () => CommonAppContainer(
                 showLoader: controller.apiLoading.value,
                 child: SingleChildScrollView(
                   child: Column(
@@ -42,7 +42,7 @@ class BookingsPage extends GetView<BookingsController> {
                       //Fill the code of padding
                       Padding(
                         padding:
-                        EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
+                            EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
                         child: NavigationTitle(
                           title: "Bookings",
                           onTap: () => controller.goBack(),
@@ -62,7 +62,7 @@ class BookingsPage extends GetView<BookingsController> {
                               height: 5.h,
                             ),
                             Obx(
-                                  () => Padding(
+                              () => Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                                 child: _tabView(
                                   controller.selectedTabBar.value,
@@ -90,13 +90,16 @@ class BookingsPage extends GetView<BookingsController> {
       isScrollable: true,
       onTap: (value) {
         controller.changeTabIndex(value);
-        if(value == 0){
+        if (value == 0) {
           bookingListController.stopTripListTimer();
+          bookingListController.stopTripListOngoingTimer();
         } else if (value == 1) {
           bookingListController.startTripListTimer();
+          bookingListController.stopTripListOngoingTimer();
           bookingListController.callTripListOngoingApi(type: value);
         } else {
           bookingListController.startTripListOngoingTimer();
+          bookingListController.stopTripListTimer();
           bookingListController.callTripListOngoingApi(type: value);
         }
       },
@@ -122,18 +125,18 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   _tabBarTextWidget({String? text}) => Padding(
-    padding: EdgeInsets.symmetric(vertical: 4.h),
-    child: Row(
-      children: [
-        Text("$text",
-            textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(
-                textStyle: TextStyle(
-                    fontSize: AppFontSize.medium.value,
-                    fontWeight: AppFontWeight.semibold.value))),
-      ],
-    ),
-  );
+        padding: EdgeInsets.symmetric(vertical: 4.h),
+        child: Row(
+          children: [
+            Text("$text",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.outfit(
+                    textStyle: TextStyle(
+                        fontSize: AppFontSize.medium.value,
+                        fontWeight: AppFontWeight.semibold.value))),
+          ],
+        ),
+      );
 
   Widget newBookingsTab(context) {
     return Column(
@@ -149,16 +152,15 @@ class BookingsPage extends GetView<BookingsController> {
         _additionalElementsInfo(context),
         SizedBox(height: 24.h),
         Obx(
-              () => CustomButton(
-            width: double.maxFinite,
-            linearColor: primaryButtonLinearColor,
-            height: 38.h,
-            borderRadius: 38.h / 2,
-            isLoader: controller.saveBookingApiLoading.value,
-            style: AppFontStyle.body(color: Colors.white),
-            text: 'Submit',
-            onTap: () => controller.checkNewBookingValidation(),
-          ),
+          () => CustomButton(
+              width: double.maxFinite,
+              linearColor: primaryButtonLinearColor,
+              height: 38.h,
+              borderRadius: 38.h / 2,
+              isLoader: controller.saveBookingApiLoading.value,
+              style: AppFontStyle.body(color: Colors.white),
+              text: 'Submit',
+              onTap: () => controller.checkNewBookingValidation()),
         ),
         SizedBox(height: 20.h),
       ],
@@ -447,7 +449,7 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _paymentDropDown(
       {required Payments? selectedOption,
-        required Function(Payments value) onTap}) {
+      required Function(Payments value) onTap}) {
     return SizedBox(
       child: DropdownButton<Payments>(
         value: selectedOption,
@@ -496,16 +498,16 @@ class BookingsPage extends GetView<BookingsController> {
 
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
-        required TextEditingController txtEditingController,
-        TextInputType keyboardType = TextInputType.text,
-        TextInputAction textInputAction = TextInputAction.next,
-        FormFieldValidator? validator,
-        bool readOnly = false,
-        GestureTapCallback? onTap,
-        Function(String)? onChanged,
-        Color? borderColor,
-        Color? focusColor,
-        TextStyle? textStyle}) {
+      required TextEditingController txtEditingController,
+      TextInputType keyboardType = TextInputType.text,
+      TextInputAction textInputAction = TextInputAction.next,
+      FormFieldValidator? validator,
+      bool readOnly = false,
+      GestureTapCallback? onTap,
+      Function(String)? onChanged,
+      Color? borderColor,
+      Color? focusColor,
+      TextStyle? textStyle}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
@@ -703,8 +705,8 @@ class BookingsPage extends GetView<BookingsController> {
         'Enter Reference Number (Optional)',
         txtEditingController: controller.refNumberController,
         keyboardType: TextInputType.text, validator: (value) {
-          return null;
-        });
+      return null;
+    });
   }
 
   Widget _remarksLabel() {
@@ -780,20 +782,20 @@ class BookingsPage extends GetView<BookingsController> {
             ),
           ),
           Obx(() => InkWell(
-            onTap: () => {
-              if (controller.showCustomPricing.value)
-                controller.showCustomPricing.value = false
-              else
-                controller.showCustomPricing.value = true
-            },
-            child: Icon(
-              controller.showCustomPricing.value
-                  ? Icons.arrow_drop_up_sharp
-                  : Icons.arrow_drop_down_sharp,
-              size: 20.r,
-              color: AppColors.kPrimaryColor.value,
-            ),
-          ))
+                onTap: () => {
+                  if (controller.showCustomPricing.value)
+                    controller.showCustomPricing.value = false
+                  else
+                    controller.showCustomPricing.value = true
+                },
+                child: Icon(
+                  controller.showCustomPricing.value
+                      ? Icons.arrow_drop_up_sharp
+                      : Icons.arrow_drop_down_sharp,
+                  size: 20.r,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+              ))
         ],
       ),
     );
@@ -881,7 +883,7 @@ class BookingsPage extends GetView<BookingsController> {
             ),
           ),
           Obx(
-                () => InkWell(
+            () => InkWell(
               onTap: () => {
                 if (controller.showAdditionalElements.value)
                   controller.showAdditionalElements.value = false
@@ -905,21 +907,21 @@ class BookingsPage extends GetView<BookingsController> {
   Widget _layoutAdditionalElements() {
     return Obx(() => controller.showAdditionalElements.value
         ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        _noteToDriverWidget(),
-        _noteToAdminWidget(),
-        _flightNumberWidget(),
-        _refNumberWidget(),
-        SizedBox(height: 10.h),
-        _remarksLabel(),
-        SizedBox(height: 7.h),
-        _remarksCardView(),
-      ],
-    )
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10.h,
+              ),
+              _noteToDriverWidget(),
+              _noteToAdminWidget(),
+              _flightNumberWidget(),
+              _refNumberWidget(),
+              SizedBox(height: 10.h),
+              _remarksLabel(),
+              SizedBox(height: 7.h),
+              _remarksCardView(),
+            ],
+          )
         : const SizedBox.shrink());
   }
 

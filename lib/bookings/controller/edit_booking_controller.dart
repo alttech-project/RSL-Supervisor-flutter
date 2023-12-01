@@ -123,9 +123,12 @@ class EditBookingController extends GetxController {
     if (details != null) {
       editBookingTripId.value = details.id ?? 0;
       nameController.text = details.guest_name ?? "";
-      if (details.guest_country_code != null &&
-          details.guest_country_code!.isNotEmpty) {
-        countryCode.value = details.guest_country_code!;
+      if (details.guest_country_code != null) {
+        if (details.guest_country_code!.contains("+")) {
+          countryCode.value = details.guest_country_code!.replaceFirst("+", "");
+        } else {
+          countryCode.value = details.guest_country_code!;
+        }
       } else {
         countryCode.value = "971";
       }
@@ -222,7 +225,7 @@ class EditBookingController extends GetxController {
         showDefaultDialog(
           context: Get.context!,
           title: "Alert",
-          message: "Do you want edit trip detail?",
+          message: "Do you want to update booking details?",
           isTwoButton: true,
           acceptBtnTitle: "Yes",
           acceptAction: () {
@@ -295,9 +298,7 @@ class EditBookingController extends GetxController {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         clearAllData();
-        Get.back();
-        Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
-        changeTabIndex(1);
+        goBackPage();
       } else {
         showDefaultDialog(
           context: Get.context!,
@@ -309,6 +310,14 @@ class EditBookingController extends GetxController {
       saveBookingApiLoading.value = false;
       printLogs("EditBooking api error: ${error.toString()}");
     });
+  }
+
+  void goBackPage() {
+    Get.back();
+    Get.find<BookingsListController>().startTripListTimer();
+    Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
+    changeTabIndex(1);
+    tabController?.animateTo(1);
   }
 
   void callMotorModelApi() async {

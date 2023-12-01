@@ -25,11 +25,13 @@ import '../../utils/helpers/location_manager.dart';
 import '../../widgets/custom_button.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
+import '../upcoming_bookings_tab.dart';
 
 double doubleWithTwoDigits(double value) =>
     double.parse(value.toStringAsFixed(2));
 
-class BookingsController extends GetxController {
+class BookingsController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
   final LocationManager locationManager = LocationManager();
   var selectedTabBar = 0.obs;
@@ -98,6 +100,7 @@ class BookingsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    tabController = TabController(length: 3, vsync: this);
     getDate();
     _getUserInfo();
   }
@@ -266,14 +269,14 @@ class BookingsController extends GetxController {
         showDefaultDialog(
           context: Get.context!,
           title: "Alert",
-          message: "Do you want to track that trip?",
+          message: "Do you want to track this trip?",
           isTwoButton: true,
           acceptBtnTitle: "Yes",
           acceptAction: () {
+            changeTabIndex(1);
+            tabController?.animateTo(1);
             Get.find<BookingsListController>().startTripListTimer();
             Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
-            selectedTabBar.value = 1;
-            changeTabIndex(1);
           },
           cancelBtnTitle: "No",
         );

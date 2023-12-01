@@ -497,8 +497,8 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
     final tripData = controller.tripListOngoing[index];
     return InkWell(
       onTap: () {
-       /* stopTripListTimer();
-        stopTripListOngoingTimer();*/
+        controller.stopTripListOngoingTimer();
+        controller.stopTripListTimer();
         editListController.callGetByPassengerDetailsApi(
             tripId: "${tripData.tripId}");
         Get.toNamed(AppRoutes.editBookings);

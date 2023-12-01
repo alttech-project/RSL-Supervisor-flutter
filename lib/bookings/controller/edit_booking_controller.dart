@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
 import 'package:rsl_supervisor/bookings/data/edit_trip_details_data.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
@@ -30,6 +31,7 @@ class EditBookingController extends GetxController {
   var selectedTabBar = 0.obs;
   TabController? tabController;
   RxInt editBookingTripId = 0.obs;
+  RxString initialCountryCode = 'AE'.obs;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -124,14 +126,11 @@ class EditBookingController extends GetxController {
       editBookingTripId.value = details.id ?? 0;
       nameController.text = details.guest_name ?? "";
       if (details.guest_country_code != null) {
-        if (details.guest_country_code!.contains("+")) {
-          countryCode.value = details.guest_country_code!.replaceFirst("+", "");
-        } else {
-          countryCode.value = details.guest_country_code!;
-        }
+        countryCode.value = details.guest_country_code!.replaceAll("+", "");
       } else {
         countryCode.value = "971";
       }
+      convertDialCodeToCountryIso();
       phoneController.text = details.guest_phone ?? "";
       emailController.text = details.guest_email ?? "";
       pickupLocationController.text = details.current_location ?? "";
@@ -408,11 +407,28 @@ class EditBookingController extends GetxController {
     selectedTabBar.value = value;
   }
 
+  String convertDialCodeToCountryIso() {
+    try {
+      String dialCode = countryCode.value.replaceAll("+", "");
+      Country country = countries.firstWhere(
+        (country) => country.dialCode == (dialCode),
+      );
+      print('ICC CCv countriesMatching: $dialCode ** ${country.code}');
+      initialCountryCode.value = country.code;
+      return country.code;
+    } catch (e) {
+      print('ICC CCv countriesMatching error: $e');
+      initialCountryCode.value = 'AE';
+      return 'AE';
+    }
+  }
+
   void clearAllData() {
     taxiModel.value = "SEDAN";
     taxiId.value = "1";
     selectedPayment.value = paymentList[0];
     countryCode.value = "971";
+    initialCountryCode.value = "AE";
     nameController.clear();
     phoneController.clear();
     emailController.clear();
@@ -425,6 +441,19 @@ class EditBookingController extends GetxController {
     remarksController.clear();
     clearPickUpLocation();
     clearDropLocation();
+    overViewPolyLine.value = "";
+    approximateTime.value = 0.0;
+    approximateTrafficTime.value = 0.0;
+    approximateDistance.value = 0.0;
+    approximateFare.value = "0";
+    zoneFareApplied = 0;
+    rslShare = 0;
+    driverShare = 0;
+    corporateShare = 0;
+    pickupZoneId = 0;
+    pickupZoneGroupId = 0;
+    dropZoneId = 0;
+    dropZoneGroupId = 0;
   }
 
   void clearPickUpLocation() {

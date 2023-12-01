@@ -509,10 +509,12 @@ class EditBooking extends GetView<EditBookingController> {
       controller: controller.phoneController,
       hint: 'Guest Phone Number',
       inputLblTxt: 'Guest Phone Number',
+      // initialCountryCode: '+${controller.countryCode.value}',
       inputLblStyle: AppFontStyle.subHeading(
           color: AppColors.kPrimaryColor.value, size: AppFontSize.medium.value),
       textInputAction: TextInputAction.next,
       onCountryChanged: (country) {
+        print("hi phone:${country.dialCode}");
         controller.isValueChanged.value = true;
         controller.countryCode.value = country.dialCode;
       },

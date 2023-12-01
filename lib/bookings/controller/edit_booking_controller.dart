@@ -112,9 +112,6 @@ class EditBookingController extends GetxController {
       apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         updatePassengerDetails(response.responseData);
-        editBookingTripId.value = response.responseData?.id ?? 0;
-        motorModelFare.value =
-            response.responseData?.motor_model_info ?? MotorModelInfo();
       }
     }).onError((error, stackTrace) {
       apiLoading.value = false;
@@ -124,11 +121,14 @@ class EditBookingController extends GetxController {
 
   void updatePassengerDetails(PassengerDetails? details) {
     if (details != null) {
-      print(
-          "hi callGetByPassengerDetailsApi1 ${details.guest_name} ${details.guest_phone}");
-
+      editBookingTripId.value = details.id ?? 0;
       nameController.text = details.guest_name ?? "";
-      countryCode.value = details.guest_country_code ?? "971";
+      if (details.guest_country_code != null &&
+          details.guest_country_code!.isNotEmpty) {
+        countryCode.value = details.guest_country_code!;
+      } else {
+        countryCode.value = "971";
+      }
       phoneController.text = details.guest_phone ?? "";
       emailController.text = details.guest_email ?? "";
       pickupLocationController.text = details.current_location ?? "";
@@ -147,7 +147,22 @@ class EditBookingController extends GetxController {
       remarksController.text = details.remarks ?? "";
       taxiModel.value = details.motor_model_info?.modelName ?? "";
       taxiId.value = (details.motor_model_info?.modelId ?? "").toString();
+      rslShare = details.rsl_share ?? 0;
+      driverShare = details.driver_share ?? 0;
+      corporateShare = details.corporate_share ?? 0;
+      zoneFareApplied = details.zone_fare_applied ?? 0;
+      pickupZoneId = details.pickup_zone_id ?? 0;
+      pickupZoneGroupId = details.pickup_zone_group_id ?? 0;
+      dropZoneId = details.drop_zone_id ?? 0;
+      dropZoneGroupId = details.drop_zone_group_id ?? 0;
+      approximateTime.value =
+          double.parse(details.approx_duration.toString() ?? "0");
+      approximateDistance.value =
+          double.parse(details.approx_distance.toString() ?? "0");
+      approximateFare.value = details.approx_trip_fare.toString() ?? "0";
 
+      print("hi approximateFare: ${approximateFare.value}");
+      overViewPolyLine.value = details.route_polyline ?? "";
       for (var value in paymentList) {
         if (details.passenger_payment_option.toString() == value.paymentId) {
           selectedPayment.value = value;
@@ -240,30 +255,42 @@ class EditBookingController extends GetxController {
       customerPrice = price;
     }
     editBookingApi(EditCorporateBookingRequestData(
-            currentLocation: pickupLocation,
-            customerPrice: int.parse(priceController.text.trim()),
-            dropLatitude: dropLatitude,
-            dropLocation: dropLocation,
-            dropLongitude: dropLongitude,
-            dropNotes: "",
-            finalPaymentOption: "1",
+            id: editBookingTripId.value,
+            motor_model: int.parse(taxiId.value),
+            pickupTime: date,
+            extraCharge: int.parse(extraCharges),
+            rsl_share: rslShare,
+            driver_share: driverShare,
+            corporate_share: corporateShare,
+            remarks: remarks,
+            zone_fare_applied: zoneFareApplied,
+            pickup_zone_id: pickupZoneId,
+            pickup_zone_group_id: pickupZoneGroupId,
+            drop_zone_id: dropZoneId,
+            drop_zone_group_id: dropZoneGroupId,
+            noteToDriver: noteToDriver,
             flightNumber: flightNumber,
-            guestCountryCode: "+971",
+            referenceNumber: refNumber,
+            noteToAdmin: noteToAdmin,
+            currentLocation: pickupLocation,
+            dropLocation: dropLocation,
+            customerPrice: int.parse(priceController.text.trim()),
+            pickupNotes: "",
+            dropNotes: "",
+            passengerPaymentOption: selectedPayment.value.paymentId,
+            finalPaymentOption: selectedPayment.value.paymentId,
+            pickupLatitude: pickupLatitude,
+            pickupLongitude: pickupLongitude,
+            dropLatitude: dropLatitude,
+            dropLongitude: dropLongitude,
             guestEmail: email,
             guestName: name,
             guestPhone: phone,
-            motorModelInfo: motorModelFare.value,
-            id: editBookingTripId.value,
-            noteToAdmin: noteToAdmin,
-            noteToDriver: noteToDriver,
-            passengerPaymentOption: "1",
-            pickupLatitude: pickupLatitude,
-            pickupLongitude: pickupLongitude,
-            pickupNotes: noteToAdmin,
-            pickupTime: date,
-            referenceNumber: refNumber,
-            remarks: remarks,
-            extraCharge: int.parse(extraCharges)))
+            guestCountryCode: "+${countryCode.value}",
+            approx_distance: "${approximateDistance.value.toString()} km",
+            approx_duration: "${approximateTime.value.toString()} mins",
+            approx_trip_fare: double.parse(approximateFare.value),
+            route_polyline: overViewPolyLine.value))
         .then((response) {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
@@ -681,7 +708,8 @@ class EditBookingController extends GetxController {
                                             cars[selectedCarIndex].name,
                                         taxiId.value =
                                             cars[selectedCarIndex].modelId,
-                                        updateModelFareDetails(),
+                                        // updateModelFareDetails(),
+                                        callMotorModelApi(),
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

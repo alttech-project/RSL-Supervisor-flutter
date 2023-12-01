@@ -20,6 +20,9 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+
   ]).then((value) {
     runApp(const AppMain());
   });
@@ -37,9 +40,12 @@ class AppMain extends StatelessWidget {
   const AppMain({super.key});
 
   @override
+
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 640),
+      designSize: MediaQuery.of(context).orientation == Orientation.landscape
+          ? const Size(640, 360) // Landscape design size
+          : const Size(360, 640), // Portrait design size
       minTextAdapt: true,
       splitScreenMode: true,
       child: const SplashScreen(),

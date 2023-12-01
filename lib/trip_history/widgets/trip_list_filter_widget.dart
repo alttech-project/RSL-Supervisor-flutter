@@ -124,7 +124,9 @@ class TripListFilterWidget extends GetView<TripHistoryController> {
 
   void _showDatePickerWidget() {
     Get.bottomSheet(
-      DateRangePickerWidget(
+        SingleChildScrollView(child:
+
+        DateRangePickerWidget(
         fromDate: controller.fromDate.value,
         toDate: controller.toDate.value,
         onClose: () {
@@ -136,6 +138,7 @@ class TripListFilterWidget extends GetView<TripHistoryController> {
           controller.toDate.value = toDate;
         },
       ),
+        ),
       isScrollControlled: true,
     );
   }

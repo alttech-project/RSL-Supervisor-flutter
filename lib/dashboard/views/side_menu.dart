@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import '../../utils/helpers/getx_storage.dart';
+import 'package:rsl_supervisor/network/app_config.dart';
 
 class SideMenuPage extends GetView<DashBoardController> {
   const SideMenuPage({super.key});

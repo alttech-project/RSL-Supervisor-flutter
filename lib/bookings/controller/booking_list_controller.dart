@@ -359,98 +359,102 @@ class BookingsListController extends GetxController {
   Widget bottomsheetWidget(tripId) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20, right: 10, left: 10, top: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Cancel Trip",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Cancel Trip",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          TextField(
-            controller: messageController,
-            decoration: InputDecoration(
-              hintText: 'Message',
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                  width: 1.0.w,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.kPrimaryColor.value,
-                  width: 1.0.w,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+              ],
             ),
-            maxLines: 5,
-            minLines: 3,
-          ),
-          SizedBox(height: 20.h),
-          Obx(() => TextField(
-                controller: passwordController,
-                obscureText: !isPasswordVisible.value,
-                decoration: InputDecoration(
-                  hintText: 'Enter the Password',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      width: 1.0.w,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            SizedBox(height: 20.h),
+            TextField(
+              controller: messageController,
+              decoration: InputDecoration(
+                hintText: 'Message',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 1.0.w,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: AppColors.kPrimaryColor.value,
-                      width: 1.0.w,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      print(isPasswordVisible.value);
-                      isPasswordVisible.value = !isPasswordVisible.value;
-                    },
-                  ),
-                  contentPadding:
-                      const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 ),
-              )),
-          ElevatedButton(
-            onPressed: () {
-              if (messageController.text == "") {
-                showSnackBar(title: "Alert", msg: "Please Enter Message");
-              } else if (passwordController.text == "") {
-                showSnackBar(title: "Alert", msg: "Please Enter Password");
-              } else {
-                _callCancelTripApi(tripId);
-                /* messageController.text = "";
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.kPrimaryColor.value,
+                    width: 1.0.w,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                contentPadding:
+                    const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+              ),
+              maxLines: 5,
+              minLines: 3,
+            ),
+            SizedBox(height: 20.h),
+            Obx(() => TextField(
+                  controller: passwordController,
+                  obscureText: !isPasswordVisible.value,
+                  decoration: InputDecoration(
+                    hintText: 'Enter the Password',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.0.w,
+                      ),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.kPrimaryColor.value,
+                        width: 1.0.w,
+                      ),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isPasswordVisible.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        print(isPasswordVisible.value);
+                        isPasswordVisible.value = !isPasswordVisible.value;
+                      },
+                    ),
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 10.0),
+                  ),
+                )),
+            ElevatedButton(
+              onPressed: () {
+                if (messageController.text == "") {
+                  showSnackBar(title: "Alert", msg: "Please Enter Message");
+                } else if (passwordController.text == "") {
+                  showSnackBar(title: "Alert", msg: "Please Enter Password");
+                } else {
+                  _callCancelTripApi(tripId);
+                  /* messageController.text = "";
                 passwordController.text = "";*/
-                Get.back();
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: AppColors.kPrimaryColor.value,
+                  Get.back();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.kPrimaryColor.value,
+              ),
+              child: const Text('Submit'),
             ),
-            child: const Text('Submit'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

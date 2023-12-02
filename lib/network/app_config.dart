@@ -17,7 +17,8 @@ const Map<Environment, String> nodeUrls = {
 
 const Map<Environment, String> newBookingUrls = {
   Environment.demo: 'http://34.197.71.192:3009/newBooking/',
-  Environment.live: 'http://34.197.71.192:3009/newBooking/',
+  Environment.live:
+      'https://corporateback.royalsmartlimousine.com/newBooking/supervisorCorporateBooking/',
 };
 
 const Map<CompanyType, String> companyIds = {
@@ -26,7 +27,7 @@ const Map<CompanyType, String> companyIds = {
 };
 
 class AppConfig {
-  static Environment currentEnvironment = Environment.demo;
+  static Environment currentEnvironment = Environment.live;
   static CompanyType companyType = CompanyType.RSL;
 
   static String get webBaseUrl => baseUrls[currentEnvironment]!;

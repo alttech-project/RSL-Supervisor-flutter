@@ -210,9 +210,9 @@ class EditBookingController extends GetxController {
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
-      } else if (price.isEmpty || int.parse(price) <= 0) {
+      } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
-      } else if (extraCharges.isEmpty || int.parse(extraCharges) <= 0) {
+      } else if (extraCharges.isEmpty || double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
       } else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
@@ -260,7 +260,8 @@ class EditBookingController extends GetxController {
             id: editBookingTripId.value,
             motor_model: int.parse(taxiId.value),
             pickupTime: date,
-            extraCharge: int.parse(extraCharges),
+            extraCharge: double.parse(extraCharges),
+            customerPrice: double.parse(priceController.text.trim()),
             rsl_share: rslShare,
             driver_share: driverShare,
             corporate_share: corporateShare,
@@ -276,7 +277,6 @@ class EditBookingController extends GetxController {
             noteToAdmin: noteToAdmin,
             currentLocation: pickupLocation,
             dropLocation: dropLocation,
-            customerPrice: int.parse(priceController.text.trim()),
             pickupNotes: "",
             dropNotes: "",
             passengerPaymentOption: selectedPayment.value.paymentId,

@@ -35,6 +35,8 @@ class SplashController extends GetxController {
             storageController.saveMonitorNodeUrl(
                 url: details?.monitorNodeUrl ?? "");
             storageController.saveNodeUrl(url: details?.referralNodeUrl ?? "");
+            storageController.saveBookingsUrl(
+                url: details?.corporateNodeUrl ?? "");
             storageController.saveRiderReferralUrl(
                 url: details?.supervisorRiderReferral ?? 0);
             storageController.saveVideoDate(date: details?.videoDate ?? "");

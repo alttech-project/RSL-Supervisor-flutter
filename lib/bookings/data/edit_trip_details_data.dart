@@ -6,7 +6,8 @@ class EditCorporateBookingRequestData {
   int? id;
   int? motor_model;
   String? pickupTime;
-  int? extraCharge;
+  double? extraCharge;
+  double? customerPrice;
 
   num? rsl_share;
   num? driver_share;
@@ -24,7 +25,6 @@ class EditCorporateBookingRequestData {
   String? noteToAdmin;
   String? currentLocation;
   String? dropLocation;
-  int? customerPrice;
   String? pickupNotes;
   String? dropNotes;
   String? passengerPaymentOption;

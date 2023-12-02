@@ -35,7 +35,7 @@ class EmailInputWidget extends GetView<LoginController> {
             ),
           ),
           Obx(
-            () => CustomButton(
+                () => CustomButton(
               width: double.maxFinite,
               linearColor: primaryButtonLinearColor,
               height: 35.h,
@@ -54,7 +54,7 @@ class EmailInputWidget extends GetView<LoginController> {
       Align(
         alignment: Alignment.bottomLeft,
         child: Obx(
-          () => ListTile(
+              () => ListTile(
             title: Text(
               "App Version: ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
               style: AppFontStyle.smallText(

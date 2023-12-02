@@ -69,6 +69,14 @@ class GetStorageController extends GetxController {
     return await storage.read("nodeUrl") ?? AppConfig.nodeUrl;
   }
 
+  void saveBookingsUrl({required String url}) {
+    storage.write("bookingsUrl", url);
+  }
+
+  Future<String> getBookingsUrl() async {
+    return await storage.read("bookingsUrl") ?? AppConfig.newBookingUrl;
+  }
+
   void saveCorporateId({required String url}) {
     storage.write("corporateId", url);
   }

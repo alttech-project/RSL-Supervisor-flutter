@@ -31,7 +31,7 @@ class EditBooking extends GetView<EditBookingController> {
             showDefaultDialog(
                 context: Get.context!,
                 title: "Alert",
-                message: "Do you want save booking details?",
+                message: "Do you want to save this details?",
                 isTwoButton: true,
                 acceptBtnTitle: "Yes",
                 acceptAction: () {
@@ -74,7 +74,7 @@ class EditBooking extends GetView<EditBookingController> {
                                       context: Get.context!,
                                       title: "Alert",
                                       message:
-                                          "Do you want save booking details?",
+                                          "Do you want to save this details?",
                                       isTwoButton: true,
                                       acceptBtnTitle: "Yes",
                                       acceptAction: () {

@@ -33,31 +33,37 @@ Future<Map<String, dynamic>> googleMapApi(
 
 Future<MotorDetailsResponse> motorDetailsApi(
     MotorDetailsRequest requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.newBookingUrl}motorDetails',
+        url: '${url}motorDetails',
         request: motorDetailsRequestToJson(requestData),
       ),
-      queryParam: {"type": ""});
+      queryParam: {"type": "motorDetails"});
   return motorDetailsResponseFromJson(response);
 }
 
 Future<SaveBookingResponse> saveBookingApi(
     SaveBookingRequest requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.newBookingUrl}supervisorCorporateBooking',
+        url: '${url}supervisorCorporateBooking',
         request: saveBookingRequestToJson(requestData),
       ),
-      queryParam: {"type": ""});
+      queryParam: {"type": "supervisorCorporateBooking"});
   return saveBookingResponseFromJson(response);
 }
 
 Future<GetByPassengerEditDetailsResponse> getByPassengerEditDetails(
     GetByPassengerEditDetailsRequest requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.newBookingUrl}getByPassengerEditDetails',
+        url: '${url}getByPassengerEditDetails',
         request: getByPassengerEditDetailsRequestToJson(requestData),
       ),
       queryParam: {"type": ""});
@@ -66,9 +72,11 @@ Future<GetByPassengerEditDetailsResponse> getByPassengerEditDetails(
 
 Future<EditCorporateBookingResponseData> editBookingApi(
     EditCorporateBookingRequestData requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.newBookingUrl}editCorporateBooking',
+        url: '${url}editCorporateBooking',
         request: editCorporateBookingRequestToJson(requestData),
       ),
       queryParam: {"type": ""});

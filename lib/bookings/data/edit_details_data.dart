@@ -72,7 +72,7 @@ class PassengerDetails {
   num? corporate_share;
   num? extra_charge;
   String? remarks;
-  String? customer_rate;
+  num? customer_rate;
   int? zone_fare_applied;
   int? pickup_zone_id;
   int? pickup_zone_group_id;

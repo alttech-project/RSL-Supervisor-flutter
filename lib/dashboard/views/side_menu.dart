@@ -20,7 +20,7 @@ class SideMenuPage extends GetView<DashBoardController> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Obx(
-              () => DrawerHeader(
+                  () => DrawerHeader(
                 child: Column(
                   children: [
                     Flexible(
@@ -87,7 +87,7 @@ class SideMenuPage extends GetView<DashBoardController> {
                 : const SizedBox(),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(
-              () => ListTile(
+                  () => ListTile(
                 title: Text(
                   "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
                   style: AppFontStyle.smallText(

@@ -646,8 +646,12 @@ class UpcomingTripListWidget extends GetView<BookingsListController> {
         return AppColors.kRedColor.value;
       case "9":
         return const Color(0xFFAD72FC);
+      case "3":
+        return const Color(0xFF44A4F4);
       case "0":
         return Colors.yellowAccent;
+      case "12":
+        return AppColors.kRedColor.value;
       default:
         return AppColors.kRedColor.value;
     }

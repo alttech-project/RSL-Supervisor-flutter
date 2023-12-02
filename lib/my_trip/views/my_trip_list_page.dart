@@ -15,7 +15,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/navigation_title.dart';
 
 class MyTripListPage extends GetView<MyTripListController> {
-  const MyTripListPage({super.key});
+  const MyTripListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,53 +25,49 @@ class MyTripListPage extends GetView<MyTripListController> {
           controller.goBack();
           return false;
         },
-
         child: Scaffold(
           extendBodyBehindAppBar: false,
           backgroundColor: Colors.black,
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: 10.w,
-              right: 10.w,
-              bottom: 12.h,
-            ),
-            child: Column(
-              children: [
-                NavigationTitle(
-                  title: "My Trips",
-                  onTap: () => controller.goBack(),
-                  rightBarWidget: Obx(
-                        () => Visibility(
-                      visible: (controller.tripList.isNotEmpty),
-                      child: CustomIconButton(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+              child: Column(
+                children: [
+                  NavigationTitle(
+                    title: "My Trips",
+                    onTap: () => controller.goBack(),
+                    rightBarWidget: Obx(
+                          () => Visibility(
+                        visible: controller.tripList.isNotEmpty,
+                        child: CustomIconButton(
                           title: "Export",
                           icon: Icons.upload,
                           showLoader: controller.showBtnLoader.value,
-                          onTap: () => showAlertDialog(context)),
-                    ),
-                  ),
-                ),
-                const MyTripListFilterWidget(),
-                Obx(
-                      () => Expanded(
-                    child: (controller.showLoader.value)
-                        ? const Center(
-                      child: AppLoader(),
-                    )
-                        : (controller.tripList.isNotEmpty)
-                        ? const MyTripListWidget()
-                        : Center(
-                      child: Text(
-                        "No trips found",
-                        style: AppFontStyle.body(
-                          color: Colors.white,
-                          weight: AppFontWeight.semibold.value,
+                          onTap: () => showAlertDialog(context),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const MyTripListFilterWidget(),
+                  Obx(
+                        () => SizedBox(
+                      child: controller.showLoader.value
+                          ? const Center(child: AppLoader())
+                          : controller.tripList.isNotEmpty
+                          ? const MyTripListWidget()
+                          : Center(
+                        child: Text(
+                          "No trips found",
+                          style: AppFontStyle.body(
+                            color: Colors.white,
+                            weight: AppFontWeight.semibold.value,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -97,8 +93,9 @@ void showAlertDialog(BuildContext context) {
             child: Text(
               "No",
               style: TextStyle(
-                  color: AppColors.kPrimaryColor.value,
-                  fontWeight: FontWeight.bold),
+                color: AppColors.kPrimaryColor.value,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -108,10 +105,13 @@ void showAlertDialog(BuildContext context) {
             width: 10,
           ),
           TextButton(
-            child: Text("Yes",
-                style: TextStyle(
-                    color: AppColors.kPrimaryColor.value,
-                    fontWeight: FontWeight.bold)),
+            child: Text(
+              "Yes",
+              style: TextStyle(
+                color: AppColors.kPrimaryColor.value,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               final controller = Get.find<MyTripListController>();
               controller.callExportPdfApi();
@@ -119,7 +119,7 @@ void showAlertDialog(BuildContext context) {
             },
           ),
         ],
-      )
+      ),
     ],
   );
 

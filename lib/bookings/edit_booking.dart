@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
@@ -23,7 +24,7 @@ class EditBooking extends GetView<EditBookingController> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: () {
-          if (controller.isValueChanged.value) {
+          if (!controller.isValueChanged.value) {
             controller.goBack();
             controller.onClose();
             return Future.value(true);
@@ -67,7 +68,7 @@ class EditBooking extends GetView<EditBookingController> {
                             child: NavigationTitle(
                               title: "Edit Bookings",
                               onTap: () {
-                                if (controller.isValueChanged.value) {
+                                if (!controller.isValueChanged.value) {
                                   controller.goBack();
                                 } else {
                                   showDefaultDialog(
@@ -352,7 +353,7 @@ class EditBooking extends GetView<EditBookingController> {
                 child: _paymentDropDown(
                   selectedOption: controller.selectedPayment.value,
                   onTap: (value) {
-                    print("hi paymentDropDown ${value}");
+                    controller.isValueChanged.value = true;
                     controller.selectedPayment.value = value;
                   },
                 ),
@@ -499,12 +500,16 @@ class EditBooking extends GetView<EditBookingController> {
     return _labelAndTextFieldWidget(
         'Guest Name', 'Guest Name', 'Enter Guest Name',
         txtEditingController: controller.nameController,
-        textInputAction: TextInputAction.next, validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please enter guest name';
-      }
-      return null;
-    });
+        onChanged: (val) {
+          controller.isValueChanged.value = true;
+        },
+        textInputAction: TextInputAction.next,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter guest name';
+          }
+          return null;
+        });
   }
 
   Widget _phoneNumberWidget() {
@@ -532,7 +537,6 @@ class EditBooking extends GetView<EditBookingController> {
       'Guest Email',
       'Enter Guest Email',
       onChanged: (val) {
-        printLogs("onChanged: $val");
         controller.isValueChanged.value = true;
       },
       txtEditingController: controller.emailController,
@@ -966,6 +970,7 @@ class EditBooking extends GetView<EditBookingController> {
       lastDate: controller.dateTime.add(const Duration(days: 62)),
     );
     if (selected != null && selected != controller.selectedDate) {
+      controller.isValueChanged.value = true;
       controller.selectedDate = selected;
     }
     return controller.selectedDate;
@@ -978,6 +983,7 @@ class EditBooking extends GetView<EditBookingController> {
       initialTime: controller.selectedTime,
     );
     if (selected != null && selected != controller.selectedTime) {
+      controller.isValueChanged.value = true;
       controller.selectedTime = selected;
     }
     return controller.selectedTime;

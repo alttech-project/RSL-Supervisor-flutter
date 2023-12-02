@@ -67,6 +67,12 @@ class BookingsListController extends GetxController {
     _getUserInfo();
   }
 
+  @override
+  void onClose() {
+    stopTripListOngoingTimer();
+    stopTripListTimer();
+  }
+
   void goBack() {
     Get.back();
   }
@@ -114,6 +120,19 @@ class BookingsListController extends GetxController {
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
+  }
+
+  void startTripListOngoingTimer() {
+    stopTripListTimer();
+    stopTripListOngoingTimer();
+    const timerDuration = Duration(seconds: 10);
+
+    _timerOngoing = Timer.periodic(
+      timerDuration,
+      (Timer timer) {
+        callTripListOngoingApi(isTimer: true, type: 2);
+      },
+    );
   }
 
   void stopTripListOngoingTimer() {
@@ -196,19 +215,6 @@ class BookingsListController extends GetxController {
           title: 'Error',
           msg: error.toString(),
         );
-      },
-    );
-  }
-
-  void startTripListOngoingTimer() {
-    stopTripListTimer();
-    stopTripListOngoingTimer();
-    const timerDuration = Duration(seconds: 10);
-
-    _timerOngoing = Timer.periodic(
-      timerDuration,
-      (Timer timer) {
-        callTripListOngoingApi(isTimer: true, type: 2);
       },
     );
   }

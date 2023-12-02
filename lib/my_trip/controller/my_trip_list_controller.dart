@@ -62,18 +62,6 @@ class MyTripListController extends GetxController {
     _getUserInfos();
   }
 
-  void stopTripListTimer() {
-    if (_timer != null && _timer!.isActive) {
-      _timer!.cancel();
-    }
-  }
-
-  void stopTripListOngoingTimer() {
-    if (_timerOngoing != null && _timerOngoing!.isActive) {
-      _timerOngoing!.cancel();
-    }
-  }
-
   void _scrollListenerTripList() {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
@@ -96,8 +84,6 @@ class MyTripListController extends GetxController {
   void onClose() {
     scrollController.dispose();
     existingDataList.refresh();
-    stopTripListOngoingTimer();
-    stopTripListTimer();
     super.onClose();
   }
 
@@ -157,7 +143,7 @@ class MyTripListController extends GetxController {
             totalCount.value = response.details!.totalCount ?? 0;
             showLoader.value = false;
             tripList.refresh();
-            print("DEEPAK tripList ${tripList.length}");
+            print("DEEPAK my trips ${tripList.length}");
           } else {
             tripList.value = [];
             dispatchedTrips.value = 0;

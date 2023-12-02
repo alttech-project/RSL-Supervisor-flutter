@@ -11,6 +11,7 @@ import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
+import '../widgets/app_loader.dart';
 import '../widgets/navigation_title.dart';
 import 'controller/edit_booking_controller.dart';
 
@@ -30,7 +31,7 @@ class EditBooking extends GetView<EditBookingController> {
             showDefaultDialog(
                 context: Get.context!,
                 title: "Alert",
-                message: "Do you want save trip detail?",
+                message: "Do you want save booking details?",
                 isTwoButton: true,
                 acceptBtnTitle: "Yes",
                 acceptAction: () {
@@ -38,8 +39,7 @@ class EditBooking extends GetView<EditBookingController> {
                 },
                 cancelBtnTitle: "No",
                 cancelAction: () {
-                  Get.back();
-                  controller.onClose();
+                  controller.goBackPage();
                 });
             return Future.value(false);
           }
@@ -50,46 +50,49 @@ class EditBooking extends GetView<EditBookingController> {
           child: Scaffold(
             extendBodyBehindAppBar: false,
             backgroundColor: Colors.black,
-            body: Obx(
-              () => CommonAppContainer(
-                showLoader: controller.apiLoading.value,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      //Fill the code of padding
-                      Padding(
-                        padding:
-                            EdgeInsets.only(left: 22.w, right: 22.w, top: 5.h),
-                        child: NavigationTitle(
-                          title: "Edit Bookings",
-                          onTap: () {
-                            if (controller.isValueChanged.value) {
-                              controller.goBack();
-                            } else {
-                              showDefaultDialog(
-                                  context: Get.context!,
-                                  title: "Alert",
-                                  message: "Do you want save trip detail?",
-                                  isTwoButton: true,
-                                  acceptBtnTitle: "Yes",
-                                  acceptAction: () {
-                                    controller.callEditBookingApi();
-                                  },
-                                  cancelBtnTitle: "No",
-                                  cancelAction: () {
-                                    Get.back();
-                                  });
-                            }
-                          },
-                        ),
+            body: Obx(() => controller.apiLoading.value
+                ? const Center(
+                    child: AppLoader(),
+                  )
+                : CommonAppContainer(
+                    showLoader: controller.apiLoading.value,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          //Fill the code of padding
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 22.w, right: 22.w, top: 5.h),
+                            child: NavigationTitle(
+                              title: "Edit Bookings",
+                              onTap: () {
+                                if (controller.isValueChanged.value) {
+                                  controller.goBack();
+                                } else {
+                                  showDefaultDialog(
+                                      context: Get.context!,
+                                      title: "Alert",
+                                      message:
+                                          "Do you want save booking details?",
+                                      isTwoButton: true,
+                                      acceptBtnTitle: "Yes",
+                                      acceptAction: () {
+                                        controller.callEditBookingApi();
+                                      },
+                                      cancelBtnTitle: "No",
+                                      cancelAction: () {
+                                        controller.goBackPage();
+                                      });
+                                }
+                              },
+                            ),
+                          ),
+                          newBookingsTab(context),
+                        ],
                       ),
-                      newBookingsTab(context),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ),
+                  )),
           ),
         ),
       ),
@@ -505,17 +508,21 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _phoneNumberWidget() {
-    return CountryCodeTextField(
-      controller: controller.phoneController,
-      hint: 'Guest Phone Number',
-      inputLblTxt: 'Guest Phone Number',
-      inputLblStyle: AppFontStyle.subHeading(
-          color: AppColors.kPrimaryColor.value, size: AppFontSize.medium.value),
-      textInputAction: TextInputAction.next,
-      onCountryChanged: (country) {
-        controller.isValueChanged.value = true;
-        controller.countryCode.value = country.dialCode;
-      },
+    return Obx(
+      () => CountryCodeTextField(
+        controller: controller.phoneController,
+        hint: 'Guest Phone Number',
+        inputLblTxt: 'Guest Phone Number',
+        initialCountryCode: controller.initialCountryCode.value,
+        inputLblStyle: AppFontStyle.subHeading(
+            color: AppColors.kPrimaryColor.value,
+            size: AppFontSize.medium.value),
+        textInputAction: TextInputAction.next,
+        onCountryChanged: (country) {
+          controller.isValueChanged.value = true;
+          controller.countryCode.value = country.dialCode;
+        },
+      ),
     );
   }
 

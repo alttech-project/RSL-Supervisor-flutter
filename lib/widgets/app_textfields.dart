@@ -16,12 +16,12 @@ class CapsuleTextField extends StatelessWidget {
 
   const CapsuleTextField(
       {super.key,
-      required this.controller,
-      required this.hint,
-      this.onChanged,
-      this.isEnabled,
-      this.textStyle,
-      this.suffix});
+        required this.controller,
+        required this.hint,
+        this.onChanged,
+        this.isEnabled,
+        this.textStyle,
+        this.suffix});
 
   @override
   Widget build(BuildContext context) {
@@ -150,12 +150,14 @@ class CountryCodeTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final ValueChanged<Country>? onCountryChanged;
   final InputDecoration? decoration;
+  final String initialCountryCode;
 
   const CountryCodeTextField({
     super.key,
     required this.controller,
     required this.hint,
     required this.inputLblTxt,
+    this.initialCountryCode = 'AE',
     this.onChanged,
     this.isEnabled,
     this.decoration,
@@ -180,7 +182,7 @@ class CountryCodeTextField extends StatelessWidget {
       cursorColor: cursorColor ?? AppColors.kPrimaryColor.value,
       autofocus: false,
       onSubmitted: onSubmit,
-      initialCountryCode: 'AE',
+      initialCountryCode: initialCountryCode,
       dropdownIconPosition: IconPosition.trailing,
       keyboardType: TextInputType.number,
       textAlign: TextAlign.start,

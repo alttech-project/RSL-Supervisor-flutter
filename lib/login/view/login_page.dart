@@ -6,6 +6,7 @@ import 'package:rsl_supervisor/login/widgets/verify_otp_widget.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 
 import '../controller/login_controller.dart';
+import '../../widgets/safe_area_container.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
@@ -18,14 +19,18 @@ class LoginPage extends GetView<LoginController> {
         return true;
       },
       child: Obx(
-        () => Scaffold(
-          backgroundColor: AppColors.kBlack.value,
-          extendBodyBehindAppBar: true,
-          body: SafeArea(
-              minimum: EdgeInsets.symmetric(horizontal: 15.w),
-              child: (controller.currentView.value == LoginViews.emailPage)
-                  ? const EmailInputWidget()
-                  : const VerifyOTPWidget()),
+        () => SafeAreaContainer(
+          statusBarColor: Colors.black,
+          themedark: true,
+          child: Scaffold(
+            backgroundColor: AppColors.kBlack.value,
+            extendBodyBehindAppBar: true,
+            body: SafeArea(
+                minimum: EdgeInsets.symmetric(horizontal: 15.w),
+                child: (controller.currentView.value == LoginViews.emailPage)
+                    ? const EmailInputWidget()
+                    : const VerifyOTPWidget()),
+          ),
         ),
       ),
     );

@@ -90,13 +90,16 @@ class BookingsPage extends GetView<BookingsController> {
       isScrollable: true,
       onTap: (value) {
         controller.changeTabIndex(value);
-        if(value == 0){
+        if (value == 0) {
           bookingListController.stopTripListTimer();
+          bookingListController.stopTripListOngoingTimer();
         } else if (value == 1) {
           bookingListController.startTripListTimer();
+          bookingListController.stopTripListOngoingTimer();
           bookingListController.callTripListOngoingApi(type: value);
         } else {
           bookingListController.startTripListOngoingTimer();
+          bookingListController.stopTripListTimer();
           bookingListController.callTripListOngoingApi(type: value);
         }
       },
@@ -150,15 +153,14 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 24.h),
         Obx(
           () => CustomButton(
-            width: double.maxFinite,
-            linearColor: primaryButtonLinearColor,
-            height: 38.h,
-            borderRadius: 38.h / 2,
-            isLoader: controller.saveBookingApiLoading.value,
-            style: AppFontStyle.body(color: Colors.white),
-            text: 'Submit',
-            onTap: () => controller.checkNewBookingValidation(),
-          ),
+              width: double.maxFinite,
+              linearColor: primaryButtonLinearColor,
+              height: 38.h,
+              borderRadius: 38.h / 2,
+              isLoader: controller.saveBookingApiLoading.value,
+              style: AppFontStyle.body(color: Colors.white),
+              text: 'Submit',
+              onTap: () => controller.checkNewBookingValidation()),
         ),
         SizedBox(height: 20.h),
       ],

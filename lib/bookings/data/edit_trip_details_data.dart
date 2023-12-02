@@ -4,8 +4,20 @@ import 'package:rsl_supervisor/bookings/data/edit_details_data.dart';
 
 class EditCorporateBookingRequestData {
   int? id;
+  int? motor_model;
   String? pickupTime;
-  MotorModelInfo? motorModelInfo;
+  int? extraCharge;
+
+  num? rsl_share;
+  num? driver_share;
+  num? corporate_share;
+  String? remarks;
+  int? zone_fare_applied;
+  int? pickup_zone_id;
+  int? pickup_zone_group_id;
+  int? drop_zone_id;
+  int? drop_zone_group_id;
+
   String? noteToDriver;
   String? flightNumber;
   String? referenceNumber;
@@ -25,13 +37,25 @@ class EditCorporateBookingRequestData {
   String? guestName;
   String? guestPhone;
   String? guestCountryCode;
-  String? remarks;
-  int? extraCharge;
+  String? approx_distance;
+  String? approx_duration;
+  double? approx_trip_fare;
+  String? route_polyline;
 
   EditCorporateBookingRequestData(
       {this.id,
+      this.motor_model,
       this.pickupTime,
-      this.motorModelInfo,
+      this.extraCharge,
+      this.rsl_share,
+      this.driver_share,
+      this.corporate_share,
+      this.remarks,
+      this.zone_fare_applied,
+      this.pickup_zone_id,
+      this.pickup_zone_group_id,
+      this.drop_zone_id,
+      this.drop_zone_group_id,
       this.noteToDriver,
       this.flightNumber,
       this.referenceNumber,
@@ -51,15 +75,15 @@ class EditCorporateBookingRequestData {
       this.guestName,
       this.guestPhone,
       this.guestCountryCode,
-      this.remarks,
-      this.extraCharge});
+      this.approx_distance,
+      this.approx_duration,
+      this.approx_trip_fare,
+      this.route_polyline});
 
   EditCorporateBookingRequestData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    motor_model = json['motor_model'];
     pickupTime = json['pickup_time'];
-    motorModelInfo = json['motor_model_info'] != null
-        ? MotorModelInfo.fromJson(json['motor_model_info'])
-        : null;
     noteToDriver = json['note_to_driver'];
     flightNumber = json['flight_number'];
     referenceNumber = json['reference_number'];
@@ -79,17 +103,27 @@ class EditCorporateBookingRequestData {
     guestName = json['guest_name'];
     guestPhone = json['guest_phone'];
     guestCountryCode = json['guest_country_code'];
+    extraCharge = json['extra_charge'];
+    rsl_share = json['rsl_share'];
+    driver_share = json['driver_share'];
+    corporate_share = json['corporate_share'];
     remarks = json['remarks'];
-    extraCharge = json['extraCharge'];
+    zone_fare_applied = json['zone_fare_applied'];
+    pickup_zone_id = json['pickup_zone_id'];
+    pickup_zone_group_id = json['pickup_zone_group_id'];
+    drop_zone_id = json['drop_zone_id'];
+    drop_zone_group_id = json['drop_zone_group_id'];
+    approx_distance = json['approx_distance'];
+    approx_duration = json['approx_duration'];
+    approx_trip_fare = json['approx_trip_fare'];
+    route_polyline = json['route_polyline'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['motor_model'] = motor_model;
     data['pickup_time'] = pickupTime;
-    if (motorModelInfo != null) {
-      data['motor_model_info'] = motorModelInfo!.toJson();
-    }
     data['note_to_driver'] = noteToDriver;
     data['flight_number'] = flightNumber;
     data['reference_number'] = referenceNumber;
@@ -109,48 +143,23 @@ class EditCorporateBookingRequestData {
     data['guest_name'] = guestName;
     data['guest_phone'] = guestPhone;
     data['guest_country_code'] = guestCountryCode;
+    data['extra_charge'] = extraCharge;
+    data['rsl_share'] = rsl_share;
+    data['driver_share'] = driver_share;
+    data['corporate_share'] = corporate_share;
     data['remarks'] = remarks;
-    data['extraCharge'] = extraCharge;
+    data['zone_fare_applied'] = zone_fare_applied;
+    data['pickup_zone_id'] = pickup_zone_id;
+    data['pickup_zone_group_id'] = pickup_zone_group_id;
+    data['drop_zone_id'] = drop_zone_id;
+    data['drop_zone_group_id'] = drop_zone_group_id;
+    data['approx_distance'] = approx_distance;
+    data['approx_duration'] = approx_duration;
+    data['approx_trip_fare'] = approx_trip_fare;
+    data['route_polyline'] = route_polyline;
     return data;
   }
 }
-
-/*class MotorModelInfo {
-  int? modelId;
-  String? modelName;
-  int? cancellationFare;
-  int? minFare;
-  int? taxiMinSpeed;
-  int? taxiSpeed;
-
-  MotorModelInfo(
-      {this.modelId,
-        this.modelName,
-        this.cancellationFare,
-        this.minFare,
-        this.taxiMinSpeed,
-        this.taxiSpeed});
-
-  MotorModelInfo.fromJson(Map<String, dynamic> json) {
-    modelId = json['model_id'];
-    modelName = json['model_name'];
-    cancellationFare = json['cancellation_fare'];
-    minFare = json['min_fare'];
-    taxiMinSpeed = json['taxi_min_speed'];
-    taxiSpeed = json['taxi_speed'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['model_id'] = modelId;
-    data['model_name'] = modelName;
-    data['cancellation_fare'] = cancellationFare;
-    data['min_fare'] = minFare;
-    data['taxi_min_speed'] = taxiMinSpeed;
-    data['taxi_speed'] = taxiSpeed;
-    return data;
-  }
-}*/
 
 class EditCorporateBookingResponseData {
   int? httpCode;

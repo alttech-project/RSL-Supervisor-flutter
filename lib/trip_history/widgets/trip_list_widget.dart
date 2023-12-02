@@ -30,14 +30,16 @@ class TripListWidget extends GetView<TripHistoryController> {
   }
 
   Widget _headerWidget() {
-    return Flexible(
-      child: Padding(
+    return
+      Padding(
         padding: const EdgeInsets.only(
           top: 0,
         ),
-        child: ListView.builder(
-          itemCount: controller.tripList.length,
+        child:
 
+        ListView.builder(
+          itemCount: controller.tripList.length,
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final tripData = controller.tripList[index];
@@ -52,8 +54,7 @@ class TripListWidget extends GetView<TripHistoryController> {
             );
           },
         ),
-      ),
-    );
+      );
   }
 
   Widget _headerTitleWidget(String title) {

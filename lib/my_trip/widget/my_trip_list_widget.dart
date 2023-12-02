@@ -35,8 +35,7 @@ class MyTripListWidget extends GetView<MyTripListController> {
   }
 
   Widget _headerWidget() {
-    return Flexible(
-      child: Padding(
+    return Padding(
         padding: const EdgeInsets.only(
           top: 0,
         ),
@@ -45,7 +44,7 @@ class MyTripListWidget extends GetView<MyTripListController> {
             print('Deepak -> ${controller.pageNationLoader.value}');
             return ListView.builder(
               controller: controller.scrollController, // Use the controller here.
-
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.tripList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
@@ -71,7 +70,7 @@ class MyTripListWidget extends GetView<MyTripListController> {
             );
           }
         ),
-      ),
+
     );
   }
 

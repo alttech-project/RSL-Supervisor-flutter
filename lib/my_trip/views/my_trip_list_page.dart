@@ -5,9 +5,6 @@ import 'package:rsl_supervisor/my_trip/controller/my_trip_list_controller.dart';
 import 'package:rsl_supervisor/my_trip/widget/my_trip_list_filter_widget.dart';
 import 'package:rsl_supervisor/my_trip/widget/my_trip_list_widget.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
-import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.dart';
-import 'package:rsl_supervisor/trip_history/widgets/trip_list_filter_widget.dart';
-import 'package:rsl_supervisor/trip_history/widgets/trip_list_widget.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 
 import '../../shared/styles/app_font.dart';

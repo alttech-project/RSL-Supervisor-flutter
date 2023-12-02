@@ -17,7 +17,8 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
       themedark: false,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
+        body: SingleChildScrollView(
+        child:Column(
           children: [
             SizedBox(
               height: 6.h,
@@ -80,6 +81,7 @@ class PlaceSearchPage extends GetView<PlaceSearchController> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

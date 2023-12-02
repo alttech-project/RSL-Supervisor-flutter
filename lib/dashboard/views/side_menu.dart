@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
-import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
-
 import '../../utils/helpers/getx_storage.dart';
 
 class SideMenuPage extends GetView<DashBoardController> {
@@ -24,20 +22,27 @@ class SideMenuPage extends GetView<DashBoardController> {
               () => DrawerHeader(
                 child: Column(
                   children: [
-                    Text(
-                      controller.supervisorInfo.value.kioskName ?? "",
-                      textAlign: TextAlign.center,
-                      style: AppFontStyle.heading(),
+                    Flexible(
+                      child: Text(
+                        controller.supervisorInfo.value.kioskName ?? "",
+                        textAlign: TextAlign.center,
+                        style: AppFontStyle.subHeading(),
+                      ),
                     ),
                     SizedBox(height: 8.h),
-                    Text(
-                      controller.supervisorInfo.value.supervisorUniqueId ?? "",
-                      style: AppFontStyle.subHeading(),
+                    Flexible(
+                      child: Text(
+                        controller.supervisorInfo.value.supervisorUniqueId ??
+                            "",
+                        style: AppFontStyle.subHeading(),
+                      ),
                     ),
                     SizedBox(height: 6.h),
-                    Text(
-                      controller.supervisorInfo.value.supervisorName ?? "",
-                      style: AppFontStyle.subHeading(),
+                    Flexible(
+                      child: Text(
+                        controller.supervisorInfo.value.supervisorName ?? "",
+                        style: AppFontStyle.subHeading(),
+                      ),
                     ),
                     SizedBox(height: 6.h),
                     Flexible(

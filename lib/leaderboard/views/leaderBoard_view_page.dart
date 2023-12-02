@@ -35,8 +35,8 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
               },
               child: Image.asset(
                 LeaderboardIcons.sideMenu,
-                width: 30,
-                height: 30,
+                width: 30.w,
+                height: 30.h,
               ),
             )
             ,
@@ -153,15 +153,16 @@ class MyTabBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeAreaContainer(
       statusBarColor: AppColors.kPrimaryColor.value,
-      child: Column(
+      child: SingleChildScrollView(child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           MyContainerWithTabBar(),
           SizedBox(
             height: 5.h,
           ),
-          UserListView(),
+          const UserListView(),
         ],
-      ),
+      ),),
     );
   }
 }
@@ -170,7 +171,7 @@ class MyContainerWithTabBar extends GetView<LeaderBoardController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220.h,
+      // height: MediaQuery.of(context).orientation == Orientation.landscape ? 170.h : 220.h,
       margin: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -207,7 +208,7 @@ class MyContainerWithTabBar extends GetView<LeaderBoardController> {
                     controller.changeTabIndex(index);
                   }),
             ),
-            LeaderBoardList(),
+            const LeaderBoardList(),
           ],
         ),
       ),
@@ -237,17 +238,17 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                   Image.asset(
                     LeaderboardIcons.upArrow,
-                    width: 15,
-                    height: 15,
+                    width: 15.w,
+                    height: 15.h,
                     color: Colors.green,
                   ),
                   Image.asset(
                     LeaderboardIcons.profileIcon,
-                    width: 50,
-                    height: 50,
+                    width: 50.w,
+                    height: 50.h,
                   ),
-                  const SizedBox(
-                    height: 5,
+                   SizedBox(
+                    height: 5.h,
                   ),
                   Text(
                             controller.supervisorList != null && controller.supervisorList.length >= 3
@@ -279,16 +280,16 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
               children: [
                 Image.asset(
                   LeaderboardIcons.crown,
-                  width: 30,
-                  height: 30,
+                  width: 30.w,
+                  height: 30.h,
                 ),
                 Image.asset(
                   LeaderboardIcons.profileIcon,
-                  width: 80,
-                  height: 80,
+                  width: 80.w,
+                  height: 80.h,
                 ),
-                const SizedBox(
-                  height: 5,
+                 SizedBox(
+                  height: 5.h,
                 ),
                 Text(
                           controller.supervisorList != null && controller.supervisorList.length >= 3
@@ -326,17 +327,17 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                 ),
                 Image.asset(
                   LeaderboardIcons.downArrow,
-                  width: 15,
-                  height: 15,
+                  width: 15.w,
+                  height: 15.h,
                   color: Colors.red,
                 ),
                 Image.asset(
                   LeaderboardIcons.profileIcon,
-                  width: 50,
-                  height: 50,
+                  width: 50.w,
+                  height: 50.h,
                 ),
-                const SizedBox(
-                  height: 5,
+                 SizedBox(
+                  height: 5.h,
                 ),
                 Text(
                           controller.supervisorList != null && controller.supervisorList.length >= 3
@@ -374,187 +375,186 @@ class UserListView extends GetView<LeaderBoardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Obx(
-      () => (controller.showLoader.value
-          ? const Center(
-              child: AppLoader(),
-            )
-          : ListView.builder(
-              itemCount: controller.supervisorList.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                final supervisorList = controller.supervisorList[index];
-                return Container(
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF353535),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          LeaderboardIcons.profileIcon,
-                          width: 60.w,
-                          height: 60.h,
-                        ),
-                        Expanded(
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5, top: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 5.h,
+    return Obx(
+            () => (controller.showLoader.value)
+            ? const Center(
+          child: AppLoader(),
+        )
+            : ListView.builder(
+            itemCount: controller.supervisorList.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              final supervisorList = controller.supervisorList[index];
+              return Container(
+                margin: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xFF353535),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        LeaderboardIcons.profileIcon,
+                        width: 60.w,
+                        height: 60.h,
+                      ),
+                      Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 5, top: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(supervisorList.supervisorName ?? "",
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: AppColors.kPrimaryColor.value,
+                                      fontSize: 18,
+                                      fontWeight: AppFontWeight.bold.value,
+                                    )),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Total Revenue: ',
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                        'AED ${supervisorList.targetCompletedPercentage}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(supervisorList.supervisorName ?? "",
-                                      maxLines: 2,
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight
+                                          .normal, // Set the font weight to normal
+                                    ),
+                                    children: <TextSpan>[
+                                      const TextSpan(
+                                        text: 'Completed Trips: ',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                        '${supervisorList.completedTrips}/',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                        '${supervisorList.totalTargetTrips}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                LinearPercentIndicator(
+                                  padding: const EdgeInsets.only(right: 3),
+                                  width: 170.0,
+                                  animation: true,
+                                  animationDuration: 1000,
+                                  lineHeight: 3.0.h,
+                                  trailing: Flexible(
+                                    child: Text(
+                                      "${supervisorList.targetCompletedPercentage}%",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight:
+                                        AppFontWeight.semibold.value,
+                                      ),
+                                    ),
+                                  ),
+                                  percent: (supervisorList.completedTrips ??
+                                      0) /
+                                      (supervisorList.totalTargetTrips ?? 1) /
+                                      100,
+                                  linearStrokeCap: LinearStrokeCap.butt,
+                                  progressColor: Colors.greenAccent,
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                )
+                              ],
+                            )),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 2, bottom: 35),
+                          child: Column(children: [
+                            Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border:
+                                    Border.all(color: Colors.white54)),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 5,
+                                        bottom: 5),
+                                    child: Text(
+                                      (index + 1).toString(),
                                       style: TextStyle(
                                         color: AppColors.kPrimaryColor.value,
-                                        fontSize: 18,
-                                        fontWeight: AppFontWeight.bold.value,
-                                      )),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Total Revenue: ',
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text:
-                                              'AED ${supervisorList.targetCompletedPercentage}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontWeight: FontWeight
-                                            .normal, // Set the font weight to normal
-                                      ),
-                                      children: <TextSpan>[
-                                        const TextSpan(
-                                          text: 'Completed Trips: ',
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              '${supervisorList.completedTrips}/',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              '${supervisorList.totalTargetTrips}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  LinearPercentIndicator(
-                                    padding: const EdgeInsets.only(right: 3),
-                                    width: 170.0,
-                                    animation: true,
-                                    animationDuration: 1000,
-                                    lineHeight: 3.0.h,
-                                    trailing: Flexible(
-                                      child: Text(
-                                        "${supervisorList.targetCompletedPercentage}%",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight:
-                                              AppFontWeight.semibold.value,
-                                        ),
+                                        fontWeight:
+                                        AppFontWeight.semibold.value,
                                       ),
                                     ),
-                                    percent: (supervisorList.completedTrips ??
-                                            0) /
-                                        (supervisorList.totalTargetTrips ?? 1) /
-                                        100,
-                                    linearStrokeCap: LinearStrokeCap.butt,
-                                    progressColor: Colors.greenAccent,
                                   ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  )
-                                ],
-                              )),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(right: 2, bottom: 35),
-                            child: Column(children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      border:
-                                          Border.all(color: Colors.white54)),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 5),
-                                      child: Text(
-                                        (index + 1).toString(),
-                                        style: TextStyle(
-                                          color: AppColors.kPrimaryColor.value,
-                                          fontWeight:
-                                              AppFontWeight.semibold.value,
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    LeaderboardIcons.smileIcon,
-                                    width: 20.w,
-                                    height: 20.h,
+                                )),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  LeaderboardIcons.smileIcon,
+                                  width: 20.w,
+                                  height: 20.h,
+                                ),
+                                SizedBox(
+                                  width: 5.w,
+                                ),
+                                Text(
+                                  supervisorList.points.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontWeight: AppFontWeight.semibold.value,
                                   ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Text(
-                                    supervisorList.points.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontWeight: AppFontWeight.semibold.value,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ])),
-                      ],
-                    ),
+                                ),
+                              ],
+                            )
+                          ])),
+                    ],
                   ),
-                );
-              })),
-    ));
+                ),
+              );
+            }));
   }
 }
 

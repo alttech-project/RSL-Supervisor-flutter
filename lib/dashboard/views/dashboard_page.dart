@@ -40,9 +40,9 @@ class DashboardPage extends GetView<DashBoardController> {
                     showLoader: controller.showLoader.value,
                     child: Stack(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 10.w, right: 10.w, top: 24.h, bottom: 65.h),
+                        Padding(padding: EdgeInsets.only(
+                              left: 10.w, right: 10.w, top: 24.h, bottom: 10.h),
+
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
@@ -111,7 +111,7 @@ class DashboardPage extends GetView<DashBoardController> {
                             alignment: Alignment.bottomRight,
                             child: Padding(
                               padding:
-                                  EdgeInsets.only(right: 15.w, bottom: 15.h),
+                                  EdgeInsets.only(right: 15.w),
                               child: ElevatedButton(
                                 onPressed: () async {
                                   try {

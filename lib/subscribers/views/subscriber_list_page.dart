@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
-import '../../trip_history/controllers/trip_history_controller.dart';
 import '../controllers/subscriberpage_controller.dart';
 
 class SubscribersPage extends GetView<SubscribersController> {
@@ -143,7 +141,7 @@ class SubscribersPage extends GetView<SubscribersController> {
                           : controller.filteredDriverList.isEmpty
                               ? Center(
                                   child: SizedBox(
-                                    height: 200.h,
+                                    height: 50.h,
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -158,7 +156,8 @@ class SubscribersPage extends GetView<SubscribersController> {
                                     ),
                                   ),
                                 )
-                              : Flexible(
+                              : Expanded(
+
                                   child: ListView.builder(
                                     itemCount:
                                         controller.filteredDriverList.length,

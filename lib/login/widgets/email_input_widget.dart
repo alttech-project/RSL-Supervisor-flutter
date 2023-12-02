@@ -14,6 +14,7 @@ class EmailInputWidget extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
+
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -49,6 +50,7 @@ class EmailInputWidget extends GetView<LoginController> {
           ),
         ],
       ),
+
       Align(
         alignment: Alignment.bottomLeft,
         child: Obx(
@@ -60,7 +62,8 @@ class EmailInputWidget extends GetView<LoginController> {
             ),
           ),
         ),
-      )
+      ),
+
     ]);
   }
 }

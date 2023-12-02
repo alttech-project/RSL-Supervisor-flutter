@@ -55,7 +55,7 @@ class DriverListScreen extends GetView<DriverListController> {
                 Obx(() => (controller.apiLoading.value)
                     ? Center(
                         child: AppLoader(
-                            color: AppColors.kPrimaryButtonColor.value),
+                            color: AppColors.kPrimaryColor.value),
                       )
                     : (controller.driverList.isNotEmpty)
                         ? ListView.builder(
@@ -99,15 +99,16 @@ class DriverListScreen extends GetView<DriverListController> {
           horizontal: 12.w,
         ), // Adjust left and right padding
         child: Column(
+
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _rowWidget(heading: "Car Plate", value: "${driverData.taxiNo}"),
+            _rowWidget(heading: "Car Plate", value: "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}"),
             SizedBox(height: 4.h),
             _rowWidget(
-                heading: "Driver Name", value: "${driverData.driverName}"),
+                heading: "Driver Name", value: "${driverData.driverName == "" ? "-" : driverData.driverName}"),
             SizedBox(height: 4.h),
             _rowWidget(
-                heading: "Driver Phone", value: "${driverData.driverPhone}"),
+                heading: "Driver Phone", value: "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}"),
             /*Row(children: [
               Text("Car Plate: ",
                   style: AppFontStyle.normalText(color: Colors.white54)),

@@ -70,6 +70,8 @@ class UnderlinedTextField extends StatelessWidget {
   final GestureTapCallback? onTap;
   final int? maxLines;
   final Color? hintColor;
+  final FocusNode? focusNode; // Added FocusNode property
+
 
   const UnderlinedTextField({
     super.key,
@@ -93,12 +95,15 @@ class UnderlinedTextField extends StatelessWidget {
     this.maxLines,
     this.hintColor,
     this.onChanged,
+    this.focusNode, // Include FocusNode in the constructor
+
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       style: textStyle ?? AppFontStyle.body(color: Colors.white),
       onTap: onTap,
       keyboardType: keyboardType,

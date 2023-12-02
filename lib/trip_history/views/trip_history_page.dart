@@ -53,18 +53,26 @@ class TripHistoryPage extends GetView<TripHistoryController> {
                           () => controller.showLoader.value
                           ? const Center(child: AppLoader())
                           : controller.tripList.isNotEmpty
-                          ?  TripListWidget()
-
+                          ? TripListWidget()
                           : Center(
-                        child: Text(
-                          "No trips found",
-                          style: AppFontStyle.body(
-                            color: Colors.white,
-                            weight: AppFontWeight.semibold.value,
-                          ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 150.0.h, // Adjust the height as needed
+                            ),
+                            Text(
+                              "No trips found",
+                              style: AppFontStyle.body(
+                                color: Colors.white,
+                                weight: AppFontWeight.semibold.value,
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
                     ),
+
                   ),
                   //
                 ],

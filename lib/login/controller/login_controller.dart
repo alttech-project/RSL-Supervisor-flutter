@@ -44,6 +44,8 @@ class LoginController extends GetxController {
   RxString appVersion = "".obs;
   RxString appBuildNumber = "".obs;
   RxString apk = "".obs;
+  var showAppVersion = true.obs;
+
 
   @override
   Future<void> onInit() async {
@@ -68,13 +70,16 @@ class LoginController extends GetxController {
 
   onBackPressed() {
     if (apiLoading.value) return;
-
     if (currentView.value == LoginViews.otpPage) {
       currentView.value = LoginViews.emailPage;
     } else {
       SystemNavigator.pop();
     }
   }
+  void hideAppVersion(bool hide) {
+    showAppVersion.value = hide;
+  }
+
 
   checkValidationAndCallApi() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());

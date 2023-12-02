@@ -25,6 +25,7 @@ class MyTripListPage extends GetView<MyTripListController> {
           controller.goBack();
           return false;
         },
+
         child: Scaffold(
           extendBodyBehindAppBar: false,
           backgroundColor: Colors.black,

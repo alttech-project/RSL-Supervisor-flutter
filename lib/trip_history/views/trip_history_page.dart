@@ -12,7 +12,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/navigation_title.dart';
 
 class TripHistoryPage extends GetView<TripHistoryController> {
-  const TripHistoryPage({super.key});
+  const TripHistoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,49 +25,48 @@ class TripHistoryPage extends GetView<TripHistoryController> {
         child: Scaffold(
           extendBodyBehindAppBar: false,
           backgroundColor: Colors.black,
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: 10.w,
-              right: 10.w,
-              bottom: 12.h,
-            ),
-            child: Column(
-              children: [
-                NavigationTitle(
-                  title: "Trip History",
-                  onTap: () => controller.goBack(),
-                  rightBarWidget: Obx(
-                    () => Visibility(
-                      visible: (controller.tripList.isNotEmpty),
-                      child: CustomIconButton(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 0.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  NavigationTitle(
+                    title: "Trip History",
+                    onTap: () => controller.goBack(),
+                    rightBarWidget: Obx(
+                      () => Visibility(
+                        visible: controller.tripList.isNotEmpty,
+                        child: CustomIconButton(
                           title: "Export",
                           icon: Icons.upload,
                           showLoader: controller.showBtnLoader.value,
-                          onTap: () => showAlertDialog(context)),
+                          onTap: () => showAlertDialog(context),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                const TripListFilterWidget(),
-                Obx(
-                  () => Expanded(
-                    child: (controller.showLoader.value)
-                        ? const Center(
-                            child: AppLoader(),
-                          )
-                        : (controller.tripList.isNotEmpty)
-                            ? const TripListWidget()
-                            : Center(
-                                child: Text(
-                                  "No trips found",
-                                  style: AppFontStyle.body(
-                                    color: Colors.white,
-                                    weight: AppFontWeight.semibold.value,
+                  const TripListFilterWidget(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Obx(
+                      () => controller.showLoader.value
+                          ? const Center(child: AppLoader())
+                          : controller.tripList.isNotEmpty
+                              ? const TripListWidget()
+                              : Center(
+                                  child: Text(
+                                    "No trips found",
+                                    style: AppFontStyle.body(
+                                      color: Colors.white,
+                                      weight: AppFontWeight.semibold.value,
+                                    ),
                                   ),
                                 ),
-                              ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

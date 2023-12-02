@@ -37,6 +37,7 @@ class TripListWidget extends GetView<TripHistoryController> {
         ),
         child: ListView.builder(
           itemCount: controller.tripList.length,
+
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final tripData = controller.tripList[index];

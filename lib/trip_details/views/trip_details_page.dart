@@ -16,6 +16,14 @@ class TripDetailsPage extends GetView<TripHistoryController> {
 
   @override
   Widget build(BuildContext context) {
+    var comments = "-";
+    if (controller.tripDetail.value.comments != null &&
+        controller.tripDetail.value.comments!.isNotEmpty) {
+      comments = controller.tripDetail.value.comments!;
+    } else {
+      comments = "-";
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -27,11 +35,11 @@ class TripDetailsPage extends GetView<TripHistoryController> {
               onTap: () {
                 Get.toNamed(AppRoutes.qrPage);
               },
-              child:  Icon(
-              CupertinoIcons.qrcode,
-              size: 20.r,
-              color: AppColors.kPrimaryColor.value,
-            ),
+              child: Icon(
+                CupertinoIcons.qrcode,
+                size: 20.r,
+                color: AppColors.kPrimaryColor.value,
+              ),
             ),
           ),
         ],
@@ -109,11 +117,13 @@ class TripDetailsPage extends GetView<TripHistoryController> {
             ),
             CommonWidgetForDetails(
               leadingText: 'Vehicle Waiting Time Cost',
-              trailingText: "AED ${controller.tripDetail.value.waitingCost ?? ""}",
+              trailingText:
+                  "AED ${controller.tripDetail.value.waitingCost ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Toll Fare',
-              trailingText: "AED ${controller.tripDetail.value.tollAmount ?? ""}",
+              trailingText:
+                  "AED ${controller.tripDetail.value.tollAmount ?? ""}",
             ),
             CommonWidgetForDetails(
               leadingText: 'Total Fare',
@@ -131,7 +141,7 @@ class TripDetailsPage extends GetView<TripHistoryController> {
             ),
             CommonWidgetForDetails(
               leadingText: 'Comments',
-              trailingText: controller.tripDetail.value.comments ?? "",
+              trailingText: comments,
             ),
           ],
         ),

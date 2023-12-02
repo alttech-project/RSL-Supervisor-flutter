@@ -11,6 +11,7 @@ import '../../widgets/app_loader.dart';
 
 class LeaderBoardPage extends GetView<LeaderBoardController> {
   const LeaderBoardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,8 +39,7 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                 width: 30.w,
                 height: 30.h,
               ),
-            )
-            ,
+            ),
           ],
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -63,84 +63,86 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0,
-                        top: 15), // Adjust the left padding as needed
-                    child: Center(
-                      child: Text(
-                        'Apply Filter',
-                        style: TextStyle(
-                          fontWeight: AppFontWeight.bold.value,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16.0,
+                          top: 15), // Adjust the left padding as needed
+                      child: Center(
+                        child: Text(
+                          'Apply Filter',
+                          style: TextStyle(
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              ListTile(
-                dense: true,
-                title: const Text('Trip count'),
-                leading: Obx(
-                  () => Radio(
-                    value: 1,
-                    groupValue: controller.selectedRadio.value,
-                    onChanged: (value) {
-                      controller.selectedRadio.value = value!;
-                    },
-                    activeColor: AppColors.kPrimaryColor.value,
-                  ),
+                  ],
                 ),
-              ),
-              ListTile(
-                dense: true,
-                title: const Text('Revenue'), // Customize radio button text
-                leading: Obx(
-                  () => Radio(
-                    value: 2,
-                    groupValue: controller.selectedRadio.value,
-                    onChanged: (value) {
-                      controller.selectedRadio.value = value!;
-                    },
-                    activeColor: AppColors.kPrimaryColor.value,
+                ListTile(
+                  dense: true,
+                  title: const Text('Trip count'),
+                  leading: Obx(
+                    () => Radio(
+                      value: 1,
+                      groupValue: controller.selectedRadio.value,
+                      onChanged: (value) {
+                        controller.selectedRadio.value = value!;
+                      },
+                      activeColor: AppColors.kPrimaryColor.value,
+                    ),
                   ),
                 ),
-              ),
-              ListTile(
-                dense: true,
-                title: const Text('Points'), // Customize radio button text
-                leading: Obx(
-                  () => Radio(
-                    value: 3,
-                    groupValue: controller.selectedRadio.value,
-                    onChanged: (value) {
-                      controller.selectedRadio.value = value!;
-                    },
-                    activeColor: AppColors.kPrimaryColor.value,
+                ListTile(
+                  dense: true,
+                  title: const Text('Revenue'), // Customize radio button text
+                  leading: Obx(
+                    () => Radio(
+                      value: 2,
+                      groupValue: controller.selectedRadio.value,
+                      onChanged: (value) {
+                        controller.selectedRadio.value = value!;
+                      },
+                      activeColor: AppColors.kPrimaryColor.value,
+                    ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Call your API with the selected radio button value
-                  controller
-                      .handleRadioValueChanged(controller.selectedRadio.value);
-                  Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: AppColors
-                      .kPrimaryColor.value, // Set the background color to cyan
+                ListTile(
+                  dense: true,
+                  title: const Text('Points'), // Customize radio button text
+                  leading: Obx(
+                    () => Radio(
+                      value: 3,
+                      groupValue: controller.selectedRadio.value,
+                      onChanged: (value) {
+                        controller.selectedRadio.value = value!;
+                      },
+                      activeColor: AppColors.kPrimaryColor.value,
+                    ),
+                  ),
                 ),
-                child: const Text('Submit'),
-              ),
-            ],
+                ElevatedButton(
+                  onPressed: () {
+                    // Call your API with the selected radio button value
+                    controller.handleRadioValueChanged(
+                        controller.selectedRadio.value);
+                    Get.back();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColors.kPrimaryColor
+                        .value, // Set the background color to cyan
+                  ),
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -153,16 +155,18 @@ class MyTabBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeAreaContainer(
       statusBarColor: AppColors.kPrimaryColor.value,
-      child: SingleChildScrollView(child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MyContainerWithTabBar(),
-          SizedBox(
-            height: 5.h,
-          ),
-          const UserListView(),
-        ],
-      ),),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MyContainerWithTabBar(),
+            SizedBox(
+              height: 5.h,
+            ),
+            const UserListView(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -247,11 +251,12 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     width: 50.w,
                     height: 50.h,
                   ),
-                   SizedBox(
+                  SizedBox(
                     height: 5.h,
                   ),
                   Text(
-                            controller.supervisorList != null && controller.supervisorList.length >= 3
+                    controller.supervisorList != null &&
+                            controller.supervisorList.length >= 3
                         ? (controller.supervisorList[1]?.completedTrips
                                 .toString() ??
                             "")
@@ -262,7 +267,8 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                     ),
                   ),
                   Text(
-                            controller.supervisorList != null && controller.supervisorList.length >= 3
+                    controller.supervisorList != null &&
+                            controller.supervisorList.length >= 3
                         ? (controller.supervisorList[1]?.supervisorName ?? "")
                         : "",
                     textAlign: TextAlign.center,
@@ -288,11 +294,12 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   width: 80.w,
                   height: 80.h,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 5.h,
                 ),
                 Text(
-                          controller.supervisorList != null && controller.supervisorList.length >= 3
+                  controller.supervisorList != null &&
+                          controller.supervisorList.length >= 3
                       ? (controller.supervisorList[0]?.completedTrips
                               .toString() ??
                           "")
@@ -303,7 +310,8 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Text(
-                          controller.supervisorList != null && controller.supervisorList.length >= 3
+                  controller.supervisorList != null &&
+                          controller.supervisorList.length >= 3
                       ? (controller.supervisorList[0]?.supervisorName ?? "")
                       : "",
                   textAlign: TextAlign.center,
@@ -336,11 +344,12 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   width: 50.w,
                   height: 50.h,
                 ),
-                 SizedBox(
+                SizedBox(
                   height: 5.h,
                 ),
                 Text(
-                          controller.supervisorList != null && controller.supervisorList.length >= 3
+                  controller.supervisorList != null &&
+                          controller.supervisorList.length >= 3
                       ? (controller.supervisorList[2]?.completedTrips
                               .toString() ??
                           "")
@@ -351,7 +360,8 @@ class LeaderBoardList extends GetView<LeaderBoardController> {
                   ),
                 ),
                 Text(
-                          controller.supervisorList != null&& controller.supervisorList.length >= 3
+                  controller.supervisorList != null &&
+                          controller.supervisorList.length >= 3
                       ? (controller.supervisorList[2]?.supervisorName ?? "")
                       : "",
                   textAlign: TextAlign.center,
@@ -375,12 +385,11 @@ class UserListView extends GetView<LeaderBoardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-            () => (controller.showLoader.value)
-            ? const Center(
-          child: AppLoader(),
-        )
-            : ListView.builder(
+    return Obx(() => (controller.showLoader.value)
+        ? const Center(
+            child: AppLoader(),
+          )
+        : ListView.builder(
             itemCount: controller.supervisorList.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -427,7 +436,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                     children: <TextSpan>[
                                       TextSpan(
                                         text:
-                                        'AED ${supervisorList.targetCompletedPercentage}',
+                                            'AED ${supervisorList.targetCompletedPercentage}',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -456,7 +465,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                       ),
                                       TextSpan(
                                         text:
-                                        '${supervisorList.completedTrips}/',
+                                            '${supervisorList.completedTrips}/',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -464,7 +473,7 @@ class UserListView extends GetView<LeaderBoardController> {
                                       ),
                                       TextSpan(
                                         text:
-                                        '${supervisorList.totalTargetTrips}',
+                                            '${supervisorList.totalTargetTrips}',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -485,12 +494,12 @@ class UserListView extends GetView<LeaderBoardController> {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight:
-                                        AppFontWeight.semibold.value,
+                                            AppFontWeight.semibold.value,
                                       ),
                                     ),
                                   ),
                                   percent: (supervisorList.completedTrips ??
-                                      0) /
+                                          0) /
                                       (supervisorList.totalTargetTrips ?? 1) /
                                       100,
                                   linearStrokeCap: LinearStrokeCap.butt,
@@ -508,21 +517,17 @@ class UserListView extends GetView<LeaderBoardController> {
                             Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5.0),
-                                    border:
-                                    Border.all(color: Colors.white54)),
+                                    border: Border.all(color: Colors.white54)),
                                 child: Center(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                        top: 5,
-                                        bottom: 5),
+                                        left: 10, right: 10, top: 5, bottom: 5),
                                     child: Text(
                                       (index + 1).toString(),
                                       style: TextStyle(
                                         color: AppColors.kPrimaryColor.value,
                                         fontWeight:
-                                        AppFontWeight.semibold.value,
+                                            AppFontWeight.semibold.value,
                                       ),
                                     ),
                                   ),
@@ -565,5 +570,4 @@ class LeaderboardIcons {
   static const String profileIcon = 'assets/leaderboard/profileimg.png';
   static const String smileIcon = 'assets/rider_referral/smile.png';
   static const String sideMenu = 'assets/leaderboard/sidemenu.png';
-
 }

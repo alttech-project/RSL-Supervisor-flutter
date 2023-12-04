@@ -189,11 +189,13 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Kindly select date!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
-      } else if (extraCharges.isEmpty || double.parse(extraCharges) <= 0) {
+      } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
-      } else if (remarks.isEmpty) {
+      }
+      /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
-      } else {
+      }*/
+      else {
         if (supervisorInfo == null) {
           _showSnackBar('Error!', 'Invalid user login status!');
           return;

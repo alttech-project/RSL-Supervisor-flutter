@@ -627,9 +627,41 @@ class EditBooking extends GetView<EditBookingController> {
         });
   }*/
 
+  Widget _labelPrice() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+        child: Text(
+          'Customer Price',
+          style: AppFontStyle.subHeading(
+            size: AppFontSize.small.value,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _labelExtraCharges() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+        child: Text(
+          'Extra Charges',
+          style: AppFontStyle.subHeading(
+            size: AppFontSize.small.value,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _priceWidget() {
     return BoxTextFieldTransparent(
-        hintText: "Price",
+        hintText: "0",
         keyboardType: TextInputType.number,
         textController: controller.priceController,
         enable: true,
@@ -644,7 +676,7 @@ class EditBooking extends GetView<EditBookingController> {
 
   Widget _extraChargesWidget() {
     return BoxTextFieldTransparent(
-        hintText: "Extra Charges",
+        hintText: "0",
         keyboardType: TextInputType.number,
         textController: controller.extraChargesController,
         enable: true,
@@ -747,7 +779,7 @@ class EditBooking extends GetView<EditBookingController> {
 
   Widget _remarksWidget() {
     return RemarksTextFieldTransparent(
-        hintText: "Enter your remarks",
+        hintText: "Enter your remarks (Optional)",
         keyboardType: TextInputType.multiline,
         textController: controller.remarksController,
         enable: true,
@@ -817,42 +849,58 @@ class EditBooking extends GetView<EditBookingController> {
               Row(
                 children: [
                   Expanded(
-                      child: Card(
-                    elevation: 8,
-                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      ),
+                    child: Column(
+                      children: [
+                        _labelPrice(),
+                        Card(
+                          elevation: 8,
+                          margin: const EdgeInsets.only(
+                              bottom: 0, left: 0, right: 0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              12,
+                            ),
+                          ),
+                          color: AppColors.kSecondaryBackGroundColor.value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5,
+                            ), // Adjust left and right padding
+                            child: _priceWidget(),
+                          ),
+                        ),
+                      ],
                     ),
-                    color: AppColors.kSecondaryBackGroundColor.value,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5,
-                        ), // Adjust left and right padding
-                        child: _priceWidget()),
-                  )),
+                  ),
                   const SizedBox(
                     width: 20,
                   ),
                   Expanded(
-                      child: Card(
-                    elevation: 8,
-                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      ),
+                    child: Column(
+                      children: [
+                        _labelExtraCharges(),
+                        Card(
+                          elevation: 8,
+                          margin: const EdgeInsets.only(
+                              bottom: 0, left: 0, right: 0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              12,
+                            ),
+                          ),
+                          color: AppColors.kSecondaryBackGroundColor.value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5,
+                            ), // Adjust left and right padding
+                            child: _extraChargesWidget(),
+                          ),
+                        ),
+                      ],
                     ),
-                    color: AppColors.kSecondaryBackGroundColor.value,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5,
-                        ), // Adjust left and right padding
-                        child: _extraChargesWidget()),
-                  )),
+                  ),
                 ],
               )
             ],

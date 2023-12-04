@@ -53,16 +53,19 @@ class DriverListScreen extends GetView<DriverListController> {
               children: [
                 // const DriverListAppBar(),
                 Obx(() => (controller.apiLoading.value)
-                    ? Center(
-                        child: AppLoader(
-                            color: AppColors.kPrimaryColor.value),
+                    ? Expanded(
+                        child: Center(
+                          child:
+                              AppLoader(color: AppColors.kPrimaryColor.value),
+                        ),
                       )
                     : (controller.driverList.isNotEmpty)
                         ? ListView.builder(
                             shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: controller.driverList.length,
                             itemBuilder: (context, index) {
-                              return _driverListItem(
+                              return _driverListWidget(
                                   driverData: controller.driverList[index]);
                             },
                           )
@@ -83,7 +86,7 @@ class DriverListScreen extends GetView<DriverListController> {
     );
   }
 
-  Widget _driverListItem({required DriverList driverData}) {
+  Widget _driverListWidget({required DriverList driverData}) {
     return Card(
       elevation: 8,
       margin: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -94,48 +97,238 @@ class DriverListScreen extends GetView<DriverListController> {
       ),
       color: AppColors.kPrimaryTransparentColor.value,
       child: Padding(
-        padding:  EdgeInsets.symmetric(
-          vertical: 15.h,
-          horizontal: 12.w,
+        padding: const EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 8,
         ), // Adjust left and right padding
         child: Column(
-
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _rowWidget(heading: "Car Plate", value: "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}"),
-            SizedBox(height: 4.h),
-            _rowWidget(
-                heading: "Driver Name", value: "${driverData.driverName == "" ? "-" : driverData.driverName}"),
-            SizedBox(height: 4.h),
-            _rowWidget(
-                heading: "Driver Phone", value: "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}"),
-            /*Row(children: [
-              Text("Car Plate: ",
-                  style: AppFontStyle.normalText(color: Colors.white54)),
-              Text(driverData.taxiNo.toString(),
-                  style: AppFontStyle.normalText(color: Colors.white))
-            ]),
-            SizedBox(height: 4.h),
-            Row(children: [
-              Text("Driver Name: ",
-                  style: AppFontStyle.normalText(color: Colors.white54)),
-              Text(driverData.driverName.toString(),
-                  style: AppFontStyle.normalText(color: Colors.white))
-            ]),
-            SizedBox(height: 4.h),
-            Row(
-              children: [
-                Text("Driver Phone: ",
-                    style: AppFontStyle.normalText(color: Colors.white54)),
-                Text(driverData.driverPhone.toString(),
-                    style: AppFontStyle.normalText(color: Colors.white))
-              ],
-            ),*/
+          children: [
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Car Plate: ",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Flexible(
+                          child: Text(
+                            "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Car Model: ",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Flexible(
+                          child: Text(
+                            "${driverData.modelName == "" ? "-" : driverData.modelName}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8.h),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Driver Name:",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Flexible(
+                          child: Text(
+                            "${driverData.driverName == "" ? "-" : driverData.driverName}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Driver Phone: ",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Flexible(
+                          child: Text(
+                            "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8.h),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Added By:",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Flexible(
+                          child: Text(
+                            "${driverData.name == null || driverData.name == "" ? "-" : driverData.name}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Added On:",
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.bold.value,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Flexible(
+                          child: Text(
+                            "${driverData.logDate == null || driverData.logDate == "" ? "-" : driverData.logDate}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.normal.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+
+/* Widget _driverListItem({required DriverList driverData}) {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 15.h,
+          horizontal: 12.w,
+        ), // Adjust left and right padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _rowWidget(
+                heading: "Car Plate",
+                value: "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Driver Name",
+                value:
+                "${driverData.driverName == "" ? "-" : driverData.driverName}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Driver Phone",
+                value:
+                "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}"),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   Widget _rowWidget({String? heading, String? value}) {
     return Row(
@@ -145,8 +338,7 @@ class DriverListScreen extends GetView<DriverListController> {
           child: Text(heading ?? "",
               style: AppFontStyle.normalText(color: Colors.white54)),
         ),
-         Text(":",
-              style: AppFontStyle.normalText(color: Colors.white54)),
+        Text(":", style: AppFontStyle.normalText(color: Colors.white54)),
         SizedBox(width: 8.w),
         Expanded(
             flex: 2,
@@ -154,40 +346,5 @@ class DriverListScreen extends GetView<DriverListController> {
                 style: AppFontStyle.normalText(color: Colors.white)))
       ],
     );
-  }
-}
-
-class DriverListItem extends StatelessWidget {
-  const DriverListItem({required Key key, required this.driverData})
-      : super(key: key);
-  final DriverList driverData;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(children: [
-              Text("Car Plate: ",
-                  style: AppFontStyle.normalText(color: Colors.white54)),
-              Text(driverData.taxiNo.toString(),
-                  style: AppFontStyle.normalText(color: Colors.white))
-            ]),
-            Row(children: [
-              Text("Driver Name: ",
-                  style: AppFontStyle.normalText(color: Colors.white54)),
-              Text(driverData.driverName.toString(),
-                  style: AppFontStyle.normalText(color: Colors.white))
-            ]),
-            Row(children: [
-              Text("Driver Phone: ",
-                  style: AppFontStyle.normalText(color: Colors.white54)),
-              Text(driverData.driverPhone.toString(),
-                  style: AppFontStyle.normalText(color: Colors.white))
-            ]),
-          ]),
-    );
-  }
+  }*/
 }

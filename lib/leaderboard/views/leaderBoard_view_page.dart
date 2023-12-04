@@ -34,10 +34,13 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
               onTap: () {
                 showRadioButtonBottomSheet(context);
               },
-              child: Image.asset(
-                LeaderboardIcons.sideMenu,
-                width: 30.w,
-                height: 30.h,
+              child: Padding(
+                padding: EdgeInsets.all(10.w),
+                child: Image.asset(
+                  LeaderboardIcons.sideMenu,
+                  width: 25.w,
+                  height: 25.h,
+                ),
               ),
             ),
           ],
@@ -99,6 +102,9 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                       activeColor: AppColors.kPrimaryColor.value,
                     ),
                   ),
+                  onTap: () {
+                    controller.selectedRadio.value = 1;
+                  },
                 ),
                 ListTile(
                   dense: true,
@@ -113,6 +119,9 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                       activeColor: AppColors.kPrimaryColor.value,
                     ),
                   ),
+                  onTap: () {
+                    controller.selectedRadio.value = 2;
+                  },
                 ),
                 ListTile(
                   dense: true,
@@ -127,6 +136,9 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                       activeColor: AppColors.kPrimaryColor.value,
                     ),
                   ),
+                  onTap: () {
+                    controller.selectedRadio.value = 3;
+                  },
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -189,9 +201,9 @@ class MyContainerWithTabBar extends GetView<LeaderBoardController> {
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 10, right: 10),
+              margin: const EdgeInsets.only(left: 8, right: 8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20.0.r)),
+                borderRadius: BorderRadius.all(Radius.circular(100.0.r)),
                 color: Colors.black12,
               ),
               child: TabBar(
@@ -204,7 +216,7 @@ class MyContainerWithTabBar extends GetView<LeaderBoardController> {
                     Tab(text: 'Last 30 days'),
                   ],
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0.r),
+                    borderRadius: BorderRadius.circular(100.0.r),
                     color: Colors.white,
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,

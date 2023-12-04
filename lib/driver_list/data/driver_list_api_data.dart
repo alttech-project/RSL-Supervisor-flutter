@@ -54,6 +54,9 @@ class DriverList {
   String? modelName;
   String? taxiNo;
   String? driverPhone;
+  String? name;
+  String? email;
+  String? logDate;
 
   DriverList(
       {this.driverId,
@@ -63,7 +66,10 @@ class DriverList {
       this.modelId,
       this.modelName,
       this.taxiNo,
-      this.driverPhone});
+      this.driverPhone,
+      this.name,
+      this.email,
+      this.logDate});
 
   DriverList.fromJson(Map<String, dynamic> json) {
     driverId = json['driver_id'];
@@ -74,6 +80,9 @@ class DriverList {
     modelName = json['model_name'];
     taxiNo = json['taxi_no'];
     driverPhone = json['driver_phone'];
+    name = json['name'];
+    email = json['email'];
+    logDate = json['log_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +95,9 @@ class DriverList {
     data['model_name'] = modelName;
     data['taxi_no'] = taxiNo;
     data['driver_phone'] = driverPhone;
+    data['name'] = name;
+    data['email'] = email;
+    data['log_date'] = logDate;
     return data;
   }
 }

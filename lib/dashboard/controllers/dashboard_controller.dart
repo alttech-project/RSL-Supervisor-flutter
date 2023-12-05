@@ -290,7 +290,8 @@ class DashBoardController extends GetxController {
         Get.toNamed(AppRoutes.riderRefferalPage);
         break;
       case "Leaderboard":
-        Get.toNamed(AppRoutes.leaderBoaradPage);
+        // Get.toNamed(AppRoutes.leaderBoaradPage);
+        Get.toNamed(AppRoutes.leaderBoardPageNew);
         break;
       case "Dispatch":
         Get.toNamed(AppRoutes.dispatchPage);

@@ -20,12 +20,24 @@ class DriverListResponse {
   int? status;
   String? message;
   List<DriverList>? driverList;
+  String? notes;
+  String? addedBy;
+  String? addedOn;
 
-  DriverListResponse({this.status, this.message, this.driverList});
+  DriverListResponse(
+      {this.status,
+      this.message,
+      this.driverList,
+      this.notes,
+      this.addedBy,
+      this.addedOn});
 
   DriverListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
+    notes = json['notes'];
+    addedBy = json['added_by'];
+    addedOn = json['added_on'];
     if (json['details'] != null) {
       driverList = <DriverList>[];
       json['details'].forEach((v) {
@@ -38,6 +50,9 @@ class DriverListResponse {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
+    data['notes'] = notes;
+    data['added_by'] = addedBy;
+    data['added_on'] = addedOn;
     if (driverList != null) {
       data['details'] = driverList!.map((v) => v.toJson()).toList();
     }
@@ -54,9 +69,10 @@ class DriverList {
   String? modelName;
   String? taxiNo;
   String? driverPhone;
-  String? name;
+  String? addedBy;
+  String? addedOn;
   String? email;
-  String? logDate;
+  String? notes;
 
   DriverList(
       {this.driverId,
@@ -67,9 +83,10 @@ class DriverList {
       this.modelName,
       this.taxiNo,
       this.driverPhone,
-      this.name,
+      this.addedBy,
+      this.addedOn,
       this.email,
-      this.logDate});
+      this.notes});
 
   DriverList.fromJson(Map<String, dynamic> json) {
     driverId = json['driver_id'];
@@ -80,9 +97,10 @@ class DriverList {
     modelName = json['model_name'];
     taxiNo = json['taxi_no'];
     driverPhone = json['driver_phone'];
-    name = json['name'];
+    addedBy = json['added_by'];
+    addedOn = json['added_on'];
     email = json['email'];
-    logDate = json['log_date'];
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,9 +113,11 @@ class DriverList {
     data['model_name'] = modelName;
     data['taxi_no'] = taxiNo;
     data['driver_phone'] = driverPhone;
-    data['name'] = name;
+    data['added_by'] = addedBy;
+    data['added_on'] = addedOn;
     data['email'] = email;
-    data['log_date'] = logDate;
+    data['notes'] = notes;
+
     return data;
   }
 }

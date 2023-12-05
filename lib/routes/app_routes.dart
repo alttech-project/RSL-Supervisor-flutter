@@ -25,6 +25,7 @@ import 'package:rsl_supervisor/trip_history/views/trip_history_map_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 
 import '../dispatch/dispatch_page.dart';
+import '../leaderboard_new/views/leaderboard_page_new.dart';
 import '../login/view/login_page.dart';
 import '../my_trip/views/my_trip_list_map_page.dart';
 import '../my_trip/views/my_trip_list_qr_page.dart';
@@ -55,6 +56,7 @@ class AppRoutes {
   static const riderRefferalPage = '/riderRefferalPage';
   static const riderReferralHistoryPage = '/riderReferralHistoryPage';
   static const leaderBoaradPage = '/leaderBoaradPage';
+  static const leaderBoardPageNew = '/leaderBoardPageNew';
   static const captureImagePage = '/captureImagePage';
   static const feedsPage = '/feedsPage';
   static const tripHistoryMapPage = '/tripHistoryMapPage';
@@ -209,6 +211,13 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.leaderBoaradPage,
     page: () => const LeaderBoardPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.leaderBoardPageNew,
+    page: () => const LeaderBoardScreenNew(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

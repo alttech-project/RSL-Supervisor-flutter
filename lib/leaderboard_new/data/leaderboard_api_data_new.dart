@@ -3,21 +3,21 @@ import 'dart:convert';
 class LeaderboardRequestData {
   int? forRange;
   int? supervisorId;
-  int? basedOn;
+  int? locationId;
 
-  LeaderboardRequestData({this.forRange, this.supervisorId, this.basedOn});
+  LeaderboardRequestData({this.forRange, this.supervisorId, this.locationId});
 
   LeaderboardRequestData.fromJson(Map<String, dynamic> json) {
     forRange = json['forRange'];
     supervisorId = json['supervisorId'];
-    basedOn = json['basedOn'];
+    locationId = json['locationId'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['forRange'] = this.forRange;
     data['supervisorId'] = this.supervisorId;
-    data['basedOn'] = this.basedOn;
+    data['locationId'] = this.locationId;
     return data;
   }
 }
@@ -26,21 +26,18 @@ class LeaderboardApiResponse {
   int? httpCode;
   int? status;
   String? message;
-  List<ResponseDate>? responseDate;
+  LeaderBoardData? responseData;
 
   LeaderboardApiResponse(
-      {this.httpCode, this.status, this.message, this.responseDate});
+      {this.httpCode, this.status, this.message, this.responseData});
 
   LeaderboardApiResponse.fromJson(Map<String, dynamic> json) {
     httpCode = json['httpCode'];
     status = json['status'];
     message = json['message'];
-    if (json['responseDate'] != null) {
-      responseDate = <ResponseDate>[];
-      json['responseDate'].forEach((v) {
-        responseDate!.add(new ResponseDate.fromJson(v));
-      });
-    }
+    responseData = json['responseData'] != null
+        ? LeaderBoardData.fromJson(json['responseData'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -48,9 +45,39 @@ class LeaderboardApiResponse {
     data['httpCode'] = this.httpCode;
     data['status'] = this.status;
     data['message'] = this.message;
-    if (this.responseDate != null) {
-      data['responseDate'] = this.responseDate!.map((v) => v.toJson()).toList();
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
+    return data;
+  }
+}
+
+class LeaderBoardData {
+  String? name;
+  String? uniqueId;
+  int? dispatchTrips;
+  int? target;
+
+  LeaderBoardData({
+    this.name,
+    this.uniqueId,
+    this.dispatchTrips,
+    this.target,
+  });
+
+  LeaderBoardData.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    uniqueId = json['uniqueId'];
+    dispatchTrips = json['dispatchTrips'];
+    target = json['target'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['uniqueId'] = uniqueId;
+    data['dispatchTrips'] = dispatchTrips;
+    data['target'] = target;
     return data;
   }
 }

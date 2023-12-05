@@ -13,6 +13,7 @@ class DriverListController extends GetxController {
   RxBool apiLoading = false.obs;
   Rx<SupervisorInfo> supervisorInfo = SupervisorInfo().obs;
   RxList<DriverList> driverList = <DriverList>[].obs;
+  Rx<DriverListResponse> driverListResponse = DriverListResponse().obs;
   RxString noDataMsg = "No data found".obs;
 
   @override
@@ -33,6 +34,7 @@ class DriverListController extends GetxController {
         .then((response) {
       apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
+        driverListResponse.value = response;
         driverList.value = response.driverList ?? [];
         driverList.refresh();
         noDataMsg.value = response.message ?? "";

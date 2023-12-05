@@ -63,10 +63,21 @@ class DriverListScreen extends GetView<DriverListController> {
                         ? ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.driverList.length,
+                            itemCount: controller.driverList.length + 1,
                             itemBuilder: (context, index) {
-                              return _driverListWidget(
-                                  driverData: controller.driverList[index]);
+                              if (index == controller.driverList.length) {
+                                if (controller.driverListResponse.value.notes !=
+                                        null &&
+                                    controller.driverListResponse.value.notes!
+                                        .isNotEmpty) {
+                                  return _notes(
+                                      controller.driverListResponse.value);
+                                }
+                                return const SizedBox.shrink();
+                              } else {
+                                return _driverListItem(
+                                    driverData: controller.driverList[index]);
+                              }
                             },
                           )
                         : Center(
@@ -86,6 +97,122 @@ class DriverListScreen extends GetView<DriverListController> {
     );
   }
 
+  Widget _driverListItem({required DriverList driverData}) {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.only(bottom: 10, left: 1, right: 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 15.h,
+          horizontal: 12.w,
+        ), // Adjust left and right padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _rowWidget(
+                heading: "Car Plate",
+                value: "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Driver Name",
+                value:
+                    "${driverData.driverName == "" ? "-" : driverData.driverName}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Driver Phone",
+                value:
+                    "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}"),
+            SizedBox(height: 10.h),
+            _line(),
+            SizedBox(height: 10.h),
+            _rowWidget(
+                heading: "Added by",
+                value:
+                    "${driverData.addedBy == "" ? "-" : driverData.addedBy}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Added on",
+                value:
+                    "${driverData.addedOn == "" ? "-" : driverData.addedOn}"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _rowWidget({String? heading, String? value}) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(heading ?? "",
+              style: AppFontStyle.normalText(color: Colors.white54)),
+        ),
+        Text(":", style: AppFontStyle.normalText(color: Colors.white54)),
+        SizedBox(width: 8.w),
+        Expanded(
+            flex: 2,
+            child: Text(value ?? "",
+                style: AppFontStyle.normalText(color: Colors.white)))
+      ],
+    );
+  }
+
+  Widget _notes(DriverListResponse driverData) {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.only(bottom: 10, left: 1, right: 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 15.h,
+          horizontal: 12.w,
+        ), // Adjust left and right padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _rowWidget(
+                heading: "Notes",
+                value:
+                    "${driverData.notes == null || driverData.notes == "" ? "-" : driverData.notes}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Added by",
+                value:
+                    "${driverData.addedBy == null || driverData.addedBy == "" ? "-" : driverData.addedBy}"),
+            SizedBox(height: 4.h),
+            _rowWidget(
+                heading: "Added on",
+                value:
+                    "${driverData.addedOn == null || driverData.addedOn == "" ? "-" : driverData.addedOn}"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _line() {
+    return Container(
+      height: 0.5.h,
+      decoration: BoxDecoration(
+        color: Colors.white24.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(5.r),
+      ),
+    );
+  }
+
+/*
   Widget _driverListWidget({required DriverList driverData}) {
     return Card(
       elevation: 8,
@@ -291,60 +418,5 @@ class DriverListScreen extends GetView<DriverListController> {
       ),
     );
   }
-
-/* Widget _driverListItem({required DriverList driverData}) {
-    return Card(
-      elevation: 8,
-      margin: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          12,
-        ),
-      ),
-      color: AppColors.kPrimaryTransparentColor.value,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 15.h,
-          horizontal: 12.w,
-        ), // Adjust left and right padding
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _rowWidget(
-                heading: "Car Plate",
-                value: "${driverData.taxiNo == "" ? "-" : driverData.taxiNo}"),
-            SizedBox(height: 4.h),
-            _rowWidget(
-                heading: "Driver Name",
-                value:
-                "${driverData.driverName == "" ? "-" : driverData.driverName}"),
-            SizedBox(height: 4.h),
-            _rowWidget(
-                heading: "Driver Phone",
-                value:
-                "${driverData.driverPhone == "" ? "-" : driverData.driverPhone}"),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-  Widget _rowWidget({String? heading, String? value}) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Text(heading ?? "",
-              style: AppFontStyle.normalText(color: Colors.white54)),
-        ),
-        Text(":", style: AppFontStyle.normalText(color: Colors.white54)),
-        SizedBox(width: 8.w),
-        Expanded(
-            flex: 2,
-            child: Text(value ?? "",
-                style: AppFontStyle.normalText(color: Colors.white)))
-      ],
-    );
-  }*/
+*/
 }

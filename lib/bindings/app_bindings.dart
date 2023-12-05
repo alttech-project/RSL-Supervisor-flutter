@@ -18,6 +18,7 @@ import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.
 import 'package:rsl_supervisor/video/controller/upload_video_controller.dart';
 
 import '../bookings/controller/bookings_controller.dart';
+import '../leaderboard_new/controllers/leaderboard_controller_new.dart';
 import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
@@ -43,6 +44,7 @@ class AppBind extends Bindings {
     Get.lazyPut<SubscribersController>(() => SubscribersController());
     Get.lazyPut<RiderReferralController>(() => RiderReferralController());
     Get.lazyPut<LeaderBoardController>(() => LeaderBoardController());
+    Get.lazyPut<LeaderBoardControllerNew>(() => LeaderBoardControllerNew());
     Get.lazyPut<CaptureImageController>(() => CaptureImageController());
     Get.lazyPut<FeedsController>(() => FeedsController());
     Get.lazyPut<UploadVideoController>(() => UploadVideoController());

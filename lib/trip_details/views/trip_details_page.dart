@@ -18,7 +18,7 @@ class TripDetailsPage extends GetView<TripHistoryController> {
   Widget build(BuildContext context) {
     var comments = "-";
     if (controller.tripDetail.value.comments != null &&
-        controller.tripDetail.value.comments!.isNotEmpty) {
+        controller.tripDetail.value.comments != "") {
       comments = controller.tripDetail.value.comments!;
     } else {
       comments = "-";

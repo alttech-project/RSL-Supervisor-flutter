@@ -211,7 +211,9 @@ class EditBookingController extends GetxController {
         _showSnackBar('Validation!', 'Kindly select date!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
-      } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
+      } else if (extraCharges.isNotEmpty &&
+          extraCharges != "0" &&
+          double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
       }
       /* else if (remarks.isEmpty) {
@@ -257,11 +259,16 @@ class EditBookingController extends GetxController {
     if (price.isNotEmpty) {
       customerPrice = price;
     }
+
+    var extraCharge = "0";
+    if (extraCharges.isNotEmpty) {
+      extraCharge = extraCharges;
+    }
     editBookingApi(EditCorporateBookingRequestData(
             id: editBookingTripId.value,
             motor_model: int.parse(taxiId.value),
             pickupTime: date,
-            extraCharge: double.parse(extraCharges),
+            extraCharge: double.parse(extraCharge),
             customerPrice: double.parse(priceController.text.trim()),
             rsl_share: rslShare,
             driver_share: driverShare,

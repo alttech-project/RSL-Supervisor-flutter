@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 
+import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../shared/styles/app_color.dart';
 import '../../utils/helpers/alert_helpers.dart';
@@ -18,6 +19,7 @@ class QuickTripController extends GetxController {
   final TextEditingController tripIdController = TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController fareController = TextEditingController();
+  final TextEditingController customPriceController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -25,6 +27,7 @@ class QuickTripController extends GetxController {
   final TextEditingController referenceNumberController =
       TextEditingController();
   final TextEditingController remarksController = TextEditingController();
+  RxString locationType = "".obs;
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
@@ -75,64 +78,134 @@ class QuickTripController extends GetxController {
         msg: "You are not shift in.Please make shift in and try again!",
       );
     } else {
-      if (formKey.currentState!.validate()) {
-        final tripID = tripIdController.text.trim();
-        final dropLocation = dropLocationController.text.trim();
-        final fare = fareController.text.trim();
-        final name = nameController.text.trim();
-        final phone = phoneController.text.trim();
-        final email = emailController.text.trim();
-        final paymentId = paymentIdController.text.trim();
-        final referenceNumber = referenceNumberController.text.trim();
-        final remarks = remarksController.text.trim();
+      if (locationType.value == LocationType.GENERAL.toString()) {
+        if (formKey.currentState!.validate()) {
+          final tripID = tripIdController.text.trim();
+          final dropLocation = dropLocationController.text.trim();
+          final fare = fareController.text.trim();
+          final name = nameController.text.trim();
+          final phone = phoneController.text.trim();
+          final email = emailController.text.trim();
+          final paymentId = paymentIdController.text.trim();
+          final referenceNumber = referenceNumberController.text.trim();
+          final remarks = remarksController.text.trim();
 
-        //GetUtils.isEmail(text) || GetUtils.isPhoneNumber(text)
-        if (tripID.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid Trip ID!');
+          if (tripID.isEmpty) {
+            _showSnackBar('Validation!', 'Enter a valid Trip Id!');
+          } else if (fare.isNotEmpty && double.parse(fare) <= 0) {
+            _showSnackBar('Validation!', 'Enter a valid fare!');
+          } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+            _showSnackBar('Validation!', 'Enter a valid phone number!');
+          } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+            _showSnackBar('Validation!', 'Enter a valid email!');
+          } else if (remarks.isEmpty) {
+            _showSnackBar('Validation!', 'Enter a valid remarks!');
+          } else {
+            if (supervisorInfo == null) {
+              _showSnackBar('Error!', 'Invalid user login status!');
+              return;
+            }
+
+            apiLoading.value = true;
+            dispatchQuickTripApi(
+              DispatchQuickTripRequestData(
+                  tripId: tripID,
+                  kioskId: supervisorInfo!.kioskId,
+                  companyId: supervisorInfo!.cid,
+                  supervisorName: supervisorInfo!.supervisorName,
+                  supervisorId: supervisorInfo!.supervisorId,
+                  supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                  name: name,
+                  countryCode: countryCode.value,
+                  mobileNo: phone,
+                  email: email,
+                  fixedMeter: (fare.isEmpty) ? '2' : '1',
+                  kioskFare: fare,
+                  paymentId: paymentId,
+                  dropLatitude: dropLatitude,
+                  dropLongitude: dropLongitude,
+                  dropplace: dropLocation,
+                  referenceNumber: referenceNumber,
+                  remarks: remarks),
+            ).then((response) {
+              apiLoading.value = false;
+              _handleDispatchQuickTripResponse(response);
+            }).catchError((onError) {
+              apiLoading.value = false;
+              _showSnackBar('Error', 'Server Connection Error!');
+            });
+          }
         }
-        /* else if (dropLocation.isEmpty) {
-        _showSnackBar('Validation!', 'Select / Enter a valid drop location!');
-      } */
-        else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
-          _showSnackBar('Validation!', 'Enter a valid phone number!');
-        } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
-          _showSnackBar('Validation!', 'Enter a valid Email!');
-        } else if (remarks.isEmpty) {
-          _showSnackBar('Validation!', 'Enter a valid remarks!');
-        } else {
-          if (supervisorInfo == null) {
-            _showSnackBar('Error!', 'Invalid user login status!');
-            return;
+      } else {
+        if (formKey.currentState!.validate()) {
+          final tripID = tripIdController.text.trim();
+          final dropLocation = dropLocationController.text.trim();
+          final fare = fareController.text.trim();
+          final name = nameController.text.trim();
+          final phone = phoneController.text.trim();
+          final email = emailController.text.trim();
+          final paymentId = paymentIdController.text.trim();
+          final referenceNumber = referenceNumberController.text.trim();
+          final remarks = remarksController.text.trim();
+          final customPrice = customPriceController.text.trim();
+
+          String customerPrice;
+          if (customPrice.isEmpty) {
+            customerPrice = "0";
+          } else {
+            customerPrice = customPrice;
           }
 
-          apiLoading.value = true;
-          dispatchQuickTripApi(
-            DispatchQuickTripRequestData(
-                tripId: tripID,
-                kioskId: supervisorInfo!.kioskId,
-                companyId: supervisorInfo!.cid,
-                supervisorName: supervisorInfo!.supervisorName,
-                supervisorId: supervisorInfo!.supervisorId,
-                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-                name: name,
-                countryCode: countryCode.value,
-                mobileNo: phone,
-                email: email,
-                fixedMeter: (fare.isEmpty) ? '2' : '1',
-                kioskFare: fare,
-                paymentId: paymentId,
-                dropLatitude: dropLatitude,
-                dropLongitude: dropLongitude,
-                dropplace: dropLocation,
-                referenceNumber: referenceNumber,
-                remarks: remarks),
-          ).then((response) {
-            apiLoading.value = false;
-            _handleDispatchQuickTripResponse(response);
-          }).catchError((onError) {
-            apiLoading.value = false;
-            _showSnackBar('Error', 'Server Connection Error!');
-          });
+          if (tripID.isEmpty) {
+            _showSnackBar('Validation!', 'Enter a valid Trip Id!');
+          } else if (dropLocation.isEmpty) {
+            _showSnackBar('Validation!', 'Enter a valid drop location!');
+          } else if (fare.isEmpty || double.parse(fare) <= 0) {
+            _showSnackBar('Validation!', 'Enter a valid fare!');
+          } else if (customPrice.isNotEmpty && double.parse(customPrice) <= 0) {
+            _showSnackBar('Validation!', 'Enter a valid custom price!');
+          } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+            _showSnackBar('Validation!', 'Enter a valid phone number!');
+          } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
+            _showSnackBar('Validation!', 'Enter a valid email!');
+          } else if (remarks.isEmpty) {
+            _showSnackBar('Validation!', 'Enter a valid remarks!');
+          } else {
+            if (supervisorInfo == null) {
+              _showSnackBar('Error!', 'Invalid user login status!');
+              return;
+            }
+
+            apiLoading.value = true;
+            dispatchQuickTripApi(
+              DispatchQuickTripRequestData(
+                  tripId: tripID,
+                  kioskId: supervisorInfo!.kioskId,
+                  companyId: supervisorInfo!.cid,
+                  supervisorName: supervisorInfo!.supervisorName,
+                  supervisorId: supervisorInfo!.supervisorId,
+                  supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                  name: name,
+                  countryCode: countryCode.value,
+                  mobileNo: phone,
+                  email: email,
+                  fixedMeter: (fare.isEmpty) ? '2' : '1',
+                  kioskFare: fare,
+                  paymentId: paymentId,
+                  dropLatitude: dropLatitude,
+                  dropLongitude: dropLongitude,
+                  dropplace: dropLocation,
+                  referenceNumber: referenceNumber,
+                  remarks: remarks,
+                  customPrice: double.parse(customerPrice)),
+            ).then((response) {
+              apiLoading.value = false;
+              _handleDispatchQuickTripResponse(response);
+            }).catchError((onError) {
+              apiLoading.value = false;
+              _showSnackBar('Error', 'Server Connection Error!');
+            });
+          }
         }
       }
     }
@@ -148,6 +221,7 @@ class QuickTripController extends GetxController {
 
   _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
+    locationType.value = await GetStorageController().getLocationType();
     // deviceToken = await GetStorageController().getDeviceToken();
   }
 
@@ -205,6 +279,7 @@ class QuickTripController extends GetxController {
     dropLatitude = 0.0;
     dropLongitude = 0.0;
     fareController.clear();
+    customPriceController.clear();
     referenceNumberController.clear();
     remarksController.clear();
     nameController.clear();

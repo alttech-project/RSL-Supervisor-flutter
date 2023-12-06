@@ -7,6 +7,7 @@ import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_loader.dart';
+import '../../widgets/custom_app_container.dart';
 
 class DriverListScreen extends GetView<DriverListController> {
   const DriverListScreen({super.key});
@@ -49,47 +50,63 @@ class DriverListScreen extends GetView<DriverListController> {
                 textAlign: TextAlign.center,
               ),
             ),
-            body: Column(
-              children: [
-                // const DriverListAppBar(),
-                Obx(() => (controller.apiLoading.value)
-                    ? Expanded(
-                        child: Center(
-                          child:
-                              AppLoader(color: AppColors.kPrimaryColor.value),
-                        ),
-                      )
-                    : (controller.driverList.isNotEmpty)
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.driverList.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == controller.driverList.length) {
-                                if (controller.driverListResponse.value.notes !=
-                                        null &&
-                                    controller.driverListResponse.value.notes!
-                                        .isNotEmpty) {
-                                  return _notes(
-                                      controller.driverListResponse.value);
-                                }
-                                return const SizedBox.shrink();
-                              } else {
-                                return _driverListItem(
-                                    driverData: controller.driverList[index]);
-                              }
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              controller.noDataMsg.value,
-                              style: AppFontStyle.body(
-                                color: Colors.white,
-                                weight: AppFontWeight.semibold.value,
-                              ),
-                            ),
-                          ))
-              ],
+            body: Obx(
+              () => CommonAppContainer(
+                showLoader: controller.apiLoading.value,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // const DriverListAppBar(),
+                      Obx(
+                        () => controller.driverList.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: controller.driverList.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == controller.driverList.length) {
+                                    if (controller.driverListResponse.value
+                                                .notes !=
+                                            null &&
+                                        controller.driverListResponse.value
+                                            .notes!.isNotEmpty) {
+                                      return _notes(
+                                          controller.driverListResponse.value);
+                                    }
+                                    return const SizedBox.shrink();
+                                  } else {
+                                    return _driverListItem(
+                                        driverData:
+                                            controller.driverList[index]);
+                                  }
+                                },
+                              )
+                            : !controller.apiLoading.value
+                                ? Column(
+                                    children: [
+                                      SizedBox(
+                                        height: ScreenUtil().screenHeight /
+                                            2, // Adjust the height as needed
+                                      ),
+                                      Center(
+
+                                        child: Text(
+                                          controller.noDataMsg.value,
+                                          style: AppFontStyle.normalText(
+                                            color: Colors.white,
+                                            weight:
+                                                AppFontWeight.semibold.value,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../network/app_config.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -45,11 +46,37 @@ class QuickTripPage extends GetView<QuickTripController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _tripIdWidget(),
-                          _dropLocationWidget(),
-                          _labelAndTextFieldWidget(
-                              'Fare', 'Fare', 'Enter Fare (Optional)',
-                              txtEditingController: controller.fareController,
-                              keyboardType: TextInputType.number),
+                          Obx(() => controller.locationType.value ==
+                                  LocationType.GENERAL.toString()
+                              ? _dropLocationWidget()
+                              : _dropLocationWidgetHotelBooking()),
+                          Obx(
+                            () => controller.locationType.value ==
+                                    LocationType.GENERAL.toString()
+                                ? _labelAndTextFieldWidget(
+                                    'Fare', 'Fare', 'Enter Fare (Optional)',
+                                    txtEditingController:
+                                        controller.fareController,
+                                    keyboardType: TextInputType.number)
+                                : _labelAndTextFieldWidget(
+                                    'Fare', 'Fare', 'Enter Fare',
+                                    txtEditingController:
+                                        controller.fareController,
+                                    readOnly: true,
+                                    keyboardType: TextInputType.number),
+                          ),
+                          Obx(
+                            () => controller.locationType.value ==
+                                    LocationType.GENERAL.toString()
+                                ? const SizedBox.shrink()
+                                : _labelAndTextFieldWidget(
+                                    'Custom Price',
+                                    'Custom Price',
+                                    'Enter Custom Price (Optional)',
+                                    txtEditingController:
+                                        controller.customPriceController,
+                                    keyboardType: TextInputType.number),
+                          ),
                           _nameWidget(),
                           _phoneNumberWidget(),
                           _emailIdWidget(),
@@ -320,6 +347,23 @@ class QuickTripPage extends GetView<QuickTripController> {
           }*/
           return null;
         });
+  }
+
+  Widget _dropLocationWidgetHotelBooking() {
+    return _labelAndTextFieldWidget(
+        'Drop Location', 'Drop Location', 'Enter Drop Location',
+        txtEditingController: controller.dropLocationController, readOnly: true,
+        /* suffix: IconButton(
+          onPressed: () => controller.clearDropLocation(),
+          icon: Icon(
+            Icons.clear_sharp,
+            size: 20.r,
+            color: AppColors.kPrimaryColor.value,
+          ),
+        ),*/
+        validator: (value) {
+      return null;
+    });
   }
 
   Widget _tripIdWidget() {

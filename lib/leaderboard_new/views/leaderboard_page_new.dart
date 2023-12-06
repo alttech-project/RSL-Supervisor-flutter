@@ -54,7 +54,6 @@ class MyContainer extends StatelessWidget {
       statusBarColor: AppColors.kPrimaryColor.value,
       child: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             const MyTabBarScreen(),
             SizedBox(
@@ -131,69 +130,67 @@ class LeaderBoardDetails extends GetView<LeaderBoardControllerNew> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 8, top: 15),
-      child: Expanded(
-        child: Obx(
-          () => Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    100,
-                  ),
-                ),
-                color: Colors.green,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 5.h,
-                    horizontal: 15.w,
-                  ), // Adjust left and right padding
-                  child: Text(
-                    "Target: ${controller.leaderBoardData.value.target ?? "0"}",
-                    style: AppFontStyle.normalText(
-                        size: AppFontSize.medium.value,
-                        color: Colors.white,
-                        weight: AppFontWeight.semibold.value),
-                  ),
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  100,
                 ),
               ),
-              Image.asset(
-                LeaderboardIcons.profileIcon,
-                width: 90.w,
-                height: 90.h,
+              color: Colors.green,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 5.h,
+                  horizontal: 15.w,
+                ), // Adjust left and right padding
+                child: Text(
+                  "Target: ${controller.leaderBoardData.value.target ?? "0"}",
+                  style: AppFontStyle.normalText(
+                      size: AppFontSize.medium.value,
+                      color: Colors.white,
+                      weight: AppFontWeight.semibold.value),
+                ),
               ),
-              SizedBox(
-                height: 7.h,
-              ),
-              _rowWidget(
-                  heading: "Name",
-                  value:
-                      "${controller.leaderBoardData.value.name == null || controller.leaderBoardData.value.name!.isEmpty ? "-" : controller.leaderBoardData.value.name}"),
-              SizedBox(
-                height: 5.h,
-              ),
-              _rowWidget(
-                  heading: "ID",
-                  value:
-                      "${controller.leaderBoardData.value.uniqueId == null || controller.leaderBoardData.value.uniqueId!.isEmpty ? "-" : controller.leaderBoardData.value.uniqueId}"),
-              SizedBox(
-                height: 5.h,
-              ),
-              _rowWidget(
-                  heading: "Dispatched Trips",
-                  value:
-                      "${controller.leaderBoardData.value.dispatchTrips ?? "0"}"),
-              /* SizedBox(
+            ),
+            Image.asset(
+              LeaderboardIcons.profileIcon,
+              width: 90.w,
+              height: 90.h,
+            ),
+            SizedBox(
+              height: 7.h,
+            ),
+            _rowWidget(
+                heading: "Name",
+                value:
+                    "${controller.leaderBoardData.value.name == null || controller.leaderBoardData.value.name!.isEmpty ? "-" : controller.leaderBoardData.value.name}"),
+            SizedBox(
+              height: 5.h,
+            ),
+            _rowWidget(
+                heading: "ID",
+                value:
+                    "${controller.leaderBoardData.value.uniqueId == null || controller.leaderBoardData.value.uniqueId!.isEmpty ? "-" : controller.leaderBoardData.value.uniqueId}"),
+            SizedBox(
+              height: 5.h,
+            ),
+            _rowWidget(
+                heading: "Dispatched Trips",
+                value:
+                    "${controller.leaderBoardData.value.dispatchTrips ?? "0"}"),
+            /* SizedBox(
                 height: 5.h,
               ),
               _rowWidget(heading: "Today Trips", value: "25"),*/
-              SizedBox(
-                height: 15.h,
-              ),
-            ],
-          ),
+            SizedBox(
+              height: 15.h,
+            ),
+          ],
         ),
       ),
     );

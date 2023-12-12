@@ -20,6 +20,8 @@ class DashboardPage extends GetView<DashBoardController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.precacheImages(context);
+
     return WillPopScope(
       child: Obx(() => (controller.logOutLoader.value)
           ? const SizedBox(

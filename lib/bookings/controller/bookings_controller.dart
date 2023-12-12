@@ -10,7 +10,7 @@ import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart'
 import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
 import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../dashboard/data/car_model_type_api.dart';
 import '../../dashboard/service/dashboard_service.dart';
@@ -22,6 +22,7 @@ import '../../utils/helpers/alert_helpers.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
+import '../../widgets/app_loader.dart';
 import '../../widgets/custom_button.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
@@ -70,7 +71,7 @@ class BookingsController extends GetxController
   // RxBool showPaymentOption = false.obs;
   // final selectedRadio = 1.obs;
   int selectedCarIndex = 0;
-  RxList<CarmodelList> carModelList = <CarmodelList>[].obs;
+  RxList<FareDetailList> carModelList = <FareDetailList>[].obs;
 
   List<FareDetailList> motorModelList = <FareDetailList>[];
 
@@ -326,7 +327,35 @@ class BookingsController extends GetxController
   }
 
   void callCarModelApi(SupervisorInfo? supervisorInfo) async {
-    carModelApi(CarModelTypeRequestData(
+    var corporateId = await GetStorageController().getCorporateId();
+    supervisorInfo = await GetStorageController().getSupervisorInfo();
+    motorDetailsApi(MotorDetailsRequest(
+            supervisorId: supervisorInfo.supervisorId ?? "",
+            kioskId: supervisorInfo.kioskId ?? "",
+            corporateId: corporateId,
+            cid: supervisorInfo.cid ?? "",
+            pickup_latitude: pickupLatitude,
+            pickup_longitude: pickupLongitude,
+            drop_latitude: dropLatitude,
+            drop_longitude: dropLongitude,
+            distance: approximateDistance.value))
+        .then((response) {
+      // apiLoading.value = false;
+      if ((response.status ?? 0) == 1) {
+        carModelList.value = response.fareDetailList ?? [];
+        carModelList.refresh();
+      } else {
+        carModelList.value = [];
+        carModelList.refresh();
+      }
+    }).onError((error, stackTrace) {
+      // apiLoading.value = false;
+      printLogs("CarModel api error: ${error.toString()}");
+      carModelList.value = [];
+      carModelList.refresh();
+    });
+
+    /*carModelApi(CarModelTypeRequestData(
       kioskId: supervisorInfo?.kioskId ?? "",
       supervisorId: supervisorInfo?.supervisorId ?? "",
       dropLatitude: "",
@@ -347,7 +376,7 @@ class BookingsController extends GetxController
       printLogs("CarModel api error: ${error.toString()}");
       carModelList.value = [];
       carModelList.refresh();
-    });
+    });*/
   }
 
   void updateModelFareDetails() {
@@ -521,21 +550,21 @@ class BookingsController extends GetxController
 
   void showCustomDialog(BuildContext context) {
     final List<dynamic> staticImageUrls = [
-      {'motor_id': 1, 'image': "assets/dashboard_page/sedan.png"},
-      {'motor_id': 10, 'image': "assets/dashboard_page/xl.png"},
-      {'motor_id': 23, 'image': "assets/dashboard_page/vip.png"},
-      {'motor_id': 19, 'image': "assets/dashboard_page/vip_plus.png"},
+      {'model_id': 1, 'image': "assets/dashboard_page/sedan.png"},
+      {'model_id': 10, 'image': "assets/dashboard_page/xl.png"},
+      {'model_id': 23, 'image': "assets/dashboard_page/vip.png"},
+      {'model_id': 19, 'image': "assets/dashboard_page/vip_plus.png"},
     ];
     final List<Car> cars = [];
     for (final carModel in carModelList) {
       final imageUrl = staticImageUrls.firstWhere(
-          (element) => element['motor_id'] == carModel.motorId,
+          (element) => element['model_id'] == carModel.modelId,
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
 
       final car = Car(
-          name: carModel.motorName ?? "",
-          imageUrl: imageUrl,
-          modelId: carModel.motorId?.toString() ?? "");
+          name: carModel.modelName ?? "",
+          imageUrl: carModel.beforeSelect ?? "",
+          modelId: carModel.modelId?.toString() ?? "");
       cars.add(car);
     }
 
@@ -601,10 +630,22 @@ class BookingsController extends GetxController
                                     ),
                                   ],
                                 ),
-                                Image.asset(
+                                /*Image.asset(
                                   cars[selectedCarIndex].imageUrl,
                                   width: 250.w,
                                   height: 250.h,
+                                ),*/
+                                Center(
+                                  child: CachedNetworkImage(
+                                    imageUrl: cars[selectedCarIndex].imageUrl,
+                                    placeholder: (context, url) => const Center(
+                                      child: AppLoader(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    width: 250.w,
+                                    height: 250.h,
+                                  ),
                                 ),
                                 // SizedBox(width: 10.w),
                                 Row(

@@ -120,20 +120,21 @@ class FareDetailList {
   int? pickupZoneId;
   int? dropZoneId;
   int? dropZoneGroupId;
+  String? beforeSelect;
 
-  FareDetailList({
-    this.modelId,
-    this.modelName,
-    this.fare,
-    this.driverShare,
-    this.rslShare,
-    this.corporateShare,
-    this.zoneFareApplied,
-    this.pickupZoneGroupId,
-    this.pickupZoneId,
-    this.dropZoneId,
-    this.dropZoneGroupId,
-  });
+  FareDetailList(
+      {this.modelId,
+      this.modelName,
+      this.fare,
+      this.driverShare,
+      this.rslShare,
+      this.corporateShare,
+      this.zoneFareApplied,
+      this.pickupZoneGroupId,
+      this.pickupZoneId,
+      this.dropZoneId,
+      this.dropZoneGroupId,
+      this.beforeSelect});
 
   FareDetailList.fromJson(Map<String, dynamic> json) {
     modelId = json['model_id'];
@@ -147,6 +148,7 @@ class FareDetailList {
     pickupZoneId = json['pickup_zone_id'];
     dropZoneId = json['drop_zone_id'];
     dropZoneGroupId = json['drop_zone_group_id'];
+    beforeSelect = json["beforeSelect"];
   }
 
   Map<String, dynamic> toJson() {
@@ -162,6 +164,7 @@ class FareDetailList {
     data['pickup_zone_id'] = pickupZoneId;
     data['drop_zone_id'] = dropZoneId;
     data['drop_zone_group_id'] = dropZoneGroupId;
+    data["beforeSelect"] = beforeSelect;
     return data;
   }
 }

@@ -165,6 +165,7 @@ class BookingsListController extends GetxController {
       default:
     }
     // showLoader.value = true;
+    supervisorInfo = await GetStorageController().getSupervisorInfo();
     tripListApi(
       MyTripsRequestData(
           driverName: carNoController.text,
@@ -185,7 +186,6 @@ class BookingsListController extends GetxController {
             totalCountOngoing.value = response.details!.totalCount ?? 0;
             showLoader.value = false;
             tripListOngoing.refresh();
-            print("DEEPAK tripList ${tripListOngoing.length}");
           } else {
             tripListOngoing.value = [];
             dispatchedTrips.value = 0;

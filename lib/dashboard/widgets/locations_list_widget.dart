@@ -162,7 +162,8 @@ class LocationsListWidget extends GetView<DashBoardController> {
         ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
         ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
         ..fareController.text =
-            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
+            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? ''
+        ..pageType.value = 2;
       Get.back();
       // Get.offAndToNamed(AppRoutes.quickTripPage);
     } else {
@@ -173,7 +174,8 @@ class LocationsListWidget extends GetView<DashBoardController> {
         ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
         ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
         ..fareController.text =
-            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? '';
+            (dropLocation.fare?.replaceAll('AED', '').trim()) ?? ''
+        ..pageType.value = 2;
       Get.toNamed(AppRoutes.quickTripPage);
     }
   }

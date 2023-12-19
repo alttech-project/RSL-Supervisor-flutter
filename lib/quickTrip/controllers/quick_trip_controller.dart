@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 
+import '../../bookings/data/motor_details_data.dart';
 import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../shared/styles/app_color.dart';
@@ -28,12 +29,15 @@ class QuickTripController extends GetxController {
       TextEditingController();
   final TextEditingController remarksController = TextEditingController();
   RxString locationType = "".obs;
+  RxInt pageType = 0.obs;
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
 
   double dropLatitude = 0.0, dropLongitude = 0.0;
+
+  Rx<Payments> selectedPayment = quickTripsPaymentList[0].obs;
 
   @override
   void onInit() {
@@ -80,6 +84,7 @@ class QuickTripController extends GetxController {
     } else {
       if (locationType.value == LocationType.GENERAL.toString()) {
         if (formKey.currentState!.validate()) {
+          print("hi locationType1 ${locationType.value}");
           final tripID = tripIdController.text.trim();
           final dropLocation = dropLocationController.text.trim();
           final fare = fareController.text.trim();
@@ -109,24 +114,26 @@ class QuickTripController extends GetxController {
             apiLoading.value = true;
             dispatchQuickTripApi(
               DispatchQuickTripRequestData(
-                  tripId: tripID,
-                  kioskId: supervisorInfo!.kioskId,
-                  companyId: supervisorInfo!.cid,
-                  supervisorName: supervisorInfo!.supervisorName,
-                  supervisorId: supervisorInfo!.supervisorId,
-                  supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-                  name: name,
-                  countryCode: countryCode.value,
-                  mobileNo: phone,
-                  email: email,
-                  fixedMeter: (fare.isEmpty) ? '2' : '1',
-                  kioskFare: fare,
-                  paymentId: paymentId,
-                  dropLatitude: dropLatitude,
-                  dropLongitude: dropLongitude,
-                  dropplace: dropLocation,
-                  referenceNumber: referenceNumber,
-                  remarks: remarks),
+                tripId: tripID,
+                kioskId: supervisorInfo!.kioskId,
+                companyId: supervisorInfo!.cid,
+                supervisorName: supervisorInfo!.supervisorName,
+                supervisorId: supervisorInfo!.supervisorId,
+                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                name: name,
+                countryCode: countryCode.value,
+                mobileNo: phone,
+                email: email,
+                fixedMeter: (fare.isEmpty) ? '2' : '1',
+                kioskFare: fare,
+                paymentId: paymentId,
+                dropLatitude: dropLatitude,
+                dropLongitude: dropLongitude,
+                dropplace: dropLocation,
+                referenceNumber: referenceNumber,
+                remarks: remarks,
+                paymentOption: int.parse(selectedPayment.value.paymentId),
+              ),
             ).then((response) {
               apiLoading.value = false;
               _handleDispatchQuickTripResponse(response);
@@ -137,6 +144,7 @@ class QuickTripController extends GetxController {
           }
         }
       } else {
+        print("hi locationType2 ${locationType.value}");
         if (formKey.currentState!.validate()) {
           final tripID = tripIdController.text.trim();
           final dropLocation = dropLocationController.text.trim();
@@ -179,25 +187,27 @@ class QuickTripController extends GetxController {
             apiLoading.value = true;
             dispatchQuickTripApi(
               DispatchQuickTripRequestData(
-                  tripId: tripID,
-                  kioskId: supervisorInfo!.kioskId,
-                  companyId: supervisorInfo!.cid,
-                  supervisorName: supervisorInfo!.supervisorName,
-                  supervisorId: supervisorInfo!.supervisorId,
-                  supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-                  name: name,
-                  countryCode: countryCode.value,
-                  mobileNo: phone,
-                  email: email,
-                  fixedMeter: (fare.isEmpty) ? '2' : '1',
-                  kioskFare: fare,
-                  paymentId: paymentId,
-                  dropLatitude: dropLatitude,
-                  dropLongitude: dropLongitude,
-                  dropplace: dropLocation,
-                  referenceNumber: referenceNumber,
-                  remarks: remarks,
-                  customPrice: double.parse(customerPrice)),
+                tripId: tripID,
+                kioskId: supervisorInfo!.kioskId,
+                companyId: supervisorInfo!.cid,
+                supervisorName: supervisorInfo!.supervisorName,
+                supervisorId: supervisorInfo!.supervisorId,
+                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                name: name,
+                countryCode: countryCode.value,
+                mobileNo: phone,
+                email: email,
+                fixedMeter: (fare.isEmpty) ? '2' : '1',
+                kioskFare: fare,
+                paymentId: paymentId,
+                dropLatitude: dropLatitude,
+                dropLongitude: dropLongitude,
+                dropplace: dropLocation,
+                referenceNumber: referenceNumber,
+                remarks: remarks,
+                customPrice: double.parse(customerPrice),
+                paymentOption: int.parse(selectedPayment.value.paymentId),
+              ),
             ).then((response) {
               apiLoading.value = false;
               _handleDispatchQuickTripResponse(response);
@@ -276,6 +286,7 @@ class QuickTripController extends GetxController {
   void clearDatas() {
     clearTripId();
     clearDropLocation();
+    selectedPayment.value = quickTripsPaymentList[0];
     dropLatitude = 0.0;
     dropLongitude = 0.0;
     fareController.clear();

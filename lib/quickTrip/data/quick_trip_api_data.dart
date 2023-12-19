@@ -20,6 +20,7 @@ class DispatchQuickTripRequestData {
   String? referenceNumber;
   String? remarks;
   num? customPrice;
+  num? paymentOption;
 
   DispatchQuickTripRequestData(
       {this.kioskId,
@@ -40,7 +41,8 @@ class DispatchQuickTripRequestData {
       this.dropplace,
       this.referenceNumber,
       this.remarks,
-      this.customPrice});
+      this.customPrice,
+      this.paymentOption});
 
   DispatchQuickTripRequestData.fromJson(Map<String, dynamic> json) {
     kioskId = json['kiosk_id'];
@@ -62,6 +64,7 @@ class DispatchQuickTripRequestData {
     referenceNumber = json['reference_number'];
     remarks = json['remarks'];
     customPrice = json['custom_price'];
+    paymentOption = json["payment_option"];
   }
 
   Map<String, dynamic> toJson() {
@@ -85,6 +88,7 @@ class DispatchQuickTripRequestData {
     data['reference_number'] = this.referenceNumber;
     data['remarks'] = this.remarks;
     data['custom_price'] = this.customPrice;
+    data["payment_option"] = this.paymentOption;
     return data;
   }
 }

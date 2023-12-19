@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../bookings/data/motor_details_data.dart';
 import '../../network/app_config.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
@@ -25,34 +27,36 @@ class QuickTripPage extends GetView<QuickTripController> {
       child: SafeAreaContainer(
         statusBarColor: Colors.black,
         themedark: true,
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: Colors.black,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 10.w,
-                right: 10.w,
-                top: 24.h,
-              ),
-              child: Column(
-                children: [
-                  const QuickTripsAppBar(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    child: Form(
-                      key: controller.formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _tripIdWidget(),
-                          Obx(() => controller.locationType.value ==
-                                  LocationType.GENERAL.toString()
-                              ? _dropLocationWidget()
-                              : _dropLocationWidgetHotelBooking()),
-                          Obx(
-                            () => controller.locationType.value ==
-                                    LocationType.GENERAL.toString()
+        child: Obx(
+          () => Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: Colors.black,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 10.w,
+                  right: 10.w,
+                  top: 24.h,
+                ),
+                child: Column(
+                  children: [
+                    const QuickTripsAppBar(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Form(
+                        key: controller.formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _tripIdWidget(),
+                            controller.pageType.value ==
+                                    1 /*controller.locationType.value ==
+                                  LocationType.GENERAL.toString()*/
+                                ? _dropLocationWidget()
+                                : _dropLocationWidgetHotelBooking(),
+                            controller.pageType.value ==
+                                    1 /*controller.locationType.value ==
+                                    LocationType.GENERAL.toString()*/
                                 ? _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare (Optional)',
                                     txtEditingController:
@@ -64,9 +68,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                                         controller.fareController,
                                     readOnly: true,
                                     keyboardType: TextInputType.number),
-                          ),
-                          Obx(
-                            () => controller.locationType.value ==
+                            controller.locationType.value ==
                                     LocationType.GENERAL.toString()
                                 ? const SizedBox.shrink()
                                 : _labelAndTextFieldWidget(
@@ -76,17 +78,19 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     txtEditingController:
                                         controller.customPriceController,
                                     keyboardType: TextInputType.number),
-                          ),
-                          _nameWidget(),
-                          _phoneNumberWidget(),
-                          _emailIdWidget(),
-                          _labelAndTextFieldWidget('Reference Number',
-                              'Reference Number', 'Reference Number (Optional)',
-                              txtEditingController:
-                                  controller.referenceNumberController,
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.next),
-                          /*_labelAndTextFieldWidget(
+                            _labelPaymentOptionInfo(),
+                            _nameWidget(),
+                            _phoneNumberWidget(),
+                            _emailIdWidget(),
+                            _labelAndTextFieldWidget(
+                                'Reference Number',
+                                'Reference Number',
+                                'Reference Number (Optional)',
+                                txtEditingController:
+                                    controller.referenceNumberController,
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.next),
+                            /*_labelAndTextFieldWidget(
                             'Payment ID',
                             'Payment ID',
                             'Enter Payment ID (Optional)',
@@ -94,33 +98,34 @@ class QuickTripPage extends GetView<QuickTripController> {
                                 controller.paymentIdController,
                             textInputAction: TextInputAction.done,
                           ),*/
-                          SizedBox(height: 10.h),
-                          _remarksLabel(),
-                          SizedBox(height: 7.h),
-                          _remarksCardView(),
-                          SizedBox(
-                            height: 24.h,
-                          ),
-                          Obx(
-                            () => CustomButton(
-                              width: double.maxFinite,
-                              linearColor: primaryButtonLinearColor,
-                              height: 38.h,
-                              borderRadius: 38.h / 2,
-                              isLoader: controller.apiLoading.value,
-                              style: AppFontStyle.body(color: Colors.white),
-                              text: 'Submit',
-                              onTap: () => controller.checkValidation(),
+                            SizedBox(height: 10.h),
+                            _remarksLabel(),
+                            SizedBox(height: 7.h),
+                            _remarksCardView(),
+                            SizedBox(
+                              height: 24.h,
                             ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                        ],
+                            Obx(
+                              () => CustomButton(
+                                width: double.maxFinite,
+                                linearColor: primaryButtonLinearColor,
+                                height: 38.h,
+                                borderRadius: 38.h / 2,
+                                isLoader: controller.apiLoading.value,
+                                style: AppFontStyle.body(color: Colors.white),
+                                text: 'Submit',
+                                onTap: () => controller.checkValidation(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -381,6 +386,124 @@ class QuickTripPage extends GetView<QuickTripController> {
         ),
       ),
       keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget _labelPaymentOptionInfo() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          _labelPaymentOption(),
+          const SizedBox(
+            height: 8,
+          ),
+          _selectedPaymentOption()
+        ],
+      ),
+    );
+  }
+
+  Widget _labelPaymentOption() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        'Payment Option',
+        style: AppFontStyle.subHeading(
+          size: AppFontSize.medium.value,
+          color: AppColors.kPrimaryColor.value,
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedPaymentOption() {
+    return Obx(
+      () => SizedBox(
+        width: double.maxFinite,
+        height: 57,
+        child: Card(
+          elevation: 8,
+          margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              12,
+            ),
+          ),
+          color: AppColors.kSecondaryBackGroundColor.value,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 10,
+            ), // Adjust left and right padding
+            child: Row(
+              children: [
+                Expanded(
+                  child: _paymentDropDown(
+                    selectedOption: controller.selectedPayment.value,
+                    onTap: (value) {
+                      controller.selectedPayment.value = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _paymentDropDown(
+      {required Payments? selectedOption,
+      required Function(Payments value) onTap}) {
+    return SizedBox(
+      child: DropdownButton<Payments>(
+        value: selectedOption,
+        isExpanded: true,
+        underline: Container(
+          height: 1.0,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide.none),
+          ),
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down_sharp,
+          size: 20.r,
+          color: AppColors.kPrimaryColor.value,
+        ),
+        dropdownColor: Colors.black,
+        iconDisabledColor: AppColors.kPrimaryColor.value,
+        iconEnabledColor: AppColors.kPrimaryColor.value,
+        alignment: Alignment.center,
+        onChanged: (newValue) {
+          onTap(newValue!);
+        },
+        items: quickTripsPaymentList
+            .map<DropdownMenuItem<Payments>>((Payments value) {
+          return DropdownMenuItem<Payments>(
+            onTap: () {
+              onTap(value);
+            },
+            value: value,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: Text(
+                value.name.toString(),
+                style: GoogleFonts.outfit(
+                  textStyle: TextStyle(
+                      fontSize: AppFontSize.verySmall.value,
+                      fontWeight: AppFontWeight.normal.value,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

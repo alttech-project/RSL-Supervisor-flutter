@@ -25,138 +25,138 @@ class DashboardPage extends GetView<DashBoardController> {
     return WillPopScope(
       child: Obx(() => (controller.logOutLoader.value)
           ? const SizedBox(
-              child: Center(
-                child: AppLoader(),
-              ),
-            )
+        child: Center(
+          child: AppLoader(),
+        ),
+      )
           : SafeAreaContainer(
-              statusBarColor: Colors.black,
-              themedark: true,
-              child: Scaffold(
-                drawer: const SideMenuPage(),
-                extendBodyBehindAppBar: false,
-                backgroundColor: Colors.black,
-                key: controller.scaffoldKey,
-                body: Obx(
-                  () => CommonAppContainer(
-                    showLoader: controller.showLoader.value,
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 10.w, right: 10.w, top: 24.h, bottom: 10.h),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                const DashboardAppBar(),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10.h),
-                                  child: Text(
-                                    controller.supervisorInfo.value.kioskName ??
-                                        "",
-                                    maxLines: 3,
-                                    style: AppFontStyle.subHeading(
-                                      color: AppColors.kPrimaryColor.value,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                                  child: Text(
-                                    controller.supervisorInfo.value
-                                            .supervisorName ??
-                                        "",
-                                    style: AppFontStyle.subHeading(
-                                      color: AppColors.kPrimaryColor.value,
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    const Spacer(),
-                                    Text(
-                                      'Use Custom Drop Off',
-                                      style: AppFontStyle.subHeading(
-                                          color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      height: 30.h,
-                                      width: 40.w,
-                                      child: FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: Switch(
-                                          value: controller.useCustomDrop.value,
-                                          inactiveTrackColor:
-                                              Colors.red.shade300,
-                                          inactiveThumbColor:
-                                              Colors.red.shade800,
-                                          activeColor: Colors.green,
-                                          onChanged: (bool newValue) {
-                                            controller
-                                                .customDropAction(newValue);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                DropSearchBar(
-                                  pageType: 2,
-                                ),
-                                LocationsListWidget(pageType: 2),
-                              ],
+        statusBarColor: Colors.black,
+        themedark: true,
+        child: Scaffold(
+          drawer: const SideMenuPage(),
+          extendBodyBehindAppBar: false,
+          backgroundColor: Colors.black,
+          key: controller.scaffoldKey,
+          body: Obx(
+                () => CommonAppContainer(
+              showLoader: controller.showLoader.value,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 10.w, right: 10.w, top: 24.h, bottom: 10.h),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const DashboardAppBar(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Text(
+                              controller.supervisorInfo.value.kioskName ??
+                                  "",
+                              maxLines: 3,
+                              style: AppFontStyle.subHeading(
+                                color: AppColors.kPrimaryColor.value,
+                              ),
                             ),
                           ),
-                        ),
-                        if (controller.carModelList.isNotEmpty)
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.only(right: 12.w, bottom: 12.h),
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  try {
-                                    controller.showCustomDialog(Get.context!);
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          AppColors.kPrimaryColor.value),
-                                  shape:
-                                      MaterialStateProperty.all<OutlinedBorder>(
-                                    const CircleBorder(),
-                                  ),
-                                  fixedSize: MaterialStateProperty.all<Size>(
-                                    Size(45.r, 45.r),
-                                  ),
-                                  elevation:
-                                      MaterialStateProperty.all<double>(6),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      AppColors.kFloatingIconColor.value),
-                                ),
-                                child: SizedBox(
-                                  width: 40.r,
-                                  height: 40.r,
-                                  child: Image.asset(
-                                    "assets/dashboard_page/ic_car.png",
-                                    width: 25.0.w,
-                                    height: 20.0.h,
-                                    color: Colors.black,
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: Text(
+                              controller.supervisorInfo.value
+                                  .supervisorName ??
+                                  "",
+                              style: AppFontStyle.subHeading(
+                                color: AppColors.kPrimaryColor.value,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const Spacer(),
+                              Text(
+                                'Use Custom Drop Off',
+                                style: AppFontStyle.subHeading(
+                                    color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 30.h,
+                                width: 40.w,
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Switch(
+                                    value: controller.useCustomDrop.value,
+                                    inactiveTrackColor:
+                                    Colors.red.shade300,
+                                    inactiveThumbColor:
+                                    Colors.red.shade800,
+                                    activeColor: Colors.green,
+                                    onChanged: (bool newValue) {
+                                      controller
+                                          .customDropAction(newValue);
+                                    },
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                      ],
+                            ],
+                          ),
+                          DropSearchBar(
+                            pageType: 2,
+                          ),
+                          LocationsListWidget(pageType: 2),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  if (controller.carModelList.isNotEmpty)
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding:
+                        EdgeInsets.only(right: 12.w, bottom: 12.h),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              controller.showCustomDialog(Get.context!);
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all<Color>(
+                                AppColors.kPrimaryColor.value),
+                            shape:
+                            MaterialStateProperty.all<OutlinedBorder>(
+                              const CircleBorder(),
+                            ),
+                            fixedSize: MaterialStateProperty.all<Size>(
+                              Size(45.r, 45.r),
+                            ),
+                            elevation:
+                            MaterialStateProperty.all<double>(6),
+                            shadowColor: MaterialStateProperty.all<Color>(
+                                AppColors.kFloatingIconColor.value),
+                          ),
+                          child: SizedBox(
+                            width: 40.r,
+                            height: 40.r,
+                            child: Image.asset(
+                              "assets/dashboard_page/ic_car.png",
+                              width: 25.0.w,
+                              height: 20.0.h,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
+      )),
       onWillPop: () {
         SystemNavigator.pop();
         return Future.value(true);

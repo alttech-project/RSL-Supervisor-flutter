@@ -43,7 +43,7 @@ class BookingsController extends GetxController
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController pickupLocationController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
@@ -304,15 +304,15 @@ class BookingsController extends GetxController
       var corporateId = await GetStorageController().getCorporateId();
       supervisorInfo = await GetStorageController().getSupervisorInfo();
       motorDetailsApi(MotorDetailsRequest(
-              supervisorId: supervisorInfo?.supervisorId ?? "",
-              kioskId: supervisorInfo?.kioskId ?? "",
-              corporateId: corporateId,
-              cid: supervisorInfo?.cid ?? "",
-              pickup_latitude: pickupLatitude,
-              pickup_longitude: pickupLongitude,
-              drop_latitude: dropLatitude,
-              drop_longitude: dropLongitude,
-              distance: approximateDistance.value))
+          supervisorId: supervisorInfo?.supervisorId ?? "",
+          kioskId: supervisorInfo?.kioskId ?? "",
+          corporateId: corporateId,
+          cid: supervisorInfo?.cid ?? "",
+          pickup_latitude: pickupLatitude,
+          pickup_longitude: pickupLongitude,
+          drop_latitude: dropLatitude,
+          drop_longitude: dropLongitude,
+          distance: approximateDistance.value))
           .then((response) {
         apiLoading.value = false;
         if ((response.status ?? 0) == 1) {
@@ -330,15 +330,15 @@ class BookingsController extends GetxController
     var corporateId = await GetStorageController().getCorporateId();
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     motorDetailsApi(MotorDetailsRequest(
-            supervisorId: supervisorInfo.supervisorId ?? "",
-            kioskId: supervisorInfo.kioskId ?? "",
-            corporateId: corporateId,
-            cid: supervisorInfo.cid ?? "",
-            pickup_latitude: pickupLatitude,
-            pickup_longitude: pickupLongitude,
-            drop_latitude: dropLatitude,
-            drop_longitude: dropLongitude,
-            distance: approximateDistance.value))
+        supervisorId: supervisorInfo.supervisorId ?? "",
+        kioskId: supervisorInfo.kioskId ?? "",
+        corporateId: corporateId,
+        cid: supervisorInfo.cid ?? "",
+        pickup_latitude: pickupLatitude,
+        pickup_longitude: pickupLongitude,
+        drop_latitude: dropLatitude,
+        drop_longitude: dropLongitude,
+        distance: approximateDistance.value))
         .then((response) {
       // apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
@@ -428,7 +428,7 @@ class BookingsController extends GetxController
           final routes = routeArray[0] as Map<String, dynamic>;
 
           final overviewPolyLines =
-              routes['overview_polyline'] as Map<String, dynamic>;
+          routes['overview_polyline'] as Map<String, dynamic>;
 
           final overViewPoly = overviewPolyLines['points'] as String? ?? '';
 
@@ -437,21 +437,21 @@ class BookingsController extends GetxController
           final legsArray = routes['legs'] as List<dynamic>;
           for (var i = 0; i < legsArray.length; i++) {
             final timeObject =
-                legsArray[i]['duration'] as Map<String, dynamic>?;
+            legsArray[i]['duration'] as Map<String, dynamic>?;
             final legTime = timeObject?['value'] as int?;
             if (legTime != null) {
               time += legTime;
             }
 
             final distanceObject =
-                legsArray[i]['distance'] as Map<String, dynamic>?;
+            legsArray[i]['distance'] as Map<String, dynamic>?;
             final legDistance = distanceObject?['value'] as int?;
             if (legDistance != null) {
               distance += legDistance;
             }
 
             final trafficTimeObject =
-                legsArray[i]['duration_in_traffic'] as Map<String, dynamic>?;
+            legsArray[i]['duration_in_traffic'] as Map<String, dynamic>?;
             final legTrafficTime = trafficTimeObject?['value'] as int?;
             if (legTrafficTime != null) {
               trafficTime += legTrafficTime;
@@ -499,14 +499,14 @@ class BookingsController extends GetxController
 
     if (pickupLatitude == 0.0 && pickupLongitude == 0.0) {
       LocationResult<Position> result =
-          await locationManager.getCurrentLocation();
+      await locationManager.getCurrentLocation();
       pickupLatitude = result.data!.latitude ?? 0.0;
       pickupLongitude = result.data!.longitude ?? 0.0;
 
       List<Placemark> locations =
-          await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
+      await placemarkFromCoordinates(pickupLatitude, pickupLongitude);
       pickupLocationController.text =
-          "${locations[0].name},${locations[0].locality} ${locations[0].country}";
+      "${locations[0].name},${locations[0].locality} ${locations[0].country}";
     }
   }
 
@@ -558,7 +558,7 @@ class BookingsController extends GetxController
     final List<Car> cars = [];
     for (final carModel in carModelList) {
       final imageUrl = staticImageUrls.firstWhere(
-          (element) => element['model_id'] == carModel.modelId,
+              (element) => element['model_id'] == carModel.modelId,
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
 
       final car = Car(
@@ -585,150 +585,150 @@ class BookingsController extends GetxController
             return (selectedCarIndex >= cars.length)
                 ? const SizedBox.shrink()
                 : AnimatedBuilder(
-                    animation: animationController,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          0,
-                          MediaQuery.of(context).size.height *
-                              verticalPositionTween
-                                  .evaluate(animationController),
-                        ),
-                        child: AlertDialog(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 30.w, vertical: 24.h),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Available Cars',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: AppFontWeight.bold.value,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        animationController
-                                            .reverse()
-                                            .then((value) {
-                                          Navigator.of(context).pop();
-                                        });
-                                      },
-                                      child: Icon(
-                                        CupertinoIcons.multiply_circle,
-                                        color: AppColors
-                                            .kSecondaryContainerBorder.value,
-                                        size: 35.r,
-                                      ),
-                                    ),
-                                  ],
+              animation: animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    MediaQuery.of(context).size.height *
+                        verticalPositionTween
+                            .evaluate(animationController),
+                  ),
+                  child: AlertDialog(
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 30.w, vertical: 24.h),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Available Cars',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: AppFontWeight.bold.value,
                                 ),
-                                /*Image.asset(
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  animationController
+                                      .reverse()
+                                      .then((value) {
+                                    Navigator.of(context).pop();
+                                  });
+                                },
+                                child: Icon(
+                                  CupertinoIcons.multiply_circle,
+                                  color: AppColors
+                                      .kSecondaryContainerBorder.value,
+                                  size: 35.r,
+                                ),
+                              ),
+                            ],
+                          ),
+                          /*Image.asset(
                                   cars[selectedCarIndex].imageUrl,
                                   width: 250.w,
                                   height: 250.h,
                                 ),*/
-                                Center(
-                                  child: CachedNetworkImage(
-                                    imageUrl: cars[selectedCarIndex].imageUrl,
-                                    placeholder: (context, url) => const Center(
-                                      child: AppLoader(),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    width: 250.w,
-                                    height: 250.h,
-                                  ),
-                                ),
-                                // SizedBox(width: 10.w),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        selectPreviousCar();
-                                        setState(() {});
-                                      },
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_left,
-                                        color: selectedCarIndex > 0
-                                            ? AppColors.kPrimaryColor.value
-                                            : Colors
-                                                .grey, // Gray if not available
-                                        size: 30.r,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          cars[selectedCarIndex].name,
-                                          style: TextStyle(
-                                            fontSize: 17.r,
-                                            fontWeight:
-                                                AppFontWeight.bold.value,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        selectNextCar(cars);
-                                        setState(() {});
-                                      },
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color:
-                                            selectedCarIndex < cars.length - 1
-                                                ? AppColors.kPrimaryColor.value
-                                                : Colors.grey,
-                                        size: 30.r,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                CustomButton(
-                                    width: double.maxFinite,
-                                    linearColor: primaryButtonLinearColor,
-                                    height: 38.h,
-                                    borderRadius: 38.h / 2,
-                                    style:
-                                        AppFontStyle.body(color: Colors.white),
-                                    text: 'Submit',
-                                    onTap: () => {
-                                          /* carModelController.text =
-                                            cars[selectedCarIndex].name,*/
-                                          taxiModel.value =
-                                              cars[selectedCarIndex].name,
-                                          taxiId.value =
-                                              cars[selectedCarIndex].modelId,
-                                          updateModelFareDetails(),
-                                          animationController.reverse().then(
-                                            (value) {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        }),
-                              ],
+                          Center(
+                            child: CachedNetworkImage(
+                              imageUrl: cars[selectedCarIndex].imageUrl,
+                              placeholder: (context, url) => const Center(
+                                child: AppLoader(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                              width: 250.w,
+                              height: 250.h,
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
+                          // SizedBox(width: 10.w),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  selectPreviousCar();
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  CupertinoIcons.chevron_left,
+                                  color: selectedCarIndex > 0
+                                      ? AppColors.kPrimaryColor.value
+                                      : Colors
+                                      .grey, // Gray if not available
+                                  size: 30.r,
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    cars[selectedCarIndex].name,
+                                    style: TextStyle(
+                                      fontSize: 17.r,
+                                      fontWeight:
+                                      AppFontWeight.bold.value,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  selectNextCar(cars);
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  CupertinoIcons.chevron_right,
+                                  color:
+                                  selectedCarIndex < cars.length - 1
+                                      ? AppColors.kPrimaryColor.value
+                                      : Colors.grey,
+                                  size: 30.r,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          CustomButton(
+                              width: double.maxFinite,
+                              linearColor: primaryButtonLinearColor,
+                              height: 38.h,
+                              borderRadius: 38.h / 2,
+                              style:
+                              AppFontStyle.body(color: Colors.white),
+                              text: 'Submit',
+                              onTap: () => {
+                                /* carModelController.text =
+                                            cars[selectedCarIndex].name,*/
+                                taxiModel.value =
+                                    cars[selectedCarIndex].name,
+                                taxiId.value =
+                                    cars[selectedCarIndex].modelId,
+                                updateModelFareDetails(),
+                                animationController.reverse().then(
+                                      (value) {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
           },
         );
       },

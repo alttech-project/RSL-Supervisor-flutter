@@ -421,7 +421,6 @@ class DashBoardController extends GetxController {
   }
 
   void showCustomDialog(BuildContext context) {
-    precacheImages(context);
     final List<dynamic> staticImageUrls = [
       {'motor_id': 1, 'image': "assets/dashboard_page/sedan.png"},
       {'motor_id': 10, 'image': "assets/dashboard_page/xl.png"},

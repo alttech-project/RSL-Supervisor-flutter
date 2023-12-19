@@ -84,7 +84,6 @@ class QuickTripController extends GetxController {
     } else {
       if (locationType.value == LocationType.GENERAL.toString()) {
         if (formKey.currentState!.validate()) {
-          print("hi locationType1 ${locationType.value}");
           final tripID = tripIdController.text.trim();
           final dropLocation = dropLocationController.text.trim();
           final fare = fareController.text.trim();
@@ -144,7 +143,6 @@ class QuickTripController extends GetxController {
           }
         }
       } else {
-        print("hi locationType2 ${locationType.value}");
         if (formKey.currentState!.validate()) {
           final tripID = tripIdController.text.trim();
           final dropLocation = dropLocationController.text.trim();

@@ -98,7 +98,7 @@ class DashBoardController extends GetxController {
 
   void startTimer() {
     stopTimer();
-    const timerDuration = Duration(seconds: 10);
+    const timerDuration = Duration(seconds: 7);
 
     _timer = Timer.periodic(
       timerDuration,

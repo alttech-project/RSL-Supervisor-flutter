@@ -19,7 +19,7 @@ class FeedsController extends GetxController {
   RxList<FeedsList> feedsList = <FeedsList>[].obs;
   RxString noDataMsg = "No data found".obs;
   RxInt currentPage = 1.obs;
-  RxInt limit = 10.obs;
+  RxInt limit = 20.obs;
   RxInt totalCount = 10.obs;
   RxBool pageNationLoader = false.obs;
   final ScrollController scrollController = ScrollController();

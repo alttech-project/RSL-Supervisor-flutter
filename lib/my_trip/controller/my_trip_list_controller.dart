@@ -47,7 +47,7 @@ class MyTripListController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   RxInt currentPage = 1.obs;
-  RxInt limit = 10.obs;
+  RxInt limit = 20.obs;
   RxInt totalCount = 10.obs;
   RxInt totalCountOngoing = 10.obs;
   RxBool pageNationLoader = false.obs;

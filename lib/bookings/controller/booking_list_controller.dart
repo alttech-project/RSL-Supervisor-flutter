@@ -28,7 +28,7 @@ class BookingsListController extends GetxController {
   Timer? _timer;
   Timer? _timerOngoing;
   RxInt currentPage = 1.obs;
-  RxInt limit = 10.obs;
+  RxInt limit = 100.obs;
   RxInt totalCount = 10.obs;
   RxInt totalCountOngoing = 10.obs;
   RxBool pageNationLoader = false.obs;

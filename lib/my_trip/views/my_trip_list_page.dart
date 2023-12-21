@@ -26,6 +26,7 @@ class MyTripListPage extends GetView<MyTripListController> {
           extendBodyBehindAppBar: false,
           backgroundColor: Colors.black,
           body: SingleChildScrollView(
+            controller: controller.scrollController,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
               child: Column(
@@ -34,7 +35,7 @@ class MyTripListPage extends GetView<MyTripListController> {
                     title: "My Trips",
                     onTap: () => controller.goBack(),
                     rightBarWidget: Obx(
-                          () => Visibility(
+                      () => Visibility(
                         visible: controller.tripList.isNotEmpty,
                         child: CustomIconButton(
                           title: "Export",
@@ -47,28 +48,28 @@ class MyTripListPage extends GetView<MyTripListController> {
                   ),
                   const MyTripListFilterWidget(),
                   Obx(
-                        () => SizedBox(
+                    () => SizedBox(
                       child: controller.showLoader.value
                           ? const Center(child: AppLoader())
                           : controller.tripList.isNotEmpty
-                          ? const MyTripListWidget()
-                          : Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 150.0.h, // Adjust the height as needed
-                            ),
-                            Text(
-                              "No trips found",
-                              style: AppFontStyle.body(
-                                color: Colors.white,
-                                weight: AppFontWeight.semibold.value,
-                              ),
-                            ),
-
-                          ],
-                        ),
-                      ),
+                              ? const MyTripListWidget()
+                              : Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 150.0
+                                            .h, // Adjust the height as needed
+                                      ),
+                                      Text(
+                                        "No trips found",
+                                        style: AppFontStyle.body(
+                                          color: Colors.white,
+                                          weight: AppFontWeight.semibold.value,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                     ),
                   ),
                 ],

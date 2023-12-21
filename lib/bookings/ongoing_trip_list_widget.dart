@@ -39,7 +39,6 @@ class OngoingTripListWidget extends GetView<BookingsListController> {
           top: 0,
         ),
         child: Obx(() {
-          print('Deepak -> ${controller.pageNationLoader.value}');
           return ListView.builder(
             controller: controller.scrollController,
             // Use the controller here.

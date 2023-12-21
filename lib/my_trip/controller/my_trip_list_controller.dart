@@ -51,6 +51,7 @@ class MyTripListController extends GetxController {
   RxInt totalCount = 10.obs;
   RxInt totalCountOngoing = 10.obs;
   RxBool pageNationLoader = false.obs;
+  RxInt totalTripList = 0.obs;
 
   Timer? _timer;
   Timer? _timerOngoing;
@@ -72,6 +73,8 @@ class MyTripListController extends GetxController {
   }
 
   void loadTripListNextPage() {
+    print(
+        "DEEPAK my trips ${currentPage.value} ${limit.value} ${totalCount.value}");
     if (currentPage.value * limit.value < totalCount.value) {
       currentPage.value++;
       callTripListApi(pageNation: true);
@@ -141,11 +144,13 @@ class MyTripListController extends GetxController {
           if ((response.status ?? 0) == 1) {
             tripList.value = response.details?.tripDetails ?? [];
             totalCount.value = response.details!.totalCount ?? 0;
+            totalTripList.value = response.details!.totalCount ?? 0;
             showLoader.value = false;
             tripList.refresh();
             print("DEEPAK my trips ${tripList.length}");
           } else {
             tripList.value = [];
+            totalTripList.value = 0;
             dispatchedTrips.value = 0;
             cancelledTrips.value = 0;
             showLoader.value = false;
@@ -164,6 +169,7 @@ class MyTripListController extends GetxController {
       (error, stackTrace) {
         printLogs("$error");
         showLoader.value = false;
+        totalTripList.value = 0;
         pageNationLoader.value = false;
         tripList.value = [];
         dispatchedTrips.value = 0;

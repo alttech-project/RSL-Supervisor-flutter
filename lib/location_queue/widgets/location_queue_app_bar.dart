@@ -31,7 +31,7 @@ class LocationQueueAppBar extends GetView<LocationQueueController> {
         ),
         /*const Spacer(),*/
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Text(
             'Location Queue',
             style:
@@ -39,7 +39,7 @@ class LocationQueueAppBar extends GetView<LocationQueueController> {
             textAlign: TextAlign.center,
           ),
         ),
-        IconButton(
+       /* IconButton(
           icon: const Icon(
             Icons.add,
           ), // You can use any icon you prefer hera
@@ -47,7 +47,7 @@ class LocationQueueAppBar extends GetView<LocationQueueController> {
             controller.showAddCarDialog();
           },
           color: AppColors.kPrimaryColor.value,
-        )
+        )*/
         /*CustomButton(
           onTap: () => controller.showAddCarDialog(),
           height: 25.h,

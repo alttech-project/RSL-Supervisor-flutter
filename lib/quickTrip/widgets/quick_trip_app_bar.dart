@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../controllers/quick_trip_controller.dart';
@@ -16,6 +17,8 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
       children: [
         InkWell(
           onTap: () {
+            final DashBoardController dashBoardController = Get.find<DashBoardController>();
+            dashBoardController.startTimer();
             controller.onClose();
             Get.back();
           },
@@ -35,7 +38,7 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
           child: Text(
             'Quick Trips',
             style:
-                AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+            AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             textAlign: TextAlign.center,
           ),
         ),

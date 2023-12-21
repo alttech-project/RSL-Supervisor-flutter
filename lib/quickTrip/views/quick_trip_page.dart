@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../bookings/data/motor_details_data.dart';
+import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../network/app_config.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
@@ -21,6 +22,9 @@ class QuickTripPage extends GetView<QuickTripController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
+        final DashBoardController dashBoardController =
+            Get.find<DashBoardController>();
+        dashBoardController.startTimer();
         controller.onClose();
         return Future.value(true);
       },

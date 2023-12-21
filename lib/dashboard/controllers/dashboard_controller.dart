@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,6 +62,7 @@ class DashBoardController extends GetxController {
   RxBool showLoader = false.obs;
   RxBool logOutLoader = false.obs;
   int selectedCarIndex = 0;
+  Timer? _timer;
 
   final GetStorageController controller = Get.find<GetStorageController>();
 
@@ -88,12 +91,35 @@ class DashBoardController extends GetxController {
     } else {
       isShiftIn.value = true;
     }
+    startTimer();
     callDashboardApi();
     callCarModelApi();
   }
 
-  void callDashboardApi() async {
-    apiLoading.value = true;
+  void startTimer() {
+    stopTimer();
+    const timerDuration = Duration(seconds: 10);
+
+    _timer = Timer.periodic(
+      timerDuration,
+      (Timer timer) {
+        if (!useCustomDrop.value) {
+          callDashboardApi(timer: true);
+        }
+      },
+    );
+  }
+
+  void stopTimer() {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
+  }
+
+  void callDashboardApi({bool timer = false}) async {
+    if (!timer) {
+      apiLoading.value = true;
+    }
     dashboardApi(DasboardApiRequest(
       kioskId: supervisorInfo.value.kioskId,
       supervisorId: supervisorInfo.value.supervisorId,
@@ -104,17 +130,17 @@ class DashBoardController extends GetxController {
         dropList = response.dropOffList ?? [];
         dropSearchList.value = response.dropOffList ?? [];
         dropSearchList.refresh();
-        apiLoading.value = false;
+        if (!timer) apiLoading.value = false;
         noDropOffDataMsg.value = response.message ?? "";
       } else {
         noDropOffDataMsg.value = response.message ?? "No Dropoff found";
         dropList = [];
         dropSearchList.value = [];
         dropSearchList.refresh();
-        apiLoading.value = false;
+        if (!timer) apiLoading.value = false;
       }
     }).onError((error, stackTrace) {
-      apiLoading.value = false;
+      if (!timer) apiLoading.value = false;
       printLogs("Dashboard api error: ${error.toString()}");
       dropList = [];
       dropSearchList.value = [];
@@ -219,6 +245,7 @@ class DashBoardController extends GetxController {
         ..dropLongitude = result.geometry?.location?.lng ?? 0.0
         ..fareController.text = ''
         ..pageType.value = 1;
+      stopTimer();
       Get.toNamed(AppRoutes.quickTripPage);
     }
   }
@@ -239,7 +266,7 @@ class DashBoardController extends GetxController {
       ..fare = ''
       ..fromDashboard = 0
       ..zoneFareApplied = "0";
-
+    stopTimer();
     Get.toNamed(AppRoutes.locationQueuePage);
   }
 
@@ -256,6 +283,7 @@ class DashBoardController extends GetxController {
         ..dropLongitude = result.geometry?.location?.lng ?? 0.0
         ..pageType.value = 1
         ..fareController.text = '';
+      stopTimer();
       Get.back();
       // Get.offAndToNamed(AppRoutes.quickTripPage);
     }

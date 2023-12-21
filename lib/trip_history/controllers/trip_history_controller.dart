@@ -51,6 +51,7 @@ class TripHistoryController extends GetxController {
   _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     fromDate.value = DateTime.now().subtract(const Duration(days: 1));
+    // fromDate.value = DateTime.now();
     toDate.value = DateTime.now();
     callTripHistoryApi();
   }

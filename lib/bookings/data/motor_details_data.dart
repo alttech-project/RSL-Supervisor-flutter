@@ -27,12 +27,12 @@ const List<Payments> paymentList = <Payments>[
 
 const List<Payments> quickTripsPaymentList = <Payments>[
   Payments(
-    name: 'CASH',
-    paymentId: "1",
-  ),
-  Payments(
     name: 'CARD',
     paymentId: "9",
+  ),
+  Payments(
+    name: 'CASH',
+    paymentId: "1",
   ),
   Payments(
     name: 'BILL',

@@ -17,6 +17,7 @@ class DateRangePickerWidget extends StatefulWidget {
     required this.onClose,
     required void Function(DateTime fromDate, DateTime toDate) this.onSubmit,
   });
+
   DateTime fromDate;
   DateTime toDate;
   final Function()? onClose;
@@ -81,7 +82,8 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   Widget _fromDatePickerTabView() {
     return SfDateRangePicker(
       enablePastDates: true,
-      maxDate: widget.toDate.subtract(const Duration(days: 1)),
+      maxDate: DateTime.now(),
+      // maxDate: widget.toDate.subtract(const Duration(days: 1)),
       selectionMode: DateRangePickerSelectionMode.single,
       onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
         final dateString = args.value.toString();

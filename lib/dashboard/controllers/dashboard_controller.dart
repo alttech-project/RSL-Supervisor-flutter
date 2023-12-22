@@ -378,6 +378,7 @@ class DashBoardController extends GetxController {
       ).then(
         (response) {
           if ((response.status ?? 0) == 1) {
+            stopTimer();
             logoutApiResponse = response;
             GetStorageController().removeSupervisorInfo();
             showSnackBar(title: "Message", msg: response.message ?? "");

@@ -112,9 +112,9 @@ class OfflineTripController extends GetxController {
           _showSnackBar('Validation!', 'Enter a valid phone number!');
         } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
           _showSnackBar('Validation!', 'Enter a valid Email!');
-        } else if (remarks.isEmpty) {
+        } /*else if (remarks.isEmpty) {
           _showSnackBar('Validation!', 'Enter a valid remarks!');
-        } else {
+        } */else {
           if (supervisorInfo == null) {
             _showSnackBar('Error!', 'Invalid user login status!');
             return;

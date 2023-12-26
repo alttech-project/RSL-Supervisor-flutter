@@ -149,7 +149,7 @@ class OfflineTripPage extends GetView<OfflineTripController> {
 
   Widget _remarksWidget() {
     return RemarksTextFieldTransparent(
-        hintText: "Enter your remarks",
+        hintText: "Enter your remarks (Optional)",
         keyboardType: TextInputType.multiline,
         textController: controller.remarksController,
         enable: true,

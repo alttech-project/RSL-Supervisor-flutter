@@ -173,7 +173,7 @@ class QuickTripPage extends GetView<QuickTripController> {
 
   Widget _remarksWidget() {
     return RemarksTextFieldTransparent(
-        hintText: "Enter your remarks",
+        hintText: "Enter your remarks (optional)",
         keyboardType: TextInputType.multiline,
         textController: controller.remarksController,
         enable: true,

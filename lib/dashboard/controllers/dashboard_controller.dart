@@ -497,6 +497,7 @@ class DashBoardController extends GetxController {
                                   .evaluate(animationController),
                         ),
                         child: AlertDialog(
+                          backgroundColor: Colors.white,
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 30.w, vertical: 24.h),
                           content: SingleChildScrollView(

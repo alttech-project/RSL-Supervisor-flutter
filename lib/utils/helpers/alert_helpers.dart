@@ -69,6 +69,7 @@ Future<void> showDefaultDialog({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: Colors.white,
         title: Text(
           title,
           style: AppFontStyle.body(

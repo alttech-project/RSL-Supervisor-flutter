@@ -52,6 +52,7 @@ class AssignSupervisorResponse {
   int? locationType;
   int? corporateId;
   String? authKey;
+  int? enableEditFare;
 
   AssignSupervisorResponse(
       {this.message,
@@ -59,7 +60,8 @@ class AssignSupervisorResponse {
       this.status,
       this.authKey,
       this.locationType,
-      this.corporateId});
+      this.corporateId,
+      this.enableEditFare});
 
   AssignSupervisorResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
@@ -68,6 +70,7 @@ class AssignSupervisorResponse {
     authKey = json['auth_key'];
     locationType = json['location_type'];
     corporateId = json['corporate_id'];
+    enableEditFare = json['enable_edit_fare'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +81,7 @@ class AssignSupervisorResponse {
     data['auth_key'] = authKey;
     data['location_type'] = locationType;
     data['corporate_id'] = corporateId;
+    data['enable_edit_fare'] = enableEditFare;
     return data;
   }
 }

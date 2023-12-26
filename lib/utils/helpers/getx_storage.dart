@@ -125,6 +125,14 @@ class GetStorageController extends GetxController {
   Future<String> getImageDate() async {
     return await storage.read("imageDate");
   }
+
+  void saveEditFare({required int type}) {
+    storage.write("enable_edit_fare", type);
+  }
+
+  Future<int> getEditFare() async {
+    return await storage.read("enable_edit_fare");
+  }
 }
 
 class SupervisorInfo {

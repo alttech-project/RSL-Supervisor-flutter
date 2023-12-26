@@ -15,6 +15,7 @@ class SubscribersPage extends GetView<SubscribersController> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: AppColors.kPrimaryColor.value),
         title: Text(
           'Subscribers',
           style: TextStyle(
@@ -157,7 +158,6 @@ class SubscribersPage extends GetView<SubscribersController> {
                                   ),
                                 )
                               : Expanded(
-
                                   child: ListView.builder(
                                     itemCount:
                                         controller.filteredDriverList.length,

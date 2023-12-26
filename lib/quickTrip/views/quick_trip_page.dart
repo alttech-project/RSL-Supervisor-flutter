@@ -9,6 +9,7 @@ import '../../network/app_config.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
+import '../../utils/helpers/getx_storage.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
@@ -53,14 +54,11 @@ class QuickTripPage extends GetView<QuickTripController> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _tripIdWidget(),
-                            controller.pageType.value ==
-                                    1 /*controller.locationType.value ==
-                                  LocationType.GENERAL.toString()*/
+                            controller.pageType.value == 1
                                 ? _dropLocationWidget()
                                 : _dropLocationWidgetHotelBooking(),
-                            controller.pageType.value ==
-                                    1 /*controller.locationType.value ==
-                                    LocationType.GENERAL.toString()*/
+                            // controller.pageType.value == 1 ||
+                                    controller.enableEditFare.value == 1
                                 ? _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare (Optional)',
                                     txtEditingController:

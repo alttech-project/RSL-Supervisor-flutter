@@ -30,6 +30,7 @@ class QuickTripController extends GetxController {
   final TextEditingController remarksController = TextEditingController();
   RxString locationType = "".obs;
   RxInt pageType = 0.obs;
+  RxInt enableEditFare = 0.obs;
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
@@ -230,6 +231,7 @@ class QuickTripController extends GetxController {
   _getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     locationType.value = await GetStorageController().getLocationType();
+    enableEditFare.value = await GetStorageController().getEditFare();
     // deviceToken = await GetStorageController().getDeviceToken();
   }
 

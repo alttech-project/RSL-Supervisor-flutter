@@ -46,7 +46,6 @@ class LoginController extends GetxController {
   RxString apk = "".obs;
   var showAppVersion = true.obs;
 
-
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -76,10 +75,10 @@ class LoginController extends GetxController {
       SystemNavigator.pop();
     }
   }
+
   void hideAppVersion(bool hide) {
     showAppVersion.value = hide;
   }
-
 
   checkValidationAndCallApi() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -238,15 +237,15 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
 
-            GetStorageController()
-                .saveCorporateId(url: (response.corporateId ?? "").toString());
-
             if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());
+              GetStorageController()
+                  .saveEditFare(type: response.enableEditFare ?? 0);
             } else {
               GetStorageController()
                   .saveLocationType(type: LocationType.HOTEL.toString());
+              GetStorageController().saveEditFare(type: 0);
             }
             resetView();
             Get.offAllNamed(AppRoutes.dashboardPage);
@@ -449,6 +448,7 @@ void _cameraPermissionAlert() {
       context: Get.context!,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Camera Permission Required"),
           content: const Text(
               "You need to allow camera access for this app to function properly."),

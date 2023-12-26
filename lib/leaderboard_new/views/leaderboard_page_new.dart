@@ -89,11 +89,10 @@ class MyTabBarScreen extends GetView<LeaderBoardControllerNew> {
             Container(
               margin: const EdgeInsets.only(left: 8, right: 8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(100.0.r)),
+                borderRadius: BorderRadius.all(Radius.circular(100.r)),
                 color: Colors.black12,
               ),
               child: TabBar(
-                  indicatorColor: Colors.transparent,
                   unselectedLabelColor: Colors.white,
                   labelColor: Colors.black,
                   tabs: const [
@@ -107,7 +106,7 @@ class MyTabBarScreen extends GetView<LeaderBoardControllerNew> {
                         fontWeight: AppFontWeight.semibold.value),
                   ),
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0.r),
+                    borderRadius: BorderRadius.circular(100.r),
                     color: Colors.white,
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,

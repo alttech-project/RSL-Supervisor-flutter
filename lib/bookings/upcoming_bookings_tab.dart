@@ -56,6 +56,7 @@ class UpcomingBookingsTab extends GetView<BookingsListController> {
 
 void showAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(
+    backgroundColor: Colors.white,
     content: const Text(
       "Are you sure want to export report?",
       style: TextStyle(

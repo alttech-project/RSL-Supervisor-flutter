@@ -57,7 +57,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                             controller.pageType.value == 1
                                 ? _dropLocationWidget()
                                 : _dropLocationWidgetHotelBooking(),
-                            // controller.pageType.value == 1 ||
+                            controller.pageType.value == 1 ||
                                     controller.enableEditFare.value == 1
                                 ? _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare (Optional)',

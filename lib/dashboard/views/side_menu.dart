@@ -20,7 +20,7 @@ class SideMenuPage extends GetView<DashBoardController> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Obx(
-                  () => DrawerHeader(
+              () => DrawerHeader(
                 child: Column(
                   children: [
                     Flexible(
@@ -63,10 +63,10 @@ class SideMenuPage extends GetView<DashBoardController> {
             /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
 
-            /*controller.locationType.value == LocationType.GENERAL.toString()
+            controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
                 : const SizedBox.shrink(),
-
+            /*
             controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
                 : const SizedBox.shrink(),
@@ -89,7 +89,7 @@ class SideMenuPage extends GetView<DashBoardController> {
                 : const SizedBox(),
             _menuListRow(SideMenuIcon.logout, 'Logout'),
             Obx(
-                  () => ListTile(
+              () => ListTile(
                 title: Text(
                   "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
                   style: AppFontStyle.smallText(

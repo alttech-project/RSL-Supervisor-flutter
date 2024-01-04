@@ -43,6 +43,21 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    signingConfigs {
+        release {
+            storeFile file('app/jks/supervisor.keystore')
+            storePassword 'limorSupervisor'
+            keyAlias 'limorSupervisor'
+            keyPassword 'limorSupervisor'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.rslsupervisor"

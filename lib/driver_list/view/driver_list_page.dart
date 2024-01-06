@@ -6,7 +6,6 @@ import 'package:rsl_supervisor/driver_list/data/driver_list_api_data.dart';
 import 'package:rsl_supervisor/widgets/safe_area_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
-import '../../widgets/app_loader.dart';
 import '../../widgets/custom_app_container.dart';
 
 class DriverListScreen extends GetView<DriverListController> {

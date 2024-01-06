@@ -343,6 +343,11 @@ class DashBoardController extends GetxController {
         Get.toNamed(AppRoutes.reOrderPage);
         break;
 
+      // case 'Driver Fine':
+      //   Get.toNamed(AppRoutes.driverFinePage);
+      //   break;
+
+
       default:
         break;
     }

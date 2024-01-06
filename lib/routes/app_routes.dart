@@ -5,6 +5,10 @@ import 'package:rsl_supervisor/bookings/bookings_page.dart';
 import 'package:rsl_supervisor/bookings/upcoming_ongoing_list_detail_page.dart';
 import 'package:rsl_supervisor/bookings/edit_booking.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/driver_fine/view/add_fine_type_view.dart';
+import 'package:rsl_supervisor/driver_fine/view/assign_fine_driver.dart';
+import 'package:rsl_supervisor/driver_fine/view/driver_fine_view.dart';
+import 'package:rsl_supervisor/driver_fine/view/fined_drivers_view.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
 import 'package:rsl_supervisor/feeds/view/feeds_page.dart';
@@ -23,7 +27,6 @@ import 'package:rsl_supervisor/trip_details/views/qr_page.dart';
 import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_map_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
-
 import '../dispatch/dispatch_page.dart';
 import '../leaderboard_new/views/leaderboard_page_new.dart';
 import '../login/view/login_page.dart';
@@ -72,6 +75,11 @@ class AppRoutes {
   static const dropLocationPage = '/dropLocationPage';
   static const reOrderPage = '/reOrderPage';
   static const myTripListDetailPage = '/myTripListDetailPage';
+  static const driverFinePage = '/driverFinePage';
+  static const addDriverFine = '/addDriverFine';
+  static const assignFinePage = '/assignFinePage';
+  static const finnedDrivers = '/finnedDrivers';
+
 }
 
 List<GetPage> routes = [
@@ -302,6 +310,34 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.myTripListDetailPage,
     page: () => const TripListDetailsPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.driverFinePage,
+    page: () => const DriverFinePage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.addDriverFine,
+    page: () => const AddFineTypePage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.assignFinePage,
+    page: () => const AssignFinePage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.finnedDrivers,
+    page: () => const FinedDriversPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

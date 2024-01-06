@@ -3,6 +3,7 @@ import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart'
 import 'package:rsl_supervisor/bookings/controller/edit_booking_controller.dart';
 import 'package:rsl_supervisor/controllers/home_controller.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
+import 'package:rsl_supervisor/driver_fine/controller/driver_fine_controller.dart';
 import 'package:rsl_supervisor/driver_list/controller/driver_list_controller.dart';
 import 'package:rsl_supervisor/leaderboard/controllers/leaderboard_controller.dart';
 import 'package:rsl_supervisor/feeds/controller/feeds_controller.dart';
@@ -55,5 +56,7 @@ class AppBind extends Bindings {
     Get.lazyPut<BookingsController>(() => BookingsController());
     Get.lazyPut<BookingsListController>(() => BookingsListController());
     Get.lazyPut<EditBookingController>(() => EditBookingController());
+    Get.lazyPut<DriverFineController>(() => DriverFineController());
+
   }
 }

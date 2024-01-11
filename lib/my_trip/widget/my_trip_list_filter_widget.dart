@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -77,13 +72,13 @@ class MyTripListFilterWidget extends GetView<MyTripListController> {
     return Row(
       children: [
         Obx(
-              () => _dateWidget(
+          () => _dateWidget(
             type: "From",
             date: controller.fromDate.value,
           ),
         ),
         Obx(
-              () => _dateWidget(
+          () => _dateWidget(
             type: "To",
             date: controller.toDate.value,
           ),
@@ -105,24 +100,27 @@ class MyTripListFilterWidget extends GetView<MyTripListController> {
   }
 
   Widget _dateWidget({required String type, required DateTime date}) {
-    return InkWell(
-      onTap: () {
-        _showDatePickerWidget();
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.w),
-        child: Column(
-          children: [
-            Text(
-              type,
-              style:
-              AppFontStyle.smallText(weight: AppFontWeight.semibold.value),
-            ),
-            Text(
-              DateFormat("MMM d, y HH:mm").format(date),
-              style: AppFontStyle.smallText(color: Colors.white),
-            ),
-          ],
+    return Flexible(
+      flex: 10,
+      child: InkWell(
+        onTap: () {
+          _showDatePickerWidget();
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.w),
+          child: Column(
+            children: [
+              Text(
+                type,
+                style: AppFontStyle.smallText(
+                    weight: AppFontWeight.semibold.value),
+              ),
+              Text(
+                DateFormat("MMM d, y HH:mm").format(date),
+                style: AppFontStyle.smallText(color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -130,19 +128,19 @@ class MyTripListFilterWidget extends GetView<MyTripListController> {
 
   void _showDatePickerWidget() {
     Get.bottomSheet(
-      SingleChildScrollView(child:
-      DateRangePickerWidget(
-        fromDate: controller.fromDate.value,
-        toDate: controller.toDate.value,
-        onClose: () {
-          Get.back();
-        },
-        onSubmit: (fromDate, toDate) {
-          Get.back();
-          controller.fromDate.value = fromDate;
-          controller.toDate.value = toDate;
-        },
-      ),
+      SingleChildScrollView(
+        child: DateRangePickerWidget(
+          fromDate: controller.fromDate.value,
+          toDate: controller.toDate.value,
+          onClose: () {
+            Get.back();
+          },
+          onSubmit: (fromDate, toDate) {
+            Get.back();
+            controller.fromDate.value = fromDate;
+            controller.toDate.value = toDate;
+          },
+        ),
       ),
       isScrollControlled: true,
     );

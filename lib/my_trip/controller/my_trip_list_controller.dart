@@ -92,7 +92,9 @@ class MyTripListController extends GetxController {
 
   _getUserInfos() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
-    fromDate.value = DateTime.now().subtract(const Duration(days: 1));
+    // fromDate.value = DateTime.now().subtract(const Duration(days: 1));
+    var now = DateTime.now();
+    fromDate.value = DateTime(now.year, now.month, now.day);
     toDate.value = DateTime.now();
     callTripListApi();
   }

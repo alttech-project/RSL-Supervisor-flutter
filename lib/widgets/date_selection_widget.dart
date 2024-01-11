@@ -80,21 +80,72 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
       ),
     );
   }
-  Future<DateTime?> _selectTime(BuildContext context, DateTime initialTime) async {
+
+  Future<DateTime?> _selectTime(
+      BuildContext context, DateTime selectedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(initialTime),
-
-
+      initialTime: TimeOfDay.fromDateTime(selectedDate),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            primaryColor: AppColors.kPrimaryColor.value,
+            hintColor: AppColors.kPrimaryColor.value,
+            primarySwatch: Colors.grey,
+            colorScheme:
+                ColorScheme.light(primary: AppColors.kPrimaryColor.value),
+            buttonBarTheme: const ButtonBarThemeData(
+              buttonTextTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+    var now = DateTime.now();
+    var today = DateTime(now.year, now.month, now.day);
+    var yourSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
     if (pickedTime != null) {
-      return DateTime(
-        initialTime.year,
-        initialTime.month,
-        initialTime.day,
-        pickedTime.hour,
-        pickedTime.minute,
+      var currentTime = DateTime(
+        now.hour,
+        now.minute,
       );
+      var selectedTime = DateTime(pickedTime.hour, pickedTime.minute);
+
+      /* printLogs(
+          "hi time 1: ${currentTime.toString()} ${selectedTime.toString()} ${formattedTime24Hour} $formattedSelectedTime24Hour");
+     */
+      if (today == yourSelectedDate) {
+        if (selectedTime.isAfter(currentTime)) {
+          // printLogs("hi time 2:");
+          return DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            now.hour,
+            now.minute,
+          );
+        } else {
+          // printLogs("hi time 3:");
+          return DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        }
+      } else {
+        return DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+      }
     }
     return null;
   }
@@ -148,7 +199,6 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
       ],
     );
   }
-
 
   Widget _headerWidget() {
     return Padding(
@@ -236,7 +286,4 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
       ),
     );
   }
-
-
-
 }

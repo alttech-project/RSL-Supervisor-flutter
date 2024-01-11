@@ -10,6 +10,7 @@ import 'package:rsl_supervisor/driver_fine/view/assign_fine_driver.dart';
 import 'package:rsl_supervisor/driver_fine/view/driver_fine_view.dart';
 import 'package:rsl_supervisor/driver_fine/view/fined_drivers_view.dart';
 import 'package:rsl_supervisor/driver_list/view/driver_list_page.dart';
+import 'package:rsl_supervisor/iospermissionPage/location_permission_page.dart';
 import 'package:rsl_supervisor/leaderboard/views/leaderBoard_view_page.dart';
 import 'package:rsl_supervisor/feeds/view/feeds_page.dart';
 import 'package:rsl_supervisor/location_queue/views/fare_selection_page.dart';
@@ -28,6 +29,7 @@ import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_map_page.dart';
 import 'package:rsl_supervisor/trip_history/views/trip_history_page.dart';
 import '../dispatch/dispatch_page.dart';
+import '../iospermissionPage/camera_permission_page.dart';
 import '../leaderboard_new/views/leaderboard_page_new.dart';
 import '../login/view/login_page.dart';
 import '../my_trip/views/my_trip_list_map_page.dart';
@@ -79,6 +81,10 @@ class AppRoutes {
   static const addDriverFine = '/addDriverFine';
   static const assignFinePage = '/assignFinePage';
   static const finnedDrivers = '/finnedDrivers';
+  static const locationPermissionDeniedPage = '/locationPermissionDeniedPage';
+  static const cameraPermissionDeniedPage = '/cameraPermissionDeniedPage';
+
+
 
 }
 
@@ -338,6 +344,20 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.finnedDrivers,
     page: () => const FinedDriversPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.locationPermissionDeniedPage,
+    page: () => const LocationPermissionPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.cameraPermissionDeniedPage,
+    page: () => const CameraPermissionPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

@@ -55,6 +55,7 @@ class AppFontStyle {
 
 enum AppFontSize {
   mini,
+  quarter,
   verySmall,
   small,
   normal,
@@ -71,6 +72,8 @@ extension FontSizeHelper on AppFontSize {
     switch (this) {
       case AppFontSize.mini:
         return 10.sp;
+      case AppFontSize.quarter:
+        return 11.sp;
       case AppFontSize.verySmall:
         return 12.sp;
       case AppFontSize.small:

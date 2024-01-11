@@ -1,11 +1,13 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
+import '../../routes/app_routes.dart';
 
 class LocationManager {
   Future<LocationResult<Position>> getCurrentLocation() async {
     LocationPermission permission;
 
-    // Request location permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -13,8 +15,6 @@ class LocationManager {
         return LocationResult.failure('Location permission denied');
       }
     }
-
-    // Get current location
     try {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -22,6 +22,7 @@ class LocationManager {
       return LocationResult.success(position);
     } catch (e) {
       printLogs('Error getting location: ${e.toString()}');
+      Get.toNamed(AppRoutes.locationPermissionDeniedPage);
       return LocationResult.failure(e.toString());
     }
   }

@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:ui' as ui;
+import '../../login/controller/login_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/helpers/basic_utils.dart';
 import '../../utils/helpers/getx_storage.dart';
@@ -63,12 +66,54 @@ class SplashController extends GetxController {
   void _checkLoginStatus() async {
     await Future.delayed(const Duration(seconds: 2));
     final userInfo = await storageController.getSupervisorInfo();
-    if ((userInfo.supervisorId ?? "").isEmpty) {
-      isSplashScreen.value = false;
-      Get.offAllNamed(AppRoutes.loginPage);
-    } else {
-      isSplashScreen.value = false;
-      Get.offAllNamed(AppRoutes.dashboardPage);
+
+    final cameraPermissionStatus = await requestCameraPermission();
+    // final locationPermissionStatus = await requestLocationPermission();
+
+    if (cameraPermissionStatus == PermissionStatus.granted) {
+        // locationPermissionStatus == PermissionStatus.granted)
+      if ((userInfo.supervisorId ?? "").isEmpty) {
+        isSplashScreen.value = false;
+        Get.offAllNamed(AppRoutes.loginPage);
+      } else {
+        isSplashScreen.value = false;
+        Get.offAllNamed(AppRoutes.dashboardPage);
+      }
     }
   }
+
+  Future<PermissionStatus> requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    printLogs("CAMERA REQUEST STATUS CHECKER: $status");
+
+    if (status == PermissionStatus.denied || status == PermissionStatus.permanentlyDenied) {
+      if (isIOS()) {
+        Get.toNamed(AppRoutes.cameraPermissionDeniedPage);
+      } else {
+        // Handle camera permission denied for Android
+      }
+    } else {
+      print("Camera Permission Granted");
+    }
+    return status;
+  }
+
+  Future<PermissionStatus> requestLocationPermission() async {
+    final status = await Permission.location.request();
+    printLogs("LOCATION REQUEST STATUS CHECKER: $status");
+
+    if (status == PermissionStatus.denied || status == PermissionStatus.permanentlyDenied) {
+      if (isIOS()) {
+        Get.toNamed(AppRoutes.locationPermissionDeniedPage);
+      } else {
+        // Handle location permission denied for Android
+      }
+    } else {
+      print("Location Permission Granted");
+    }
+    return status;
+  }
+
+
+
 }

@@ -2,9 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>&quot;We use user tracking data to provide personalized recommendations and improve your experience.&quot;
-</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -13,8 +10,6 @@
 	<string>RSL Supervisor</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -32,7 +27,7 @@
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string>public.app-category.travel</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -41,17 +36,20 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>RSL Supervisor needs access to your camera to take photos and videos.</string>
+	<string>To facilitate photo capture during login, kindly authorize access to your camera for RSL Supervisor.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>RSL Supervisor needs user location for pickup and drop marker.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>RSL Supervisor needs user location for pickup and drop marker.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow RSL Supervisor to access your location</string>
+	<string>For optimal service allocation, the RSL Supervisor requests location access to identify the nearest service locations.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow RSL Supervisor to access your audio.</string>
+	<string>RSL Supervisor may access your microphone when utilizing the camera feature, ensuring a seamless experience for capturing visuals and audio when needed</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>RSL Supervisor needs to access your photo library to upload your profile image.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We use user tracking data to provide personalized recommendations and improve your experience.
+</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

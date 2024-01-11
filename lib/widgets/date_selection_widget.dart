@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -69,49 +71,84 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           ),
           Visibility(
               visible: (widget.selectedTab == 0),
-              child: _fromDatePickerTabView()),
+              child: _fromDatePickerTabView(context)),
           Visibility(
               visible: (widget.selectedTab == 1),
-              child: _toDatePickerTabView()),
+              child: _toDatePickerTabView(context)),
           _footerWidget(),
         ],
       ),
     );
   }
+  Future<DateTime?> _selectTime(BuildContext context, DateTime initialTime) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initialTime),
 
-  Widget _fromDatePickerTabView() {
-    return SfDateRangePicker(
-      enablePastDates: true,
-      maxDate: DateTime.now(),
-      // maxDate: widget.toDate.subtract(const Duration(days: 1)),
-      selectionMode: DateRangePickerSelectionMode.single,
-      onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-        final dateString = args.value.toString();
-        setState(() {
-          widget.fromDate = DateTime.parse(dateString);
-        });
-      },
-      selectionColor: AppColors.kPrimaryColor.value,
-      initialSelectedDate: widget.fromDate,
+
+    );
+    if (pickedTime != null) {
+      return DateTime(
+        initialTime.year,
+        initialTime.month,
+        initialTime.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+    }
+    return null;
+  }
+
+  Widget _fromDatePickerTabView(BuildContext context) {
+    return Column(
+      children: [
+        SfDateRangePicker(
+          enablePastDates: true,
+          maxDate: DateTime.now(),
+          // maxDate: widget.toDate.subtract(const Duration(days: 1)),
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: (DateRangePickerSelectionChangedArgs args) async {
+            final dateString = args.value.toString();
+            DateTime selectedDate = DateTime.parse(dateString);
+            DateTime? selectedTime = await _selectTime(context, selectedDate);
+            if (selectedTime != null) {
+              setState(() {
+                widget.fromDate = selectedTime;
+              });
+            }
+          },
+          selectionColor: AppColors.kPrimaryColor.value,
+          initialSelectedDate: widget.fromDate,
+        ),
+      ],
     );
   }
 
-  Widget _toDatePickerTabView() {
-    return SfDateRangePicker(
-      enablePastDates: true,
-      minDate: widget.fromDate,
-      maxDate: DateTime.now(),
-      selectionMode: DateRangePickerSelectionMode.single,
-      onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-        final dateString = args.value.toString();
-        setState(() {
-          widget.toDate = DateTime.parse(dateString);
-        });
-      },
-      selectionColor: AppColors.kPrimaryColor.value,
-      initialSelectedDate: widget.toDate,
+  Widget _toDatePickerTabView(BuildContext context) {
+    return Column(
+      children: [
+        SfDateRangePicker(
+          enablePastDates: true,
+          minDate: widget.fromDate,
+          maxDate: DateTime.now(),
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: (DateRangePickerSelectionChangedArgs args) async {
+            final dateString = args.value.toString();
+            DateTime selectedDate = DateTime.parse(dateString);
+            DateTime? selectedTime = await _selectTime(context, selectedDate);
+            if (selectedTime != null) {
+              setState(() {
+                widget.toDate = selectedTime;
+              });
+            }
+          },
+          selectionColor: AppColors.kPrimaryColor.value,
+          initialSelectedDate: widget.toDate,
+        ),
+      ],
     );
   }
+
 
   Widget _headerWidget() {
     return Padding(
@@ -143,11 +180,11 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
-          _dateWidget(
+          _dateWithTimeWidget(
             type: "From",
             date: widget.fromDate,
           ),
-          _dateWidget(
+          _dateWithTimeWidget(
             type: "To",
             date: widget.toDate,
           ),
@@ -177,26 +214,29 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
     );
   }
 
-  Widget _dateWidget({required String type, required DateTime date}) {
+  Widget _dateWithTimeWidget({required String type, required DateTime date}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 5.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "$type: ",
-            style: AppFontStyle.body(
-              weight: AppFontWeight.semibold.value,
+            "$type Date & Time: ",
+            style: AppFontStyle.subHeading(
+              size: AppFontSize.quarter.value,
             ),
           ),
           Text(
-            DateFormat("MMM d, y").format(date),
-            style: AppFontStyle.body(
-              size: AppFontSize.small.value,
+            DateFormat("MMM d, y HH:mm").format(date),
+            style: AppFontStyle.subHeading(
+              size: AppFontSize.quarter.value,
             ),
           ),
         ],
       ),
     );
   }
+
+
+
 }

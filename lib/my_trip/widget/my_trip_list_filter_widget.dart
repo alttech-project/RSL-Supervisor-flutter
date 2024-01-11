@@ -119,7 +119,7 @@ class MyTripListFilterWidget extends GetView<MyTripListController> {
               AppFontStyle.smallText(weight: AppFontWeight.semibold.value),
             ),
             Text(
-              DateFormat("MMM d, y").format(date),
+              DateFormat("MMM d, y HH:mm").format(date),
               style: AppFontStyle.smallText(color: Colors.white),
             ),
           ],

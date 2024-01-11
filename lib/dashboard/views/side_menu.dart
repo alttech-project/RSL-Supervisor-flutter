@@ -19,50 +19,43 @@ class SideMenuPage extends GetView<DashBoardController> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Obx(
-              () => DrawerHeader(
-                child: Column(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        controller.supervisorInfo.value.kioskName ?? "",
-                        textAlign: TextAlign.center,
-                        style: AppFontStyle.subHeading(),
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Flexible(
-                      child: Text(
-                        controller.supervisorInfo.value.supervisorUniqueId ??
-                            "",
-                        style: AppFontStyle.subHeading(),
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    Flexible(
-                      child: Text(
-                        controller.supervisorInfo.value.supervisorName ?? "",
-                        style: AppFontStyle.subHeading(),
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    Flexible(
-                      child: Text(
-                        controller.supervisorInfo.value.phoneNumber ?? "",
-                        style: AppFontStyle.body(
-                            weight: AppFontWeight.semibold.value),
-                      ),
-                    ),
-                  ],
+            Column(
+              children: [
+                SizedBox(height: 25.h),
+                Text(
+                  controller.supervisorInfo.value.kioskName ?? "",
+                  textAlign: TextAlign.center,
+                  style: AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                  ),
                 ),
-              ),
+                SizedBox(height: 10.h),
+                Text(
+                  controller.supervisorInfo.value.supervisorUniqueId ?? "",
+                  style: AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  controller.supervisorInfo.value.supervisorName ?? "",
+                  style: AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  controller.supervisorInfo.value.phoneNumber ?? "",
+                  style: AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                  ),
+                ),
+              ],
             ),
             _menuListRow(SideMenuIcon.home, 'Home'),
             _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
-
             /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
-
             controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
                 : const SizedBox.shrink(),
@@ -102,7 +95,9 @@ class SideMenuPage extends GetView<DashBoardController> {
             SizedBox(height: 20.h)
           ],
         ),
-      ),
+
+        )
+
     );
   }
 

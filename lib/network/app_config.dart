@@ -27,7 +27,7 @@ const Map<CompanyType, String> companyIds = {
 };
 
 class AppConfig {
-  static Environment currentEnvironment = Environment.demo;
+  static Environment currentEnvironment = Environment.live;
   static CompanyType companyType = CompanyType.RSL;
 
   static String get webBaseUrl => baseUrls[currentEnvironment]!;

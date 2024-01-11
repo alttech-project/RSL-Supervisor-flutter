@@ -52,7 +52,7 @@ class LoginController extends GetxController {
     currentView.value = LoginViews.emailPage;
     // getDeviceToken();
     _getAppInfo();
-    requestCameraPermission();
+    // await requestCameraPermission();
   }
 
   void _getAppInfo() async {
@@ -170,7 +170,7 @@ class LoginController extends GetxController {
           deviceToken: await GetStorageController().getDeviceToken(),
         ),
       ).then(
-        (response) {
+        (response) async {
           apiLoading.value = false;
           if (response.status == 1) {
             kioskList = response.detail?.kioskList ?? [];
@@ -427,18 +427,12 @@ class LoginController extends GetxController {
     phoneNumber = "";
   }
 
-  void requestCameraPermission() async {
-    final status = await Permission.camera.request();
-    printLogs("CAMERA REQUEST STATUS CHECKER: $status");
 
-    if ((status == PermissionStatus.denied) ||
-        (status == PermissionStatus.permanentlyDenied)) {
-      print("If called");
-      _cameraPermissionAlert();
-    } else {
-      print("Permission Granted");
-    }
-  }
+
+
+}
+bool isIOS() {
+  return Platform.isIOS;
 }
 
 void _cameraPermissionAlert() {

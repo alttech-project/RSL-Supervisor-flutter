@@ -49,6 +49,7 @@ class DashBoardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey2 = GlobalKey<ScaffoldState>();
   RxString locationType = "".obs;
   RxInt quickTripEnable = 0.obs;
+  RxInt customDropOffEnable = 0.obs;
 
   final LocationManager locationManager = LocationManager();
   late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
@@ -89,6 +90,8 @@ class DashBoardController extends GetxController {
     locationType.value = await GetStorageController().getLocationType();
     quickTripEnable.value =
         await GetStorageController().getQuickTripEnableType();
+    customDropOffEnable.value =
+        await GetStorageController().getCustomDropOffEnableType();
     if (!shiftStatus) {
       isShiftIn.value = false;
     } else {

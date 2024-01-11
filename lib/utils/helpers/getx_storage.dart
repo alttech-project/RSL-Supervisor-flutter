@@ -102,6 +102,14 @@ class GetStorageController extends GetxController {
     return await storage.read("QuickTripEnableType") ?? 0;
   }
 
+  void saveCustomDropOffEnableType({required int type}) {
+    storage.write("CustomDropOffType", type);
+  }
+
+  Future<int> getCustomDropOffEnableType() async {
+    return await storage.read("CustomDropOffType") ?? 0;
+  }
+
   void saveRiderReferralUrl({required int url}) {
     storage.write("riderReferralUrl", url);
   }

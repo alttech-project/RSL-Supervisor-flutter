@@ -240,6 +240,9 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveQuickTripEnableType(type: response.quickTrip ?? 0);
 
+            GetStorageController()
+                .saveCustomDropOffEnableType(type: response.customDropOff ?? 0);
+
             if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());

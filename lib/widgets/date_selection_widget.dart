@@ -7,6 +7,7 @@ import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'custom_button.dart';
 
@@ -92,8 +93,9 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
             primaryColor: AppColors.kPrimaryColor.value,
             hintColor: AppColors.kPrimaryColor.value,
             primarySwatch: Colors.grey,
-            colorScheme:
-                ColorScheme.light(primary: AppColors.kPrimaryColor.value),
+            colorScheme: ColorScheme.light(
+                primary: AppColors.kPrimaryColor.value,
+                secondary: AppColors.kPrimaryColor.value.withOpacity(0.5)),
             buttonBarTheme: const ButtonBarThemeData(
               buttonTextTheme: ButtonTextTheme.primary,
             ),
@@ -153,7 +155,60 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   Widget _fromDatePickerTabView(BuildContext context) {
     return Column(
       children: [
-        SfDateRangePicker(
+        TableCalendar(
+          key: widget.key,
+          focusedDay: widget.fromDate,
+          firstDay: DateTime(2019),
+          lastDay: DateTime.now(),
+          selectedDayPredicate: (day) {
+            return isSameDay(widget.fromDate, day);
+          },
+          calendarFormat: CalendarFormat.month,
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            formatButtonDecoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(22.0),
+            ),
+            formatButtonTextStyle: const TextStyle(color: Colors.white),
+            formatButtonShowsNext: false,
+          ),
+          onDaySelected: (date, events) async {
+            print("hi date: ${date.toString()}");
+            final dateString = date.toString();
+            DateTime selectedDate = DateTime.parse(dateString);
+            DateTime? selectedTime = await _selectTime(context, selectedDate);
+            if (selectedTime != null) {
+              setState(() {
+                widget.fromDate = selectedTime;
+              });
+            }
+          },
+          calendarBuilders: CalendarBuilders(
+            selectedBuilder: (context, date, events) => Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColors.kPrimaryColor.value, shape: BoxShape.circle),
+              child: Text(
+                date.day.toString(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            todayBuilder: (context, date, events) => Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColors.kPrimaryColor.value.withOpacity(0.2),
+                  shape: BoxShape.circle),
+              child: Text(
+                date.day.toString(),
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+        ),
+        /*SfDateRangePicker(
           enablePastDates: true,
           maxDate: DateTime.now(),
           // maxDate: widget.toDate.subtract(const Duration(days: 1)),
@@ -170,7 +225,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           },
           selectionColor: AppColors.kPrimaryColor.value,
           initialSelectedDate: widget.fromDate,
-        ),
+        ),*/
       ],
     );
   }
@@ -178,6 +233,62 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   Widget _toDatePickerTabView(BuildContext context) {
     return Column(
       children: [
+        TableCalendar(
+          key: widget.key,
+          focusedDay: widget.toDate,
+          // currentDay: widget.toDate,
+          firstDay: widget.fromDate,
+          lastDay: DateTime.now(),
+          selectedDayPredicate: (day) {
+            return isSameDay(widget.toDate, day);
+          },
+          calendarFormat: CalendarFormat.month,
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            formatButtonDecoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(22.0),
+            ),
+            formatButtonTextStyle: const TextStyle(color: Colors.white),
+            formatButtonShowsNext: false,
+          ),
+          onDaySelected: (date, events) async {
+            print("hi date: ${date.toString()}");
+            final dateString = date.toString();
+            DateTime selectedDate = DateTime.parse(dateString);
+            DateTime? selectedTime = await _selectTime(context, selectedDate);
+            if (selectedTime != null) {
+              setState(() {
+                widget.toDate = selectedTime;
+              });
+            }
+          },
+          calendarBuilders: CalendarBuilders(
+            selectedBuilder: (context, date, events) => Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColors.kPrimaryColor.value, shape: BoxShape.circle),
+              child: Text(
+                date.day.toString(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            todayBuilder: (context, date, events) => Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColors.kPrimaryColor.value.withOpacity(0.5),
+                  shape: BoxShape.circle),
+              child: Text(
+                date.day.toString(),
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+        ),
+
+/*
         SfDateRangePicker(
           enablePastDates: true,
           minDate: widget.fromDate,
@@ -196,6 +307,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           selectionColor: AppColors.kPrimaryColor.value,
           initialSelectedDate: widget.toDate,
         ),
+*/
       ],
     );
   }

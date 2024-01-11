@@ -13,92 +13,89 @@ class SideMenuPage extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250.w,
-      child: Drawer(
-        backgroundColor: AppColors.kPrimaryColor.value,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Column(
-              children: [
-                SizedBox(height: 25.h),
-                Text(
-                  controller.supervisorInfo.value.kioskName ?? "",
-                  textAlign: TextAlign.center,
-                  style: AppFontStyle.body(
-                    weight: AppFontWeight.semibold.value,
+        width: 250.w,
+        child: Drawer(
+          backgroundColor: AppColors.kPrimaryColor.value,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Column(
+                children: [
+                  SizedBox(height: 35.h),
+                  Text(
+                    controller.supervisorInfo.value.kioskName ?? "",
+                    textAlign: TextAlign.center,
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  controller.supervisorInfo.value.supervisorUniqueId ?? "",
-                  style: AppFontStyle.body(
-                    weight: AppFontWeight.semibold.value,
+                  SizedBox(height: 10.h),
+                  Text(
+                    controller.supervisorInfo.value.supervisorUniqueId ?? "",
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  controller.supervisorInfo.value.supervisorName ?? "",
-                  style: AppFontStyle.body(
-                    weight: AppFontWeight.semibold.value,
+                  SizedBox(height: 10.h),
+                  Text(
+                    controller.supervisorInfo.value.supervisorName ?? "",
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  controller.supervisorInfo.value.phoneNumber ?? "",
-                  style: AppFontStyle.body(
-                    weight: AppFontWeight.semibold.value,
+                  SizedBox(height: 10.h),
+                  Text(
+                    controller.supervisorInfo.value.phoneNumber ?? "",
+                    style: AppFontStyle.body(
+                      weight: AppFontWeight.semibold.value,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            _menuListRow(SideMenuIcon.home, 'Home'),
-            _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
-            /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
+                ],
+              ),
+              _menuListRow(SideMenuIcon.home, 'Home'),
+              _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
+              /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
-            controller.locationType.value == LocationType.GENERAL.toString()
-                ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
-                : const SizedBox.shrink(),
-            /*
+
+              controller.quickTripEnable.value == 1
+                  ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
+                  : const SizedBox.shrink(),
+              /*
             controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
                 : const SizedBox.shrink(),
              */
+              controller.locationType.value == LocationType.HOTEL.toString()
+                  ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
+                  : const SizedBox.shrink(),
 
-            controller.locationType.value == LocationType.HOTEL.toString()
-                ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
-                : const SizedBox.shrink(),
-
-            _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
-            //_menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
-            _menuListRow(SideMenuIcon.myTrips, 'My Trips'),
-            _menuListRow(SideMenuIcon.driverList, 'Driver List'),
-            _menuListRow(SideMenuIcon.subscribers, 'Subscribers'),
-            _menuListRow(SideMenuIcon.feeds, 'Feeds'),
-            _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
-            // _menuListRow(SideMenuIcon.leaderBoard, 'Reorder List'),
-            Get.find<GetStorageController>().getRiderReferralUrl() == 1
-                ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
-                : const SizedBox(),
-            // _menuListRow(SideMenuIcon.subscribers, 'Driver Fine'),
-            _menuListRow(SideMenuIcon.logout, 'Logout'),
-            Obx(
-              () => ListTile(
-                title: Text(
-                  "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
-                  style: AppFontStyle.smallText(
-                      weight: AppFontWeight.semibold.value,
-                      color: Colors.white),
+              _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
+              //_menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
+              _menuListRow(SideMenuIcon.myTrips, 'My Trips'),
+              _menuListRow(SideMenuIcon.driverList, 'Driver List'),
+              _menuListRow(SideMenuIcon.subscribers, 'Subscribers'),
+              _menuListRow(SideMenuIcon.feeds, 'Feeds'),
+              _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
+              // _menuListRow(SideMenuIcon.leaderBoard, 'Reorder List'),
+              Get.find<GetStorageController>().getRiderReferralUrl() == 1
+                  ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
+                  : const SizedBox(),
+              // _menuListRow(SideMenuIcon.subscribers, 'Driver Fine'),
+              _menuListRow(SideMenuIcon.logout, 'Logout'),
+              Obx(
+                () => ListTile(
+                  title: Text(
+                    "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
+                    style: AppFontStyle.smallText(
+                        weight: AppFontWeight.semibold.value,
+                        color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20.h)
-          ],
-        ),
-
-        )
-
-    );
+              SizedBox(height: 20.h)
+            ],
+          ),
+        ));
   }
 
   Widget _menuListRow(String icon, String title) {

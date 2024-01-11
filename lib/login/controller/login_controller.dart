@@ -237,6 +237,9 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
 
+            GetStorageController()
+                .saveQuickTripEnableType(type: response.quickTrip ?? 0);
+
             if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());
@@ -426,11 +429,8 @@ class LoginController extends GetxController {
     kioskId = 0;
     phoneNumber = "";
   }
-
-
-
-
 }
+
 bool isIOS() {
   return Platform.isIOS;
 }

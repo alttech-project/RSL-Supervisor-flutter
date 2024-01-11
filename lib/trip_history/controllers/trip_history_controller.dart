@@ -28,6 +28,7 @@ class TripHistoryController extends GetxController {
   TextEditingController carNoController = TextEditingController();
   TextEditingController farEditController = TextEditingController();
   TextEditingController commentAddController = TextEditingController();
+
   RxList<MapDatas> mapdatas = <MapDatas>[].obs;
   RxList<Marker> markers = <Marker>[].obs;
   BitmapDescriptor? icons;

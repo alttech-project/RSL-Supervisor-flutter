@@ -48,6 +48,7 @@ class DashBoardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> scaffoldKey2 = GlobalKey<ScaffoldState>();
   RxString locationType = "".obs;
+  RxInt quickTripEnable = 0.obs;
 
   final LocationManager locationManager = LocationManager();
   late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
@@ -86,6 +87,8 @@ class DashBoardController extends GetxController {
     deviceToken = await GetStorageController().getDeviceToken();
     bool shiftStatus = await GetStorageController().getShiftStatus();
     locationType.value = await GetStorageController().getLocationType();
+    quickTripEnable.value =
+        await GetStorageController().getQuickTripEnableType();
     if (!shiftStatus) {
       isShiftIn.value = false;
     } else {
@@ -346,7 +349,6 @@ class DashBoardController extends GetxController {
       // case 'Driver Fine':
       //   Get.toNamed(AppRoutes.driverFinePage);
       //   break;
-
 
       default:
         break;

@@ -94,6 +94,14 @@ class GetStorageController extends GetxController {
         LocationType.GENERAL.toString();
   }
 
+  void saveQuickTripEnableType({required int type}) {
+    storage.write("QuickTripEnableType", type);
+  }
+
+  Future<int> getQuickTripEnableType() async {
+    return await storage.read("QuickTripEnableType") ?? 0;
+  }
+
   void saveRiderReferralUrl({required int url}) {
     storage.write("riderReferralUrl", url);
   }

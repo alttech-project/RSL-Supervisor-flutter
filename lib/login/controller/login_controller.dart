@@ -234,8 +234,12 @@ class LoginController extends GetxController {
             );
             GetStorageController()
                 .saveSupervisorInfo(supervisorInfo: supervisorInfo);
+
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
+
+            GetStorageController()
+                .saveCorporateId(id: response.corporateId.toString() ?? "0");
 
             GetStorageController()
                 .saveQuickTripEnableType(type: response.quickTrip ?? 0);

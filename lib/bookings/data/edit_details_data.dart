@@ -63,6 +63,7 @@ class PassengerDetails {
   String? note_to_admin;
   String? flight_number;
   String? reference_number;
+  String? room_number;
   String? guest_name;
   String? guest_country_code;
   String? guest_phone;
@@ -83,43 +84,45 @@ class PassengerDetails {
   num? approx_trip_fare;
   String? route_polyline;
 
-  PassengerDetails(
-      {this.id,
-      this.pickup_latitude,
-      this.pickup_longitude,
-      this.drop_latitude,
-      this.drop_longitude,
-      this.current_location,
-      this.drop_location,
-      this.pickup_time,
-      this.pickup_notes,
-      this.drop_notes,
-      this.passenger_payment_option,
-      this.motor_model_info,
-      this.customer_price,
-      this.note_to_driver,
-      this.note_to_admin,
-      this.flight_number,
-      this.reference_number,
-      this.guest_name,
-      this.guest_country_code,
-      this.guest_phone,
-      this.guest_email,
-      this.rsl_share,
-      this.driver_share,
-      this.corporate_share,
-      this.extra_charge,
-      this.remarks,
-      this.customer_rate,
-      this.zone_fare_applied,
-      this.pickup_zone_id,
-      this.pickup_zone_group_id,
-      this.drop_zone_id,
-      this.drop_zone_group_id,
-      this.approx_distance,
-      this.approx_duration,
-      this.approx_trip_fare,
-      this.route_polyline});
+  PassengerDetails({
+    this.id,
+    this.pickup_latitude,
+    this.pickup_longitude,
+    this.drop_latitude,
+    this.drop_longitude,
+    this.current_location,
+    this.drop_location,
+    this.pickup_time,
+    this.pickup_notes,
+    this.drop_notes,
+    this.passenger_payment_option,
+    this.motor_model_info,
+    this.customer_price,
+    this.note_to_driver,
+    this.note_to_admin,
+    this.flight_number,
+    this.reference_number,
+    this.guest_name,
+    this.guest_country_code,
+    this.guest_phone,
+    this.guest_email,
+    this.rsl_share,
+    this.driver_share,
+    this.corporate_share,
+    this.extra_charge,
+    this.remarks,
+    this.customer_rate,
+    this.zone_fare_applied,
+    this.pickup_zone_id,
+    this.pickup_zone_group_id,
+    this.drop_zone_id,
+    this.drop_zone_group_id,
+    this.approx_distance,
+    this.approx_duration,
+    this.approx_trip_fare,
+    this.room_number,
+    this.route_polyline,
+  });
 
   PassengerDetails.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -159,6 +162,7 @@ class PassengerDetails {
     approx_distance = json['approx_distance'];
     approx_duration = json['approx_duration'];
     approx_trip_fare = json['approx_fare'];
+    room_number = json['room_number'];
     route_polyline = json['route_polyline'];
   }
 
@@ -201,6 +205,7 @@ class PassengerDetails {
     data['approx_distance'] = approx_distance;
     data['approx_duration'] = approx_duration;
     data['approx_fare'] = approx_trip_fare;
+    data['room_number'] = room_number;
     data['route_polyline'] = route_polyline;
     return data;
   }

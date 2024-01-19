@@ -29,6 +29,8 @@ class SaveBookingRequest {
   String? extra_charge;
   String? remarks;
 
+  String? roomNo;
+
   int? zone_fare_applied;
   num? rsl_share;
   num? driver_share;
@@ -41,46 +43,46 @@ class SaveBookingRequest {
   String? kioskId;
   String? cid;
 
-  SaveBookingRequest({
-    this.approx_distance,
-    this.approx_duration,
-    this.approx_trip_fare,
-    this.drop_latitude,
-    this.drop_longitude,
-    this.dropplace,
-    this.guest_name,
-    this.guest_country_code,
-    this.guest_phone,
-    this.guest_email,
-    this.latitude,
-    this.longitude,
-    this.motor_model,
-    this.now_after,
-    this.corporate_id,
-    this.passenger_payment_option,
-    this.pickupplace,
-    this.pickup_time,
-    this.note_to_driver,
-    this.note_to_admin,
-    this.flight_number,
-    this.reference_number,
-    this.customer_price,
-    this.route_polyline,
-    this.customer_rate,
-    this.extra_charge,
-    this.remarks,
-    this.zone_fare_applied,
-    this.rsl_share,
-    this.driver_share,
-    this.corporate_share,
-    this.pickup_zone_id,
-    this.pickup_zone_group_id,
-    this.drop_zone_id,
-    this.drop_zone_group_id,
-    this.supervisorId,
-    this.kioskId,
-    this.cid,
-  });
+  SaveBookingRequest(
+      {this.approx_distance,
+      this.approx_duration,
+      this.approx_trip_fare,
+      this.drop_latitude,
+      this.drop_longitude,
+      this.dropplace,
+      this.guest_name,
+      this.guest_country_code,
+      this.guest_phone,
+      this.guest_email,
+      this.latitude,
+      this.longitude,
+      this.motor_model,
+      this.now_after,
+      this.corporate_id,
+      this.passenger_payment_option,
+      this.pickupplace,
+      this.pickup_time,
+      this.note_to_driver,
+      this.note_to_admin,
+      this.flight_number,
+      this.reference_number,
+      this.customer_price,
+      this.route_polyline,
+      this.customer_rate,
+      this.extra_charge,
+      this.remarks,
+      this.zone_fare_applied,
+      this.rsl_share,
+      this.driver_share,
+      this.corporate_share,
+      this.pickup_zone_id,
+      this.pickup_zone_group_id,
+      this.drop_zone_id,
+      this.drop_zone_group_id,
+      this.supervisorId,
+      this.kioskId,
+      this.cid,
+      this.roomNo});
 
   SaveBookingRequest.fromJson(Map<String, dynamic> json) {
     approx_distance = json['approx_distance'];
@@ -121,6 +123,7 @@ class SaveBookingRequest {
     kioskId = json['kiosk_id'];
     cid = json['company_id'];
     route_polyline = json['route_polyline'];
+    roomNo = json['room_number'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +166,7 @@ class SaveBookingRequest {
     data['kiosk_id'] = kioskId;
     data['company_id'] = cid;
     data['route_polyline'] = route_polyline;
+    data['room_number'] = roomNo;
     return data;
   }
 }

@@ -50,6 +50,7 @@ class EditBookingController extends GetxController {
   final TextEditingController refNumberController = TextEditingController();
   final TextEditingController noteToAdminController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
+  final TextEditingController roomNumberController = TextEditingController();
 
   var countryCode = '971'.obs;
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
@@ -146,6 +147,7 @@ class EditBookingController extends GetxController {
       noteToAdminController.text = details.note_to_admin ?? "";
       flightNumberController.text = details.flight_number ?? "";
       refNumberController.text = details.reference_number ?? "";
+      roomNumberController.text = details.room_number ?? "";
       remarksController.text = details.remarks ?? "";
       taxiModel.value = details.motor_model_info?.modelName ?? "";
       taxiId.value = (details.motor_model_info?.modelId ?? "").toString();
@@ -254,6 +256,8 @@ class EditBookingController extends GetxController {
     final flightNumber = flightNumberController.text.trim();
     final refNumber = refNumberController.text.trim();
     final remarks = remarksController.text.trim();
+    final roomNo = roomNumberController.text.trim();
+
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     var customerPrice = "0";
     if (price.isNotEmpty) {
@@ -300,6 +304,7 @@ class EditBookingController extends GetxController {
             approx_distance: "${approximateDistance.value.toString()} km",
             approx_duration: "${approximateTime.value.toString()} mins",
             approx_trip_fare: double.parse(approximateFare.value),
+            roomNo: roomNo,
             route_polyline: overViewPolyLine.value))
         .then((response) {
       saveBookingApiLoading.value = false;
@@ -445,6 +450,7 @@ class EditBookingController extends GetxController {
     flightNumberController.clear();
     refNumberController.clear();
     remarksController.clear();
+    roomNumberController.clear();
     clearPickUpLocation();
     clearDropLocation();
     overViewPolyLine.value = "";

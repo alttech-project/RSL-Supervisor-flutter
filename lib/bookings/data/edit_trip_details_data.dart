@@ -41,6 +41,7 @@ class EditCorporateBookingRequestData {
   String? approx_duration;
   double? approx_trip_fare;
   String? route_polyline;
+  String? roomNo;
 
   EditCorporateBookingRequestData(
       {this.id,
@@ -78,6 +79,7 @@ class EditCorporateBookingRequestData {
       this.approx_distance,
       this.approx_duration,
       this.approx_trip_fare,
+      this.roomNo,
       this.route_polyline});
 
   EditCorporateBookingRequestData.fromJson(Map<String, dynamic> json) {
@@ -116,6 +118,7 @@ class EditCorporateBookingRequestData {
     approx_distance = json['approx_distance'];
     approx_duration = json['approx_duration'];
     approx_trip_fare = json['approx_trip_fare'];
+    roomNo = json['room_number'];
     route_polyline = json['route_polyline'];
   }
 
@@ -157,6 +160,7 @@ class EditCorporateBookingRequestData {
     data['approx_duration'] = approx_duration;
     data['approx_trip_fare'] = approx_trip_fare;
     data['route_polyline'] = route_polyline;
+    data['room_number'] = roomNo;
     return data;
   }
 }

@@ -970,6 +970,7 @@ class EditBooking extends GetView<EditBookingController> {
               _noteToAdminWidget(),
               _flightNumberWidget(),
               _refNumberWidget(),
+              _roomNumberWidget(),
               SizedBox(height: 10.h),
               _remarksLabel(),
               SizedBox(height: 7.h),
@@ -977,6 +978,15 @@ class EditBooking extends GetView<EditBookingController> {
             ],
           )
         : const SizedBox.shrink());
+  }
+
+  Widget _roomNumberWidget() {
+    return _labelAndTextFieldWidget(
+        'Room Number', 'Room Number', 'Enter Room Number (Optional)',
+        txtEditingController: controller.roomNumberController,
+        keyboardType: TextInputType.text, validator: (value) {
+      return null;
+    });
   }
 
   Widget _line() {

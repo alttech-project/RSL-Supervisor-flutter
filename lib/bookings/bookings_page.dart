@@ -741,6 +741,15 @@ class BookingsPage extends GetView<BookingsController> {
     });
   }
 
+  Widget _roomNumberWidget() {
+    return _labelAndTextFieldWidget(
+        'Room Number', 'Room Number', 'Enter Room Number (Optional)',
+        txtEditingController: controller.roomNumberController,
+        keyboardType: TextInputType.text, validator: (value) {
+      return null;
+    });
+  }
+
   Widget _remarksLabel() {
     return Text(
       'Remarks',
@@ -964,6 +973,7 @@ class BookingsPage extends GetView<BookingsController> {
               _noteToAdminWidget(),
               _flightNumberWidget(),
               _refNumberWidget(),
+              _roomNumberWidget(),
               SizedBox(height: 10.h),
               _remarksLabel(),
               SizedBox(height: 7.h),

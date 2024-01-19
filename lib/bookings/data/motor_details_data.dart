@@ -38,6 +38,10 @@ const List<Payments> quickTripsPaymentList = <Payments>[
     name: 'BILL',
     paymentId: "7",
   ),
+  Payments(
+    name: 'COMPLIMENTARY',
+    paymentId: "8",
+  ),
 ];
 
 class MotorDetailsRequest {

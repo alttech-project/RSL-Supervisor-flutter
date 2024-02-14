@@ -145,6 +145,12 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 10.h),
         _locationInfo(context),
         SizedBox(height: 10.h),
+        _tripTypeRadioWidget(),
+        SizedBox(height: 10.h),
+        controller.selectedTripRadioValue.value == 2
+            ? _roundtripTypeRadioWidget()
+            : SizedBox(),
+        SizedBox(height: 10.h),
         _carModelInfo(),
         SizedBox(height: 10.h),
         _customPricingInfo(context),
@@ -233,6 +239,126 @@ class BookingsPage extends GetView<BookingsController> {
       ),
     );
   }
+
+  Widget _tripTypeRadioWidget() {
+    return Obx(() => Card(
+      elevation: 8,
+      margin: const EdgeInsets.symmetric(vertical: 10), // Adjust vertical margin
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: const EdgeInsets.all(16), // Add padding for the content inside the card
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: <Widget>[
+            Text(
+              'Trip Type',
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold,color:AppColors.kPrimaryColor.value),
+            ),
+            SizedBox(height: 10), // Add some space between label and radio buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Radio(
+                  activeColor: AppColors.kPrimaryColor.value,
+                  value: 1,
+                  groupValue: controller.selectedTripRadioValue.value,
+                  onChanged: (value) {
+                    print("value${value}");
+                    controller.tripTypeSelectedRadio(value!);
+                  },
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
+                ),
+                Text(
+                  'Normal',
+                  style: TextStyle(fontSize: 16.sp, color: AppColors.kPrimaryColor.value),
+                ),
+                Radio(
+                  activeColor: AppColors.kPrimaryColor.value,
+                  value: 2,
+                  groupValue: controller.selectedTripRadioValue.value,
+                  onChanged: (int? value) {
+                    print("value${value}");
+                    controller.tripTypeSelectedRadio(value);
+                  },
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
+                ),
+                Text(
+                  'Round Trip',
+                  style: TextStyle(fontSize: 16.sp, color: AppColors.kPrimaryColor.value),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+    );
+  }
+
+  Widget _roundtripTypeRadioWidget() {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.symmetric(vertical: 10), // Adjust vertical margin
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: const EdgeInsets.all(16), // Add padding for the content inside the card
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Round Trip Fare', // Add your label here
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold,color: AppColors.kPrimaryColor.value),
+            ),
+            SizedBox(height: 10), // Add some space between label and radio buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Radio(
+                  value: 1,
+                  groupValue: controller.roundTripselectedTripRadioValue.value,
+                  onChanged: (value) {
+                    controller.roundedSelectedRadio(value!);
+                  },
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
+
+                ),
+                Text(
+                  'Single',
+                  style: TextStyle(fontSize: 16.sp,color: AppColors.kPrimaryColor.value),
+                ),
+                Radio(
+                  value: 2,
+                  groupValue: controller.roundTripselectedTripRadioValue.value,
+                  onChanged: (value) {
+                    controller.roundedSelectedRadio(value!);
+                  },
+                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
+
+                ),
+                Text(
+                  'Double',
+                  style: TextStyle(fontSize: 16.sp,color: AppColors.kPrimaryColor.value),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
+
+
+
 
   Widget _carModelInfo() {
     return Card(

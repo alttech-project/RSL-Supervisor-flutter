@@ -99,6 +99,11 @@ class BookingsController extends GetxController
   var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
 
+  RxInt selectedTripRadioValue = 0.obs;
+  RxInt roundTripselectedTripRadioValue = 0.obs;
+
+
+
   @override
   void onInit() {
     super.onInit();
@@ -153,6 +158,12 @@ class BookingsController extends GetxController
     carModelController.clear();
   }*/
 
+  void tripTypeSelectedRadio(int? value) {
+    selectedTripRadioValue.value = value ?? 0;
+  }
+  void roundedSelectedRadio(int? value) {
+    roundTripselectedTripRadioValue.value = value ?? 0;
+  }
   void checkNewBookingValidation() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     bool shiftStatus = await GetStorageController().getShiftStatus();

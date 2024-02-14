@@ -15,6 +15,7 @@ import '../../widgets/safe_area_container.dart';
 import '../widgets/app_loader.dart';
 import '../widgets/navigation_title.dart';
 import 'controller/edit_booking_controller.dart';
+import 'data/get_package_data.dart';
 
 class EditBooking extends GetView<EditBookingController> {
   const EditBooking({super.key});
@@ -108,6 +109,8 @@ class EditBooking extends GetView<EditBookingController> {
         _locationInfo(context),
         SizedBox(height: 10.h),
         _carModelInfo(),
+        SizedBox(height: 10.h),
+        _bookingTypeInfo(),
         SizedBox(height: 10.h),
         _customPricingInfo(context),
         SizedBox(height: 10.h),
@@ -970,6 +973,7 @@ class EditBooking extends GetView<EditBookingController> {
               _noteToAdminWidget(),
               _flightNumberWidget(),
               _refNumberWidget(),
+              _customerRateWidget(),
               _roomNumberWidget(),
               SizedBox(height: 10.h),
               _remarksLabel(),
@@ -989,6 +993,15 @@ class EditBooking extends GetView<EditBookingController> {
     });
   }
 
+  Widget _customerRateWidget() {
+    return _labelAndTextFieldWidget(
+        'Customer Rate', 'Customer Rate', 'Enter Customer Rate (Optional)',
+        txtEditingController: controller.customRateController,
+        keyboardType: TextInputType.number, validator: (value) {
+      return null;
+    });
+  }
+
   Widget _line() {
     return Container(
       width: 40.w,
@@ -1000,6 +1013,404 @@ class EditBooking extends GetView<EditBookingController> {
       ),
     );
   }
+
+  Widget _bookingTypeInfo() {
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      color: AppColors.kPrimaryTransparentColor.value,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 8,
+        ), // Adjust left and right padding
+        child: Row(children: [
+          _layoutBookingTypeInfo(),
+        ]),
+      ),
+    );
+  }
+
+  Widget _layoutBookingTypeInfo() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            _labelBookingType(),
+            const SizedBox(
+              height: 8,
+            ),
+            _selectedBookingType(),
+            const SizedBox(
+              height: 0,
+            ),
+            _layoutPackageInfo()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _labelBookingType() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        'Booking Type',
+        style: AppFontStyle.subHeading(
+          size: AppFontSize.medium.value,
+          color: AppColors.kPrimaryColor.value,
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedBookingType() {
+    return SizedBox(
+      width: double.maxFinite,
+      height: 57,
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kSecondaryBackGroundColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 10,
+          ), // Adjust left and right padding
+          child: Row(
+            children: [
+              Expanded(
+                child: _bookingTypeDropDown(
+                  selectedOption: controller.selectedBookingType.value,
+                  onTap: (value) {
+                    controller.selectedBookingType.value = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _layoutPackageInfo() {
+    return Obx(() => controller.selectedBookingType.value.id == 3
+        ? Padding(
+      padding: const EdgeInsets.only(
+          top: 15,
+          bottom: 0,
+          left: 0,
+          right: 0), // Adjust left and right padding
+      child: Row(children: [
+        _layoutPackageType(),
+        const SizedBox(
+          width: 20,
+        ),
+        _layoutPackage()
+      ]),
+    )
+        : const SizedBox.shrink());
+  }
+
+  Widget _layoutPackageType() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            _labelPackageType(),
+            const SizedBox(
+              height: 8,
+            ),
+            _selectedPackageType()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _layoutPackage() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Column(
+          children: [
+            _labelPackage(),
+            const SizedBox(
+              height: 8,
+            ),
+            _selectedPackage()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _labelPackageType() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          'Package Type',
+          style: AppFontStyle.subHeading(
+            size: AppFontSize.small.value,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _labelPackage() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          'Package',
+          style: AppFontStyle.subHeading(
+            size: AppFontSize.small.value,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedPackageType() {
+    return SizedBox(
+      width: double.maxFinite,
+      height: 57,
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kSecondaryBackGroundColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 10,
+          ), // Adjust left and right padding
+          child: Row(
+            children: [
+              Expanded(
+                child: _packageTypeDropDown(
+                  selectedOption: controller.selectedPackageType.value,
+                  onTap: (value) {
+                    controller.selectedPackageType.value = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedPackage() {
+    return SizedBox(
+      width: double.maxFinite,
+      height: 57,
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kSecondaryBackGroundColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 10,
+          ), // Adjust left and right padding
+          child: Row(
+            children: [
+              Expanded(
+                child: _packageDropDown(
+                  selectedOption: controller.packageData.value,
+                  onTap: (value) {
+                    controller.packageData.value = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bookingTypeDropDown(
+      {required TripType? selectedOption,
+        required Function(TripType value) onTap}) {
+    return SizedBox(
+      child: DropdownButton<TripType>(
+        value: selectedOption,
+        isExpanded: true,
+        underline: Container(
+          height: 1.0,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide.none),
+          ),
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down_sharp,
+          size: 20.r,
+          color: AppColors.kPrimaryColor.value,
+        ),
+        dropdownColor: Colors.black,
+        iconDisabledColor: AppColors.kPrimaryColor.value,
+        iconEnabledColor: AppColors.kPrimaryColor.value,
+        alignment: Alignment.center,
+        onChanged: (newValue) {
+          onTap(newValue!);
+        },
+        items:
+        bookingTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
+          return DropdownMenuItem<TripType>(
+            onTap: () {
+              onTap(value);
+            },
+            value: value,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: Text(
+                value.name.toString(),
+                style: GoogleFonts.outfit(
+                  textStyle: TextStyle(
+                      fontSize: AppFontSize.verySmall.value,
+                      fontWeight: AppFontWeight.normal.value,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _packageTypeDropDown(
+      {required TripType? selectedOption,
+        required Function(TripType value) onTap}) {
+    return SizedBox(
+      child: DropdownButton<TripType>(
+        value: selectedOption,
+        isExpanded: true,
+        underline: Container(
+          height: 1.0,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide.none),
+          ),
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down_sharp,
+          size: 20.r,
+          color: AppColors.kPrimaryColor.value,
+        ),
+        dropdownColor: Colors.black,
+        iconDisabledColor: AppColors.kPrimaryColor.value,
+        iconEnabledColor: AppColors.kPrimaryColor.value,
+        alignment: Alignment.center,
+        onChanged: (newValue) {
+          onTap(newValue!);
+        },
+        items:
+        packageTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
+          return DropdownMenuItem<TripType>(
+            onTap: () {
+              onTap(value);
+            },
+            value: value,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: Text(
+                value.name.toString(),
+                style: GoogleFonts.outfit(
+                  textStyle: TextStyle(
+                      fontSize: AppFontSize.verySmall.value,
+                      fontWeight: AppFontWeight.normal.value,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _packageDropDown(
+      {required CorporatePackageList? selectedOption,
+        required Function(CorporatePackageList value) onTap}) {
+    return SizedBox(
+      child: DropdownButton<CorporatePackageList>(
+        value: selectedOption,
+        isExpanded: true,
+        underline: Container(
+          height: 1.0,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide.none),
+          ),
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down_sharp,
+          size: 20.r,
+          color: AppColors.kPrimaryColor.value,
+        ),
+        dropdownColor: Colors.black,
+        iconDisabledColor: AppColors.kPrimaryColor.value,
+        iconEnabledColor: AppColors.kPrimaryColor.value,
+        alignment: Alignment.center,
+        onChanged: (newValue) {
+          onTap(newValue!);
+        },
+        items: controller.packageList
+            .map<DropdownMenuItem<CorporatePackageList>>(
+                (CorporatePackageList value) {
+              return DropdownMenuItem<CorporatePackageList>(
+                onTap: () {
+                  onTap(value);
+                },
+                value: value,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.w),
+                  child: Text(
+                    value.name.toString(),
+                    style: GoogleFonts.outfit(
+                      textStyle: TextStyle(
+                          fontSize: AppFontSize.verySmall.value,
+                          fontWeight: AppFontWeight.normal.value,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+      ),
+    );
+  }
+
 
   Future _selectDateTime(BuildContext context) async {
     final date = await _selectDate(context);

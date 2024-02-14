@@ -42,6 +42,8 @@ class SaveBookingRequest {
   String? supervisorId;
   String? kioskId;
   String? cid;
+  int? package_id;
+  int? package_type;
 
   SaveBookingRequest(
       {this.approx_distance,
@@ -82,7 +84,9 @@ class SaveBookingRequest {
       this.supervisorId,
       this.kioskId,
       this.cid,
-      this.roomNo});
+      this.roomNo,
+      this.package_id,
+      this.package_type});
 
   SaveBookingRequest.fromJson(Map<String, dynamic> json) {
     approx_distance = json['approx_distance'];
@@ -124,6 +128,8 @@ class SaveBookingRequest {
     cid = json['company_id'];
     route_polyline = json['route_polyline'];
     roomNo = json['room_number'];
+    package_id = json['package_id'];
+    package_type = json['package_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -167,6 +173,8 @@ class SaveBookingRequest {
     data['company_id'] = cid;
     data['route_polyline'] = route_polyline;
     data['room_number'] = roomNo;
+    data['package_id'] = package_id;
+    data['package_type'] = package_type;
     return data;
   }
 }

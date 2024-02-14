@@ -24,6 +24,7 @@ import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../../widgets/app_loader.dart';
 import '../../widgets/custom_button.dart';
+import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
 import '../upcoming_bookings_tab.dart';
@@ -56,6 +57,12 @@ class BookingsController extends GetxController
   final TextEditingController noteToAdminController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
   final TextEditingController roomNumberController = TextEditingController();
+  final TextEditingController customRateController = TextEditingController();
+
+  Rx<TripType> selectedBookingType = bookingTypeList[0].obs;
+  Rx<TripType> selectedPackageType = packageTypeList[0].obs;
+  RxList<CorporatePackageList> packageList = <CorporatePackageList>[].obs;
+  Rx<CorporatePackageList> packageData = CorporatePackageList().obs;
 
   var countryCode = '971'.obs;
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
@@ -104,6 +111,7 @@ class BookingsController extends GetxController
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
     getDate();
+    callGetCorporatePackageListApi();
     _getUserInfo();
   }
 
@@ -130,6 +138,10 @@ class BookingsController extends GetxController
     flightNumberController.clear();
     refNumberController.clear();
     roomNumberController.clear();
+    customRateController.clear();
+    selectedBookingType.value = bookingTypeList[0];
+    selectedPackageType.value = packageTypeList[0];
+    packageData.value = packageList[0];
     remarksController.clear();
     clearPickUpLocation();
     clearDropLocation();
@@ -152,6 +164,48 @@ class BookingsController extends GetxController
   /*  void clearCarModel() {
     carModelController.clear();
   }*/
+
+  void callGetCorporatePackageListApi() async {
+    var corporateId = "0";
+    var corporateID = await GetStorageController().getCorporateId();
+    if (corporateID.isNotEmpty) {
+      corporateId = corporateID;
+    }
+    getCorporatePackageListApi(
+      GetCorporatePackageListRequest(
+          corporateId: int.parse(corporateId ?? "0"),
+          modelId: int.parse(taxiId.value),
+          packageType: selectedPackageType.value.id),
+    ).then(
+      (response) {
+        if (response.status == 1) {
+          packageList.value = response.packageList ?? [];
+          packageList.insert(
+              0, CorporatePackageList(id: 001, name: "Select Package"));
+          packageList.refresh();
+          packageData.value = packageList[0];
+        } else {
+          showSnackBar(
+            title: 'Error',
+            msg: response.message ?? "Something went wrong",
+          );
+          packageList.insert(
+              0, CorporatePackageList(id: 001, name: "Select Package"));
+          packageList.refresh();
+          packageData.value = packageList[0];
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Error",
+          message: error.toString(),
+        );
+      },
+    );
+    // callCorporateApi();
+  }
 
   void checkNewBookingValidation() async {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -195,6 +249,9 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
+      } else if (selectedBookingType.value.id == 3 &&
+          (packageData.value.id == null || packageData.value.id == 001)) {
+        _showSnackBar('Validation!', 'Kindly select package!');
       }
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
@@ -225,6 +282,7 @@ class BookingsController extends GetxController
     final refNumber = refNumberController.text.trim();
     final remarks = remarksController.text.trim();
     final roomNo = roomNumberController.text.trim();
+    final customerRate = customRateController.text.trim();
 
     var corporateId = "0";
     var corporateID = await GetStorageController().getCorporateId();
@@ -237,6 +295,17 @@ class BookingsController extends GetxController
     if (price.isNotEmpty) {
       customerPrice = price;
     }
+
+    int packageType = 0;
+    int? packageId = 0;
+    if (selectedBookingType.value.id == 3) {
+      packageType = selectedPackageType.value.id;
+      packageId = packageData.value.id == 001 ? 0 : packageData.value.id;
+    } else {
+      packageType = 0;
+      packageId = 0;
+    }
+
     saveBookingApi(SaveBookingRequest(
             approx_distance: "${approximateDistance.value.toString()} km",
             approx_duration: "${approximateTime.value.toString()} mins",
@@ -251,7 +320,7 @@ class BookingsController extends GetxController
             latitude: pickupLatitude,
             longitude: pickupLongitude,
             motor_model: int.parse(taxiId.value),
-            now_after: 1,
+            now_after: selectedBookingType.value.id,
             corporate_id: int.parse(corporateId ?? "0"),
             passenger_payment_option:
                 int.parse(selectedPayment.value.paymentId),
@@ -263,7 +332,7 @@ class BookingsController extends GetxController
             reference_number: refNumber,
             customer_price: double.parse(customerPrice),
             route_polyline: overViewPolyLine.value,
-            customer_rate: "",
+            customer_rate: customerRate,
             extra_charge: extraCharges,
             remarks: remarks,
             zone_fare_applied: zoneFareApplied,
@@ -277,7 +346,9 @@ class BookingsController extends GetxController
             supervisorId: supervisorInfo?.supervisorId ?? "",
             kioskId: supervisorInfo?.kioskId ?? "",
             cid: supervisorInfo?.cid ?? "",
-            roomNo: roomNo))
+            roomNo: roomNo,
+            package_type: packageType,
+            package_id: packageId))
         .then((response) {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
@@ -730,6 +801,7 @@ class BookingsController extends GetxController
                                           taxiId.value =
                                               cars[selectedCarIndex].modelId,
                                           updateModelFareDetails(),
+                                          callGetCorporatePackageListApi(),
                                           animationController.reverse().then(
                                             (value) {
                                               Navigator.of(context).pop();

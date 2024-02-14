@@ -19,6 +19,7 @@ import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../../widgets/custom_button.dart';
 import '../data/edit_details_data.dart';
+import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
 
@@ -51,6 +52,12 @@ class EditBookingController extends GetxController {
   final TextEditingController noteToAdminController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
   final TextEditingController roomNumberController = TextEditingController();
+  final TextEditingController customRateController = TextEditingController();
+
+  Rx<TripType> selectedBookingType = bookingTypeList[0].obs;
+  Rx<TripType> selectedPackageType = packageTypeList[0].obs;
+  RxList<CorporatePackageList> packageList = <CorporatePackageList>[].obs;
+  Rx<CorporatePackageList> packageData = CorporatePackageList().obs;
 
   var countryCode = '971'.obs;
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
@@ -98,6 +105,7 @@ class EditBookingController extends GetxController {
   void onInit() {
     super.onInit();
     getDate();
+    callGetCorporatePackageListApi();
     _getUserInfo();
   }
 
@@ -217,6 +225,9 @@ class EditBookingController extends GetxController {
           extraCharges != "0" &&
           double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
+      } else if (selectedBookingType.value.id == 3 &&
+          (packageData.value.id == null || packageData.value.id == 001)) {
+        _showSnackBar('Validation!', 'Kindly select package!');
       }
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
@@ -257,6 +268,7 @@ class EditBookingController extends GetxController {
     final refNumber = refNumberController.text.trim();
     final remarks = remarksController.text.trim();
     final roomNo = roomNumberController.text.trim();
+    final customerRate = customRateController.text.trim();
 
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     var customerPrice = "0";
@@ -268,6 +280,17 @@ class EditBookingController extends GetxController {
     if (extraCharges.isNotEmpty) {
       extraCharge = extraCharges;
     }
+
+    int packageType = 0;
+    int? packageId = 0;
+    if (selectedBookingType.value.id == 3) {
+      packageType = selectedPackageType.value.id;
+      packageId = packageData.value.id == 001 ? 0 : packageData.value.id;
+    } else {
+      packageType = 0;
+      packageId = 0;
+    }
+
     editBookingApi(EditCorporateBookingRequestData(
             id: editBookingTripId.value,
             motor_model: int.parse(taxiId.value),
@@ -293,6 +316,8 @@ class EditBookingController extends GetxController {
             dropNotes: "",
             passengerPaymentOption: selectedPayment.value.paymentId,
             finalPaymentOption: selectedPayment.value.paymentId,
+            now_after: selectedBookingType.value.id,
+            customer_rate: customerRate,
             pickupLatitude: pickupLatitude,
             pickupLongitude: pickupLongitude,
             dropLatitude: dropLatitude,
@@ -305,6 +330,8 @@ class EditBookingController extends GetxController {
             approx_duration: "${approximateTime.value.toString()} mins",
             approx_trip_fare: double.parse(approximateFare.value),
             roomNo: roomNo,
+            package_type: packageType,
+            package_id: packageId,
             route_polyline: overViewPolyLine.value))
         .then((response) {
       saveBookingApiLoading.value = false;
@@ -330,6 +357,48 @@ class EditBookingController extends GetxController {
     Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
     changeTabIndex(1);
     tabController?.animateTo(1);
+  }
+
+  void callGetCorporatePackageListApi() async {
+    var corporateId = "0";
+    var corporateID = await GetStorageController().getCorporateId();
+    if (corporateID.isNotEmpty) {
+      corporateId = corporateID;
+    }
+    getCorporatePackageListApi(
+      GetCorporatePackageListRequest(
+          corporateId: int.parse(corporateId ?? "0"),
+          modelId: int.parse(taxiId.value),
+          packageType: selectedPackageType.value.id),
+    ).then(
+      (response) {
+        if (response.status == 1) {
+          packageList.value = response.packageList ?? [];
+          packageList.insert(
+              0, CorporatePackageList(id: 001, name: "Select Package"));
+          packageList.refresh();
+          packageData.value = packageList[0];
+        } else {
+          showSnackBar(
+            title: 'Error',
+            msg: response.message ?? "Something went wrong",
+          );
+          packageList.insert(
+              0, CorporatePackageList(id: 001, name: "Select Package"));
+          packageList.refresh();
+          packageData.value = packageList[0];
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        showDefaultDialog(
+          context: Get.context!,
+          title: "Error",
+          message: error.toString(),
+        );
+      },
+    );
+    // callCorporateApi();
   }
 
   void callMotorModelApi() async {
@@ -458,6 +527,10 @@ class EditBookingController extends GetxController {
     approximateTrafficTime.value = 0.0;
     approximateDistance.value = 0.0;
     approximateFare.value = "0";
+    customRateController.clear();
+    selectedBookingType.value = bookingTypeList[0];
+    selectedPackageType.value = packageTypeList[0];
+    packageData.value = packageList[0];
     zoneFareApplied = 0;
     rslShare = 0;
     driverShare = 0;
@@ -762,6 +835,7 @@ class EditBookingController extends GetxController {
                                         isValueChanged.value = true,
                                         // updateModelFareDetails(),
                                         callMotorModelApi(),
+                                        callGetCorporatePackageListApi(),
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

@@ -7,6 +7,7 @@ import '../../network/app_config.dart';
 import '../../network/services.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../data/edit_details_data.dart';
+import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 
 final ApiProvider _apiProvider = Get.find<ApiProvider>();
@@ -55,6 +56,19 @@ Future<SaveBookingResponse> saveBookingApi(
       ),
       queryParam: {"type": "supervisorCorporateBooking"});
   return saveBookingResponseFromJson(response);
+}
+
+Future<CorporatePackageListApiResponse> getCorporatePackageListApi(
+    GetCorporatePackageListRequest requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
+  final response = await _apiProvider.httpRequest(
+      resource: Resource(
+        url: '${url}getCorpratePackageList',
+        request: corporatePackageListApiRequestToJson(requestData),
+      ),
+      queryParam: {"type": "getCorpratePackageList"});
+  return corporatePackageListApiResponseFromJson(response);
 }
 
 Future<GetByPassengerEditDetailsResponse> getByPassengerEditDetails(

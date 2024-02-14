@@ -44,6 +44,39 @@ const List<Payments> quickTripsPaymentList = <Payments>[
   ),
 ];
 
+class TripType {
+  final String name;
+  final int id;
+
+  const TripType({
+    required this.name,
+    required this.id,
+  });
+}
+
+const List<TripType> bookingTypeList = <TripType>[
+  TripType(
+    name: 'Normal Booking',
+    id: 1,
+  ),
+  TripType(
+    name: 'Package Booking',
+    id: 3,
+  ),
+];
+
+const List<TripType> packageTypeList = <TripType>[
+  TripType(
+    name: 'Hours',
+    id: 1,
+  ),
+  TripType(
+    name: 'Days',
+    id: 2,
+  ),
+];
+
+
 class MotorDetailsRequest {
   String? supervisorId;
   String? kioskId;

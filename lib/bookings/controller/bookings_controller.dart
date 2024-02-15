@@ -106,8 +106,8 @@ class BookingsController extends GetxController
   var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
 
-  RxInt selectedTripRadioValue = 0.obs;
-  RxInt roundTripselectedTripRadioValue = 3.obs;
+  RxInt selectedTripRadioValue = 1.obs;
+  RxInt roundTripselectedTripRadioValue = 1.obs;
 
   @override
   void onInit() {
@@ -146,8 +146,8 @@ class BookingsController extends GetxController
     selectedPackageType.value = packageTypeList[0];
     packageData.value = packageList[0];
     remarksController.clear();
-    selectedTripRadioValue.value = 0;
-    roundTripselectedTripRadioValue.value = 3;
+    selectedTripRadioValue.value = 1;
+    roundTripselectedTripRadioValue.value = 0;
     clearPickUpLocation();
     clearDropLocation();
   }
@@ -272,14 +272,11 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
-      } else if (selectedTripRadioValue.value == 0) {
-        _showSnackBar('Validation!', 'Kindly select trip type!');
-      } else if (selectedTripRadioValue.value == 2 &&
-          roundTripselectedTripRadioValue.value == 3) {
-        _showSnackBar('Validation!', 'Kindly select round trip fare!');
       } else if (selectedBookingType.value.id == 3 &&
           (packageData.value.id == null || packageData.value.id == 001)) {
         _showSnackBar('Validation!', 'Kindly select package!');
+      } else if (selectedTripRadioValue.value == 0) {
+        _showSnackBar('Validation!', 'Kindly select trip type!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {

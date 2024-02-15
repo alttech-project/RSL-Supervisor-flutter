@@ -146,8 +146,6 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 10.h),
         _locationInfo(context),
         SizedBox(height: 10.h),
-        _tripTypeRadioWidget(),
-        SizedBox(height: 10.h),
         /*controller.selectedTripRadioValue.value == 2
             ? _roundtripTypeRadioWidget()
             : const SizedBox.shrink(),
@@ -155,6 +153,8 @@ class BookingsPage extends GetView<BookingsController> {
         _carModelInfo(),
         SizedBox(height: 10.h),
         _bookingTypeInfo(),
+        SizedBox(height: 10.h),
+        _tripTypeRadioWidget(),
         SizedBox(height: 10.h),
         _customPricingInfo(context),
         SizedBox(height: 10.h),
@@ -1186,7 +1186,7 @@ class BookingsPage extends GetView<BookingsController> {
     return Align(
       alignment: Alignment.topLeft,
       child: Text(
-        'Booking Type',
+        'Booking Category',
         style: AppFontStyle.subHeading(
           size: AppFontSize.medium.value,
           color: AppColors.kPrimaryColor.value,

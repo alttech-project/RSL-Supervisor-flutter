@@ -72,7 +72,7 @@ class EditBookingController extends GetxController {
   RxBool showAdditionalElements = false.obs;
 
   int selectedCarIndex = 0;
-  RxList<CarmodelList> carModelList = <CarmodelList>[].obs;
+  RxList<FareDetailList> carModelList = <FareDetailList>[].obs;
 
   List<FareDetailList> motorModelList = <FareDetailList>[];
   Rx<MotorModelInfo> motorModelFare = MotorModelInfo().obs;
@@ -101,8 +101,8 @@ class EditBookingController extends GetxController {
   SupervisorInfo? supervisorInfo;
   RxBool isValueChanged = false.obs;
 
-  RxInt selectedTripRadioValue = 0.obs;
-  RxInt roundTripselectedTripRadioValue = 3.obs;
+  RxInt selectedTripRadioValue = 1.obs;
+  RxInt roundTripselectedTripRadioValue = 1.obs;
 
   @override
   void onInit() {
@@ -210,7 +210,7 @@ class EditBookingController extends GetxController {
       }
 
       selectedTripRadioValue.value = details.trip_type ?? 0;
-      roundTripselectedTripRadioValue.value = details.double_the_fare ?? 0;
+      roundTripselectedTripRadioValue.value = details.double_the_fare ?? 1;
     }
   }
 
@@ -251,14 +251,11 @@ class EditBookingController extends GetxController {
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
-      } else if (selectedTripRadioValue.value == 0) {
-        _showSnackBar('Validation!', 'Kindly select trip type!');
-      } else if (selectedTripRadioValue.value == 2 &&
-          roundTripselectedTripRadioValue.value == 3) {
-        _showSnackBar('Validation!', 'Kindly select round trip fare!');
       } else if (selectedBookingType.value.id == 3 &&
           (packageData.value.id == null || packageData.value.id == 001)) {
         _showSnackBar('Validation!', 'Kindly select package!');
+      } else if (selectedTripRadioValue.value == 0) {
+        _showSnackBar('Validation!', 'Kindly select trip type!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isNotEmpty &&
@@ -490,7 +487,34 @@ class EditBookingController extends GetxController {
   }
 
   void callCarModelApi(SupervisorInfo? supervisorInfo) async {
-    carModelApi(CarModelTypeRequestData(
+    var corporateId = await GetStorageController().getCorporateId();
+    supervisorInfo = await GetStorageController().getSupervisorInfo();
+    motorDetailsApi(MotorDetailsRequest(
+            supervisorId: supervisorInfo.supervisorId ?? "",
+            kioskId: supervisorInfo.kioskId ?? "",
+            corporateId: corporateId,
+            cid: supervisorInfo.cid ?? "",
+            pickup_latitude: pickupLatitude,
+            pickup_longitude: pickupLongitude,
+            drop_latitude: dropLatitude,
+            drop_longitude: dropLongitude,
+            distance: approximateDistance.value))
+        .then((response) {
+      // apiLoading.value = false;
+      if ((response.status ?? 0) == 1) {
+        carModelList.value = response.fareDetailList ?? [];
+        carModelList.refresh();
+      } else {
+        carModelList.value = [];
+        carModelList.refresh();
+      }
+    }).onError((error, stackTrace) {
+      // apiLoading.value = false;
+      printLogs("CarModel api error: ${error.toString()}");
+      carModelList.value = [];
+      carModelList.refresh();
+    });
+    /*carModelApi(CarModelTypeRequestData(
       kioskId: supervisorInfo?.kioskId ?? "",
       supervisorId: supervisorInfo?.supervisorId ?? "",
       dropLatitude: "",
@@ -511,7 +535,7 @@ class EditBookingController extends GetxController {
       printLogs("CarModel api error: ${error.toString()}");
       carModelList.value = [];
       carModelList.refresh();
-    });
+    });*/
   }
 
   void updateModelFareDetails() {
@@ -592,8 +616,8 @@ class EditBookingController extends GetxController {
     selectedPackageType.value = packageTypeList[0];
     packageData.value = packageList[0];
     zoneFareApplied = 0;
-    selectedTripRadioValue.value = 0;
-    roundTripselectedTripRadioValue.value = 3;
+    selectedTripRadioValue.value = 1;
+    roundTripselectedTripRadioValue.value = 0;
     rslShare = 0;
     driverShare = 0;
     corporateShare = 0;
@@ -753,13 +777,13 @@ class EditBookingController extends GetxController {
     final List<Car> cars = [];
     for (final carModel in carModelList) {
       final imageUrl = staticImageUrls.firstWhere(
-          (element) => element['motor_id'] == carModel.motorId,
+          (element) => element['motor_id'] == carModel.modelId,
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
 
       final car = Car(
-          name: carModel.motorName ?? "",
+          name: carModel.modelName ?? "",
           imageUrl: imageUrl,
-          modelId: carModel.motorId?.toString() ?? "");
+          modelId: carModel.modelId?.toString() ?? "");
       cars.add(car);
     }
 

@@ -107,16 +107,14 @@ class BookingsController extends GetxController
   SupervisorInfo? supervisorInfo;
 
   RxInt selectedTripRadioValue = 0.obs;
-  RxInt roundTripselectedTripRadioValue = 0.obs;
-
-
+  RxInt roundTripselectedTripRadioValue = 3.obs;
 
   @override
   void onInit() {
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
     getDate();
-    callGetCorporatePackageListApi();
+    callGetCorporatePackageListApi(false);
     _getUserInfo();
   }
 
@@ -148,6 +146,8 @@ class BookingsController extends GetxController
     selectedPackageType.value = packageTypeList[0];
     packageData.value = packageList[0];
     remarksController.clear();
+    selectedTripRadioValue.value = 0;
+    roundTripselectedTripRadioValue.value = 3;
     clearPickUpLocation();
     clearDropLocation();
   }
@@ -170,11 +170,16 @@ class BookingsController extends GetxController
     carModelController.clear();
   }*/
 
-  void callGetCorporatePackageListApi() async {
+  void callGetCorporatePackageListApi(showLoader) async {
     var corporateId = "0";
     var corporateID = await GetStorageController().getCorporateId();
     if (corporateID.isNotEmpty) {
       corporateId = corporateID;
+    }
+    if (showLoader) {
+      apiLoading.value = true;
+    } else {
+      apiLoading.value = false;
     }
     getCorporatePackageListApi(
       GetCorporatePackageListRequest(
@@ -183,10 +188,12 @@ class BookingsController extends GetxController
           packageType: selectedPackageType.value.id),
     ).then(
       (response) {
+        apiLoading.value = false;
         if (response.status == 1) {
-          packageList.value = response.packageList ?? [];
+          packageList.clear();
+          packageList.value = response.packageDetails?.packageList ?? [];
           packageList.insert(
-              0, CorporatePackageList(id: 001, name: "Select Package"));
+              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         } else {
@@ -194,14 +201,21 @@ class BookingsController extends GetxController
             title: 'Error',
             msg: response.message ?? "Something went wrong",
           );
+          packageList.clear();
           packageList.insert(
-              0, CorporatePackageList(id: 001, name: "Select Package"));
+              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         }
       },
     ).onError(
       (error, stackTrace) {
+        apiLoading.value = false;
+        packageList.clear();
+        packageList.insert(
+            0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
+        packageList.refresh();
+        packageData.value = packageList[0];
         showDefaultDialog(
           context: Get.context!,
           title: "Error",
@@ -215,6 +229,7 @@ class BookingsController extends GetxController
   void tripTypeSelectedRadio(int? value) {
     selectedTripRadioValue.value = value ?? 0;
   }
+
   void roundedSelectedRadio(int? value) {
     roundTripselectedTripRadioValue.value = value ?? 0;
   }
@@ -257,13 +272,18 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
+      } else if (selectedTripRadioValue.value == 0) {
+        _showSnackBar('Validation!', 'Kindly select trip type!');
+      } else if (selectedTripRadioValue.value == 2 &&
+          roundTripselectedTripRadioValue.value == 3) {
+        _showSnackBar('Validation!', 'Kindly select round trip fare!');
+      } else if (selectedBookingType.value.id == 3 &&
+          (packageData.value.id == null || packageData.value.id == 001)) {
+        _showSnackBar('Validation!', 'Kindly select package!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
-      } else if (selectedBookingType.value.id == 3 &&
-          (packageData.value.id == null || packageData.value.id == 001)) {
-        _showSnackBar('Validation!', 'Kindly select package!');
       }
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
@@ -318,6 +338,13 @@ class BookingsController extends GetxController
       packageId = 0;
     }
 
+    int? fareType = 0;
+    if (selectedTripRadioValue.value == 2) {
+      fareType = roundTripselectedTripRadioValue.value;
+    } else {
+      fareType = 0;
+    }
+
     saveBookingApi(SaveBookingRequest(
             approx_distance: "${approximateDistance.value.toString()} km",
             approx_duration: "${approximateTime.value.toString()} mins",
@@ -360,7 +387,9 @@ class BookingsController extends GetxController
             cid: supervisorInfo?.cid ?? "",
             roomNo: roomNo,
             package_type: packageType,
-            package_id: packageId))
+            package_id: packageId,
+            trip_type: selectedTripRadioValue.value,
+            double_the_fare: fareType))
         .then((response) {
       saveBookingApiLoading.value = false;
       if ((response.status ?? 0) == 1) {
@@ -813,7 +842,11 @@ class BookingsController extends GetxController
                                           taxiId.value =
                                               cars[selectedCarIndex].modelId,
                                           updateModelFareDetails(),
-                                          callGetCorporatePackageListApi(),
+                                          if (selectedBookingType.value.id == 3)
+                                            {
+                                              callGetCorporatePackageListApi(
+                                                  true),
+                                            },
                                           animationController.reverse().then(
                                             (value) {
                                               Navigator.of(context).pop();

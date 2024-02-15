@@ -82,6 +82,11 @@ class PassengerDetails {
   num? approx_distance;
   num? approx_duration;
   num? approx_trip_fare;
+  int? now_after;
+  int? package_id;
+  int? package_type;
+  int? trip_type;
+  int? double_the_fare;
   String? route_polyline;
 
   PassengerDetails({
@@ -121,6 +126,11 @@ class PassengerDetails {
     this.approx_duration,
     this.approx_trip_fare,
     this.room_number,
+    this.now_after,
+    this.package_id,
+    this.package_type,
+    this.trip_type,
+    this.double_the_fare,
     this.route_polyline,
   });
 
@@ -163,6 +173,11 @@ class PassengerDetails {
     approx_duration = json['approx_duration'];
     approx_trip_fare = json['approx_fare'];
     room_number = json['room_number'];
+    now_after = json['now_after'];
+    package_id = json['package_id'];
+    package_type = json['package_type'];
+    trip_type = json['trip_type'];
+    double_the_fare = json['double_the_fare'];
     route_polyline = json['route_polyline'];
   }
 
@@ -206,6 +221,11 @@ class PassengerDetails {
     data['approx_duration'] = approx_duration;
     data['approx_fare'] = approx_trip_fare;
     data['room_number'] = room_number;
+    data['now_after'] = now_after;
+    data['package_id'] = package_id;
+    data['package_type'] = package_type;
+    data['trip_type'] = trip_type;
+    data['double_the_fare'] = double_the_fare;
     data['route_polyline'] = route_polyline;
     return data;
   }

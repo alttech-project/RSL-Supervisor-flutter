@@ -101,16 +101,26 @@ class EditBookingController extends GetxController {
   SupervisorInfo? supervisorInfo;
   RxBool isValueChanged = false.obs;
 
+  RxInt selectedTripRadioValue = 0.obs;
+  RxInt roundTripselectedTripRadioValue = 3.obs;
+
   @override
   void onInit() {
     super.onInit();
     getDate();
-    callGetCorporatePackageListApi();
     _getUserInfo();
   }
 
   void goBack() {
     Get.back();
+  }
+
+  void tripTypeSelectedRadio(int? value) {
+    selectedTripRadioValue.value = value ?? 0;
+  }
+
+  void roundedSelectedRadio(int? value) {
+    roundTripselectedTripRadioValue.value = value ?? 0;
   }
 
   void callGetByPassengerDetailsApi({String? tripId}) async {
@@ -157,6 +167,7 @@ class EditBookingController extends GetxController {
       refNumberController.text = details.reference_number ?? "";
       roomNumberController.text = details.room_number ?? "";
       remarksController.text = details.remarks ?? "";
+      customRateController.text = details.customer_rate.toString() ?? "";
       taxiModel.value = details.motor_model_info?.modelName ?? "";
       taxiId.value = (details.motor_model_info?.modelId ?? "").toString();
       rslShare = details.rsl_share ?? 0;
@@ -179,6 +190,27 @@ class EditBookingController extends GetxController {
           selectedPayment.value = value;
         }
       }
+
+      for (var value in bookingTypeList) {
+        if (details.now_after == value.id) {
+          selectedBookingType.value = value;
+        }
+      }
+
+      for (var value in packageTypeList) {
+        if (details.package_type == value.id) {
+          selectedPackageType.value = value;
+        }
+      }
+
+      for (var value in packageList) {
+        if (details.package_id == value.id) {
+          packageData.value = value;
+        }
+      }
+
+      selectedTripRadioValue.value = details.trip_type ?? 0;
+      roundTripselectedTripRadioValue.value = details.double_the_fare ?? 0;
     }
   }
 
@@ -219,15 +251,20 @@ class EditBookingController extends GetxController {
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
+      } else if (selectedTripRadioValue.value == 0) {
+        _showSnackBar('Validation!', 'Kindly select trip type!');
+      } else if (selectedTripRadioValue.value == 2 &&
+          roundTripselectedTripRadioValue.value == 3) {
+        _showSnackBar('Validation!', 'Kindly select round trip fare!');
+      } else if (selectedBookingType.value.id == 3 &&
+          (packageData.value.id == null || packageData.value.id == 001)) {
+        _showSnackBar('Validation!', 'Kindly select package!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
       } else if (extraCharges.isNotEmpty &&
           extraCharges != "0" &&
           double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
-      } else if (selectedBookingType.value.id == 3 &&
-          (packageData.value.id == null || packageData.value.id == 001)) {
-        _showSnackBar('Validation!', 'Kindly select package!');
       }
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
@@ -291,6 +328,13 @@ class EditBookingController extends GetxController {
       packageId = 0;
     }
 
+    int? fareType = 0;
+    if (selectedTripRadioValue.value == 2) {
+      fareType = roundTripselectedTripRadioValue.value;
+    } else {
+      fareType = 0;
+    }
+
     editBookingApi(EditCorporateBookingRequestData(
             id: editBookingTripId.value,
             motor_model: int.parse(taxiId.value),
@@ -332,6 +376,8 @@ class EditBookingController extends GetxController {
             roomNo: roomNo,
             package_type: packageType,
             package_id: packageId,
+            trip_type: selectedTripRadioValue.value,
+            double_the_fare: fareType,
             route_polyline: overViewPolyLine.value))
         .then((response) {
       saveBookingApiLoading.value = false;
@@ -359,11 +405,16 @@ class EditBookingController extends GetxController {
     tabController?.animateTo(1);
   }
 
-  void callGetCorporatePackageListApi() async {
+  void callGetCorporatePackageListApi(showLoader) async {
     var corporateId = "0";
     var corporateID = await GetStorageController().getCorporateId();
     if (corporateID.isNotEmpty) {
       corporateId = corporateID;
+    }
+    if (showLoader) {
+      apiLoading.value = true;
+    } else {
+      apiLoading.value = false;
     }
     getCorporatePackageListApi(
       GetCorporatePackageListRequest(
@@ -372,10 +423,12 @@ class EditBookingController extends GetxController {
           packageType: selectedPackageType.value.id),
     ).then(
       (response) {
+        apiLoading.value = false;
         if (response.status == 1) {
-          packageList.value = response.packageList ?? [];
+          packageList.clear();
+          packageList.value = response.packageDetails?.packageList ?? [];
           packageList.insert(
-              0, CorporatePackageList(id: 001, name: "Select Package"));
+              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         } else {
@@ -383,14 +436,21 @@ class EditBookingController extends GetxController {
             title: 'Error',
             msg: response.message ?? "Something went wrong",
           );
+          packageList.clear();
           packageList.insert(
-              0, CorporatePackageList(id: 001, name: "Select Package"));
+              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         }
       },
     ).onError(
       (error, stackTrace) {
+        apiLoading.value = false;
+        packageList.clear();
+        packageList.insert(
+            0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
+        packageList.refresh();
+        packageData.value = packageList[0];
         showDefaultDialog(
           context: Get.context!,
           title: "Error",
@@ -532,6 +592,8 @@ class EditBookingController extends GetxController {
     selectedPackageType.value = packageTypeList[0];
     packageData.value = packageList[0];
     zoneFareApplied = 0;
+    selectedTripRadioValue.value = 0;
+    roundTripselectedTripRadioValue.value = 3;
     rslShare = 0;
     driverShare = 0;
     corporateShare = 0;
@@ -835,7 +897,11 @@ class EditBookingController extends GetxController {
                                         isValueChanged.value = true,
                                         // updateModelFareDetails(),
                                         callMotorModelApi(),
-                                        callGetCorporatePackageListApi(),
+                                        if (selectedBookingType.value.id == 3)
+                                          {
+                                            callGetCorporatePackageListApi(
+                                                true),
+                                          },
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

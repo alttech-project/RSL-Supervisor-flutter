@@ -24,7 +24,6 @@ class SaveBookingRequest {
   String? flight_number;
   String? reference_number;
   num? customer_price;
-  String? route_polyline;
   String? customer_rate;
   String? extra_charge;
   String? remarks;
@@ -39,54 +38,60 @@ class SaveBookingRequest {
   int? pickup_zone_group_id;
   int? drop_zone_id;
   int? drop_zone_group_id;
+  int? package_id;
+  int? package_type;
+  int? trip_type;
+  int? double_the_fare;
   String? supervisorId;
   String? kioskId;
   String? cid;
-  int? package_id;
-  int? package_type;
+  String? route_polyline;
 
-  SaveBookingRequest(
-      {this.approx_distance,
-      this.approx_duration,
-      this.approx_trip_fare,
-      this.drop_latitude,
-      this.drop_longitude,
-      this.dropplace,
-      this.guest_name,
-      this.guest_country_code,
-      this.guest_phone,
-      this.guest_email,
-      this.latitude,
-      this.longitude,
-      this.motor_model,
-      this.now_after,
-      this.corporate_id,
-      this.passenger_payment_option,
-      this.pickupplace,
-      this.pickup_time,
-      this.note_to_driver,
-      this.note_to_admin,
-      this.flight_number,
-      this.reference_number,
-      this.customer_price,
-      this.route_polyline,
-      this.customer_rate,
-      this.extra_charge,
-      this.remarks,
-      this.zone_fare_applied,
-      this.rsl_share,
-      this.driver_share,
-      this.corporate_share,
-      this.pickup_zone_id,
-      this.pickup_zone_group_id,
-      this.drop_zone_id,
-      this.drop_zone_group_id,
-      this.supervisorId,
-      this.kioskId,
-      this.cid,
-      this.roomNo,
-      this.package_id,
-      this.package_type});
+  SaveBookingRequest({
+    this.approx_distance,
+    this.approx_duration,
+    this.approx_trip_fare,
+    this.drop_latitude,
+    this.drop_longitude,
+    this.dropplace,
+    this.guest_name,
+    this.guest_country_code,
+    this.guest_phone,
+    this.guest_email,
+    this.latitude,
+    this.longitude,
+    this.motor_model,
+    this.now_after,
+    this.corporate_id,
+    this.passenger_payment_option,
+    this.pickupplace,
+    this.pickup_time,
+    this.note_to_driver,
+    this.note_to_admin,
+    this.flight_number,
+    this.reference_number,
+    this.customer_price,
+    this.customer_rate,
+    this.extra_charge,
+    this.remarks,
+    this.zone_fare_applied,
+    this.rsl_share,
+    this.driver_share,
+    this.corporate_share,
+    this.pickup_zone_id,
+    this.pickup_zone_group_id,
+    this.drop_zone_id,
+    this.drop_zone_group_id,
+    this.package_id,
+    this.package_type,
+    this.trip_type,
+    this.double_the_fare,
+    this.supervisorId,
+    this.kioskId,
+    this.cid,
+    this.roomNo,
+    this.route_polyline,
+  });
 
   SaveBookingRequest.fromJson(Map<String, dynamic> json) {
     approx_distance = json['approx_distance'];
@@ -123,13 +128,15 @@ class SaveBookingRequest {
     pickup_zone_group_id = json['pickup_zone_group_id'];
     drop_zone_id = json['drop_zone_id'];
     drop_zone_group_id = json['drop_zone_group_id'];
+    package_id = json['package_id'];
+    package_type = json['package_type'];
+    trip_type = json['trip_type'];
+    double_the_fare = json['double_the_fare'];
     supervisorId = json['supervisor_id'];
     kioskId = json['kiosk_id'];
     cid = json['company_id'];
-    route_polyline = json['route_polyline'];
     roomNo = json['room_number'];
-    package_id = json['package_id'];
-    package_type = json['package_type'];
+    route_polyline = json['route_polyline'];
   }
 
   Map<String, dynamic> toJson() {
@@ -168,13 +175,15 @@ class SaveBookingRequest {
     data['pickup_zone_group_id'] = pickup_zone_group_id;
     data['drop_zone_id'] = drop_zone_id;
     data['drop_zone_group_id'] = drop_zone_group_id;
+    data['package_id'] = package_id;
+    data['package_type'] = package_type;
+    data['trip_type'] = trip_type;
+    data['double_the_fare'] = double_the_fare;
     data['supervisor_id'] = supervisorId;
     data['kiosk_id'] = kioskId;
     data['company_id'] = cid;
-    data['route_polyline'] = route_polyline;
     data['room_number'] = roomNo;
-    data['package_id'] = package_id;
-    data['package_type'] = package_type;
+    data['route_polyline'] = route_polyline;
     return data;
   }
 }

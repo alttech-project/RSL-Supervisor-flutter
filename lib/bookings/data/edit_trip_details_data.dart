@@ -45,6 +45,8 @@ class EditCorporateBookingRequestData {
   int? now_after;
   int? package_id;
   int? package_type;
+  int? trip_type;
+  int? double_the_fare;
   String? route_polyline;
 
   EditCorporateBookingRequestData(
@@ -88,6 +90,8 @@ class EditCorporateBookingRequestData {
       this.customer_rate,
       this.package_id,
       this.package_type,
+      this.trip_type,
+      this.double_the_fare,
       this.route_polyline});
 
   EditCorporateBookingRequestData.fromJson(Map<String, dynamic> json) {
@@ -131,6 +135,8 @@ class EditCorporateBookingRequestData {
     customer_rate = json['customer_rate'];
     package_id = json['package_id'];
     package_type = json['package_type'];
+    trip_type = json['trip_type'];
+    double_the_fare = json['double_the_fare'];
     route_polyline = json['route_polyline'];
   }
 
@@ -175,6 +181,8 @@ class EditCorporateBookingRequestData {
     data['now_after'] = now_after;
     data['package_id'] = package_id;
     data['package_type'] = package_type;
+    data['trip_type'] = trip_type;
+    data['double_the_fare'] = double_the_fare;
     data['route_polyline'] = route_polyline;
     data['room_number'] = roomNo;
     return data;

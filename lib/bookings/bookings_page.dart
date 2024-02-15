@@ -148,10 +148,10 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 10.h),
         _tripTypeRadioWidget(),
         SizedBox(height: 10.h),
-        controller.selectedTripRadioValue.value == 2
+        /*controller.selectedTripRadioValue.value == 2
             ? _roundtripTypeRadioWidget()
-            : SizedBox(),
-        SizedBox(height: 10.h),
+            : const SizedBox.shrink(),
+        SizedBox(height: 10.h),*/
         _carModelInfo(),
         SizedBox(height: 10.h),
         _bookingTypeInfo(),
@@ -244,124 +244,141 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _tripTypeRadioWidget() {
-    return Obx(() => Card(
-      elevation: 8,
-      margin: const EdgeInsets.symmetric(vertical: 10), // Adjust vertical margin
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      color: AppColors.kPrimaryTransparentColor.value,
-      child: Padding(
-        padding: const EdgeInsets.all(16), // Add padding for the content inside the card
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Obx(
+      () => Card(
+        elevation: 8,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kPrimaryTransparentColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 8,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Trip Type',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.medium.value,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Add some space between label and radio buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Radio(
+                    activeColor: Colors.white /*AppColors.kPrimaryColor.value*/,
+                    value: 1,
+                    groupValue: controller.selectedTripRadioValue.value,
+                    onChanged: (value) {
+                      controller.tripTypeSelectedRadio(value!);
+                    },
+                    fillColor: MaterialStateColor.resolveWith((states) =>
+                        Colors.white /*AppColors.kPrimaryColor.value*/),
+                  ),
+                  Text(
+                    'Normal',
+                    style: AppFontStyle.subHeading(
+                      size: AppFontSize.small.value,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Radio(
+                    activeColor: Colors.white,
+                    value: 2,
+                    groupValue: controller.selectedTripRadioValue.value,
+                    onChanged: (int? value) {
+                      controller.tripTypeSelectedRadio(value);
+                    },
+                    fillColor: MaterialStateColor.resolveWith((states) =>
+                        Colors.white /*AppColors.kPrimaryColor.value*/),
+                  ),
+                  Text(
+                    'Round Trip',
+                    style: AppFontStyle.subHeading(
+                      size: AppFontSize.small.value,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
 
-          children: <Widget>[
-            Text(
-              'Trip Type',
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold,color:AppColors.kPrimaryColor.value),
-            ),
-            SizedBox(height: 10), // Add some space between label and radio buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Radio(
-                  activeColor: AppColors.kPrimaryColor.value,
-                  value: 1,
-                  groupValue: controller.selectedTripRadioValue.value,
-                  onChanged: (value) {
-                    print("value${value}");
-                    controller.tripTypeSelectedRadio(value!);
-                  },
-                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
-                ),
-                Text(
-                  'Normal',
-                  style: TextStyle(fontSize: 16.sp, color: AppColors.kPrimaryColor.value),
-                ),
-                Radio(
-                  activeColor: AppColors.kPrimaryColor.value,
-                  value: 2,
-                  groupValue: controller.selectedTripRadioValue.value,
-                  onChanged: (int? value) {
-                    print("value${value}");
-                    controller.tripTypeSelectedRadio(value);
-                  },
-                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
-                ),
-                Text(
-                  'Round Trip',
-                  style: TextStyle(fontSize: 16.sp, color: AppColors.kPrimaryColor.value),
-                ),
-              ],
-            ),
-          ],
+              controller.selectedTripRadioValue.value == 2
+                  ? _roundtripTypeRadioWidget()
+                  : const SizedBox.shrink(),
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 
   Widget _roundtripTypeRadioWidget() {
-    return Card(
-      elevation: 8,
-      margin: const EdgeInsets.symmetric(vertical: 10), // Adjust vertical margin
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      color: AppColors.kPrimaryTransparentColor.value,
-      child: Padding(
-        padding: const EdgeInsets.all(16), // Add padding for the content inside the card
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Round Trip Fare', // Add your label here
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold,color: AppColors.kPrimaryColor.value),
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Round Trip Fare', // Add your label here
+            style: AppFontStyle.subHeading(
+              size: AppFontSize.medium.value,
+              color: AppColors.kPrimaryColor.value,
             ),
-            SizedBox(height: 10), // Add some space between label and radio buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Radio(
-                  value: 1,
-                  groupValue: controller.roundTripselectedTripRadioValue.value,
-                  onChanged: (value) {
-                    controller.roundedSelectedRadio(value!);
-                  },
-                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
-
+          ),
+          const SizedBox(height: 10),
+          // Add some space between label and radio buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Radio(
+                value: 0,
+                groupValue: controller.roundTripselectedTripRadioValue.value,
+                onChanged: (value) {
+                  controller.roundedSelectedRadio(value!);
+                },
+                fillColor:
+                    MaterialStateColor.resolveWith((states) => Colors.white),
+              ),
+              Text(
+                'Single',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.small.value,
+                  color: Colors.white,
                 ),
-                Text(
-                  'Single',
-                  style: TextStyle(fontSize: 16.sp,color: AppColors.kPrimaryColor.value),
+              ),
+              const SizedBox(width: 12),
+              Radio(
+                value: 1,
+                groupValue: controller.roundTripselectedTripRadioValue.value,
+                onChanged: (value) {
+                  controller.roundedSelectedRadio(value!);
+                },
+                fillColor:
+                    MaterialStateColor.resolveWith((states) => Colors.white),
+              ),
+              Text(
+                'Double',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.small.value,
+                  color: Colors.white,
                 ),
-                Radio(
-                  value: 2,
-                  groupValue: controller.roundTripselectedTripRadioValue.value,
-                  onChanged: (value) {
-                    controller.roundedSelectedRadio(value!);
-                  },
-                  fillColor: MaterialStateColor.resolveWith((states) => AppColors.kPrimaryColor.value),
-
-                ),
-                Text(
-                  'Double',
-                  style: TextStyle(fontSize: 16.sp,color: AppColors.kPrimaryColor.value),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
-
-
-
-
-
-
 
   Widget _carModelInfo() {
     return Card(
@@ -1323,6 +1340,7 @@ class BookingsPage extends GetView<BookingsController> {
                   selectedOption: controller.selectedPackageType.value,
                   onTap: (value) {
                     controller.selectedPackageType.value = value;
+                    controller.callGetCorporatePackageListApi(true);
                   },
                 ),
               ),
@@ -1503,15 +1521,25 @@ class BookingsPage extends GetView<BookingsController> {
             value: value,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 0.w),
-              child: Text(
-                value.name.toString(),
-                style: GoogleFonts.outfit(
-                  textStyle: TextStyle(
-                      fontSize: AppFontSize.verySmall.value,
-                      fontWeight: AppFontWeight.normal.value,
-                      color: Colors.white),
-                ),
-              ),
+              child: value.id == 001
+                  ? Text(
+                      value.typeLabel.toString(),
+                      style: GoogleFonts.outfit(
+                        textStyle: TextStyle(
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.normal.value,
+                            color: Colors.white),
+                      ),
+                    )
+                  : Text(
+                      "${value.duration.toString()}${value.typeLabel.toString()}-${value.km.toString()}KM-${value.amount.toString()}${value.currency.toString()}",
+                      style: GoogleFonts.outfit(
+                        textStyle: TextStyle(
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.normal.value,
+                            color: Colors.white),
+                      ),
+                    ),
             ),
           );
         }).toList(),

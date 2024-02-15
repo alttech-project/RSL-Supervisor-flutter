@@ -27,21 +27,18 @@ class CorporatePackageListApiResponse {
   int? httpCode;
   int? status;
   String? message;
-  List<CorporatePackageList>? packageList;
+  PackageDetails? packageDetails;
 
   CorporatePackageListApiResponse(
-      {this.httpCode, this.status, this.message, this.packageList});
+      {this.httpCode, this.status, this.message, this.packageDetails});
 
   CorporatePackageListApiResponse.fromJson(Map<String, dynamic> json) {
     httpCode = json['httpCode'];
     status = json['status'];
     message = json['message'];
-    if (json['responseData'] != null) {
-      packageList = <CorporatePackageList>[];
-      json['responseData'].forEach((v) {
-        packageList!.add(CorporatePackageList.fromJson(v));
-      });
-    }
+    packageDetails = json['details'] != null
+        ? PackageDetails.fromJson(json['details'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -49,8 +46,31 @@ class CorporatePackageListApiResponse {
     data['httpCode'] = httpCode;
     data['status'] = status;
     data['message'] = message;
+    if (packageDetails != null) {
+      data['details'] = packageDetails!.toJson();
+    }
+    return data;
+  }
+}
+
+class PackageDetails {
+  List<CorporatePackageList>? packageList;
+
+  PackageDetails({this.packageList});
+
+  PackageDetails.fromJson(Map<String, dynamic> json) {
+    if (json['packageList'] != null) {
+      packageList = <CorporatePackageList>[];
+      json['packageList'].forEach((v) {
+        packageList!.add(CorporatePackageList.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (packageList != null) {
-      data['responseData'] = packageList!.map((v) => v.toJson()).toList();
+      data['packageList'] = packageList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,19 +78,42 @@ class CorporatePackageListApiResponse {
 
 class CorporatePackageList {
   int? id;
-  String? name;
+  num? amount;
+  num? km;
+  num? duration;
+  int? type;
+  String? currency;
+  String? typeLabel;
 
-  CorporatePackageList({this.id, this.name});
+  CorporatePackageList(
+      {this.id,
+      this.amount,
+      this.km,
+      this.duration,
+      this.type,
+      this.currency,
+      this.typeLabel});
 
   CorporatePackageList.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    id = json['id'];
+    id = json['_id'];
+    amount = json['amount'];
+    km = json['km'];
+    duration = json['duration'];
+    type = json['type'];
+    currency = json['currency'];
+    typeLabel = json['typeLabel'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['id'] = id;
+    data['_id'] = id;
+    data['amount'] = amount;
+    data['km'] = km;
+    data['duration'] = duration;
+    data['type'] = type;
+    data['currency'] = currency;
+    data['typeLabel'] = typeLabel;
+
     return data;
   }
 }

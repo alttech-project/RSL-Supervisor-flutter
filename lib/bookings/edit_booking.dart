@@ -102,34 +102,43 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget newBookingsTab(context) {
-    return Column(
-      children: [
-        _personalInfo(context),
-        SizedBox(height: 10.h),
-        _locationInfo(context),
-        SizedBox(height: 10.h),
-        _carModelInfo(),
-        SizedBox(height: 10.h),
-        _bookingTypeInfo(),
-        SizedBox(height: 10.h),
-        _customPricingInfo(context),
-        SizedBox(height: 10.h),
-        _additionalElementsInfo(context),
-        SizedBox(height: 24.h),
-        Obx(
-          () => CustomButton(
-            width: double.maxFinite,
-            linearColor: primaryButtonLinearColor,
-            height: 38.h,
-            borderRadius: 38.h / 2,
-            isLoader: controller.saveBookingApiLoading.value,
-            style: AppFontStyle.body(color: Colors.white),
-            text: 'Update',
-            onTap: () => controller.checkNewBookingValidation(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
+          _personalInfo(context),
+          SizedBox(height: 10.h),
+          _locationInfo(context),
+          SizedBox(height: 10.h),
+          _tripTypeRadioWidget(),
+          SizedBox(height: 10.h),
+          /* controller.selectedTripRadioValue.value == 2
+            ? _roundtripTypeRadioWidget()
+            : const SizedBox.shrink(),
+        SizedBox(height: 10.h),*/
+          _carModelInfo(),
+          SizedBox(height: 10.h),
+          _bookingTypeInfo(),
+          SizedBox(height: 10.h),
+          _customPricingInfo(context),
+          SizedBox(height: 10.h),
+          _additionalElementsInfo(context),
+          SizedBox(height: 24.h),
+          Obx(
+            () => CustomButton(
+              width: double.maxFinite,
+              linearColor: primaryButtonLinearColor,
+              height: 38.h,
+              borderRadius: 38.h / 2,
+              isLoader: controller.saveBookingApiLoading.value,
+              style: AppFontStyle.body(color: Colors.white),
+              text: 'Update',
+              onTap: () => controller.checkNewBookingValidation(),
+            ),
           ),
-        ),
-        SizedBox(height: 20.h),
-      ],
+          SizedBox(height: 20.h),
+        ],
+      ),
     );
   }
 
@@ -196,6 +205,143 @@ class EditBooking extends GetView<EditBookingController> {
             },
           ),*/
         ]),
+      ),
+    );
+  }
+
+  Widget _tripTypeRadioWidget() {
+    return Obx(
+      () => Card(
+        elevation: 8,
+        margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12,
+          ),
+        ),
+        color: AppColors.kPrimaryTransparentColor.value,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 8,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Trip Type',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.medium.value,
+                  color: AppColors.kPrimaryColor.value,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Add some space between label and radio buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Radio(
+                    activeColor: Colors.white /*AppColors.kPrimaryColor.value*/,
+                    value: 1,
+                    groupValue: controller.selectedTripRadioValue.value,
+                    onChanged: (value) {
+                      controller.tripTypeSelectedRadio(value!);
+                    },
+                    fillColor: MaterialStateColor.resolveWith((states) =>
+                        Colors.white /*AppColors.kPrimaryColor.value*/),
+                  ),
+                  Text(
+                    'Normal',
+                    style: AppFontStyle.subHeading(
+                      size: AppFontSize.small.value,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Radio(
+                    activeColor: Colors.white,
+                    value: 2,
+                    groupValue: controller.selectedTripRadioValue.value,
+                    onChanged: (int? value) {
+                      controller.tripTypeSelectedRadio(value);
+                    },
+                    fillColor: MaterialStateColor.resolveWith((states) =>
+                        Colors.white /*AppColors.kPrimaryColor.value*/),
+                  ),
+                  Text(
+                    'Round Trip',
+                    style: AppFontStyle.subHeading(
+                      size: AppFontSize.small.value,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+
+              controller.selectedTripRadioValue.value == 2
+                  ? _roundtripTypeRadioWidget()
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _roundtripTypeRadioWidget() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Round Trip Fare', // Add your label here
+            style: AppFontStyle.subHeading(
+              size: AppFontSize.medium.value,
+              color: AppColors.kPrimaryColor.value,
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Add some space between label and radio buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Radio(
+                value: 0,
+                groupValue: controller.roundTripselectedTripRadioValue.value,
+                onChanged: (value) {
+                  controller.roundedSelectedRadio(value!);
+                },
+                fillColor:
+                    MaterialStateColor.resolveWith((states) => Colors.white),
+              ),
+              Text(
+                'Single',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.small.value,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Radio(
+                value: 1,
+                groupValue: controller.roundTripselectedTripRadioValue.value,
+                onChanged: (value) {
+                  controller.roundedSelectedRadio(value!);
+                },
+                fillColor:
+                    MaterialStateColor.resolveWith((states) => Colors.white),
+              ),
+              Text(
+                'Double',
+                style: AppFontStyle.subHeading(
+                  size: AppFontSize.small.value,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -1108,19 +1254,19 @@ class EditBooking extends GetView<EditBookingController> {
   Widget _layoutPackageInfo() {
     return Obx(() => controller.selectedBookingType.value.id == 3
         ? Padding(
-      padding: const EdgeInsets.only(
-          top: 15,
-          bottom: 0,
-          left: 0,
-          right: 0), // Adjust left and right padding
-      child: Row(children: [
-        _layoutPackageType(),
-        const SizedBox(
-          width: 20,
-        ),
-        _layoutPackage()
-      ]),
-    )
+            padding: const EdgeInsets.only(
+                top: 15,
+                bottom: 0,
+                left: 0,
+                right: 0), // Adjust left and right padding
+            child: Row(children: [
+              _layoutPackageType(),
+              const SizedBox(
+                width: 20,
+              ),
+              _layoutPackage()
+            ]),
+          )
         : const SizedBox.shrink());
   }
 
@@ -1215,6 +1361,7 @@ class EditBooking extends GetView<EditBookingController> {
                   selectedOption: controller.selectedPackageType.value,
                   onTap: (value) {
                     controller.selectedPackageType.value = value;
+                    controller.callGetCorporatePackageListApi(false);
                   },
                 ),
               ),
@@ -1262,7 +1409,7 @@ class EditBooking extends GetView<EditBookingController> {
 
   Widget _bookingTypeDropDown(
       {required TripType? selectedOption,
-        required Function(TripType value) onTap}) {
+      required Function(TripType value) onTap}) {
     return SizedBox(
       child: DropdownButton<TripType>(
         value: selectedOption,
@@ -1286,7 +1433,7 @@ class EditBooking extends GetView<EditBookingController> {
           onTap(newValue!);
         },
         items:
-        bookingTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
+            bookingTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
           return DropdownMenuItem<TripType>(
             onTap: () {
               onTap(value);
@@ -1312,7 +1459,7 @@ class EditBooking extends GetView<EditBookingController> {
 
   Widget _packageTypeDropDown(
       {required TripType? selectedOption,
-        required Function(TripType value) onTap}) {
+      required Function(TripType value) onTap}) {
     return SizedBox(
       child: DropdownButton<TripType>(
         value: selectedOption,
@@ -1336,7 +1483,7 @@ class EditBooking extends GetView<EditBookingController> {
           onTap(newValue!);
         },
         items:
-        packageTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
+            packageTypeList.map<DropdownMenuItem<TripType>>((TripType value) {
           return DropdownMenuItem<TripType>(
             onTap: () {
               onTap(value);
@@ -1362,7 +1509,7 @@ class EditBooking extends GetView<EditBookingController> {
 
   Widget _packageDropDown(
       {required CorporatePackageList? selectedOption,
-        required Function(CorporatePackageList value) onTap}) {
+      required Function(CorporatePackageList value) onTap}) {
     return SizedBox(
       child: DropdownButton<CorporatePackageList>(
         value: selectedOption,
@@ -1388,29 +1535,38 @@ class EditBooking extends GetView<EditBookingController> {
         items: controller.packageList
             .map<DropdownMenuItem<CorporatePackageList>>(
                 (CorporatePackageList value) {
-              return DropdownMenuItem<CorporatePackageList>(
-                onTap: () {
-                  onTap(value);
-                },
-                value: value,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.w),
-                  child: Text(
-                    value.name.toString(),
-                    style: GoogleFonts.outfit(
-                      textStyle: TextStyle(
-                          fontSize: AppFontSize.verySmall.value,
-                          fontWeight: AppFontWeight.normal.value,
-                          color: Colors.white),
+          return DropdownMenuItem<CorporatePackageList>(
+            onTap: () {
+              onTap(value);
+            },
+            value: value,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              child: value.id == 001
+                  ? Text(
+                      value.typeLabel.toString(),
+                      style: GoogleFonts.outfit(
+                        textStyle: TextStyle(
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.normal.value,
+                            color: Colors.white),
+                      ),
+                    )
+                  : Text(
+                      "${value.duration.toString()}${value.typeLabel.toString()}-${value.km.toString()}KM-${value.amount.toString()}${value.currency.toString()}",
+                      style: GoogleFonts.outfit(
+                        textStyle: TextStyle(
+                            fontSize: AppFontSize.verySmall.value,
+                            fontWeight: AppFontWeight.normal.value,
+                            color: Colors.white),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            }).toList(),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
-
 
   Future _selectDateTime(BuildContext context) async {
     final date = await _selectDate(context);

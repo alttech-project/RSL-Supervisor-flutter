@@ -24,6 +24,8 @@ import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../../widgets/app_loader.dart';
 import '../../widgets/custom_button.dart';
+import '../data/all_car_makes_data.dart';
+import '../data/get_car_make_fare_data.dart';
 import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
@@ -68,8 +70,9 @@ class BookingsController extends GetxController
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
   double dropLatitude = 0.0, dropLongitude = 0.0;
 
-  var taxiModel = 'SEDAN'.obs;
-  var taxiId = '1'.obs;
+  var taxiModel = ''.obs;
+  var taxiId = ''.obs;
+  var carMakeId = ''.obs;
 
   Rx<Payments> selectedPayment = paymentList[0].obs;
 
@@ -79,7 +82,7 @@ class BookingsController extends GetxController
   // RxBool showPaymentOption = false.obs;
   // final selectedRadio = 1.obs;
   int selectedCarIndex = 0;
-  RxList<FareDetailList> carModelList = <FareDetailList>[].obs;
+  RxList<CarMakeList> carModelList = <CarMakeList>[].obs;
 
   List<FareDetailList> motorModelList = <FareDetailList>[];
 
@@ -114,7 +117,6 @@ class BookingsController extends GetxController
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
     getDate();
-    callGetCorporatePackageListApi(false);
     _getUserInfo();
   }
 
@@ -127,8 +129,18 @@ class BookingsController extends GetxController
   }
 
   void clearAllData() {
-    taxiModel.value = "SEDAN";
+    if (carModelList.isNotEmpty) {
+      taxiModel.value = carModelList[0].car_make_name.toString();
+      taxiId.value = carModelList[0].model_id.toString();
+      carMakeId.value = carModelList[0].car_make_id.toString();
+    } else {
+      taxiModel.value = "";
+      taxiId.value = "";
+      carMakeId.value = "";
+    }
+    /*taxiModel.value = "SEDAN";
     taxiId.value = "1";
+    carMakeId.value = "1";*/
     selectedPayment.value = paymentList[0];
     countryCode.value = "971";
     nameController.clear();
@@ -272,6 +284,8 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Enter a valid drop location!');
       } else if (date.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select date!');
+      } else if (taxiId.isEmpty || carMakeId.isEmpty) {
+        _showSnackBar('Validation!', 'Kindly select car model!');
       } else if (selectedBookingType.value.id == 3 &&
           (packageData.value.id == null || packageData.value.id == 001)) {
         _showSnackBar('Validation!', 'Kindly select package!');
@@ -342,6 +356,20 @@ class BookingsController extends GetxController
       fareType = 0;
     }
 
+    int? taxi = 0;
+    if (taxiId.value.isNotEmpty) {
+      taxi = int.parse(taxiId.value);
+    } else {
+      taxi = 0;
+    }
+
+    int? carMake = 0;
+    if (carMakeId.value.isNotEmpty) {
+      carMake = int.parse(carMakeId.value);
+    } else {
+      carMake = 0;
+    }
+
     saveBookingApi(SaveBookingRequest(
             approx_distance: "${approximateDistance.value.toString()} km",
             approx_duration: "${approximateTime.value.toString()} mins",
@@ -355,7 +383,8 @@ class BookingsController extends GetxController
             guest_email: email,
             latitude: pickupLatitude,
             longitude: pickupLongitude,
-            motor_model: int.parse(taxiId.value),
+            motor_model: taxi,
+            car_make_id: carMake,
             now_after: selectedBookingType.value.id,
             corporate_id: int.parse(corporateId ?? "0"),
             passenger_payment_option:
@@ -419,52 +448,18 @@ class BookingsController extends GetxController
     });
   }
 
-  void callMotorModelApi() async {
-    if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
-      apiLoading.value = true;
-      var corporateId = await GetStorageController().getCorporateId();
-      supervisorInfo = await GetStorageController().getSupervisorInfo();
-      motorDetailsApi(MotorDetailsRequest(
-              supervisorId: supervisorInfo?.supervisorId ?? "",
-              kioskId: supervisorInfo?.kioskId ?? "",
-              corporateId: corporateId,
-              cid: supervisorInfo?.cid ?? "",
-              pickup_latitude: pickupLatitude,
-              pickup_longitude: pickupLongitude,
-              drop_latitude: dropLatitude,
-              drop_longitude: dropLongitude,
-              distance: approximateDistance.value))
-          .then((response) {
-        apiLoading.value = false;
-        if ((response.status ?? 0) == 1) {
-          motorModelList = response.fareDetailList ?? [];
-          updateModelFareDetails();
-        }
-      }).onError((error, stackTrace) {
-        apiLoading.value = false;
-        printLogs("CarModel api error: ${error.toString()}");
-      });
-    }
-  }
-
-  void callCarModelApi(SupervisorInfo? supervisorInfo) async {
-    var corporateId = await GetStorageController().getCorporateId();
-    supervisorInfo = await GetStorageController().getSupervisorInfo();
-    motorDetailsApi(MotorDetailsRequest(
-            supervisorId: supervisorInfo.supervisorId ?? "",
-            kioskId: supervisorInfo.kioskId ?? "",
-            corporateId: corporateId,
-            cid: supervisorInfo.cid ?? "",
-            pickup_latitude: pickupLatitude,
-            pickup_longitude: pickupLongitude,
-            drop_latitude: dropLatitude,
-            drop_longitude: dropLongitude,
-            distance: approximateDistance.value))
-        .then((response) {
+  void callCarMakeListApi(SupervisorInfo? supervisorInfo) async {
+    allCarMakesApi().then((response) {
       // apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
-        carModelList.value = response.fareDetailList ?? [];
+        carModelList.value = response.carMakeDetails?.carMakeList ?? [];
         carModelList.refresh();
+        if (carModelList.isNotEmpty) {
+          taxiModel.value = carModelList[0].car_make_name.toString();
+          taxiId.value = carModelList[0].model_id.toString();
+          carMakeId.value = carModelList[0].car_make_id.toString();
+        }
+        callGetCorporatePackageListApi(false);
       } else {
         carModelList.value = [];
         carModelList.refresh();
@@ -475,59 +470,60 @@ class BookingsController extends GetxController
       carModelList.value = [];
       carModelList.refresh();
     });
-
-    /*carModelApi(CarModelTypeRequestData(
-      kioskId: supervisorInfo?.kioskId ?? "",
-      supervisorId: supervisorInfo?.supervisorId ?? "",
-      dropLatitude: "",
-      dropLongitude: "",
-      cid: supervisorInfo?.cid ?? "",
-      deviceToken: await GetStorageController().getDeviceToken(),
-    )).then((response) {
-      // apiLoading.value = false;
-      if ((response.status ?? 0) == 1) {
-        carModelList.value = response.carmodelList ?? [];
-        carModelList.refresh();
-      } else {
-        carModelList.value = [];
-        carModelList.refresh();
-      }
-    }).onError((error, stackTrace) {
-      // apiLoading.value = false;
-      printLogs("CarModel api error: ${error.toString()}");
-      carModelList.value = [];
-      carModelList.refresh();
-    });*/
   }
 
-  void updateModelFareDetails() {
-    if (motorModelList.isNotEmpty) {
-      for (var model in motorModelList) {
-        if (taxiId.value.toString() == model.modelId.toString()) {
-          approximateFare.value = model.fare?.toString() ?? "0";
-          zoneFareApplied = model.zoneFareApplied ?? 0;
-
-          if (zoneFareApplied == 1) {
-            rslShare = model.rslShare ?? 0;
-            driverShare = model.driverShare ?? 0;
-            corporateShare = model.corporateShare ?? 0;
-            pickupZoneId = model.pickupZoneId ?? 0;
-            pickupZoneGroupId = model.pickupZoneGroupId ?? 0;
-            dropZoneId = model.dropZoneId ?? 0;
-            dropZoneGroupId = model.dropZoneGroupId ?? 0;
-            priceController.text = model.fare?.toString() ?? "";
-          } else {
-            rslShare = 0;
-            driverShare = 0;
-            corporateShare = 0;
-            pickupZoneId = 0;
-            pickupZoneGroupId = 0;
-            dropZoneId = 0;
-            dropZoneGroupId = 0;
-            priceController.clear();
-          }
+  void carMakeFareApi() async {
+    if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
+      apiLoading.value = true;
+      var corporateId = await GetStorageController().getCorporateId();
+      supervisorInfo = await GetStorageController().getSupervisorInfo();
+      getCarMakeFareApi(CarMakeFareRequest(
+              supervisorId: supervisorInfo?.supervisorId ?? "",
+              kioskId: supervisorInfo?.kioskId ?? "",
+              corporateId: corporateId,
+              cid: supervisorInfo?.cid ?? "",
+              pickup_latitude: pickupLatitude,
+              pickup_longitude: pickupLongitude,
+              drop_latitude: dropLatitude,
+              drop_longitude: dropLongitude,
+              distance: approximateDistance.value,
+              modelId: taxiId.value.toString(),
+              carMakeId: carMakeId.value.toString()))
+          .then((response) {
+        apiLoading.value = false;
+        if ((response.status ?? 0) == 1) {
+          // motorModelList = response.fareDetailList ?? [];
+          updateModelFareDetails(response.carMakeDetails?.carMakeFareDetails);
         }
-      }
+      }).onError((error, stackTrace) {
+        apiLoading.value = false;
+        printLogs("CarModel api error: ${error.toString()}");
+      });
+    }
+  }
+
+  void updateModelFareDetails(CarMakeFareDetails? carMakeFareDetails) {
+    approximateFare.value = carMakeFareDetails?.fare?.toString() ?? "0";
+    zoneFareApplied = carMakeFareDetails?.zoneFareApplied ?? 0;
+
+    if (zoneFareApplied == 1) {
+      rslShare = carMakeFareDetails?.rslShare ?? 0;
+      driverShare = carMakeFareDetails?.driverShare ?? 0;
+      corporateShare = carMakeFareDetails?.corporateShare ?? 0;
+      pickupZoneId = carMakeFareDetails?.pickupZoneId ?? 0;
+      pickupZoneGroupId = carMakeFareDetails?.pickupZoneGroupId ?? 0;
+      dropZoneId = carMakeFareDetails?.dropZoneId ?? 0;
+      dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
+      priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+    } else {
+      rslShare = 0;
+      driverShare = 0;
+      corporateShare = 0;
+      pickupZoneId = 0;
+      pickupZoneGroupId = 0;
+      dropZoneId = 0;
+      dropZoneGroupId = 0;
+      priceController.clear();
     }
   }
 
@@ -582,7 +578,7 @@ class BookingsController extends GetxController
           approximateTime.value = doubleWithTwoDigits((time / 60));
           approximateTrafficTime.value = doubleWithTwoDigits(trafficTime / 60);
           approximateDistance.value = doubleWithTwoDigits(distance / 1000);
-          callMotorModelApi();
+          carMakeFareApi();
           print(
               "POLYLINE  Time:${approximateTime.value} Distance:${approximateDistance.value} RoutePolyline:${overViewPoly.toString()}");
         }
@@ -617,7 +613,7 @@ class BookingsController extends GetxController
       return;
     }
 
-    callCarModelApi(supervisorInfo);
+    callCarMakeListApi(supervisorInfo);
 
     if (pickupLatitude == 0.0 && pickupLongitude == 0.0) {
       LocationResult<Position> result =
@@ -671,22 +667,25 @@ class BookingsController extends GetxController
   }
 
   void showCustomDialog(BuildContext context) {
-    final List<dynamic> staticImageUrls = [
+/*    final List<dynamic> staticImageUrls = [
       {'model_id': 1, 'image': "assets/dashboard_page/sedan.png"},
       {'model_id': 10, 'image': "assets/dashboard_page/xl.png"},
       {'model_id': 23, 'image': "assets/dashboard_page/vip.png"},
       {'model_id': 19, 'image': "assets/dashboard_page/vip_plus.png"},
-    ];
+    ];*/
     final List<Car> cars = [];
     for (final carModel in carModelList) {
+      /*
       final imageUrl = staticImageUrls.firstWhere(
-          (element) => element['model_id'] == carModel.modelId,
+          (element) => element['model_id'] == carModel.model_id,
           orElse: () => {'image': "assets/dashboard_page/tesla.png"})['image'];
-
+     */
       final car = Car(
-          name: carModel.modelName ?? "",
-          imageUrl: carModel.beforeSelect ?? "",
-          modelId: carModel.modelId?.toString() ?? "");
+        name: carModel.car_make_name ?? "",
+        imageUrl: carModel.beforeSelect ?? "",
+        modelId: carModel.model_id?.toString() ?? "",
+        carMakeId: carModel.car_make_id?.toString() ?? "",
+      );
       cars.add(car);
     }
 
@@ -838,7 +837,9 @@ class BookingsController extends GetxController
                                               cars[selectedCarIndex].name,
                                           taxiId.value =
                                               cars[selectedCarIndex].modelId,
-                                          updateModelFareDetails(),
+                                          carMakeId.value =
+                                              cars[selectedCarIndex].carMakeId,
+                                          carMakeFareApi(),
                                           if (selectedBookingType.value.id == 3)
                                             {
                                               callGetCorporatePackageListApi(

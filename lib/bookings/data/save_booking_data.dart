@@ -14,6 +14,7 @@ class SaveBookingRequest {
   double? latitude;
   double? longitude;
   int? motor_model;
+  int? car_make_id;
   int? now_after;
   int? corporate_id;
   int? passenger_payment_option;
@@ -61,6 +62,7 @@ class SaveBookingRequest {
     this.latitude,
     this.longitude,
     this.motor_model,
+    this.car_make_id,
     this.now_after,
     this.corporate_id,
     this.passenger_payment_option,
@@ -107,6 +109,7 @@ class SaveBookingRequest {
     latitude = json['latitude'];
     longitude = json['longitude'];
     motor_model = json['motor_model'];
+    car_make_id = json['car_make_id'];
     now_after = json['now_after'];
     corporate_id = json['corporate_id'];
     corporate_share = json['corporate_share'];
@@ -154,6 +157,7 @@ class SaveBookingRequest {
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     data['motor_model'] = motor_model;
+    data['car_make_id'] = car_make_id;
     data['now_after'] = now_after;
     data['corporate_id'] = corporate_id;
     data['corporate_share'] = corporate_share;

@@ -146,16 +146,18 @@ class BookingsPage extends GetView<BookingsController> {
         SizedBox(height: 10.h),
         _locationInfo(context),
         SizedBox(height: 10.h),
-        /*controller.selectedTripRadioValue.value == 2
-            ? _roundtripTypeRadioWidget()
-            : const SizedBox.shrink(),
-        SizedBox(height: 10.h),*/
         _carModelInfo(),
         SizedBox(height: 10.h),
         _bookingTypeInfo(),
         SizedBox(height: 10.h),
-        _tripTypeRadioWidget(),
-        SizedBox(height: 10.h),
+        controller.selectedBookingType.value.id == 1
+            ? Column(
+                children: [
+                  _tripTypeRadioWidget(),
+                  SizedBox(height: 10.h),
+                ],
+              )
+            : const SizedBox.shrink(),
         _customPricingInfo(context),
         SizedBox(height: 10.h),
         _additionalElementsInfo(context),

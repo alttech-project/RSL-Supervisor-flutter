@@ -58,6 +58,7 @@ class PassengerDetails {
   String? drop_notes;
   String? passenger_payment_option;
   MotorModelInfo? motor_model_info;
+  CarMakeInfo? car_make_info;
   num? customer_price;
   String? note_to_driver;
   String? note_to_admin;
@@ -102,6 +103,7 @@ class PassengerDetails {
     this.drop_notes,
     this.passenger_payment_option,
     this.motor_model_info,
+    this.car_make_info,
     this.customer_price,
     this.note_to_driver,
     this.note_to_admin,
@@ -149,6 +151,9 @@ class PassengerDetails {
     motor_model_info = json['motor_model_info'] != null
         ? MotorModelInfo.fromJson(json['motor_model_info'])
         : null;
+    car_make_info = json['car_make_info'] != null
+        ? CarMakeInfo.fromJson(json['car_make_info'])
+        : null;
     customer_price = json['customer_price'];
     note_to_driver = json['note_to_driver'];
     note_to_admin = json['note_to_admin'];
@@ -176,8 +181,8 @@ class PassengerDetails {
     now_after = json['now_after'];
     package_id = json['package_id'];
     package_type = json['package_type'];
-    trip_type = json['trip_type'];
-    double_the_fare = json['double_the_fare'];
+    trip_type = json['mobile_trip_type'];
+    double_the_fare = json['mobile_double_the_fare'];
     route_polyline = json['route_polyline'];
   }
 
@@ -196,6 +201,9 @@ class PassengerDetails {
     data['passenger_payment_option'] = passenger_payment_option;
     if (motor_model_info != null) {
       data['motor_model_info'] = motor_model_info!.toJson();
+    }
+    if (car_make_info != null) {
+      data['car_make_info'] = car_make_info!.toJson();
     }
     data['customer_price'] = customer_price;
     data['note_to_driver'] = note_to_driver;
@@ -224,8 +232,8 @@ class PassengerDetails {
     data['now_after'] = now_after;
     data['package_id'] = package_id;
     data['package_type'] = package_type;
-    data['trip_type'] = trip_type;
-    data['double_the_fare'] = double_the_fare;
+    data['mobile_trip_type'] = trip_type;
+    data['mobile_double_the_fare'] = double_the_fare;
     data['route_polyline'] = route_polyline;
     return data;
   }
@@ -268,6 +276,29 @@ class MotorModelInfo {
     data['taxi_min_speed'] = taxiMinSpeed;
     data['taxi_speed'] = taxiSpeed;
     data['waiting_time'] = waitingTime;
+    return data;
+  }
+}
+
+class CarMakeInfo {
+  int? car_make_id;
+  String? car_make_name;
+
+  CarMakeInfo({
+    this.car_make_id,
+    this.car_make_name,
+  });
+
+  CarMakeInfo.fromJson(Map<String, dynamic> json) {
+    car_make_id = json['car_make_id'];
+    car_make_name = json['car_make_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['car_make_id'] = car_make_id;
+    data['car_make_name'] = car_make_name;
+
     return data;
   }
 }

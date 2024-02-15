@@ -32,8 +32,13 @@ class Car {
   final String name;
   final String imageUrl;
   final String modelId;
+  final String carMakeId;
 
-  Car({required this.name, required this.imageUrl, required this.modelId});
+  Car(
+      {required this.name,
+      required this.imageUrl,
+      required this.modelId,
+      required this.carMakeId});
 }
 
 class DashBoardController extends GetxController {
@@ -476,7 +481,8 @@ class DashBoardController extends GetxController {
           name: carModel.motorName ?? "",
           // imageUrl: imageUrl,
           imageUrl: carModel.androidFocusModelImage ?? "",
-          modelId: carModel.motorId?.toString() ?? "");
+          modelId: carModel.motorId?.toString() ?? "",
+          carMakeId: "");
       cars.add(car);
     }
 

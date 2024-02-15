@@ -118,8 +118,14 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           _bookingTypeInfo(),
           SizedBox(height: 10.h),
-          _tripTypeRadioWidget(),
-          SizedBox(height: 10.h),
+          controller.selectedBookingType.value.id == 1
+              ? Column(
+                  children: [
+                    _tripTypeRadioWidget(),
+                    SizedBox(height: 10.h),
+                  ],
+                )
+              : const SizedBox.shrink(),
           _customPricingInfo(context),
           SizedBox(height: 10.h),
           _additionalElementsInfo(context),
@@ -1361,7 +1367,7 @@ class EditBooking extends GetView<EditBookingController> {
                   selectedOption: controller.selectedPackageType.value,
                   onTap: (value) {
                     controller.selectedPackageType.value = value;
-                    controller.callGetCorporatePackageListApi(false);
+                    controller.callGetCorporatePackageListApi(true);
                   },
                 ),
               ),

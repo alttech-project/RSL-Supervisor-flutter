@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:rsl_supervisor/bookings/data/edit_trip_details_data.dart';
 
 import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
-import '../../network/app_config.dart';
 import '../../network/services.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../data/edit_details_data.dart';
+import '../data/get_car_make_fare_data.dart';
+import '../data/all_car_makes_data.dart';
 import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 
@@ -30,6 +31,32 @@ Future<Map<String, dynamic>> googleMapApi(
     ),
   );
   return json.decode(response);
+}
+
+Future<AllCarMakeListApiResponse> allCarMakesApi() async {
+  String url = await _storageController.getBookingsUrl();
+
+  final response = await _apiProvider.httpRequest(
+      requestType: RequestType.kGet,
+      resource: Resource(
+        url: '${url}allCarMakes',
+        request: "",
+      ),
+      queryParam: {"type": "allCarMakes"});
+  return allCarMakeListApiResponseFromJson(response);
+}
+
+Future<CarMakeFareResponse> getCarMakeFareApi(
+    CarMakeFareRequest requestData) async {
+  String url = await _storageController.getBookingsUrl();
+
+  final response = await _apiProvider.httpRequest(
+      resource: Resource(
+        url: '${url}getCarMakeFare',
+        request: carMakeFareRequestToJson(requestData),
+      ),
+      queryParam: {"type": "getCarMakeFare"});
+  return carMakeFareResponseFromJson(response);
 }
 
 Future<MotorDetailsResponse> motorDetailsApi(

@@ -91,7 +91,7 @@ class EditBookingController extends GetxController {
   var approximateDistance = 0.0.obs;
   var approximateFare = "0".obs;
 
-  int zoneFareApplied = 0;
+  var zoneFareApplied = 0.obs;
   num rslShare = 0;
   num driverShare = 0;
   num corporateShare = 0;
@@ -178,7 +178,7 @@ class EditBookingController extends GetxController {
       rslShare = details.rsl_share ?? 0;
       driverShare = details.driver_share ?? 0;
       corporateShare = details.corporate_share ?? 0;
-      zoneFareApplied = details.zone_fare_applied ?? 0;
+      zoneFareApplied.value = details.zone_fare_applied ?? 0;
       pickupZoneId = details.pickup_zone_id ?? 0;
       pickupZoneGroupId = details.pickup_zone_group_id ?? 0;
       dropZoneId = details.drop_zone_id ?? 0;
@@ -216,6 +216,7 @@ class EditBookingController extends GetxController {
 
       selectedTripRadioValue.value = details.trip_type ?? 0;
       roundTripselectedTripRadioValue.value = details.double_the_fare ?? 1;
+      callGetCorporatePackageListApi(false);
     }
   }
 
@@ -356,7 +357,7 @@ class EditBookingController extends GetxController {
     editBookingApi(EditCorporateBookingRequestData(
             id: editBookingTripId.value,
             motor_model: taxi,
-            car_make_id: carMake,
+            // car_make_id: carMake,
             car_make_info: CarMakeInfo(
                 car_make_id: carMake, car_make_name: taxiModel.value),
             pickupTime: date,
@@ -366,7 +367,7 @@ class EditBookingController extends GetxController {
             driver_share: driverShare,
             corporate_share: corporateShare,
             remarks: remarks,
-            zone_fare_applied: zoneFareApplied,
+            zone_fare_applied: zoneFareApplied.value,
             pickup_zone_id: pickupZoneId,
             pickup_zone_group_id: pickupZoneGroupId,
             drop_zone_id: dropZoneId,
@@ -491,7 +492,6 @@ class EditBookingController extends GetxController {
         carModelList.value = response.carMakeDetails?.carMakeList ?? [];
         carModelList.refresh();
         // printLogs("hi carModelList ${taxiModel.value} ${carModelList}");
-        callGetCorporatePackageListApi(false);
       } else {
         carModelList.value = [];
         carModelList.refresh();
@@ -536,9 +536,9 @@ class EditBookingController extends GetxController {
 
   void updateModelFareDetails(CarMakeFareDetails? carMakeFareDetails) {
     approximateFare.value = carMakeFareDetails?.fare?.toString() ?? "0";
-    zoneFareApplied = carMakeFareDetails?.zoneFareApplied ?? 0;
+    zoneFareApplied.value = carMakeFareDetails?.zoneFareApplied ?? 0;
 
-    if (zoneFareApplied == 1) {
+    if (zoneFareApplied.value == 1) {
       rslShare = carMakeFareDetails?.rslShare ?? 0;
       driverShare = carMakeFareDetails?.driverShare ?? 0;
       corporateShare = carMakeFareDetails?.corporateShare ?? 0;
@@ -612,7 +612,7 @@ class EditBookingController extends GetxController {
     selectedBookingType.value = bookingTypeList[0];
     selectedPackageType.value = packageTypeList[0];
     packageData.value = packageList[0];
-    zoneFareApplied = 0;
+    zoneFareApplied.value = 0;
     selectedTripRadioValue.value = 1;
     roundTripselectedTripRadioValue.value = 0;
     rslShare = 0;
@@ -708,7 +708,7 @@ class EditBookingController extends GetxController {
     overViewPolyLine.value = "";
     approximateFare.value = "0";
     motorModelList.clear();
-    zoneFareApplied = 0;
+    zoneFareApplied.value = 0;
     rslShare = 0;
     driverShare = 0;
     corporateShare = 0;

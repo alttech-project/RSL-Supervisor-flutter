@@ -5,7 +5,7 @@ import 'package:rsl_supervisor/bookings/data/edit_details_data.dart';
 class EditCorporateBookingRequestData {
   int? id;
   int? motor_model;
-  int? car_make_id;
+  // int? car_make_id;
   CarMakeInfo? car_make_info;
   String? pickupTime;
   double? extraCharge;
@@ -54,7 +54,7 @@ class EditCorporateBookingRequestData {
   EditCorporateBookingRequestData(
       {this.id,
       this.motor_model,
-      this.car_make_id,
+      // this.car_make_id,
       this.car_make_info,
       this.pickupTime,
       this.extraCharge,
@@ -101,7 +101,7 @@ class EditCorporateBookingRequestData {
   EditCorporateBookingRequestData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     motor_model = json['motor_model'];
-    car_make_id = json['car_make_id'];
+    // car_make_id = json['car_make_id'];
     car_make_info = json['car_make_info'] != null
         ? CarMakeInfo.fromJson(json['car_make_info'])
         : null;
@@ -152,7 +152,7 @@ class EditCorporateBookingRequestData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['motor_model'] = motor_model;
-    data['car_make_id'] = car_make_id;
+    // data['car_make_id'] = car_make_id;
     if (car_make_info != null) {
       data['car_make_info'] = car_make_info!.toJson();
     }

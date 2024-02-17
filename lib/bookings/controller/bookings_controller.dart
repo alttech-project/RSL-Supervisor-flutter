@@ -96,7 +96,7 @@ class BookingsController extends GetxController
   var approximateDistance = 0.0.obs;
   var approximateFare = "0".obs;
 
-  int zoneFareApplied = 0;
+  var zoneFareApplied = 0.obs;
   num rslShare = 0;
   num driverShare = 0;
   num corporateShare = 0;
@@ -400,7 +400,7 @@ class BookingsController extends GetxController
             customer_rate: customerRate,
             extra_charge: extraCharges,
             remarks: remarks,
-            zone_fare_applied: zoneFareApplied,
+            zone_fare_applied: zoneFareApplied.value,
             rsl_share: rslShare,
             driver_share: driverShare,
             corporate_share: corporateShare,
@@ -504,9 +504,9 @@ class BookingsController extends GetxController
 
   void updateModelFareDetails(CarMakeFareDetails? carMakeFareDetails) {
     approximateFare.value = carMakeFareDetails?.fare?.toString() ?? "0";
-    zoneFareApplied = carMakeFareDetails?.zoneFareApplied ?? 0;
+    zoneFareApplied.value = carMakeFareDetails?.zoneFareApplied ?? 0;
 
-    if (zoneFareApplied == 1) {
+    if (zoneFareApplied.value == 1) {
       rslShare = carMakeFareDetails?.rslShare ?? 0;
       driverShare = carMakeFareDetails?.driverShare ?? 0;
       corporateShare = carMakeFareDetails?.corporateShare ?? 0;
@@ -597,7 +597,7 @@ class BookingsController extends GetxController
     overViewPolyLine.value = "";
     approximateFare.value = "0";
     motorModelList.clear();
-    zoneFareApplied = 0;
+    zoneFareApplied.value = 0;
     rslShare = 0;
     driverShare = 0;
     corporateShare = 0;

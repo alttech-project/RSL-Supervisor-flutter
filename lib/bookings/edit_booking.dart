@@ -118,7 +118,8 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           _bookingTypeInfo(),
           SizedBox(height: 10.h),
-          controller.selectedBookingType.value.id == 1
+          controller.selectedBookingType.value.id == 1 &&
+                  controller.zoneFareApplied.value == 1
               ? Column(
                   children: [
                     _tripTypeRadioWidget(),

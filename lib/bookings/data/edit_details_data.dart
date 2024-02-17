@@ -144,7 +144,7 @@ class PassengerDetails {
     drop_longitude = json['drop_longitude'];
     current_location = json['current_location'];
     drop_location = json['drop_location'];
-    pickup_time = json['pickup_time'];
+    pickup_time = json['mobile_pickup_time'];
     pickup_notes = json['pickup_notes'];
     drop_notes = json['drop_notes'];
     passenger_payment_option = json['passenger_payment_option'];
@@ -195,7 +195,7 @@ class PassengerDetails {
     data['drop_longitude'] = drop_longitude;
     data['current_location'] = current_location;
     data['drop_location'] = drop_location;
-    data['pickup_time'] = pickup_time;
+    data['mobile_pickup_time'] = pickup_time;
     data['pickup_notes'] = pickup_notes;
     data['drop_notes'] = drop_notes;
     data['passenger_payment_option'] = passenger_payment_option;

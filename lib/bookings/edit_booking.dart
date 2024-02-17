@@ -118,7 +118,7 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           _bookingTypeInfo(),
           SizedBox(height: 10.h),
-          controller.selectedBookingType.value.id == 1 &&
+          Obx(() => controller.selectedBookingType.value.id == 1 &&
                   controller.zoneFareApplied.value == 1
               ? Column(
                   children: [
@@ -126,7 +126,7 @@ class EditBooking extends GetView<EditBookingController> {
                     SizedBox(height: 10.h),
                   ],
                 )
-              : const SizedBox.shrink(),
+              : const SizedBox.shrink()),
           _customPricingInfo(context),
           SizedBox(height: 10.h),
           _additionalElementsInfo(context),

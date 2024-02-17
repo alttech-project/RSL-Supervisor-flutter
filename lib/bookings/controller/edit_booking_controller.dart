@@ -105,6 +105,7 @@ class EditBookingController extends GetxController {
   SupervisorInfo? supervisorInfo;
   RxBool isValueChanged = false.obs;
 
+  var packageId = "".obs;
   RxInt selectedTripRadioValue = 1.obs;
   RxInt roundTripselectedTripRadioValue = 1.obs;
 
@@ -208,15 +209,16 @@ class EditBookingController extends GetxController {
         }
       }
 
-      for (var value in packageList) {
+      /*for (var value in packageList) {
         if (details.package_id == value.id) {
           packageData.value = value;
         }
-      }
-
+      }*/
+      packageId.value = details.package_id.toString();
       selectedTripRadioValue.value = details.trip_type ?? 0;
       roundTripselectedTripRadioValue.value = details.double_the_fare ?? 1;
-      callGetCorporatePackageListApi(false);
+      carMakeFareApi();
+      callGetCorporatePackageListApi(false, packageId: packageId.value);
     }
   }
 
@@ -427,7 +429,8 @@ class EditBookingController extends GetxController {
     tabController?.animateTo(1);
   }
 
-  void callGetCorporatePackageListApi(showLoader) async {
+  void callGetCorporatePackageListApi(showLoader,
+      {String packageId = "0"}) async {
     var corporateId = "0";
     var corporateID = await GetStorageController().getCorporateId();
     if (corporateID.isNotEmpty) {
@@ -452,7 +455,17 @@ class EditBookingController extends GetxController {
           packageList.insert(
               0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
           packageList.refresh();
-          packageData.value = packageList[0];
+
+          //update package id
+          if (packageId.isNotEmpty && packageId != "0") {
+            for (var value in response.packageDetails?.packageList ?? []) {
+              if (packageId == value.id.toString()) {
+                packageData.value = value;
+              }
+            }
+          } else {
+            packageData.value = packageList[0];
+          }
         } else {
           showSnackBar(
             title: 'Error',

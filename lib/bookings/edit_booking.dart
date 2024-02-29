@@ -833,12 +833,19 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _extraChargesWidget() {
+    final FocusNode extraChargesFocusNode = FocusNode();
+    extraChargesFocusNode.addListener(() {
+      if (extraChargesFocusNode.hasFocus) {
+        controller.originalPrice = controller.priceController.text.trim();
+      }
+    });
     return BoxTextFieldTransparent(
         hintText: "0",
         keyboardType: TextInputType.number,
         textController: controller.extraChargesController,
         enable: true,
         autocorrect: false,
+        focusNode: extraChargesFocusNode,
         textInputAction: TextInputAction.done,
         onChanged: (value) => {
               controller.handleExtraCharge(value),

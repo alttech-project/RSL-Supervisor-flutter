@@ -51,13 +51,11 @@ class QuickTripController extends GetxController {
 
   @override
   void onReady() {
-    print('hiTamil QTC onReady');
     super.onReady();
   }
 
   @override
   void onClose() {
-    print('hiTamil QTC onClose');
     clearDatas();
 /*    tripIdController.dispose();
     dropLocationController.dispose();
@@ -228,7 +226,7 @@ class QuickTripController extends GetxController {
   void navigateToScannerAndFetch() async {
     final result = await Get.toNamed(AppRoutes.qrScannerPage);
     if (result is QrResult) {
-      print("navigateToScannerAndFetch -> ${result.data?.code ?? ''}");
+      // print("navigateToScannerAndFetch -> ${result.data?.code ?? ''}");
       tripIdController.text = result.data?.code ?? '';
     }
   }
@@ -266,15 +264,11 @@ class QuickTripController extends GetxController {
       String discountFare = discount.replaceAll('-', '');
       double discountValue =
           discountFare.isEmpty ? 0.0 : double.parse(discountFare);
-      printLogs("hi discountValue0 ${discount}");
       if (discount.isNotEmpty) {
-        printLogs("hi discountValue3 ${discount}");
         if (discountValue >= double.parse(originalFare)) {
-          printLogs("hi discountValue1 ${discountValue}");
           setDiscountError(true);
           return;
         } else {
-          printLogs("hi discountValue2 ${originalFare}");
           setDiscountError(false);
         }
       }

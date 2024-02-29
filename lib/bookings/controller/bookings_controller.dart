@@ -196,11 +196,11 @@ class BookingsController extends GetxController
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    printLogs("hello rslShare ${rslShare} ${driverShare}");
+    // printLogs("hello rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {
-    printLogs("hello originalPrice ${originalPrice}");
+    // printLogs("hello originalPrice ${originalPrice}");
     if (value.contains('-')) {
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue =
@@ -236,6 +236,12 @@ class BookingsController extends GetxController
 
   void setExtraChargeError(bool extraCharge) {
     if (extraCharge) {
+      Future.delayed(const Duration(seconds: 1), () {
+        extraChargesController.clear();
+        if (originalPrice != "0") {
+          priceController.text = originalPrice.toString();
+        }
+      });
       showSnackBar(
         title: 'Error',
         msg: "Extra Charges cannot be greater than the Customer Price",
@@ -589,7 +595,7 @@ class BookingsController extends GetxController
       priceController.clear();
       originalPrice = "0";
     }
-    printLogs("hello rslShare api ${rslShare} ${driverShare}");
+    // printLogs("hello rslShare api ${rslShare} ${driverShare}");
   }
 
   void _calculateTimeAndDistance() async {

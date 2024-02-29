@@ -312,7 +312,7 @@ class EditBookingController extends GetxController {
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    printLogs("hello rslShare ${rslShare} ${driverShare}");
+    // printLogs("hello rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {
@@ -352,6 +352,12 @@ class EditBookingController extends GetxController {
 
   void setExtraChargeError(bool extraCharge) {
     if (extraCharge) {
+      Future.delayed(const Duration(seconds: 1), () {
+        extraChargesController.clear();
+        if (originalPrice != "0") {
+          priceController.text = originalPrice.toString();
+        }
+      });
       showSnackBar(
         title: 'Error',
         msg: "Extra Charges cannot be greater than the Customer Price",

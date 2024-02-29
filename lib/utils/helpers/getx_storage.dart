@@ -52,6 +52,27 @@ class GetStorageController extends GetxController {
     );
   }
 
+  Future<CorporateInfo> getCorporateInfo() async {
+    final corporateInfoStr = await storage.read(StorageKeys.corporateInfo) ??
+        _corporateInfoToJson(CorporateInfo());
+    printLogs("getCorporateInfo $corporateInfoStr");
+
+    return _corporateInfoFromJson(corporateInfoStr);
+  }
+
+  void removeCorporateInfo() {
+    storage.write(
+        StorageKeys.corporateInfo, _corporateInfoToJson(CorporateInfo()));
+  }
+
+  void saveCorporateInfo({required CorporateInfo corporateInfo}) {
+    printLogs("saveCorporateInfo : ${_corporateInfoToJson(corporateInfo)}");
+    storage.write(
+      StorageKeys.corporateInfo,
+      _corporateInfoToJson(corporateInfo),
+    );
+  }
+
   void saveDeviceToken({required String value}) {
     storage.write("deviceToken", value);
   }
@@ -207,9 +228,62 @@ String _supervisorInfoToJson(SupervisorInfo data) {
   return json.encode(dyn);
 }
 
+class CorporateInfo {
+  String? corporateName;
+  String? corporateEmail;
+  String? corporatePhoneNumber;
+  String? corporateCountryCode;
+  String? corporateLocation;
+  num? corporateLat;
+  num? corporateLong;
+
+  CorporateInfo({
+    this.corporateName = "",
+    this.corporateEmail = "",
+    this.corporatePhoneNumber = "",
+    this.corporateCountryCode = "",
+    this.corporateLocation = "",
+    this.corporateLat = 0,
+    this.corporateLong = 0,
+  });
+
+  CorporateInfo.fromJson(Map<String, dynamic> json) {
+    corporateName = json['corporate_name'] ?? "";
+    corporateEmail = json['corporate_email'] ?? "";
+    corporatePhoneNumber = json['corporate_phone'] ?? "";
+    corporateCountryCode = json['corporate_country_code'] ?? "";
+    corporateLocation = json['corporate_address'] ?? "";
+    corporateLat = json['corporate_pickup_latitude'] ?? "";
+    corporateLong = json['corporate_pickup_longitude'] ?? "";
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['corporate_name'] = corporateName;
+    data['corporate_email'] = corporateEmail;
+    data['corporate_phone'] = corporatePhoneNumber;
+    data['corporate_country_code'] = corporateCountryCode;
+    data['corporate_address'] = corporateLocation;
+    data['corporate_pickup_latitude'] = corporateLat;
+    data['corporate_pickup_longitude'] = corporateLong;
+    return data;
+  }
+}
+
+CorporateInfo _corporateInfoFromJson(String str) {
+  final jsonData = json.decode(str);
+  return CorporateInfo.fromJson(jsonData);
+}
+
+String _corporateInfoToJson(CorporateInfo data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
+}
+
 class StorageKeys {
   static const String accessToken = 'accessToken';
   static const String supervisorInfo = 'supervisorInfo';
+  static const String corporateInfo = 'corporateInfo';
   static const String deviceToken = 'deviceToken';
   static const String nodeUrl = 'nodeUrl';
   static const String shiftStatus = 'shiftStatus';

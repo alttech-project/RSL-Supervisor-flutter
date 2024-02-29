@@ -104,6 +104,7 @@ class EditBookingController extends GetxController {
   var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
   RxBool isValueChanged = false.obs;
+  String originalPrice = "0";
 
   var packageId = "".obs;
   RxInt selectedTripRadioValue = 1.obs;
@@ -165,6 +166,7 @@ class EditBookingController extends GetxController {
       dropLongitude = details.drop_longitude ?? 0.0;
       dateController.text = details.pickup_time ?? "";
       priceController.text = (details.customer_price ?? "").toString();
+      originalPrice = priceController.text.toString();
       extraChargesController.text = (details.extra_charge ?? "").toString();
       noteToDriverController.text = details.note_to_driver ?? "";
       noteToAdminController.text = details.note_to_admin ?? "";
@@ -268,11 +270,12 @@ class EditBookingController extends GetxController {
         _showSnackBar('Validation!', 'Kindly select trip type!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
-      } else if (extraCharges.isNotEmpty &&
+      }
+      /*else if (extraCharges.isNotEmpty &&
           extraCharges != "0" &&
           double.parse(extraCharges) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid extra charges!');
-      }
+      }*/
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
       } */
@@ -293,6 +296,62 @@ class EditBookingController extends GetxController {
           cancelBtnTitle: "No",
         );
       }
+    }
+  }
+
+  void calculateShares(double customerPriceValue) {
+    double rslShareValue = (customerPriceValue * 0.15 * 100).round() / 100;
+
+    if (customerPriceValue <= 20.0) {
+      rslShareValue = customerPriceValue;
+    } else if (rslShareValue < 20.0) {
+      rslShareValue = 20.0;
+    }
+
+    double driverShareValue = customerPriceValue - rslShareValue;
+    double driverShares = driverShareValue.clamp(0, double.infinity);
+    rslShare = rslShareValue;
+    driverShare = driverShares;
+    // printLogs("hello rslShare ${rslShare} ${driverShare}");
+  }
+
+  void handleExtraCharge(String value) {
+    // printLogs("hello originalPrice ${originalPrice}");
+    if (value.contains('-')) {
+      String absoluteValue = value.replaceAll('-', '');
+      double enteredValue = double.parse(absoluteValue) ?? 0;
+      if (enteredValue > double.parse(originalPrice)) {
+        setExtraChargeError(true);
+        return;
+      } else {
+        setExtraChargeError(false);
+      }
+      double extraChargeValue = enteredValue.isNaN ? 0 : enteredValue;
+      double adjustedCustomerPrice =
+          double.parse(originalPrice) - extraChargeValue;
+      calculateShares(adjustedCustomerPrice);
+      // setExtraChargeForMinus(true);
+      priceController.text = adjustedCustomerPrice.toString();
+    } else {
+      double extraChargeValue = value.isEmpty ? 0 : double.parse(value) ?? 0;
+      double adjustedCustomerPrice =
+          double.parse(originalPrice) + extraChargeValue;
+      calculateShares(adjustedCustomerPrice);
+      // setExtraChargeForMinus(false);
+      priceController.text = adjustedCustomerPrice.toString();
+    }
+  }
+
+  void setExtraChargeForMinus() {
+    extraChargesController.clear();
+  }
+
+  void setExtraChargeError(bool extraCharge) {
+    if (extraCharge) {
+      showSnackBar(
+        title: 'Error',
+        msg: "Extra Charges cannot be greater than the Customer Price",
+      );
     }
   }
 
@@ -560,6 +619,7 @@ class EditBookingController extends GetxController {
       dropZoneId = carMakeFareDetails?.dropZoneId ?? 0;
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+      originalPrice = priceController.text.toString();
     } else {
       rslShare = 0;
       driverShare = 0;
@@ -569,6 +629,7 @@ class EditBookingController extends GetxController {
       dropZoneId = 0;
       dropZoneGroupId = 0;
       priceController.clear();
+      originalPrice = "0";
     }
   }
 

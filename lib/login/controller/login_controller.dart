@@ -232,11 +232,28 @@ class LoginController extends GetxController {
               kioskName: kioskName,
               phoneNumber: phoneNumber,
             );
+
+            var corporateInfo = CorporateInfo(
+              corporateName: response.corporateName,
+              corporateEmail: response.corporateEmail,
+              corporatePhoneNumber: response.corporatePhoneNumber,
+              corporateCountryCode: response.corporateCountryCode,
+              corporateLocation: response.corporateLocation,
+              corporateLat: response.corporateLat,
+              corporateLong: response.corporateLong,
+            );
+
+            GetStorageController()
+                .saveCorporateInfo(corporateInfo: corporateInfo);
+
             GetStorageController()
                 .saveSupervisorInfo(supervisorInfo: supervisorInfo);
 
             GetStorageController()
                 .saveNodeUrl(url: response.supervisorMonitorLogUrl ?? "");
+
+            GetStorageController()
+                .saveCorporateId(id: response.corporateId.toString() ?? "0");
 
             GetStorageController()
                 .saveCorporateId(id: response.corporateId.toString() ?? "0");

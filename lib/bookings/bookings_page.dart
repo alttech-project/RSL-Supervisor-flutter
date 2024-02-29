@@ -7,6 +7,7 @@ import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
 import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
+import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -833,8 +834,9 @@ class BookingsPage extends GetView<BookingsController> {
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
-        textInputAction: TextInputAction.next,
-        // onChanged: (value) => controller.priceController.text = value,
+        textInputAction: TextInputAction.done,
+        onChanged: (value) => controller.calculateShares(double.parse(value)),
+        onSubmitted: (value) => {controller.originalPrice = value},
         autofocus: false);
   }
 
@@ -846,7 +848,8 @@ class BookingsPage extends GetView<BookingsController> {
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.done,
-        // onChanged: (value) => controller.extraChargesController.text = value,
+        onChanged: (value) => controller.handleExtraCharge(value),
+        onSubmitted: (value) => controller.setExtraChargeForMinus(),
         autofocus: false);
   }
 

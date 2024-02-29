@@ -74,10 +74,11 @@ class BookingsController extends GetxController
   var taxiId = ''.obs;
   var carMakeId = ''.obs;
 
-  Rx<Payments> selectedPayment = paymentList[0].obs;
+  Rx<Payments> selectedPayment = paymentList[1].obs;
 
   RxBool showCustomPricing = false.obs;
   RxBool showAdditionalElements = false.obs;
+  String originalPrice = "0";
 
   // RxBool showPaymentOption = false.obs;
   // final selectedRadio = 1.obs;
@@ -181,6 +182,62 @@ class BookingsController extends GetxController
   /*  void clearCarModel() {
     carModelController.clear();
   }*/
+
+  void calculateShares(double customerPriceValue) {
+    double rslShareValue = (customerPriceValue * 0.15 * 100).round() / 100;
+
+    if (customerPriceValue <= 20.0) {
+      rslShareValue = customerPriceValue;
+    } else if (rslShareValue < 20.0) {
+      rslShareValue = 20.0;
+    }
+
+    double driverShareValue = customerPriceValue - rslShareValue;
+    double driverShares = driverShareValue.clamp(0, double.infinity);
+    rslShare = rslShareValue;
+    driverShare = driverShares;
+    // printLogs("hello rslShare ${rslShare} ${driverShare}");
+  }
+
+  void handleExtraCharge(String value) {
+    // printLogs("hello originalPrice ${originalPrice}");
+    if (value.contains('-')) {
+      String absoluteValue = value.replaceAll('-', '');
+      double enteredValue = double.parse(absoluteValue) ?? 0;
+      if (enteredValue > double.parse(originalPrice)) {
+        setExtraChargeError(true);
+        return;
+      } else {
+        setExtraChargeError(false);
+      }
+      double extraChargeValue = enteredValue.isNaN ? 0 : enteredValue;
+      double adjustedCustomerPrice =
+          double.parse(originalPrice) - extraChargeValue;
+      calculateShares(adjustedCustomerPrice);
+      // setExtraChargeForMinus(true);
+      priceController.text = adjustedCustomerPrice.toString();
+    } else {
+      double extraChargeValue = value.isEmpty ? 0 : double.parse(value) ?? 0;
+      double adjustedCustomerPrice =
+          double.parse(originalPrice) + extraChargeValue;
+      calculateShares(adjustedCustomerPrice);
+      // setExtraChargeForMinus(false);
+      priceController.text = adjustedCustomerPrice.toString();
+    }
+  }
+
+  void setExtraChargeForMinus() {
+    extraChargesController.clear();
+  }
+
+  void setExtraChargeError(bool extraCharge) {
+    if (extraCharge) {
+      showSnackBar(
+        title: 'Error',
+        msg: "Extra Charges cannot be greater than the Customer Price",
+      );
+    }
+  }
 
   void callGetCorporatePackageListApi(showLoader) async {
     var corporateId = "0";
@@ -293,9 +350,10 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Kindly select trip type!');
       } else if (price.isEmpty || double.parse(price) <= 0) {
         _showSnackBar('Validation!', 'Enter a valid price!');
-      } else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
-        _showSnackBar('Validation!', 'Enter a valid extra charges!');
       }
+      /*else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {
+        _showSnackBar('Validation!', 'Enter a valid extra charges!');
+      }*/
       /* else if (remarks.isEmpty) {
         _showSnackBar('Validation!', 'Enter a valid remarks!');
       }*/
@@ -515,6 +573,7 @@ class BookingsController extends GetxController
       dropZoneId = carMakeFareDetails?.dropZoneId ?? 0;
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+      originalPrice = priceController.text;
     } else {
       rslShare = 0;
       driverShare = 0;
@@ -524,6 +583,7 @@ class BookingsController extends GetxController
       dropZoneId = 0;
       dropZoneGroupId = 0;
       priceController.clear();
+      originalPrice = "0";
     }
   }
 
@@ -612,6 +672,18 @@ class BookingsController extends GetxController
     if (supervisorInfo == null) {
       return;
     }
+
+    var corporateInfo = await GetStorageController().getCorporateInfo();
+    if (corporateInfo == null) {
+      return;
+    }
+    nameController.text = corporateInfo.corporateName ?? "";
+    countryCode.value = corporateInfo.corporateCountryCode ?? "971";
+    phoneController.text = corporateInfo.corporatePhoneNumber ?? "";
+    emailController.text = corporateInfo.corporateEmail ?? "";
+    pickupLocationController.text = corporateInfo.corporateLocation ?? "";
+    pickupLatitude = (corporateInfo.corporateLat ?? 0).toDouble();
+    pickupLatitude = (corporateInfo.corporateLong ?? 0).toDouble();
 
     callCarMakeListApi(supervisorInfo);
 

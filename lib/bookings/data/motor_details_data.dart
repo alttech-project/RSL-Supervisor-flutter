@@ -23,6 +23,10 @@ const List<Payments> paymentList = <Payments>[
     name: 'COMPLIMENTARY',
     paymentId: "8",
   ),
+  Payments(
+    name: 'POS',
+    paymentId: "9",
+  ),
 ];
 
 const List<Payments> quickTripsPaymentList = <Payments>[
@@ -75,7 +79,6 @@ const List<TripType> packageTypeList = <TripType>[
     id: 2,
   ),
 ];
-
 
 class MotorDetailsRequest {
   String? supervisorId;

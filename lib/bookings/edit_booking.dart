@@ -822,10 +822,12 @@ class EditBooking extends GetView<EditBookingController> {
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
-        textInputAction: TextInputAction.next,
-        onChanged: (val) {
-          controller.isValueChanged.value = true;
-        },
+        textInputAction: TextInputAction.done,
+        onChanged: (value) => {
+              controller.calculateShares(double.parse(value)),
+              controller.isValueChanged.value = true
+            },
+        onSubmitted: (value) => {controller.originalPrice = value},
         // onChanged: (value) => controller.priceController.text = value,
         autofocus: false);
   }
@@ -838,10 +840,11 @@ class EditBooking extends GetView<EditBookingController> {
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.done,
-        onChanged: (val) {
-          controller.isValueChanged.value = true;
-        },
-        // onChanged: (value) => controller.extraChargesController.text = value,
+        onChanged: (value) => {
+              controller.handleExtraCharge(value),
+              controller.isValueChanged.value = true
+            },
+        onSubmitted: (value) => controller.setExtraChargeForMinus(),
         autofocus: false);
   }
 

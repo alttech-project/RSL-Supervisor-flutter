@@ -52,6 +52,13 @@ class AssignSupervisorResponse {
   int? locationType;
   int? corporateId;
   String? authKey;
+  String? corporateName;
+  String? corporateEmail;
+  String? corporatePhoneNumber;
+  String? corporateCountryCode;
+  String? corporateLocation;
+  num? corporateLat;
+  num? corporateLong;
   int? enableEditFare;
   int? quickTrip;
   int? customDropOff;
@@ -61,6 +68,13 @@ class AssignSupervisorResponse {
       this.supervisorMonitorLogUrl,
       this.status,
       this.authKey,
+      this.corporateName,
+      this.corporateEmail,
+      this.corporatePhoneNumber,
+      this.corporateCountryCode,
+      this.corporateLocation,
+      this.corporateLat,
+      this.corporateLong,
       this.locationType,
       this.corporateId,
       this.enableEditFare,
@@ -72,8 +86,15 @@ class AssignSupervisorResponse {
     supervisorMonitorLogUrl = json['supervisor_monitor_log_url'];
     status = json['status'];
     authKey = json['auth_key'];
-    locationType = json['location_type'];
     corporateId = json['corporate_id'];
+    corporateName = json['corporate_name'];
+    corporateEmail = json['corporate_email'];
+    corporatePhoneNumber = json['corporate_phone'];
+    corporateCountryCode = json['corporate_country_code'];
+    corporateLocation = json['corporate_address'];
+    corporateLat = json['corporate_pickup_latitude'];
+    corporateLong = json['corporate_pickup_longitude'];
+    locationType = json['location_type'];
     enableEditFare = json['enable_edit_fare'];
     quickTrip = json['quick_trip'];
     customDropOff = json['custom_drop_off'];
@@ -85,8 +106,15 @@ class AssignSupervisorResponse {
     data['supervisor_monitor_log_url'] = supervisorMonitorLogUrl;
     data['status'] = status;
     data['auth_key'] = authKey;
-    data['location_type'] = locationType;
     data['corporate_id'] = corporateId;
+    data['corporate_name'] = corporateName;
+    data['corporate_email'] = corporateEmail;
+    data['corporate_phone'] = corporatePhoneNumber;
+    data['corporate_country_code'] = corporateCountryCode;
+    data['corporate_address'] = corporateLocation;
+    data['corporate_pickup_latitude'] = corporateLat;
+    data['corporate_pickup_longitude'] = corporateLong;
+    data['location_type'] = locationType;
     data['enable_edit_fare'] = enableEditFare;
     data['quick_trip'] = quickTrip;
     data['custom_drop_off'] = customDropOff;

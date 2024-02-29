@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -245,7 +246,13 @@ class QuickTripController extends GetxController {
   }
 
   void setDiscountError(bool discount) {
-    if (discount) {
+    if (discount == true) {
+      Future.delayed(const Duration(seconds: 1), () {
+        customPriceController.clear();
+        if (originalFare != "0") {
+          fareController.text = originalFare.toString();
+        }
+      });
       showSnackBar(
         title: 'Error',
         msg: "Discount cannot be greater than the fare",
@@ -253,20 +260,28 @@ class QuickTripController extends GetxController {
     }
   }
 
-  Future<void> updateFare(String discount) async {
+  void updateFare(String discount) async {
     var discountValue = await GetStorageController().getDiscountValue();
     if (discountValue == 0) {
       String discountFare = discount.replaceAll('-', '');
       double discountValue =
           discountFare.isEmpty ? 0.0 : double.parse(discountFare);
-      if (discountValue >= double.parse(originalFare)) {
-        setDiscountError(true);
-        return;
-      } else {
-        setDiscountError(false);
+      printLogs("hi discountValue0 ${discount}");
+      if (discount.isNotEmpty) {
+        printLogs("hi discountValue3 ${discount}");
+        if (discountValue >= double.parse(originalFare)) {
+          printLogs("hi discountValue1 ${discountValue}");
+          setDiscountError(true);
+          return;
+        } else {
+          printLogs("hi discountValue2 ${originalFare}");
+          setDiscountError(false);
+        }
       }
-      double adjustedPrice = double.parse(originalFare) - discountValue;
-      fareController.text = adjustedPrice.toString();
+      if (originalFare != "0") {
+        double adjustedPrice = double.parse(originalFare) - discountValue;
+        fareController.text = adjustedPrice.toString();
+      }
     } else {
       double customPriceValue = discount.isEmpty ? 0.0 : double.parse(discount);
       double adjustedPrice = double.parse(originalFare) + customPriceValue;

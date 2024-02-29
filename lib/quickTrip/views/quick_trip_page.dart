@@ -21,6 +21,12 @@ class QuickTripPage extends GetView<QuickTripController> {
 
   @override
   Widget build(BuildContext context) {
+    final FocusNode discountFocusNode = FocusNode();
+    discountFocusNode.addListener(() {
+      if (discountFocusNode.hasFocus) {
+        controller.originalFare = controller.fareController.text.trim();
+      }
+    });
     return WillPopScope(
       onWillPop: () {
         final DashBoardController dashBoardController =
@@ -83,6 +89,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     'Enter Discount (Optional)',
                                     txtEditingController:
                                         controller.customPriceController,
+                                    focusNode: discountFocusNode,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
                                         controller.updateFare(value),

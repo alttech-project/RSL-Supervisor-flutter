@@ -179,6 +179,13 @@ class GetStorageController extends GetxController {
     return await storage.read("saveDiscountValue");
   }
 
+  void storeOriginalPrice({required int? type}) {
+    storage.write("storeOriginalPrice", type);
+  }
+
+  Future<int> getOriginalPrice() async {
+    return await storage.read("storeOriginalPrice");
+  }
 
 
 }

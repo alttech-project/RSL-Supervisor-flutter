@@ -173,9 +173,7 @@ class QuickTripController extends GetxController {
             _showSnackBar('Validation!', 'Enter a valid drop location!');
           } else if (fare.isEmpty || double.parse(fare) <= 0) {
             _showSnackBar('Validation!', 'Enter a valid fare!');
-          } else if (customPrice.isNotEmpty && double.parse(customPrice) <= 0) {
-            _showSnackBar('Validation!', 'Enter a valid custom price!');
-          } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+          }  else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
             _showSnackBar('Validation!', 'Enter a valid phone number!');
           } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
             _showSnackBar('Validation!', 'Enter a valid email!');
@@ -250,6 +248,14 @@ class QuickTripController extends GetxController {
     var discountValue = await GetStorageController().getDiscountValue();
     int customPrice = int.tryParse(customPriceController.text) ?? 0;
     int initialFare = int.tryParse(fareText.value) ?? 0;
+
+    if (pageType.value == 1) {
+      initialFare = int.tryParse(fareController.text) ?? 0;
+
+    }
+
+print("customPrice-->${customPrice}");
+
     if (discountValue == 0) {
       int newFare = initialFare - customPrice;
       if (newFare <= 0) {

@@ -255,7 +255,10 @@ class DashBoardController extends GetxController {
         ..dropLatitude = result.geometry?.location?.lat ?? 0.0
         ..dropLongitude = result.geometry?.location?.lng ?? 0.0
         ..fareController.text = ''
-        ..pageType.value = 1;
+      ..fareController.clear()
+
+
+    ..pageType.value = 1;
       stopTimer();
       Get.toNamed(AppRoutes.quickTripPage);
     }
@@ -293,8 +296,10 @@ class DashBoardController extends GetxController {
         ..dropLatitude = result.geometry?.location?.lat ?? 0.0
         ..dropLongitude = result.geometry?.location?.lng ?? 0.0
         ..pageType.value = 1
-        ..fareController.text = '';
-      stopTimer();
+        ..fareController.text = ''
+    ..fareController.clear();
+
+    stopTimer();
       Get.back();
       // Get.offAndToNamed(AppRoutes.quickTripPage);
     }
@@ -314,6 +319,7 @@ class DashBoardController extends GetxController {
       case 'Quick Trips':
         final QuickTripController controller = Get.find<QuickTripController>();
         controller.pageType.value = 1;
+        controller.fareText.value = "0";
         Get.toNamed(AppRoutes.quickTripPage);
         break;
       case 'Offline Trips':
@@ -460,7 +466,8 @@ class DashBoardController extends GetxController {
       ..dropLongitude =
           double.tryParse('${result.geometry?.location?.lng}') ?? 0.0
       ..fareController.text = ''
-      ..pageType.value = 1;
+      ..pageType.value = 1
+    ..fareController.clear();
     Get.back();
   }
 

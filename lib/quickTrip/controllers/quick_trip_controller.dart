@@ -33,10 +33,10 @@ class QuickTripController extends GetxController {
   RxInt enableEditFare = 0.obs;
   RxString fareText = ''.obs;
 
-
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
+  String originalFare = "0";
 
   double dropLatitude = 0.0, dropLongitude = 0.0;
 
@@ -173,7 +173,7 @@ class QuickTripController extends GetxController {
             _showSnackBar('Validation!', 'Enter a valid drop location!');
           } else if (fare.isEmpty || double.parse(fare) <= 0) {
             _showSnackBar('Validation!', 'Enter a valid fare!');
-          }  else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
+          } else if (phone.isNotEmpty && !GetUtils.isPhoneNumber(phone)) {
             _showSnackBar('Validation!', 'Enter a valid phone number!');
           } else if (email.isNotEmpty && !GetUtils.isEmail(email)) {
             _showSnackBar('Validation!', 'Enter a valid email!');
@@ -244,30 +244,63 @@ class QuickTripController extends GetxController {
         backgroundColor: AppColors.kGetSnackBarColor.value);
   }
 
-  Future<void> updateFare() async {
+  void setDiscountError(bool discount) {
+    if (discount) {
+      showSnackBar(
+        title: 'Error',
+        msg: "Discount cannot be greater than the fare",
+      );
+    }
+  }
+
+  Future<void> updateFare(discount) async {
     var discountValue = await GetStorageController().getDiscountValue();
-    int customPrice = int.tryParse(customPriceController.text) ?? 0;
-    int initialFare = int.tryParse(fareText.value) ?? 0;
+    if (discountValue == 0) {
+      printLogs("hello originalFare $originalFare $discount");
+      String customPrice = discount.replaceAll('-', '');
+      double enteredValue = double.parse(customPrice) ?? 0;
+      if (enteredValue >= double.parse(originalFare)) {
+        setDiscountError(true);
+        return;
+      } else {
+        setDiscountError(false);
+      }
+      printLogs("hello originalFare11 $originalFare $discount");
 
-    if (pageType.value == 1) {
-      initialFare = int.tryParse(fareController.text) ?? 0;
+      // double customPriceValue = enteredValue.isNaN ? 0 : enteredValue;
+      double adjustedPrice = double.parse(originalFare) - enteredValue;
+      printLogs(
+          "hello originalFare000 $originalFare $enteredValue $adjustedPrice");
 
+      fareController.text = adjustedPrice.toString();
+    } else {
+      double customPriceValue =
+          discount.isEmpty ? 0 : double.parse(discount) ?? 0;
+      double adjustedPrice = double.parse(originalFare) + customPriceValue;
+      fareController.text = adjustedPrice.toString();
     }
 
-print("customPrice-->${customPrice}");
+    /* double customPrice = double.parse(customPriceController.text) ?? 0.0;
+    double initialFare = double.parse(originalFare) ?? 0.0;
 
+    if (pageType.value == 1) {
+      initialFare = double.parse(fareController.text) ?? 0.0;
+    }
+
+    print("customPrice-->${customPrice}");
+    var discountValue = await GetStorageController().getDiscountValue();
     if (discountValue == 0) {
-      int newFare = initialFare - customPrice;
+      double newFare = initialFare - customPrice;
       if (newFare <= 0) {
-        showSnackBar(title: "Alert", msg: "Discount should not be less or equal");
+        setDiscountError(true);
         fareController.text = initialFare.toString();
       } else {
         fareController.text = newFare.toString();
       }
     } else {
-      int newFare = initialFare + customPrice;
+      double newFare = initialFare + customPrice;
       fareController.text = newFare.toString();
-    }
+    }*/
   }
 
   void _handleDispatchQuickTripResponse(

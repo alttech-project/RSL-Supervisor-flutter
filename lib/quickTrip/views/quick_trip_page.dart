@@ -63,11 +63,15 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     'Fare', 'Fare', 'Enter Fare (Optional)',
                                     txtEditingController:
                                         controller.fareController,
+                                    onChanged: (value) =>
+                                        controller.originalFare = value,
                                     keyboardType: TextInputType.number)
                                 : _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare',
                                     txtEditingController:
                                         controller.fareController,
+                                    onChanged: (value) =>
+                                        controller.originalFare = value,
                                     readOnly: true,
                                     keyboardType: TextInputType.number),
                             controller.locationType.value ==
@@ -80,9 +84,8 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     txtEditingController:
                                         controller.customPriceController,
                                     keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      controller.updateFare();
-                                    },
+                                    onChanged: (value) =>
+                                        controller.updateFare(value),
                                   ),
                             _labelPaymentOptionInfo(),
                             _nameWidget(),
@@ -251,6 +254,7 @@ class QuickTripPage extends GetView<QuickTripController> {
 
   Widget _labelAndTextFieldWidget(String fieldLabel, String label, String hint,
       {Widget? suffix,
+      final FocusNode? focusNode,
       required TextEditingController txtEditingController,
       TextInputType keyboardType = TextInputType.text,
       TextInputAction textInputAction = TextInputAction.next,
@@ -265,6 +269,7 @@ class QuickTripPage extends GetView<QuickTripController> {
       padding: EdgeInsets.only(bottom: 8.h),
       child: UnderlinedTextField(
         controller: txtEditingController,
+        focusNode: focusNode,
         hint: hint,
         inputLblTxt: label,
         inputLblStyle: AppFontStyle.subHeading(

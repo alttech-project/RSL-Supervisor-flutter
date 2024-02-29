@@ -343,7 +343,10 @@ class EditBookingController extends GetxController {
   }
 
   void setExtraChargeForMinus() {
-    extraChargesController.clear();
+    if (extraChargesController.text.contains('-')) {
+      extraChargesController.clear();
+      extraChargesController.text = "";
+    }
   }
 
   void setExtraChargeError(bool extraCharge) {

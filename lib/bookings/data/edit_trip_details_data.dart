@@ -5,12 +5,12 @@ import 'package:rsl_supervisor/bookings/data/edit_details_data.dart';
 class EditCorporateBookingRequestData {
   int? id;
   int? motor_model;
+
   // int? car_make_id;
   CarMakeInfo? car_make_info;
   String? pickupTime;
   double? extraCharge;
   double? customerPrice;
-
   num? rsl_share;
   num? driver_share;
   num? corporate_share;
@@ -20,15 +20,8 @@ class EditCorporateBookingRequestData {
   int? pickup_zone_group_id;
   int? drop_zone_id;
   int? drop_zone_group_id;
-
-  String? noteToDriver;
-  String? flightNumber;
-  String? referenceNumber;
-  String? noteToAdmin;
   String? currentLocation;
   String? dropLocation;
-  String? pickupNotes;
-  String? dropNotes;
   String? passengerPaymentOption;
   String? finalPaymentOption;
   double? pickupLatitude;
@@ -42,13 +35,19 @@ class EditCorporateBookingRequestData {
   String? approx_distance;
   String? approx_duration;
   double? approx_trip_fare;
-  String? roomNo;
   String? customer_rate;
   int? now_after;
   int? package_id;
   int? package_type;
   int? trip_type;
   int? double_the_fare;
+  String? roomNo;
+  String? pickupNotes;
+  String? dropNotes;
+  String? noteToDriver;
+  String? flightNumber;
+  String? referenceNumber;
+  String? noteToAdmin;
   String? route_polyline;
 
   EditCorporateBookingRequestData(
@@ -67,10 +66,6 @@ class EditCorporateBookingRequestData {
       this.pickup_zone_group_id,
       this.drop_zone_id,
       this.drop_zone_group_id,
-      this.noteToDriver,
-      this.flightNumber,
-      this.referenceNumber,
-      this.noteToAdmin,
       this.currentLocation,
       this.dropLocation,
       this.customerPrice,
@@ -89,13 +84,17 @@ class EditCorporateBookingRequestData {
       this.approx_distance,
       this.approx_duration,
       this.approx_trip_fare,
-      this.roomNo,
-      this.now_after,
       this.customer_rate,
       this.package_id,
       this.package_type,
       this.trip_type,
       this.double_the_fare,
+      this.roomNo,
+      this.noteToDriver,
+      this.flightNumber,
+      this.referenceNumber,
+      this.noteToAdmin,
+      this.now_after,
       this.route_polyline});
 
   EditCorporateBookingRequestData.fromJson(Map<String, dynamic> json) {
@@ -106,10 +105,6 @@ class EditCorporateBookingRequestData {
         ? CarMakeInfo.fromJson(json['car_make_info'])
         : null;
     pickupTime = json['pickup_time'];
-    noteToDriver = json['note_to_driver'];
-    flightNumber = json['flight_number'];
-    referenceNumber = json['reference_number'];
-    noteToAdmin = json['note_to_admin'];
     currentLocation = json['current_location'];
     dropLocation = json['drop_location'];
     customerPrice = json['customer_price'];
@@ -138,6 +133,10 @@ class EditCorporateBookingRequestData {
     approx_distance = json['approx_distance'];
     approx_duration = json['approx_duration'];
     approx_trip_fare = json['approx_trip_fare'];
+    noteToDriver = json['note_to_driver'];
+    flightNumber = json['flight_number'];
+    referenceNumber = json['reference_number'];
+    noteToAdmin = json['note_to_admin'];
     roomNo = json['room_number'];
     now_after = json['now_after'];
     customer_rate = json['customer_rate'];
@@ -157,10 +156,6 @@ class EditCorporateBookingRequestData {
       data['car_make_info'] = car_make_info!.toJson();
     }
     data['pickup_time'] = pickupTime;
-    data['note_to_driver'] = noteToDriver;
-    data['flight_number'] = flightNumber;
-    data['reference_number'] = referenceNumber;
-    data['note_to_admin'] = noteToAdmin;
     data['current_location'] = currentLocation;
     data['drop_location'] = dropLocation;
     data['customer_price'] = customerPrice;
@@ -190,6 +185,10 @@ class EditCorporateBookingRequestData {
     data['approx_duration'] = approx_duration;
     data['approx_trip_fare'] = approx_trip_fare;
     data['customer_rate'] = customer_rate;
+    data['note_to_driver'] = noteToDriver;
+    data['flight_number'] = flightNumber;
+    data['reference_number'] = referenceNumber;
+    data['note_to_admin'] = noteToAdmin;
     data['now_after'] = now_after;
     data['package_id'] = package_id;
     data['package_type'] = package_type;

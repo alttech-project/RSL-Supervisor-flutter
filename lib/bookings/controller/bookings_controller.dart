@@ -74,7 +74,7 @@ class BookingsController extends GetxController
   var taxiId = ''.obs;
   var carMakeId = ''.obs;
 
-  Rx<Payments> selectedPayment = paymentList[1].obs;
+  Rx<Payments> selectedPayment = paymentList[0].obs;
 
   RxBool showCustomPricing = false.obs;
   RxBool showAdditionalElements = false.obs;
@@ -196,11 +196,11 @@ class BookingsController extends GetxController
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    // printLogs("hello rslShare ${rslShare} ${driverShare}");
+    printLogs("hello rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {
-    // printLogs("hello originalPrice ${originalPrice}");
+    printLogs("hello originalPrice ${originalPrice}");
     if (value.contains('-')) {
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue = double.parse(absoluteValue) ?? 0;
@@ -585,6 +585,7 @@ class BookingsController extends GetxController
       priceController.clear();
       originalPrice = "0";
     }
+    printLogs("hello rslShare api ${rslShare} ${driverShare}");
   }
 
   void _calculateTimeAndDistance() async {
@@ -678,7 +679,14 @@ class BookingsController extends GetxController
       return;
     }
     nameController.text = corporateInfo.corporateName ?? "";
-    countryCode.value = corporateInfo.corporateCountryCode ?? "971";
+    var country = corporateInfo.corporateCountryCode ?? "971";
+    if (country.contains("+")) {
+      String countryCodeValue = country.replaceAll('+', '');
+      countryCode.value = countryCodeValue;
+    } else {
+      countryCode.value = country;
+    }
+
     phoneController.text = corporateInfo.corporatePhoneNumber ?? "";
     emailController.text = corporateInfo.corporateEmail ?? "";
     pickupLocationController.text = corporateInfo.corporateLocation ?? "";

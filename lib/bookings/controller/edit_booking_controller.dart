@@ -219,7 +219,7 @@ class EditBookingController extends GetxController {
       packageId.value = details.package_id.toString();
       selectedTripRadioValue.value = details.trip_type ?? 0;
       roundTripselectedTripRadioValue.value = details.double_the_fare ?? 1;
-      carMakeFareApi();
+      // carMakeFareApi();
       callGetCorporatePackageListApi(false, packageId: packageId.value);
     }
   }
@@ -312,7 +312,7 @@ class EditBookingController extends GetxController {
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    // printLogs("hello rslShare ${rslShare} ${driverShare}");
+    printLogs("hello rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {

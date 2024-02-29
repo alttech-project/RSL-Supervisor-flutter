@@ -12,12 +12,12 @@ class Payments {
 
 const List<Payments> paymentList = <Payments>[
   Payments(
-    name: 'CASH',
-    paymentId: "1",
-  ),
-  Payments(
     name: 'BILL',
     paymentId: "7",
+  ),
+  Payments(
+    name: 'CASH',
+    paymentId: "1",
   ),
   Payments(
     name: 'COMPLIMENTARY',

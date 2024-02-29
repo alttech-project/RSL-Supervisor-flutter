@@ -268,8 +268,7 @@ class QuickTripController extends GetxController {
       double adjustedPrice = double.parse(originalFare) - discountValue;
       fareController.text = adjustedPrice.toString();
     } else {
-      double customPriceValue =
-          discount.isEmpty ? 0.0 : double.parse(discount);
+      double customPriceValue = discount.isEmpty ? 0.0 : double.parse(discount);
       double adjustedPrice = double.parse(originalFare) + customPriceValue;
       fareController.text = adjustedPrice.toString();
     }
@@ -324,7 +323,9 @@ class QuickTripController extends GetxController {
     selectedPayment.value = quickTripsPaymentList[0];
     dropLatitude = 0.0;
     dropLongitude = 0.0;
+    fareController.text = "0";
     fareController.clear();
+    originalFare = "0";
     customPriceController.clear();
     referenceNumberController.clear();
     remarksController.clear();

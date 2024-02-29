@@ -203,7 +203,8 @@ class BookingsController extends GetxController
     printLogs("hello originalPrice ${originalPrice}");
     if (value.contains('-')) {
       String absoluteValue = value.replaceAll('-', '');
-      double enteredValue = double.parse(absoluteValue) ?? 0;
+      double enteredValue =
+          absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
       if (enteredValue > double.parse(originalPrice)) {
         setExtraChargeError(true);
         return;

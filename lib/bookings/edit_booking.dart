@@ -822,7 +822,7 @@ class EditBooking extends GetView<EditBookingController> {
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
-        textInputAction: TextInputAction.done,
+        textInputAction: TextInputAction.next,
         onChanged: (value) => {
               controller.calculateShares(double.parse(value)),
               controller.isValueChanged.value = true

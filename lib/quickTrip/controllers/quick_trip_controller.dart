@@ -253,54 +253,26 @@ class QuickTripController extends GetxController {
     }
   }
 
-  Future<void> updateFare(discount) async {
+  Future<void> updateFare(String discount) async {
     var discountValue = await GetStorageController().getDiscountValue();
     if (discountValue == 0) {
-      printLogs("hello originalFare $originalFare $discount");
-      String customPrice = discount.replaceAll('-', '');
-      double enteredValue = double.parse(customPrice) ?? 0;
-      if (enteredValue >= double.parse(originalFare)) {
+      String discountFare = discount.replaceAll('-', '');
+      double discountValue =
+          discountFare.isEmpty ? 0.0 : double.parse(discountFare);
+      if (discountValue >= double.parse(originalFare)) {
         setDiscountError(true);
         return;
       } else {
         setDiscountError(false);
       }
-      printLogs("hello originalFare11 $originalFare $discount");
-
-      // double customPriceValue = enteredValue.isNaN ? 0 : enteredValue;
-      double adjustedPrice = double.parse(originalFare) - enteredValue;
-      printLogs(
-          "hello originalFare000 $originalFare $enteredValue $adjustedPrice");
-
+      double adjustedPrice = double.parse(originalFare) - discountValue;
       fareController.text = adjustedPrice.toString();
     } else {
       double customPriceValue =
-          discount.isEmpty ? 0 : double.parse(discount) ?? 0;
+          discount.isEmpty ? 0.0 : double.parse(discount);
       double adjustedPrice = double.parse(originalFare) + customPriceValue;
       fareController.text = adjustedPrice.toString();
     }
-
-    /* double customPrice = double.parse(customPriceController.text) ?? 0.0;
-    double initialFare = double.parse(originalFare) ?? 0.0;
-
-    if (pageType.value == 1) {
-      initialFare = double.parse(fareController.text) ?? 0.0;
-    }
-
-    print("customPrice-->${customPrice}");
-    var discountValue = await GetStorageController().getDiscountValue();
-    if (discountValue == 0) {
-      double newFare = initialFare - customPrice;
-      if (newFare <= 0) {
-        setDiscountError(true);
-        fareController.text = initialFare.toString();
-      } else {
-        fareController.text = newFare.toString();
-      }
-    } else {
-      double newFare = initialFare + customPrice;
-      fareController.text = newFare.toString();
-    }*/
   }
 
   void _handleDispatchQuickTripResponse(

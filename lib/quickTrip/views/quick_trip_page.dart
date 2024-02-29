@@ -63,14 +63,14 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     'Fare', 'Fare', 'Enter Fare (Optional)',
                                     txtEditingController:
                                         controller.fareController,
-                                    onChanged: (value) =>
+                                    onSubmitted: (value) =>
                                         controller.originalFare = value,
                                     keyboardType: TextInputType.number)
                                 : _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare',
                                     txtEditingController:
                                         controller.fareController,
-                                    onChanged: (value) =>
+                                    onSubmitted: (value) =>
                                         controller.originalFare = value,
                                     readOnly: true,
                                     keyboardType: TextInputType.number),
@@ -262,6 +262,7 @@ class QuickTripPage extends GetView<QuickTripController> {
       bool readOnly = false,
       GestureTapCallback? onTap,
       Function(String)? onChanged,
+      Function(String)? onSubmitted,
       Color? borderColor,
       Color? focusColor,
       TextStyle? textStyle}) {
@@ -276,13 +277,14 @@ class QuickTripPage extends GetView<QuickTripController> {
             color: AppColors.kPrimaryColor.value,
             size: AppFontSize.medium.value),
         keyboardType: keyboardType,
-        onSubmit: (value) {},
+        // onSubmit: (value) {},
         textInputAction: textInputAction,
         suffix: suffix,
         validator: validator,
         readOnly: readOnly,
         onTap: onTap,
         onChanged: onChanged,
+        onSubmit: onSubmitted,
         borderColor: borderColor,
         focusColor: focusColor,
         textStyle: textStyle,

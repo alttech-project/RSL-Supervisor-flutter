@@ -273,7 +273,7 @@ class BookingsPage extends GetView<BookingsController> {
                   color: AppColors.kPrimaryColor.value,
                 ),
               ),
-               SizedBox(height: 10.h),
+              SizedBox(height: 10.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -294,7 +294,7 @@ class BookingsPage extends GetView<BookingsController> {
                       color: Colors.white,
                     ),
                   ),
-                   SizedBox(width: 12.w),
+                  SizedBox(width: 12.w),
                   Radio(
                     activeColor: Colors.white,
                     value: 2,
@@ -337,7 +337,7 @@ class BookingsPage extends GetView<BookingsController> {
               color: AppColors.kPrimaryColor.value,
             ),
           ),
-           SizedBox(height: 10.h),
+          SizedBox(height: 10.h),
           // Add some space between label and radio buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -358,7 +358,7 @@ class BookingsPage extends GetView<BookingsController> {
                   color: Colors.white,
                 ),
               ),
-               SizedBox(width: 12.w),
+              SizedBox(width: 12.w),
               Radio(
                 value: 1,
                 groupValue: controller.roundTripselectedTripRadioValue.value,
@@ -832,7 +832,7 @@ class BookingsPage extends GetView<BookingsController> {
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
-        textInputAction: TextInputAction.done,
+        textInputAction: TextInputAction.next,
         onChanged: (value) => controller.calculateShares(double.parse(value)),
         onSubmitted: (value) => {controller.originalPrice = value},
         autofocus: false);

@@ -74,12 +74,23 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     LocationType.GENERAL.toString()
                                 ? const SizedBox.shrink()
                                 : _labelAndTextFieldWidget(
-                                    'Custom Price',
-                                    'Custom Price',
-                                    'Enter Custom Price (Optional)',
+
+                                    'Discount',
+                                    'Discount',
+                                    'Enter Discount (Optional)',
+
                                     txtEditingController:
                                         controller.customPriceController,
-                                    keyboardType: TextInputType.number),
+
+                                    keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                controller.updateFare();
+                              },
+
+
+
+
+                            ),
                             _labelPaymentOptionInfo(),
                             _nameWidget(),
                             _phoneNumberWidget(),

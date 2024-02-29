@@ -179,6 +179,7 @@ class LocationsListWidget extends GetView<DashBoardController> {
         ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0
         ..fareController.text =
             (dropLocation.fare?.replaceAll('AED', '').trim()) ?? ''
+        ..fareText.value =  (dropLocation.fare?.replaceAll('AED', '').trim()) ?? ''
         ..pageType.value = 2;
       controller.stopTimer();
       Get.toNamed(AppRoutes.quickTripPage);

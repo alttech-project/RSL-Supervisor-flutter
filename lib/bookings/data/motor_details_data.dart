@@ -27,7 +27,7 @@ const List<Payments> paymentList = <Payments>[
 
 const List<Payments> quickTripsPaymentList = <Payments>[
   Payments(
-    name: 'CARD',
+    name: 'POS',
     paymentId: "9",
   ),
   Payments(

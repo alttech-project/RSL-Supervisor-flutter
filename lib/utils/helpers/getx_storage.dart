@@ -149,6 +149,17 @@ class GetStorageController extends GetxController {
   Future<int> getEditFare() async {
     return await storage.read("enable_edit_fare");
   }
+
+  void saveDiscountValue({required int? type}) {
+    storage.write("saveDiscountValue", type);
+  }
+
+  Future<int> getDiscountValue() async {
+    return await storage.read("saveDiscountValue");
+  }
+
+
+
 }
 
 class SupervisorInfo {

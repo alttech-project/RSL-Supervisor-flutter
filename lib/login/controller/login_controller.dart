@@ -9,6 +9,7 @@ import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
 import 'package:rsl_supervisor/login/data/verify_otp_api_data.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
 import '../../network/app_config.dart';
+import '../../quickTrip/controllers/quick_trip_controller.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
 import '../../utils/helpers/app_info.dart';
@@ -247,6 +248,9 @@ class LoginController extends GetxController {
             GetStorageController()
                 .saveCustomDropOffEnableType(type: response.customDropOff ?? 0);
 
+            GetStorageController()
+                .saveDiscountValue(type: response.quickTripDiscount);
+
             if (response.locationType != null && response.locationType == 1) {
               GetStorageController()
                   .saveLocationType(type: LocationType.GENERAL.toString());
@@ -256,6 +260,7 @@ class LoginController extends GetxController {
               GetStorageController()
                   .saveLocationType(type: LocationType.HOTEL.toString());
               GetStorageController().saveEditFare(type: 0);
+
             }
             resetView();
             Get.offAllNamed(AppRoutes.dashboardPage);

@@ -31,6 +31,8 @@ class QuickTripController extends GetxController {
   RxString locationType = "".obs;
   RxInt pageType = 0.obs;
   RxInt enableEditFare = 0.obs;
+  RxString fareText = ''.obs;
+
 
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
@@ -242,6 +244,24 @@ class QuickTripController extends GetxController {
   void _showSnackBar(String title, String message) {
     Get.snackbar(title, message,
         backgroundColor: AppColors.kGetSnackBarColor.value);
+  }
+
+  Future<void> updateFare() async {
+    var discountValue = await GetStorageController().getDiscountValue();
+    int customPrice = int.tryParse(customPriceController.text) ?? 0;
+    int initialFare = int.tryParse(fareText.value) ?? 0;
+    if (discountValue == 0) {
+      int newFare = initialFare - customPrice;
+      if (newFare <= 0) {
+        showSnackBar(title: "Alert", msg: "Discount should not be less or equal");
+        fareController.text = initialFare.toString();
+      } else {
+        fareController.text = newFare.toString();
+      }
+    } else {
+      int newFare = initialFare + customPrice;
+      fareController.text = newFare.toString();
+    }
   }
 
   void _handleDispatchQuickTripResponse(

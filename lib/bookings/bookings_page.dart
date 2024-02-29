@@ -253,7 +253,7 @@ class BookingsPage extends GetView<BookingsController> {
         margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            12,
+            12.r,
           ),
         ),
         color: AppColors.kPrimaryTransparentColor.value,
@@ -272,8 +272,7 @@ class BookingsPage extends GetView<BookingsController> {
                   color: AppColors.kPrimaryColor.value,
                 ),
               ),
-              const SizedBox(height: 10),
-              // Add some space between label and radio buttons
+               SizedBox(height: 10.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -282,7 +281,7 @@ class BookingsPage extends GetView<BookingsController> {
                     value: 1,
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (value) {
-                      controller.tripTypeSelectedRadio(value!);
+                      controller.tripTypeSelectedRadio(value);
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -294,7 +293,7 @@ class BookingsPage extends GetView<BookingsController> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                   SizedBox(width: 12.w),
                   Radio(
                     activeColor: Colors.white,
                     value: 2,
@@ -314,7 +313,6 @@ class BookingsPage extends GetView<BookingsController> {
                   ),
                 ],
               ),
-
               controller.selectedTripRadioValue.value == 2
                   ? _roundtripTypeRadioWidget()
                   : const SizedBox.shrink(),
@@ -338,7 +336,7 @@ class BookingsPage extends GetView<BookingsController> {
               color: AppColors.kPrimaryColor.value,
             ),
           ),
-          const SizedBox(height: 10),
+           SizedBox(height: 10.h),
           // Add some space between label and radio buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -347,7 +345,7 @@ class BookingsPage extends GetView<BookingsController> {
                 value: 0,
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
-                  controller.roundedSelectedRadio(value!);
+                  controller.roundedSelectedRadio(value);
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -359,7 +357,7 @@ class BookingsPage extends GetView<BookingsController> {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(width: 12),
+               SizedBox(width: 12.w),
               Radio(
                 value: 1,
                 groupValue: controller.roundTripselectedTripRadioValue.value,

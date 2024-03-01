@@ -30,6 +30,7 @@ import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
 import '../upcoming_bookings_tab.dart';
+import 'dart:io';
 
 double doubleWithTwoDigits(double value) =>
     double.parse(value.toStringAsFixed(2));
@@ -183,11 +184,12 @@ class BookingsController extends GetxController
     carModelController.clear();
   }*/
   void calculateShares(String customerPriceValue) {
-    // Remove special characters from the customerPriceValue
-    String cleanedValue = customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
-    print("calculateSharesdeepakvalue---> $cleanedValue");
-    priceController.text = cleanedValue;
-
+    if (Platform.isIOS) {
+      String cleanedValue = customerPriceValue.toString().replaceAll(
+          RegExp(r'[^0-9.-]'), '');
+      print("calculateSharesdeepakvalue---> $cleanedValue");
+      priceController.text = cleanedValue;
+    }
     double rslShareValue = (double.parse(customerPriceValue) * 0.15 * 100).round() / 100;
     if (double.parse(customerPriceValue) <= 20.0) {
       rslShareValue = double.parse(customerPriceValue);
@@ -202,10 +204,11 @@ class BookingsController extends GetxController
 
 
   void handleExtraCharge(String value) {
-    String cleanedValue = value.replaceAll(RegExp(r'[^0-9.-]'), '');
-    print("deepakvalue---> $cleanedValue");
-    extraChargesController.text = cleanedValue;
-
+    if (Platform.isIOS) {
+      String cleanedValue = value.replaceAll(RegExp(r'[^0-9.-]'), '');
+      print("deepakvalue---> $cleanedValue");
+      extraChargesController.text = cleanedValue;
+    }
     if (value.contains('-')) {
       if (originalPrice.isEmpty) {
         originalPrice = "0";

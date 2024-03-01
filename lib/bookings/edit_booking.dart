@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -819,13 +821,13 @@ class EditBooking extends GetView<EditBookingController> {
   Widget _priceWidget() {
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.datetime,
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.next,
-        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))], // Allow only numbers and dot
-        onChanged: (value) => {
+      keyboardType: Platform.isIOS ?
+      TextInputType.datetime : TextInputType.number,
+      onChanged: (value) => {
               controller.calculateShares(value),
               controller.isValueChanged.value = true
             },
@@ -847,13 +849,13 @@ class EditBooking extends GetView<EditBookingController> {
     });
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.datetime,
+        keyboardType: Platform.isIOS ?
+        TextInputType.datetime : TextInputType.number,
         textController: controller.extraChargesController,
         enable: true,
         autocorrect: false,
         focusNode: extraChargesFocusNode,
         textInputAction: TextInputAction.done,
-        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))], // Allow only numbers and dot
 
         onChanged: (value) => {
               controller.handleExtraCharge(value),

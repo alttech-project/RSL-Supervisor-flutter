@@ -16,12 +16,12 @@ class CapsuleTextField extends StatelessWidget {
 
   const CapsuleTextField(
       {super.key,
-        required this.controller,
-        required this.hint,
-        this.onChanged,
-        this.isEnabled,
-        this.textStyle,
-        this.suffix});
+      required this.controller,
+      required this.hint,
+      this.onChanged,
+      this.isEnabled,
+      this.textStyle,
+      this.suffix});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,6 @@ class UnderlinedTextField extends StatelessWidget {
   final Color? hintColor;
   final FocusNode? focusNode; // Added FocusNode property
 
-
   const UnderlinedTextField({
     super.key,
     required this.controller,
@@ -96,7 +95,6 @@ class UnderlinedTextField extends StatelessWidget {
     this.hintColor,
     this.onChanged,
     this.focusNode, // Include FocusNode in the constructor
-
   });
 
   @override
@@ -309,9 +307,6 @@ class BoxTextFieldTransparent extends StatelessWidget {
     this.autofocus = false,
     this.contentPadding,
     this.textInputAction = TextInputAction.done,
-    required this.inputFormatters,// Add this line
-
-
   });
 
   final String? hintText;
@@ -328,10 +323,6 @@ class BoxTextFieldTransparent extends StatelessWidget {
   final void Function(String)? onChanged;
   final EdgeInsetsGeometry? contentPadding;
   final TextInputAction textInputAction;
-  final List<TextInputFormatter> inputFormatters;
-  // Validator function added
-
-
 
   @override
   Widget build(BuildContext context) {

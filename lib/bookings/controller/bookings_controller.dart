@@ -30,7 +30,6 @@ import '../data/get_package_data.dart';
 import '../data/motor_details_data.dart';
 import '../service/booking_service.dart';
 import '../upcoming_bookings_tab.dart';
-import 'dart:io';
 
 double doubleWithTwoDigits(double value) =>
     double.parse(value.toStringAsFixed(2));
@@ -180,33 +179,29 @@ class BookingsController extends GetxController
     dropLocationController.clear();
   }
 
-  /*  void clearCarModel() {
-    carModelController.clear();
-  }*/
   void calculateShares(String customerPriceValue) {
-    if (Platform.isIOS) {
-      String cleanedValue = customerPriceValue.toString().replaceAll(
-          RegExp(r'[^0-9.-]'), '');
-      print("calculateSharesdeepakvalue---> $cleanedValue");
+    if (GetPlatform.isIOS) {
+      // Remove special characters from the customerPriceValue
+      String cleanedValue =
+          customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
       priceController.text = cleanedValue;
     }
-    double rslShareValue = (double.parse(customerPriceValue) * 0.15 * 100).round() / 100;
-    if (double.parse(customerPriceValue) <= 20.0) {
-      rslShareValue = double.parse(customerPriceValue);
+    var price = double.parse(customerPriceValue);
+    double rslShareValue = (price * 0.15 * 100).round() / 100;
+    if (price <= 20.0) {
+      rslShareValue = price;
     } else if (rslShareValue < 20.0) {
       rslShareValue = 20.0;
     }
-    double driverShareValue = double.parse(customerPriceValue) - rslShareValue;
+    double driverShareValue = price - rslShareValue;
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
   }
 
-
   void handleExtraCharge(String value) {
-    if (Platform.isIOS) {
+    if (GetPlatform.isIOS) {
       String cleanedValue = value.replaceAll(RegExp(r'[^0-9.-]'), '');
-      print("deepakvalue---> $cleanedValue");
       extraChargesController.text = cleanedValue;
     }
     if (value.contains('-')) {
@@ -225,7 +220,7 @@ class BookingsController extends GetxController
       double extraChargeValue = enteredValue.isNaN ? 0 : enteredValue;
       double adjustedCustomerPrice =
           double.parse(originalPrice) - extraChargeValue;
-      calculateShares(    adjustedCustomerPrice.toString());
+      calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
     } else {
       if (originalPrice.isEmpty) {
@@ -238,16 +233,6 @@ class BookingsController extends GetxController
       priceController.text = adjustedCustomerPrice.toString();
     }
   }
-
-
-
-
-
-
-
-
-
-
 
   void setExtraChargeForMinus() {
     if (extraChargesController.text.contains('-')) {

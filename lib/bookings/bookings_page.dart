@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
 import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
+import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -827,19 +827,29 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _priceWidget() {
-    return BoxTextFieldTransparent(
-        hintText: "0",
-        keyboardType: Platform.isIOS ?
-        TextInputType.datetime : TextInputType.number,
-        textController: controller.priceController,
-        enable: true,
-        autocorrect: false,
-        textInputAction: TextInputAction.next,
-        onChanged: (value) => controller.calculateShares(value),
-        onSubmitted: (value) => {controller.originalPrice = value},
-        autofocus: false,
-
-    );
+    return GetPlatform.isAndroid
+        ? BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.number,
+            textController: controller.priceController,
+            enable: true,
+            autocorrect: false,
+            textInputAction: TextInputAction.next,
+            onChanged: (value) => controller.calculateShares(value),
+            onSubmitted: (value) => {controller.originalPrice = value},
+            autofocus: false,
+          )
+        : BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.datetime,
+            textController: controller.priceController,
+            enable: true,
+            autocorrect: false,
+            textInputAction: TextInputAction.next,
+            onChanged: (value) => controller.calculateShares(value),
+            onSubmitted: (value) => {controller.originalPrice = value},
+            autofocus: false,
+          );
   }
 
   Widget _extraChargesWidget() {
@@ -849,20 +859,35 @@ class BookingsPage extends GetView<BookingsController> {
         controller.originalPrice = controller.priceController.text.trim();
       }
     });
-    return BoxTextFieldTransparent(
-        hintText: "0",
-        keyboardType:Platform.isIOS ?
-      TextInputType.datetime : TextInputType.number,
-        textController: controller.extraChargesController,
-        enable: true,
-        autocorrect: false,
-        focusNode: extraChargesFocusNode,
-        textInputAction: TextInputAction.done,
-        onChanged: (value) => controller.handleExtraCharge(value),
-        onSubmitted: (value) => controller.setExtraChargeForMinus(),
-        autofocus: false,
-
-    );
+    return GetPlatform.isAndroid
+        ? BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.number,
+            textController: controller.extraChargesController,
+            enable: true,
+            autocorrect: false,
+            focusNode: extraChargesFocusNode,
+            textInputAction: TextInputAction.done,
+            onChanged: (value) => controller.handleExtraCharge(value),
+            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            autofocus: false,
+          )
+        : BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.datetime,
+            textController: controller.extraChargesController,
+            enable: true,
+            autocorrect: false,
+            focusNode: extraChargesFocusNode,
+            textInputAction: TextInputAction.done,
+            onChanged: (value) => controller.handleExtraCharge(value),
+            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            autofocus: false,
+            /* inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              FilteringTextInputFormatter.digitsOnly,
+            ],*/
+          );
   }
 
   Widget _noteToDriverWidget() {

@@ -584,7 +584,7 @@ class MyTripListController extends GetxController {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: AppColors.kPrimaryColor.value,
+                backgroundColor: AppColors.kPrimaryColor.value,
               ),
               child: const Text('Submit'),
             ),

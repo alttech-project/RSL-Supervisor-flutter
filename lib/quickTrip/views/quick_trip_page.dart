@@ -71,7 +71,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                                         controller.fareController,
                                     onSubmitted: (value) =>
                                         controller.originalFare = value,
-                                    keyboardType: TextInputType.number)
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true))
                                 : _labelAndTextFieldWidget(
                                     'Fare', 'Fare', 'Enter Fare',
                                     txtEditingController:
@@ -79,7 +79,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     onSubmitted: (value) =>
                                         controller.originalFare = value,
                                     readOnly: true,
-                                    keyboardType: TextInputType.number),
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true)),
                             controller.locationType.value ==
                                     LocationType.GENERAL.toString()
                                 ? const SizedBox.shrink()
@@ -90,7 +90,7 @@ class QuickTripPage extends GetView<QuickTripController> {
                                     txtEditingController:
                                         controller.customPriceController,
                                     focusNode: discountFocusNode,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                     onChanged: (value) =>
                                         controller.updateFare(value),
                                   ),

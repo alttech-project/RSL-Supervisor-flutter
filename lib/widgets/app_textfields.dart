@@ -309,6 +309,9 @@ class BoxTextFieldTransparent extends StatelessWidget {
     this.autofocus = false,
     this.contentPadding,
     this.textInputAction = TextInputAction.done,
+    required this.inputFormatters,// Add this line
+
+
   });
 
   final String? hintText;
@@ -325,6 +328,10 @@ class BoxTextFieldTransparent extends StatelessWidget {
   final void Function(String)? onChanged;
   final EdgeInsetsGeometry? contentPadding;
   final TextInputAction textInputAction;
+  final List<TextInputFormatter> inputFormatters;
+  // Validator function added
+
+
 
   @override
   Widget build(BuildContext context) {

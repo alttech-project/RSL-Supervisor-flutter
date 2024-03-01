@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rsl_supervisor/routes/app_routes.dart';
@@ -33,14 +34,11 @@ class QuickTripController extends GetxController {
   RxInt pageType = 0.obs;
   RxInt enableEditFare = 0.obs;
   RxString fareText = ''.obs;
-
   var countryCode = '971'.obs;
   var apiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
   String originalFare = "0";
-
   double dropLatitude = 0.0, dropLongitude = 0.0;
-
   Rx<Payments> selectedPayment = quickTripsPaymentList[0].obs;
 
   @override
@@ -252,7 +250,7 @@ class QuickTripController extends GetxController {
         }
       });
       showSnackBar(
-        title: 'Error',
+        title: 'Alert',
         msg: "Discount cannot be greater than the fare",
       );
     }
@@ -296,20 +294,30 @@ class QuickTripController extends GetxController {
     switch (response.status) {
       case 1:
         clearDatas();
-        showAppDialog(
-          title: '${response.message}',
-          message: '${response.message}',
-          content: QrImageView(
-            data: '${response.trackUrl}',
-            version: QrVersions.auto,
-            size: 200.0,
+        Get.defaultDialog(
+          title: response.message.toString(),
+          content: Column(
+            children: [
+              Text(response.message.toString()),
+              SizedBox(
+                width: 200.0.w, // Adjust as needed
+                height: 200.0.h, // Adjust as needed
+                child: QrImageView(
+                  data: response.trackUrl.toString(),
+                  version: QrVersions.auto,
+                ),
+              ),
+
+            ],
           ),
-          confirm: defaultAlertConfirm(
+          confirm: TextButton(
             onPressed: () {
               navigateToDashboardPage();
             },
+            child:  Text('Confirm',style: TextStyle(color: AppColors.kPrimaryColor.value,)),
           ),
         );
+
         break;
       default:
         _showSnackBar('Error', response.message ?? 'Server Connection Error!');

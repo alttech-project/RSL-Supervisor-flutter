@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -818,19 +819,24 @@ class EditBooking extends GetView<EditBookingController> {
   Widget _priceWidget() {
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.datetime,
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.next,
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))], // Allow only numbers and dot
         onChanged: (value) => {
-              controller.calculateShares(double.parse(value)),
+              controller.calculateShares(value),
               controller.isValueChanged.value = true
             },
         onSubmitted: (value) => {controller.originalPrice = value},
         // onChanged: (value) => controller.priceController.text = value,
-        autofocus: false);
+        autofocus: false,
+      );
   }
+
+
+
 
   Widget _extraChargesWidget() {
     final FocusNode extraChargesFocusNode = FocusNode();
@@ -841,17 +847,20 @@ class EditBooking extends GetView<EditBookingController> {
     });
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.datetime,
         textController: controller.extraChargesController,
         enable: true,
         autocorrect: false,
         focusNode: extraChargesFocusNode,
         textInputAction: TextInputAction.done,
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))], // Allow only numbers and dot
+
         onChanged: (value) => {
               controller.handleExtraCharge(value),
               controller.isValueChanged.value = true
             },
         onSubmitted: (value) => controller.setExtraChargeForMinus(),
+
         autofocus: false);
   }
 

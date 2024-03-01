@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -828,14 +829,18 @@ class BookingsPage extends GetView<BookingsController> {
   Widget _priceWidget() {
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.datetime,
         textController: controller.priceController,
         enable: true,
         autocorrect: false,
         textInputAction: TextInputAction.next,
-        onChanged: (value) => controller.calculateShares(double.parse(value)),
+        onChanged: (value) => controller.calculateShares(value),
         onSubmitted: (value) => {controller.originalPrice = value},
-        autofocus: false);
+        autofocus: false,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp('[0-9.-]')),
+        ],
+    );
   }
 
   Widget _extraChargesWidget() {
@@ -847,7 +852,7 @@ class BookingsPage extends GetView<BookingsController> {
     });
     return BoxTextFieldTransparent(
         hintText: "0",
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.datetime,
         textController: controller.extraChargesController,
         enable: true,
         autocorrect: false,
@@ -855,7 +860,12 @@ class BookingsPage extends GetView<BookingsController> {
         textInputAction: TextInputAction.done,
         onChanged: (value) => controller.handleExtraCharge(value),
         onSubmitted: (value) => controller.setExtraChargeForMinus(),
-        autofocus: false);
+        autofocus: false,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+    );
   }
 
   Widget _noteToDriverWidget() {

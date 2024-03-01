@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +8,6 @@ import 'package:rsl_supervisor/dashboard/widgets/locations_list_widget.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/dashboard/views/side_menu.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
-
 import '../../shared/styles/app_font.dart';
 import '../../widgets/app_loader.dart';
 import '../../widgets/safe_area_container.dart';

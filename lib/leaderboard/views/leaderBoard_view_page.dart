@@ -148,7 +148,7 @@ class LeaderBoardPage extends GetView<LeaderBoardController> {
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: AppColors.kPrimaryColor
+                    backgroundColor: AppColors.kPrimaryColor
                         .value, // Set the background color to cyan
                   ),
                   child: const Text('Submit'),

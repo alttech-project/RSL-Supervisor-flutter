@@ -299,29 +299,37 @@ class EditBookingController extends GetxController {
     }
   }
 
-  void calculateShares(double customerPriceValue) {
-    double rslShareValue = (customerPriceValue * 0.15 * 100).round() / 100;
+  void calculateShares(String customerPriceValue) {
+    // Remove special characters from the customerPriceValue
+    String cleanedValue = customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
+    print("calculateSharesdeepakvalue---> $cleanedValue");
+    priceController.text = cleanedValue;
 
-    if (customerPriceValue <= 20.0) {
-      rslShareValue = customerPriceValue;
+    double rslShareValue = (double.parse(customerPriceValue) * 0.15 * 100).round() / 100;
+    if (double.parse(customerPriceValue) <= 20.0) {
+      rslShareValue = double.parse(customerPriceValue);
     } else if (rslShareValue < 20.0) {
       rslShareValue = 20.0;
     }
-
-    double driverShareValue = customerPriceValue - rslShareValue;
+    double driverShareValue = double.parse(customerPriceValue) - rslShareValue;
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
   }
 
+
   void handleExtraCharge(String value) {
+    String cleanedValue = value.replaceAll(RegExp(r'[^0-9.-]'), '');
+    print("deepakvalue---> $cleanedValue");
+    extraChargesController.text = cleanedValue;
+
     if (value.contains('-')) {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
       }
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue =
-          absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
+      absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
       if (enteredValue > double.parse(originalPrice)) {
         setExtraChargeError(true);
         return;
@@ -331,8 +339,7 @@ class EditBookingController extends GetxController {
       double extraChargeValue = enteredValue.isNaN ? 0 : enteredValue;
       double adjustedCustomerPrice =
           double.parse(originalPrice) - extraChargeValue;
-      calculateShares(adjustedCustomerPrice);
-      // setExtraChargeForMinus(true);
+      calculateShares(    adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
     } else {
       if (originalPrice.isEmpty) {
@@ -340,9 +347,8 @@ class EditBookingController extends GetxController {
       }
       double extraChargeValue = value.isEmpty ? 0 : double.parse(value) ?? 0;
       double adjustedCustomerPrice =
-          double.parse(originalPrice) + extraChargeValue;
-      calculateShares(adjustedCustomerPrice);
-      // setExtraChargeForMinus(false);
+          double.parse(originalPrice ?? "0") + extraChargeValue;
+      calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
     }
   }

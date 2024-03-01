@@ -320,6 +320,7 @@ class DashBoardController extends GetxController {
         final QuickTripController controller = Get.find<QuickTripController>();
         controller.pageType.value = 1;
         controller.fareText.value = "0";
+        controller.originalFare = "0";
         Get.toNamed(AppRoutes.quickTripPage);
         break;
       case 'Offline Trips':

@@ -1591,11 +1591,27 @@ class BookingsPage extends GetView<BookingsController> {
 
   Future<DateTime> _selectDate(BuildContext context) async {
     final selected = await showDatePicker(
-      context: context,
-      initialDate: controller.selectedDate,
-      firstDate: controller.dateTime.subtract(const Duration(days: 0)),
-      lastDate: controller.dateTime.add(const Duration(days: 62)),
-    );
+        context: context,
+        initialDate: controller.selectedDate,
+        firstDate: DateTime.now().subtract(const Duration(days: 0)),
+        lastDate: controller.dateTime.add(const Duration(days: 62)),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(
+              primaryColor: AppColors.kPrimaryColor.value,
+              hintColor: AppColors.kPrimaryColor.value,
+              primarySwatch: Colors.grey,
+              colorScheme: ColorScheme.light(
+                  primary: AppColors.kPrimaryColor.value,
+                  secondary: AppColors.kPrimaryColor.value.withOpacity(0.5)),
+              buttonBarTheme: const ButtonBarThemeData(
+                buttonTextTheme: ButtonTextTheme.primary,
+              ),
+            ),
+            child: child!,
+          );
+        });
+
     if (selected != null && selected != controller.selectedDate) {
       controller.selectedDate = selected;
     }
@@ -1605,9 +1621,24 @@ class BookingsPage extends GetView<BookingsController> {
 // Select for Time
   Future<TimeOfDay> _selectTime(BuildContext context) async {
     final selected = await showTimePicker(
-      context: context,
-      initialTime: controller.selectedTime,
-    );
+        context: context,
+        initialTime: controller.selectedTime,
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(
+              primaryColor: AppColors.kPrimaryColor.value,
+              hintColor: AppColors.kPrimaryColor.value,
+              primarySwatch: Colors.grey,
+              colorScheme: ColorScheme.light(
+                  primary: AppColors.kPrimaryColor.value,
+                  secondary: AppColors.kPrimaryColor.value.withOpacity(0.5)),
+              buttonBarTheme: const ButtonBarThemeData(
+                buttonTextTheme: ButtonTextTheme.primary,
+              ),
+            ),
+            child: child!,
+          );
+        });
     if (selected != null && selected != controller.selectedTime) {
       controller.selectedTime = selected;
     }

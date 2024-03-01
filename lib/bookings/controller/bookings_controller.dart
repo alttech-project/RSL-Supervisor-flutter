@@ -196,12 +196,14 @@ class BookingsController extends GetxController
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    // printLogs("hello rslShare ${rslShare} ${driverShare}");
+    // printLogs("rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {
-    // printLogs("hello originalPrice ${originalPrice}");
     if (value.contains('-')) {
+      if (originalPrice.isEmpty) {
+        originalPrice = "0";
+      }
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue =
           absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
@@ -218,9 +220,12 @@ class BookingsController extends GetxController
       // setExtraChargeForMinus(true);
       priceController.text = adjustedCustomerPrice.toString();
     } else {
+      if (originalPrice.isEmpty) {
+        originalPrice = "0";
+      }
       double extraChargeValue = value.isEmpty ? 0 : double.parse(value) ?? 0;
       double adjustedCustomerPrice =
-          double.parse(originalPrice) + extraChargeValue;
+          double.parse(originalPrice ?? "0") + extraChargeValue;
       calculateShares(adjustedCustomerPrice);
       // setExtraChargeForMinus(false);
       priceController.text = adjustedCustomerPrice.toString();
@@ -595,7 +600,6 @@ class BookingsController extends GetxController
       priceController.clear();
       originalPrice = "0";
     }
-    // printLogs("hello rslShare api ${rslShare} ${driverShare}");
   }
 
   void _calculateTimeAndDistance() async {

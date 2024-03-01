@@ -312,12 +312,13 @@ class EditBookingController extends GetxController {
     double driverShares = driverShareValue.clamp(0, double.infinity);
     rslShare = rslShareValue;
     driverShare = driverShares;
-    // printLogs("hello rslShare ${rslShare} ${driverShare}");
   }
 
   void handleExtraCharge(String value) {
-    // printLogs("hello originalPrice ${originalPrice}");
     if (value.contains('-')) {
+      if (originalPrice.isEmpty) {
+        originalPrice = "0";
+      }
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue =
           absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
@@ -334,6 +335,9 @@ class EditBookingController extends GetxController {
       // setExtraChargeForMinus(true);
       priceController.text = adjustedCustomerPrice.toString();
     } else {
+      if (originalPrice.isEmpty) {
+        originalPrice = "0";
+      }
       double extraChargeValue = value.isEmpty ? 0 : double.parse(value) ?? 0;
       double adjustedCustomerPrice =
           double.parse(originalPrice) + extraChargeValue;
@@ -573,7 +577,6 @@ class EditBookingController extends GetxController {
       if ((response.status ?? 0) == 1) {
         carModelList.value = response.carMakeDetails?.carMakeList ?? [];
         carModelList.refresh();
-        // printLogs("hi carModelList ${taxiModel.value} ${carModelList}");
       } else {
         carModelList.value = [];
         carModelList.refresh();

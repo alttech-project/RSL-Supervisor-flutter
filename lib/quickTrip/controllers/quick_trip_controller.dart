@@ -261,6 +261,9 @@ class QuickTripController extends GetxController {
   void updateFare(String discount) async {
     var discountValue = await GetStorageController().getDiscountValue();
     if (discountValue == 0) {
+      if (originalFare.isEmpty) {
+        originalFare = "0";
+      }
       String discountFare = discount.replaceAll('-', '');
       double discountValue =
           discountFare.isEmpty ? 0.0 : double.parse(discountFare);
@@ -277,7 +280,12 @@ class QuickTripController extends GetxController {
         fareController.text = adjustedPrice.toString();
       }
     } else {
-      double customPriceValue = discount.isEmpty ? 0.0 : double.parse(discount);
+      if (originalFare.isEmpty) {
+        originalFare = "0";
+      }
+      double customPriceValue = discount.replaceAll("-", "").isEmpty
+          ? 0.0
+          : double.parse(discount.replaceAll("-", ""));
       double adjustedPrice = double.parse(originalFare) + customPriceValue;
       fareController.text = adjustedPrice.toString();
     }

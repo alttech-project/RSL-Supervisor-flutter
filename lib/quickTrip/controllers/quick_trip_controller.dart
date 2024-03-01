@@ -298,7 +298,6 @@ class QuickTripController extends GetxController {
           title: response.message.toString(),
           content: Column(
             children: [
-              Text(response.message.toString()),
               SizedBox(
                 width: 200.0.w, // Adjust as needed
                 height: 200.0.h, // Adjust as needed
@@ -307,14 +306,16 @@ class QuickTripController extends GetxController {
                   version: QrVersions.auto,
                 ),
               ),
-
             ],
           ),
           confirm: TextButton(
             onPressed: () {
               navigateToDashboardPage();
             },
-            child:  Text('Confirm',style: TextStyle(color: AppColors.kPrimaryColor.value,)),
+            child: Text('Confirm',
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor.value,
+                )),
           ),
         );
 

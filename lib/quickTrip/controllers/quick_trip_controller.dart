@@ -116,11 +116,11 @@ class QuickTripController extends GetxController {
             dispatchQuickTripApi(
               DispatchQuickTripRequestData(
                 tripId: tripID,
-                kioskId: supervisorInfo!.kioskId,
-                companyId: supervisorInfo!.cid,
-                supervisorName: supervisorInfo!.supervisorName,
-                supervisorId: supervisorInfo!.supervisorId,
-                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                kioskId: supervisorInfo?.kioskId,
+                companyId: supervisorInfo?.cid,
+                supervisorName: supervisorInfo?.supervisorName,
+                supervisorId: supervisorInfo?.supervisorId,
+                supervisorUniqueId: supervisorInfo?.supervisorUniqueId,
                 name: name,
                 countryCode: countryCode.value,
                 mobileNo: phone,
@@ -300,7 +300,7 @@ class QuickTripController extends GetxController {
             children: [
               SizedBox(
                 width: 200.0.w, // Adjust as needed
-                height: 200.0.h, // Adjust as needed
+                height: 150.0.h, // Adjust as needed
                 child: QrImageView(
                   data: response.trackUrl.toString(),
                   version: QrVersions.auto,
@@ -310,6 +310,7 @@ class QuickTripController extends GetxController {
           ),
           confirm: TextButton(
             onPressed: () {
+              Get.back();
               navigateToDashboardPage();
             },
             child: Text('Confirm',
@@ -326,9 +327,13 @@ class QuickTripController extends GetxController {
   }
 
   void navigateToDashboardPage() async {
-    await Get.toNamed(
+    clearDatas();
+    await Get.offAndToNamed(
       AppRoutes.dashboardPage,
     );
+    /*await Get.toNamed(
+      AppRoutes.dashboardPage,
+    );*/
   }
 
   void navigateToPlaceSearchPage() async {

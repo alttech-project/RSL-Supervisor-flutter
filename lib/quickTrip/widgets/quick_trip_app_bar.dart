@@ -17,7 +17,8 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
       children: [
         InkWell(
           onTap: () {
-            final DashBoardController dashBoardController = Get.find<DashBoardController>();
+            final DashBoardController dashBoardController =
+                Get.find<DashBoardController>();
             dashBoardController.startTimer();
             controller.onClose();
             Get.back();
@@ -38,7 +39,7 @@ class QuickTripsAppBar extends GetView<QuickTripController> {
           child: Text(
             'Quick Trips',
             style:
-            AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+                AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             textAlign: TextAlign.center,
           ),
         ),

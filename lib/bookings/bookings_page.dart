@@ -287,10 +287,23 @@ class BookingsPage extends GetView<BookingsController> {
                       if (controller.singleClicked.value) {
                         controller.singleClicked.value = false;
                       } else {
-                        controller.priceController.text = (controller.calculatedValue.value / 2).toString();
-                        controller.calculatedValue.value = controller.calculatedValue.value / 2;
+                        if (controller.isMultiFly.value == true) {
+                          controller.priceController.text = (controller
+                              .calculatedValue.value / 2).toString();
+                          controller.calculatedValue.value = controller
+                              .calculatedValue.value / 2;
 
+                          print("isMultiFlyif${controller.isMultiFly.value}");
+                        } else {
+                          controller.priceController.text = (controller
+                              .calculatedValue.value ).toString();
+                          controller.calculatedValue.value = controller
+                              .calculatedValue.value;
+                          print("isMultiFlyelse${controller.isMultiFly.value}");
+
+                        }
                       }
+                      controller.priceController.text = controller.originalPrice;
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -358,7 +371,6 @@ class BookingsPage extends GetView<BookingsController> {
                 onChanged: (value) {
                   controller.roundedSelectedRadio(value);
                   controller.singleClicked.value = true;
-
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -842,8 +854,10 @@ class BookingsPage extends GetView<BookingsController> {
      controller.calculatedValue;
 
     if (controller.roundTripselectedTripRadioValue.value == 1 && controller.selectedTripRadioValue.value == 2) {
+      controller.isMultiFly.value = true;
       controller.calculatedValue.value = controller.price.value * 2;
     } else {
+      controller.isMultiFly.value = false;
       controller.selectedTripRadioValue.value == 2 ? controller.calculatedValue.value = controller.price.value /2 : controller.calculatedValue.value = controller.price.value;
     }
     controller.priceController.text = controller.calculatedValue.value.toString();

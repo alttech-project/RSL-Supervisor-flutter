@@ -117,7 +117,9 @@ class BookingsController extends GetxController
   RxInt roundTripselectedTripRadioValue = 1.obs;
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
-  RxBool singleClicked = false.obs; // Initially, no single option clicked
+  RxBool singleClicked = false.obs;
+  RxBool isMultiFly = false.obs; // Initially, no single option clicked
+// Initially, no single option clicked
 
 
 

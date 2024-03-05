@@ -16,12 +16,12 @@ class CapsuleTextField extends StatelessWidget {
 
   const CapsuleTextField(
       {super.key,
-      required this.controller,
-      required this.hint,
-      this.onChanged,
-      this.isEnabled,
-      this.textStyle,
-      this.suffix});
+        required this.controller,
+        required this.hint,
+        this.onChanged,
+        this.isEnabled,
+        this.textStyle,
+        this.suffix});
 
   @override
   Widget build(BuildContext context) {

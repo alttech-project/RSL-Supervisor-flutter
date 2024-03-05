@@ -827,16 +827,23 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _priceWidget() {
+    printLogs("hello price");
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: false),
             textController: controller.priceController,
             enable: true,
             autocorrect: false,
             textInputAction: TextInputAction.next,
-            onChanged: (value) => controller.calculateShares(value),
-            onSubmitted: (value) => {controller.originalPrice = value},
+            onChanged: (value) => {
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
             autofocus: false,
           )
         : BoxTextFieldTransparent(
@@ -846,8 +853,14 @@ class BookingsPage extends GetView<BookingsController> {
             enable: true,
             autocorrect: false,
             textInputAction: TextInputAction.next,
-            onChanged: (value) => controller.calculateShares(value),
-            onSubmitted: (value) => {controller.originalPrice = value},
+            onChanged: (value) => {
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
             autofocus: false,
           );
   }
@@ -862,13 +875,18 @@ class BookingsPage extends GetView<BookingsController> {
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: false),
             textController: controller.extraChargesController,
             enable: true,
             autocorrect: false,
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
-            onChanged: (value) => controller.handleExtraCharge(value),
+            onChanged: (value) => {
+              controller.extraChargesController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller
+                  .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
             onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
           )
@@ -880,7 +898,12 @@ class BookingsPage extends GetView<BookingsController> {
             autocorrect: false,
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
-            onChanged: (value) => controller.handleExtraCharge(value),
+            onChanged: (value) => {
+              controller.extraChargesController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller
+                  .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
             onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
             /* inputFormatters: <TextInputFormatter>[
@@ -943,9 +966,14 @@ class BookingsPage extends GetView<BookingsController> {
     return _labelAndTextFieldWidget(
         'Customer Rate', 'Customer Rate', 'Enter Customer Rate (Optional)',
         txtEditingController: controller.customRateController,
-        keyboardType: TextInputType.number, validator: (value) {
-      return null;
-    });
+        onChanged: (value) => {
+              controller.customRateController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+            },
+        keyboardType: TextInputType.number,
+        validator: (value) {
+          return null;
+        });
   }
 
   Widget _remarksLabel() {

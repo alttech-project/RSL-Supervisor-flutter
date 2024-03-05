@@ -826,10 +826,14 @@ class EditBooking extends GetView<EditBookingController> {
             autocorrect: false,
             textInputAction: TextInputAction.next,
             onChanged: (value) => {
-              controller.calculateShares(value),
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
-            onSubmitted: (value) => {controller.originalPrice = value},
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
             autofocus: false,
           )
         : BoxTextFieldTransparent(
@@ -840,10 +844,14 @@ class EditBooking extends GetView<EditBookingController> {
             autocorrect: false,
             textInputAction: TextInputAction.next,
             onChanged: (value) => {
-              controller.calculateShares(value),
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
-            onSubmitted: (value) => {controller.originalPrice = value},
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
             autofocus: false,
           );
   }
@@ -865,7 +873,10 @@ class EditBooking extends GetView<EditBookingController> {
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
-              controller.handleExtraCharge(value),
+              controller.extraChargesController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller
+                  .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
             onSubmitted: (value) => controller.setExtraChargeForMinus(),
@@ -880,7 +891,10 @@ class EditBooking extends GetView<EditBookingController> {
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
-              controller.handleExtraCharge(value),
+              controller.extraChargesController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller
+                  .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
             onSubmitted: (value) => controller.setExtraChargeForMinus(),
@@ -1197,9 +1211,14 @@ class EditBooking extends GetView<EditBookingController> {
     return _labelAndTextFieldWidget(
         'Customer Rate', 'Customer Rate', 'Enter Customer Rate (Optional)',
         txtEditingController: controller.customRateController,
-        keyboardType: TextInputType.number, validator: (value) {
-      return null;
-    });
+        onChanged: (value) => {
+              controller.customRateController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+            },
+        keyboardType: TextInputType.number,
+        validator: (value) {
+          return null;
+        });
   }
 
   Widget _line() {

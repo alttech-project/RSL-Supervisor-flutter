@@ -243,7 +243,7 @@ class MotorModelInfo {
   int? modelId;
   String? modelName;
   int? cancellationFare;
-  int? minFare;
+  num? minFare;
   int? taxiMinSpeed;
   int? taxiSpeed;
   int? waitingTime;
@@ -251,31 +251,17 @@ class MotorModelInfo {
   MotorModelInfo(
       {this.modelId,
       this.modelName,
-      this.cancellationFare,
-      this.minFare,
-      this.taxiMinSpeed,
-      this.taxiSpeed,
-      this.waitingTime});
+      });
 
   MotorModelInfo.fromJson(Map<String, dynamic> json) {
     modelId = json['model_id'];
     modelName = json['model_name'];
-    cancellationFare = json['cancellation_fare'];
-    minFare = json['min_fare'];
-    taxiMinSpeed = json['taxi_min_speed'];
-    taxiSpeed = json['taxi_speed'];
-    waitingTime = json['waiting_time'];
-  }
+    }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['model_id'] = modelId;
     data['model_name'] = modelName;
-    data['cancellation_fare'] = cancellationFare;
-    data['min_fare'] = minFare;
-    data['taxi_min_speed'] = taxiMinSpeed;
-    data['taxi_speed'] = taxiSpeed;
-    data['waiting_time'] = waitingTime;
     return data;
   }
 }

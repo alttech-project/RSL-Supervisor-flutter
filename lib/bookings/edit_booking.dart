@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
-import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -119,8 +117,8 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           _bookingTypeInfo(),
           SizedBox(height: 10.h),
-          Obx(() => controller.selectedBookingType.value.id == 1 &&
-                  controller.zoneFareApplied.value == 1
+          Obx(() => controller.mobileTripType.value == 2 &&
+                  controller.mobileDoubleTheFare.value == 1
               ? Column(
                   children: [
                     _tripTypeRadioWidget(),
@@ -254,6 +252,13 @@ class EditBooking extends GetView<EditBookingController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (value) {
                       controller.tripTypeSelectedRadio(value!);
+                      if (controller.singleClicked.value) {
+                        controller.singleClicked.value = false;
+                      } else {
+                        controller.priceController.text = (controller.calculatedValue.value / 2).toString();
+                        controller.calculatedValue.value = controller.calculatedValue.value / 2;
+
+                      }
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -272,6 +277,7 @@ class EditBooking extends GetView<EditBookingController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (int? value) {
                       controller.tripTypeSelectedRadio(value);
+                      controller.price.value = controller.carMakeFareDetails.value.customer_price?.toDouble() ?? 0;
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -285,7 +291,6 @@ class EditBooking extends GetView<EditBookingController> {
                   ),
                 ],
               ),
-
               controller.selectedTripRadioValue.value == 2
                   ? _roundtripTypeRadioWidget()
                   : const SizedBox.shrink(),
@@ -336,6 +341,8 @@ class EditBooking extends GetView<EditBookingController> {
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
                   controller.roundedSelectedRadio(value!);
+                  controller.singleClicked.value = true;
+
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -806,7 +813,7 @@ class EditBooking extends GetView<EditBookingController> {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
         child: Text(
-          'Extra Charges',
+          'Previous Applied Extra Charge',
           style: AppFontStyle.subHeading(
             size: AppFontSize.small.value,
             color: Colors.white70,
@@ -817,12 +824,24 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _priceWidget() {
+
+    controller.price.value = double.tryParse(controller.priceController.text) ?? 0;
+    controller.calculatedValue;
+
+    if (controller.roundTripselectedTripRadioValue.value == 1 && controller.selectedTripRadioValue.value == 2) {
+      controller.calculatedValue.value = controller.price.value * 2;
+    } else {
+      controller.selectedTripRadioValue.value == 2 ? controller.calculatedValue.value = controller.price.value /2 : controller.calculatedValue.value = controller.price.value;
+    }
+    controller.priceController.text = controller.calculatedValue.value.toString();
+
+
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",
             keyboardType: TextInputType.number,
             textController: controller.priceController,
-            enable: true,
+            enable: false,
             autocorrect: false,
             textInputAction: TextInputAction.next,
             onChanged: (value) => {
@@ -840,7 +859,7 @@ class EditBooking extends GetView<EditBookingController> {
             hintText: "0",
             keyboardType: TextInputType.datetime,
             textController: controller.priceController,
-            enable: true,
+            enable: false,
             autocorrect: false,
             textInputAction: TextInputAction.next,
             onChanged: (value) => {
@@ -857,6 +876,44 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _extraChargesWidget() {
+    return GetPlatform.isAndroid
+        ? BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.number,
+            textController: controller.extraChargesController,
+            enable: false,
+            autocorrect: false,
+            textInputAction: TextInputAction.done,
+            // onChanged: (value) => {
+            //   controller.handleExtraCharge(value),
+            //   controller.isValueChanged.value = true
+            // },
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            autofocus: false,
+          )
+        : BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.datetime,
+            textController: controller.extraChargesController,
+            enable: false,
+            autocorrect: false,
+            textInputAction: TextInputAction.done,
+            // onChanged: (value) => {
+            //   controller.handleExtraCharge(value),
+            //   controller.isValueChanged.value = true
+            // },
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            autofocus: false,
+            /* inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              FilteringTextInputFormatter.digitsOnly,
+            ],*/
+          );
+
+      }
+
+
+  Widget _addExtraChargesWidget() {
     final FocusNode extraChargesFocusNode = FocusNode();
     extraChargesFocusNode.addListener(() {
       if (extraChargesFocusNode.hasFocus) {
@@ -903,8 +960,28 @@ class EditBooking extends GetView<EditBookingController> {
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               FilteringTextInputFormatter.digitsOnly,
             ],*/
-          );
+    );
+
   }
+
+
+  Widget _addLabelExtraCharges() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+        child: Text(
+          'Extra Charge',
+          style: AppFontStyle.subHeading(
+            size: AppFontSize.small.value,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
+
+
 
   Widget _noteToDriverWidget() {
     return _labelAndTextFieldWidget(
@@ -1113,13 +1190,37 @@ class EditBooking extends GetView<EditBookingController> {
                               horizontal: 5,
                             ), // Adjust left and right padding
                             child: _extraChargesWidget(),
+
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
+
+              ),
+              SizedBox(height: 10),
+              _addLabelExtraCharges(),
+              Card(
+                elevation: 8,
+                margin: const EdgeInsets.only(
+                    bottom: 0, left: 0, right: 150,top: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    12,
+                  ),
+                ),
+                color: AppColors.kSecondaryBackGroundColor.value,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 5,
+                  ), // Adjust left and right padding
+                  child: _addExtraChargesWidget(),
+                ),
               )
+
+
             ],
           )
         : const SizedBox.shrink());

@@ -37,18 +37,31 @@ class EditBookingController extends GetxController {
   TabController? tabController;
   RxInt editBookingTripId = 0.obs;
   RxString initialCountryCode = 'AE'.obs;
+  RxInt subtractValue = 0.obs;
+  RxInt intialFare = 0.obs;
+  RxInt customerFldClicked = 0.obs;
+  RxDouble calculatedValue = 0.0.obs;
+  RxDouble price = 0.0.obs;
+  RxBool singleClicked = false.obs;
+
+  Rx<PassengerDetails> carMakeFareDetails = PassengerDetails().obs;
+// Initially, no single option clicked
+
+
+
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController pickupLocationController =
       TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController extraChargesController = TextEditingController();
+   final TextEditingController extraChargesController = TextEditingController();
+  final TextEditingController addExtraChargesController = TextEditingController();
+
 
   final TextEditingController noteToDriverController = TextEditingController();
   final TextEditingController flightNumberController = TextEditingController();
@@ -92,6 +105,11 @@ class EditBookingController extends GetxController {
   var approximateFare = "0".obs;
 
   var zoneFareApplied = 0.obs;
+  var mobileTripType = 0.obs;
+  var mobileDoubleTheFare = 0.obs;
+
+
+
   num rslShare = 0;
   num driverShare = 0;
   num corporateShare = 0;
@@ -168,6 +186,7 @@ class EditBookingController extends GetxController {
       priceController.text = (details.customer_price ?? "").toString();
       originalPrice = priceController.text.toString();
       extraChargesController.text = (details.extra_charge ?? "").toString();
+      subtractValue.value = details.extra_charge?.toInt() ?? 0;
       noteToDriverController.text = details.note_to_driver ?? "";
       noteToAdminController.text = details.note_to_admin ?? "";
       flightNumberController.text = details.flight_number ?? "";
@@ -182,6 +201,8 @@ class EditBookingController extends GetxController {
       driverShare = details.driver_share ?? 0;
       corporateShare = details.corporate_share ?? 0;
       zoneFareApplied.value = details.zone_fare_applied ?? 0;
+      mobileTripType.value = details?.trip_type ?? 0;
+      mobileDoubleTheFare.value = details?.double_the_fare ?? 0;
       pickupZoneId = details.pickup_zone_id ?? 0;
       pickupZoneGroupId = details.pickup_zone_group_id ?? 0;
       dropZoneId = details.drop_zone_id ?? 0;
@@ -322,7 +343,7 @@ class EditBookingController extends GetxController {
   void handleExtraCharge(String value) {
     if (GetPlatform.isIOS) {
       String cleanedValue = value.replaceAll(RegExp(r'[^0-9.-]'), '');
-      extraChargesController.text = cleanedValue;
+      addExtraChargesController.text = cleanedValue;
     }
 
     if (value.contains('-')) {
@@ -356,16 +377,16 @@ class EditBookingController extends GetxController {
   }
 
   void setExtraChargeForMinus() {
-    if (extraChargesController.text.contains('-')) {
-      extraChargesController.clear();
-      extraChargesController.text = "";
+    if (addExtraChargesController.text.contains('-')) {
+      addExtraChargesController.clear();
+      addExtraChargesController.text = "";
     }
   }
 
   void setExtraChargeError(bool extraCharge) {
     if (extraCharge) {
       Future.delayed(const Duration(seconds: 1), () {
-        extraChargesController.clear();
+        addExtraChargesController.clear();
         if (originalPrice != "0") {
           priceController.text = originalPrice.toString();
         }
@@ -386,7 +407,7 @@ class EditBookingController extends GetxController {
     final dropLocation = dropLocationController.text.trim();
     final date = dateController.text.trim();
     final price = priceController.text.trim();
-    final extraCharges = extraChargesController.text.trim();
+    final extraCharges = addExtraChargesController.text.trim();
     final noteToDriver = noteToDriverController.text.trim();
     final noteToAdmin = noteToAdminController.text.trim();
     final flightNumber = flightNumberController.text.trim();
@@ -503,6 +524,7 @@ class EditBookingController extends GetxController {
   }
 
   void goBackPage() {
+    addExtraChargesController.clear();
     Get.back();
     Get.find<BookingsListController>().startTripListTimer();
     Get.find<BookingsListController>().callTripListOngoingApi(type: 1);
@@ -631,6 +653,10 @@ class EditBookingController extends GetxController {
     approximateFare.value = carMakeFareDetails?.fare?.toString() ?? "0";
     zoneFareApplied.value = carMakeFareDetails?.zoneFareApplied ?? 0;
 
+
+
+
+
     if (zoneFareApplied.value == 1) {
       rslShare = carMakeFareDetails?.rslShare ?? 0;
       driverShare = carMakeFareDetails?.driverShare ?? 0;
@@ -640,6 +666,7 @@ class EditBookingController extends GetxController {
       dropZoneId = carMakeFareDetails?.dropZoneId ?? 0;
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+
       originalPrice = priceController.text.toString();
     } else {
       rslShare = 0;
@@ -689,7 +716,7 @@ class EditBookingController extends GetxController {
     phoneController.clear();
     emailController.clear();
     priceController.clear();
-    extraChargesController.clear();
+    addExtraChargesController.clear();
     noteToAdminController.clear();
     noteToDriverController.clear();
     flightNumberController.clear();

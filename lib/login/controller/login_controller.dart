@@ -154,7 +154,7 @@ class LoginController extends GetxController {
     );
   }
 
-  calVerfyOtpApi() async {
+  calVerifyOtpApi() async {
     String username = emailController.text.trim();
     apiLoading.value = true;
 

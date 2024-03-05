@@ -51,7 +51,7 @@ class VerifyOTPWidget extends GetView<LoginController> {
               onCompleted: (pin) {
                 printLogs("OTP Completed: $pin");
                 controller.otp.value = pin;
-                controller.calVerfyOtpApi();
+                controller.calVerifyOtpApi();
               },
               onChanged: (pin) {
                 printLogs("OTP onChanged: $pin");
@@ -87,7 +87,7 @@ class VerifyOTPWidget extends GetView<LoginController> {
                 text: 'Verify OTP',
                 onTap: () {
                   if (controller.otp.value.length == 4) {
-                    controller.calVerfyOtpApi();
+                    controller.calVerifyOtpApi();
                   }
                 },
               ),

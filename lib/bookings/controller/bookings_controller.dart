@@ -65,6 +65,8 @@ class BookingsController extends GetxController
   Rx<TripType> selectedPackageType = packageTypeList[0].obs;
   RxList<CorporatePackageList> packageList = <CorporatePackageList>[].obs;
   Rx<CorporatePackageList> packageData = CorporatePackageList().obs;
+  Rx<CarMakeFareDetails> carMakeFareDetails = CarMakeFareDetails().obs;
+
 
   var countryCode = '971'.obs;
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
@@ -73,6 +75,7 @@ class BookingsController extends GetxController
   var taxiModel = ''.obs;
   var taxiId = ''.obs;
   var carMakeId = ''.obs;
+
 
   Rx<Payments> selectedPayment = paymentList[0].obs;
 
@@ -112,13 +115,19 @@ class BookingsController extends GetxController
 
   RxInt selectedTripRadioValue = 1.obs;
   RxInt roundTripselectedTripRadioValue = 1.obs;
+  RxDouble calculatedValue = 0.0.obs;
+  RxDouble price = 0.0.obs;
+  RxBool singleClicked = false.obs; // Initially, no single option clicked
+
+
+
 
   @override
   void onInit() {
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
     getDate();
-    _getUserInfo();
+    getUserInfo();
   }
 
   void goBack() {
@@ -181,7 +190,6 @@ class BookingsController extends GetxController
 
   void calculateShares(String customerPriceValue) {
     if (GetPlatform.isIOS) {
-      // Remove special characters from the customerPriceValue
       String cleanedValue =
           customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
       priceController.text = cleanedValue;
@@ -314,10 +322,19 @@ class BookingsController extends GetxController
 
   void tripTypeSelectedRadio(int? value) {
     selectedTripRadioValue.value = value ?? 0;
+    print("selectedTripRadioValue-->${selectedTripRadioValue}");
+    if (selectedTripRadioValue.value == 2) {
+      roundTripselectedTripRadioValue.value = 1;
+    } else {
+      roundTripselectedTripRadioValue.value = 0;
+    }
   }
+
 
   void roundedSelectedRadio(int? value) {
     roundTripselectedTripRadioValue.value = value ?? 0;
+
+    print("roundTripselectedTripRadioValue-->${roundTripselectedTripRadioValue}");
   }
 
   void checkNewBookingValidation() async {
@@ -569,6 +586,9 @@ class BookingsController extends GetxController
         if ((response.status ?? 0) == 1) {
           // motorModelList = response.fareDetailList ?? [];
           updateModelFareDetails(response.carMakeDetails?.carMakeFareDetails);
+          carMakeFareDetails.value = response.carMakeDetails?.carMakeFareDetails ?? CarMakeFareDetails();
+
+
         }
       }).onError((error, stackTrace) {
         apiLoading.value = false;
@@ -684,7 +704,7 @@ class BookingsController extends GetxController
     dropZoneGroupId = 0;
   }
 
-  void _getUserInfo() async {
+  void getUserInfo() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
     if (supervisorInfo == null) {
       return;
@@ -707,7 +727,10 @@ class BookingsController extends GetxController
     emailController.text = corporateInfo.corporateEmail ?? "";
     pickupLocationController.text = corporateInfo.corporateLocation ?? "";
     pickupLatitude = (corporateInfo.corporateLat ?? 0).toDouble();
-    pickupLatitude = (corporateInfo.corporateLong ?? 0).toDouble();
+    print("pickupLatitude--->$pickupLatitude");
+    pickupLongitude = (corporateInfo.corporateLong ?? 0).toDouble();
+    print("dropLattotude--->$pickupLatitude");
+
 
     callCarMakeListApi(supervisorInfo);
 

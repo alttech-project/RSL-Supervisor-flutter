@@ -119,16 +119,18 @@ class EditBooking extends GetView<EditBookingController> {
               // _tripTypeRadioWidget(),
               SizedBox(height: 10.h),
             ],
-          ), Obx(() => (controller.mobileTripType.value == 2  || controller.mobileTripType.value == 1)&&
-              (controller.mobileDoubleTheFare.value == 0|| controller.mobileDoubleTheFare.value == 1)
+          ),
+          Obx(() => (controller.mobileTripType.value == 2 ||
+                      controller.mobileTripType.value == 1) &&
+                  (controller.mobileDoubleTheFare.value == 0 ||
+                      controller.mobileDoubleTheFare.value == 1)
               ? Column(
                   children: [
                     _tripTypeRadioWidget(),
                     SizedBox(height: 10.h),
                   ],
                 )
-              : const SizedBox.shrink())
-          ,
+              : const SizedBox.shrink()),
           _customPricingInfo(context),
           SizedBox(height: 10.h),
           _additionalElementsInfo(context),
@@ -830,10 +832,11 @@ class EditBooking extends GetView<EditBookingController> {
     } else {
       printLogs(
           "hi fare ${controller.isDouble} ${controller.isDoubleTheFare.value} ${controller.customerPriceValue} ${controller.price.value.toString()}  ${double.parse(controller.customerPriceValue) * 2}");
-      if (controller.isDouble) {
+      if (controller.isDouble || controller.isExtraChargesApplied) {
         controller.calculatedValue.value = controller.price.value / 2;
         controller.customerPriceValue = (controller.price.value / 2).toString();
         controller.isDouble = false;
+        controller.isExtraChargesApplied = false;
       } else if ((controller.isDoubleTheFare.value == true &&
               controller.price.value.toString() ==
                   (double.parse(controller.customerPriceValue) * 2)

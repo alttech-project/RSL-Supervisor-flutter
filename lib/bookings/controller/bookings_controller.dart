@@ -119,6 +119,8 @@ class BookingsController extends GetxController
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
   String customerPriceValue = "0";
+  RxBool isSingleClicked = false.obs;
+  RxBool isDoubleClicked = false.obs;
 
   @override
   void onInit() {

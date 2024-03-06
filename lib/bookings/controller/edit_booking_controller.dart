@@ -120,6 +120,8 @@ class EditBookingController extends GetxController {
   bool isFirstTime = true;
   bool isDouble = true;
 
+
+
   @override
   void onInit() {
     super.onInit();

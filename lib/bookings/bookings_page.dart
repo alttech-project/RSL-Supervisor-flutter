@@ -350,8 +350,6 @@ class BookingsPage extends GetView<BookingsController> {
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
                   controller.roundedSelectedRadio(value);
-                  controller.isSingleClicked.value = true;
-                  controller.isDoubleClicked.value = false;
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -370,9 +368,6 @@ class BookingsPage extends GetView<BookingsController> {
                 onChanged: (value) {
                   controller.isDoubleTheFare.value = true;
                   controller.roundedSelectedRadio(value);
-                  controller.isSingleClicked.value = false;
-                  controller.isDoubleClicked.value = true;
-
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart';
 import 'package:rsl_supervisor/bookings/controller/bookings_controller.dart';
 import 'package:rsl_supervisor/bookings/ongoing_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/upcoming_bookings_tab.dart';
 import 'package:rsl_supervisor/bookings/data/motor_details_data.dart';
+import 'package:rsl_supervisor/utils/helpers/basic_utils.dart';
 import 'package:rsl_supervisor/widgets/custom_app_container.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -284,26 +286,6 @@ class BookingsPage extends GetView<BookingsController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (value) {
                       controller.tripTypeSelectedRadio(value);
-                      if (controller.singleClicked.value) {
-                        controller.singleClicked.value = false;
-                      } else {
-                        if (controller.isMultiFly.value == true) {
-                          controller.priceController.text = (controller
-                              .calculatedValue.value / 2).toString();
-                          controller.calculatedValue.value = controller
-                              .calculatedValue.value / 2;
-
-                          print("isMultiFlyif${controller.isMultiFly.value}");
-                        } else {
-                          controller.priceController.text = (controller
-                              .calculatedValue.value ).toString();
-                          controller.calculatedValue.value = controller
-                              .calculatedValue.value;
-                          print("isMultiFlyelse${controller.isMultiFly.value}");
-
-                        }
-                      }
-                      controller.priceController.text = controller.originalPrice;
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -322,9 +304,7 @@ class BookingsPage extends GetView<BookingsController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (int? value) {
                       controller.tripTypeSelectedRadio(value);
-                      controller.price.value = controller.carMakeFareDetails.value.fare?.toDouble() ?? 0;
                     },
-
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
                   ),
@@ -370,7 +350,6 @@ class BookingsPage extends GetView<BookingsController> {
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
                   controller.roundedSelectedRadio(value);
-                  controller.singleClicked.value = true;
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -387,7 +366,8 @@ class BookingsPage extends GetView<BookingsController> {
                 value: 1,
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
-                  controller.roundedSelectedRadio(value!);
+                  controller.isDoubleTheFare.value = true;
+                  controller.roundedSelectedRadio(value);
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -850,35 +830,44 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _priceWidget() {
-    controller.price.value = double.tryParse(controller.priceController.text) ?? 0;
-     controller.calculatedValue;
-
-    if (controller.roundTripselectedTripRadioValue.value == 1 && controller.selectedTripRadioValue.value == 2) {
-      controller.isMultiFly.value = true;
+    controller.price.value =
+        double.tryParse(controller.priceController.text) ?? 0;
+    if (controller.roundTripselectedTripRadioValue.value == 1 &&
+        controller.selectedTripRadioValue.value == 2) {
       controller.calculatedValue.value = controller.price.value * 2;
     } else {
-      controller.isMultiFly.value = false;
-      controller.selectedTripRadioValue.value == 2 ? controller.calculatedValue.value = controller.price.value /2 : controller.calculatedValue.value = controller.price.value;
+      printLogs(
+          "hi fare ${controller.price.value.toString()} ${controller.customerPriceValue} ${double.parse(controller.customerPriceValue) * 2}");
+      if (controller.isDoubleTheFare.value == true &&
+          controller.price.value.toString() ==
+              (double.parse(controller.customerPriceValue) * 2).toString()) {
+        controller.calculatedValue.value = controller.price.value / 2;
+      } else {
+        controller.calculatedValue.value = controller.price.value;
+      }
     }
-    controller.priceController.text = controller.calculatedValue.value.toString();
+
+    controller.priceController.text =
+        controller.calculatedValue.value.toString();
 
     return GetPlatform.isAndroid
-            ? BoxTextFieldTransparent(
-      hintText: "0",
-      keyboardType: TextInputType.number,
-      textController: controller.priceController,
-      enable: false,
-      autocorrect: false,
-      textInputAction: TextInputAction.next,
-      onChanged: (value) => {
-        controller.priceController.text =
-            value.replaceAll(RegExp(r'[,.]'), ""),
-        controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
-      },
-      onSubmitted: (value) => {
-        controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
-      },      autofocus: false,
-    )
+        ? BoxTextFieldTransparent(
+            hintText: "0",
+            keyboardType: TextInputType.number,
+            textController: controller.priceController,
+            enable: false,
+            autocorrect: false,
+            textInputAction: TextInputAction.next,
+            onChanged: (value) => {
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
+            autofocus: false,
+          )
         : BoxTextFieldTransparent(
             hintText: "0",
             keyboardType: TextInputType.datetime,
@@ -886,14 +875,14 @@ class BookingsPage extends GetView<BookingsController> {
             enable: false,
             autocorrect: false,
             textInputAction: TextInputAction.next,
-      onChanged: (value) => {
-        controller.priceController.text =
-            value.replaceAll(RegExp(r'[,.]'), ""),
-        controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
-      },
-      onSubmitted: (value) => {
-        controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
-      },
+            onChanged: (value) => {
+              controller.priceController.text =
+                  value.replaceAll(RegExp(r'[,.]'), ""),
+              controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), ""))
+            },
+            onSubmitted: (value) => {
+              controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
+            },
             autofocus: false,
           );
   }

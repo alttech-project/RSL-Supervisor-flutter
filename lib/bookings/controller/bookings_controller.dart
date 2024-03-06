@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +69,6 @@ class BookingsController extends GetxController
   Rx<CorporatePackageList> packageData = CorporatePackageList().obs;
   Rx<CarMakeFareDetails> carMakeFareDetails = CarMakeFareDetails().obs;
 
-
   var countryCode = '971'.obs;
   double pickupLatitude = 0.0, pickupLongitude = 0.0;
   double dropLatitude = 0.0, dropLongitude = 0.0;
@@ -75,7 +76,6 @@ class BookingsController extends GetxController
   var taxiModel = ''.obs;
   var taxiId = ''.obs;
   var carMakeId = ''.obs;
-
 
   Rx<Payments> selectedPayment = paymentList[0].obs;
 
@@ -112,17 +112,13 @@ class BookingsController extends GetxController
   var apiLoading = false.obs;
   var saveBookingApiLoading = false.obs;
   SupervisorInfo? supervisorInfo;
-
   RxInt selectedTripRadioValue = 1.obs;
   RxInt roundTripselectedTripRadioValue = 1.obs;
+
+  RxBool isDoubleTheFare = false.obs;
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
-  RxBool singleClicked = false.obs;
-  RxBool isMultiFly = false.obs; // Initially, no single option clicked
-// Initially, no single option clicked
-
-
-
+  String customerPriceValue = "0";
 
   @override
   void onInit() {
@@ -232,6 +228,7 @@ class BookingsController extends GetxController
           double.parse(originalPrice) - extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
+      customerPriceValue = adjustedCustomerPrice.toString();
     } else {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
@@ -241,6 +238,7 @@ class BookingsController extends GetxController
           double.parse(originalPrice ?? "0") + extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
+      customerPriceValue = adjustedCustomerPrice.toString();
     }
   }
 
@@ -324,19 +322,16 @@ class BookingsController extends GetxController
 
   void tripTypeSelectedRadio(int? value) {
     selectedTripRadioValue.value = value ?? 0;
-    print("selectedTripRadioValue-->${selectedTripRadioValue}");
     if (selectedTripRadioValue.value == 2) {
+      isDoubleTheFare.value = true;
       roundTripselectedTripRadioValue.value = 1;
     } else {
       roundTripselectedTripRadioValue.value = 0;
     }
   }
 
-
   void roundedSelectedRadio(int? value) {
     roundTripselectedTripRadioValue.value = value ?? 0;
-
-    print("roundTripselectedTripRadioValue-->${roundTripselectedTripRadioValue}");
   }
 
   void checkNewBookingValidation() async {
@@ -588,9 +583,9 @@ class BookingsController extends GetxController
         if ((response.status ?? 0) == 1) {
           // motorModelList = response.fareDetailList ?? [];
           updateModelFareDetails(response.carMakeDetails?.carMakeFareDetails);
-          carMakeFareDetails.value = response.carMakeDetails?.carMakeFareDetails ?? CarMakeFareDetails();
-
-
+          carMakeFareDetails.value =
+              response.carMakeDetails?.carMakeFareDetails ??
+                  CarMakeFareDetails();
         }
       }).onError((error, stackTrace) {
         apiLoading.value = false;
@@ -613,6 +608,7 @@ class BookingsController extends GetxController
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
       originalPrice = priceController.text;
+      customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
     } else {
       rslShare = 0;
       driverShare = 0;
@@ -623,6 +619,7 @@ class BookingsController extends GetxController
       dropZoneGroupId = 0;
       priceController.clear();
       originalPrice = "0";
+      customerPriceValue = "0";
     }
   }
 
@@ -732,7 +729,6 @@ class BookingsController extends GetxController
     print("pickupLatitude--->$pickupLatitude");
     pickupLongitude = (corporateInfo.corporateLong ?? 0).toDouble();
     print("dropLattotude--->$pickupLatitude");
-
 
     callCarMakeListApi(supervisorInfo);
 

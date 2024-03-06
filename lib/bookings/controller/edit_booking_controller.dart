@@ -9,8 +9,6 @@ import 'package:rsl_supervisor/bookings/controller/booking_list_controller.dart'
 import 'package:rsl_supervisor/bookings/data/edit_trip_details_data.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
-import '../../dashboard/data/car_model_type_api.dart';
-import '../../dashboard/service/dashboard_service.dart';
 import '../../routes/app_routes.dart';
 import '../../shared/styles/app_color.dart';
 import '../../shared/styles/app_font.dart';
@@ -38,18 +36,7 @@ class EditBookingController extends GetxController {
   RxInt editBookingTripId = 0.obs;
   RxString initialCountryCode = 'AE'.obs;
   RxInt subtractValue = 0.obs;
-  RxInt intialFare = 0.obs;
-  RxInt customerFldClicked = 0.obs;
-  RxDouble calculatedValue = 0.0.obs;
-  RxDouble price = 0.0.obs;
-  RxBool singleClicked = false.obs;
-
   Rx<PassengerDetails> carMakeFareDetails = PassengerDetails().obs;
-// Initially, no single option clicked
-
-
-
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -59,9 +46,9 @@ class EditBookingController extends GetxController {
   final TextEditingController dateController = TextEditingController();
 
   final TextEditingController priceController = TextEditingController();
-   final TextEditingController extraChargesController = TextEditingController();
-  final TextEditingController addExtraChargesController = TextEditingController();
-
+  final TextEditingController extraChargesController = TextEditingController();
+  final TextEditingController addExtraChargesController =
+      TextEditingController();
 
   final TextEditingController noteToDriverController = TextEditingController();
   final TextEditingController flightNumberController = TextEditingController();
@@ -108,8 +95,6 @@ class EditBookingController extends GetxController {
   var mobileTripType = 0.obs;
   var mobileDoubleTheFare = 0.obs;
 
-
-
   num rslShare = 0;
   num driverShare = 0;
   num corporateShare = 0;
@@ -128,6 +113,13 @@ class EditBookingController extends GetxController {
   RxInt selectedTripRadioValue = 1.obs;
   RxInt roundTripselectedTripRadioValue = 1.obs;
 
+  RxBool isDoubleTheFare = false.obs;
+  RxDouble calculatedValue = 0.0.obs;
+  RxDouble price = 0.0.obs;
+  String customerPriceValue = "0";
+  bool isFirstTime = true;
+  bool isDouble = true;
+
   @override
   void onInit() {
     super.onInit();
@@ -140,10 +132,15 @@ class EditBookingController extends GetxController {
   }
 
   void tripTypeSelectedRadio(int? value) {
+    isFirstTime = false;
     selectedTripRadioValue.value = value ?? 0;
+    if (selectedTripRadioValue.value == 2) {
+      isDoubleTheFare.value = true;
+    }
   }
 
   void roundedSelectedRadio(int? value) {
+    isFirstTime = false;
     roundTripselectedTripRadioValue.value = value ?? 0;
   }
 
@@ -184,7 +181,7 @@ class EditBookingController extends GetxController {
       dropLongitude = details.drop_longitude ?? 0.0;
       dateController.text = details.pickup_time ?? "";
       priceController.text = (details.customer_price ?? "").toString();
-      originalPrice = priceController.text.toString();
+      originalPrice = (details.customer_price ?? "").toString();
       extraChargesController.text = (details.extra_charge ?? "").toString();
       subtractValue.value = details.extra_charge?.toInt() ?? 0;
       noteToDriverController.text = details.note_to_driver ?? "";
@@ -240,6 +237,14 @@ class EditBookingController extends GetxController {
       packageId.value = details.package_id.toString();
       selectedTripRadioValue.value = details.trip_type ?? 0;
       roundTripselectedTripRadioValue.value = details.double_the_fare ?? 1;
+
+      customerPriceValue = (details.customer_price ?? "").toString();
+      isFirstTime = true;
+      if (details.double_the_fare == 1) {
+        isDouble = true;
+      } else {
+        isDouble = false;
+      }
       // carMakeFareApi();
       callGetCorporatePackageListApi(false, packageId: packageId.value);
     }
@@ -364,6 +369,7 @@ class EditBookingController extends GetxController {
           double.parse(originalPrice) - extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
+      customerPriceValue = adjustedCustomerPrice.toString();
     } else {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
@@ -373,6 +379,7 @@ class EditBookingController extends GetxController {
           double.parse(originalPrice ?? "0") + extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
+      customerPriceValue = adjustedCustomerPrice.toString();
     }
   }
 
@@ -653,10 +660,6 @@ class EditBookingController extends GetxController {
     approximateFare.value = carMakeFareDetails?.fare?.toString() ?? "0";
     zoneFareApplied.value = carMakeFareDetails?.zoneFareApplied ?? 0;
 
-
-
-
-
     if (zoneFareApplied.value == 1) {
       rslShare = carMakeFareDetails?.rslShare ?? 0;
       driverShare = carMakeFareDetails?.driverShare ?? 0;
@@ -667,7 +670,8 @@ class EditBookingController extends GetxController {
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
 
-      originalPrice = priceController.text.toString();
+      originalPrice = carMakeFareDetails?.fare?.toString() ?? "";
+      customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
     } else {
       rslShare = 0;
       driverShare = 0;
@@ -678,6 +682,7 @@ class EditBookingController extends GetxController {
       dropZoneGroupId = 0;
       priceController.clear();
       originalPrice = "0";
+      customerPriceValue = "0";
     }
   }
 

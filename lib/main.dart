@@ -22,7 +22,6 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
-
   ]).then((value) {
     runApp(const AppMain());
   });
@@ -40,12 +39,12 @@ class AppMain extends StatelessWidget {
   const AppMain({super.key});
 
   @override
-
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: MediaQuery.of(context).orientation == Orientation.landscape
           ? const Size(640, 360) // Landscape design size
-          : const Size(360, 640), // Portrait design size
+          : const Size(360, 640),
+      // Portrait design size
       minTextAdapt: true,
       splitScreenMode: true,
       child: const SplashScreen(),
@@ -69,7 +68,8 @@ class AppMain extends StatelessWidget {
       initialRoute: "/",
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: child ?? Container(),
         );
       },

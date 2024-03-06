@@ -11,6 +11,7 @@ import '../../shared/styles/app_font.dart';
 import '../../widgets/app_textfields.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/safe_area_container.dart';
+import '../utils/helpers/basic_utils.dart';
 import '../widgets/app_loader.dart';
 import '../widgets/navigation_title.dart';
 import 'controller/edit_booking_controller.dart';
@@ -109,15 +110,16 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           _locationInfo(context),
           SizedBox(height: 10.h),
-          /* controller.selectedTripRadioValue.value == 2
-            ? _roundtripTypeRadioWidget()
-            : const SizedBox.shrink(),
-        SizedBox(height: 10.h),*/
           _carModelInfo(),
           SizedBox(height: 10.h),
           _bookingTypeInfo(),
           SizedBox(height: 10.h),
-          Obx(() => controller.mobileTripType.value == 2 &&
+          Column(
+            children: [
+              _tripTypeRadioWidget(),
+              SizedBox(height: 10.h),
+            ],
+          ) /*Obx(() => controller.mobileTripType.value == 2 &&
                   controller.mobileDoubleTheFare.value == 1
               ? Column(
                   children: [
@@ -125,7 +127,8 @@ class EditBooking extends GetView<EditBookingController> {
                     SizedBox(height: 10.h),
                   ],
                 )
-              : const SizedBox.shrink()),
+              : const SizedBox.shrink())*/
+          ,
           _customPricingInfo(context),
           SizedBox(height: 10.h),
           _additionalElementsInfo(context),
@@ -252,13 +255,6 @@ class EditBooking extends GetView<EditBookingController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (value) {
                       controller.tripTypeSelectedRadio(value!);
-                      if (controller.singleClicked.value) {
-                        controller.singleClicked.value = false;
-                      } else {
-                        controller.priceController.text = (controller.calculatedValue.value / 2).toString();
-                        controller.calculatedValue.value = controller.calculatedValue.value / 2;
-
-                      }
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -277,7 +273,6 @@ class EditBooking extends GetView<EditBookingController> {
                     groupValue: controller.selectedTripRadioValue.value,
                     onChanged: (int? value) {
                       controller.tripTypeSelectedRadio(value);
-                      controller.price.value = controller.carMakeFareDetails.value.customer_price?.toDouble() ?? 0;
                     },
                     fillColor: MaterialStateColor.resolveWith((states) =>
                         Colors.white /*AppColors.kPrimaryColor.value*/),
@@ -340,9 +335,8 @@ class EditBooking extends GetView<EditBookingController> {
                 value: 1,
                 groupValue: controller.roundTripselectedTripRadioValue.value,
                 onChanged: (value) {
+                  controller.isDoubleTheFare.value = true;
                   controller.roundedSelectedRadio(value!);
-                  controller.singleClicked.value = true;
-
                 },
                 fillColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
@@ -824,17 +818,33 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _priceWidget() {
-
-    controller.price.value = double.tryParse(controller.priceController.text) ?? 0;
-    controller.calculatedValue;
-
-    if (controller.roundTripselectedTripRadioValue.value == 1 && controller.selectedTripRadioValue.value == 2) {
-      controller.calculatedValue.value = controller.price.value * 2;
+    controller.price.value =
+        double.tryParse(controller.priceController.text) ?? 0;
+    if (controller.roundTripselectedTripRadioValue.value == 1 &&
+        controller.selectedTripRadioValue.value == 2) {
+      if (controller.isFirstTime) {
+        controller.calculatedValue.value = controller.price.value;
+      } else {
+        controller.calculatedValue.value = controller.price.value * 2;
+      }
     } else {
-      controller.selectedTripRadioValue.value == 2 ? controller.calculatedValue.value = controller.price.value /2 : controller.calculatedValue.value = controller.price.value;
+      printLogs(
+          "hi fare ${controller.isDouble} ${controller.isDoubleTheFare.value} ${controller.customerPriceValue} ${controller.price.value.toString()}  ${double.parse(controller.customerPriceValue) * 2}");
+      if (controller.isDouble) {
+        controller.calculatedValue.value = controller.price.value / 2;
+        controller.customerPriceValue = (controller.price.value / 2).toString();
+        controller.isDouble = false;
+      } else if (controller.isDoubleTheFare.value == true &&
+          controller.price.value.toString() ==
+              (double.parse(controller.customerPriceValue) * 2).toString()) {
+        controller.calculatedValue.value = controller.price.value / 2;
+      } else {
+        controller.calculatedValue.value = controller.price.value;
+      }
     }
-    controller.priceController.text = controller.calculatedValue.value.toString();
 
+    controller.priceController.text =
+        controller.calculatedValue.value.toString();
 
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
@@ -848,7 +858,7 @@ class EditBooking extends GetView<EditBookingController> {
               controller.priceController.text =
                   value.replaceAll(RegExp(r'[,.]'), ""),
               controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), "")),
-              controller.isValueChanged.value = true
+              controller.isValueChanged.value = true,
             },
             onSubmitted: (value) => {
               controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
@@ -866,7 +876,7 @@ class EditBooking extends GetView<EditBookingController> {
               controller.priceController.text =
                   value.replaceAll(RegExp(r'[,.]'), ""),
               controller.calculateShares(value.replaceAll(RegExp(r'[,.]'), "")),
-              controller.isValueChanged.value = true
+              controller.isValueChanged.value = true,
             },
             onSubmitted: (value) => {
               controller.originalPrice = value.replaceAll(RegExp(r'[,.]'), "")
@@ -909,9 +919,7 @@ class EditBooking extends GetView<EditBookingController> {
               FilteringTextInputFormatter.digitsOnly,
             ],*/
           );
-
-      }
-
+  }
 
   Widget _addExtraChargesWidget() {
     final FocusNode extraChargesFocusNode = FocusNode();
@@ -960,10 +968,8 @@ class EditBooking extends GetView<EditBookingController> {
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               FilteringTextInputFormatter.digitsOnly,
             ],*/
-    );
-
+          );
   }
-
 
   Widget _addLabelExtraCharges() {
     return Align(
@@ -980,8 +986,6 @@ class EditBooking extends GetView<EditBookingController> {
       ),
     );
   }
-
-
 
   Widget _noteToDriverWidget() {
     return _labelAndTextFieldWidget(
@@ -1190,21 +1194,19 @@ class EditBooking extends GetView<EditBookingController> {
                               horizontal: 5,
                             ), // Adjust left and right padding
                             child: _extraChargesWidget(),
-
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
-
               ),
               SizedBox(height: 10),
               _addLabelExtraCharges(),
               Card(
                 elevation: 8,
                 margin: const EdgeInsets.only(
-                    bottom: 0, left: 0, right: 150,top: 10),
+                    bottom: 0, left: 0, right: 150, top: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                     12,
@@ -1219,8 +1221,6 @@ class EditBooking extends GetView<EditBookingController> {
                   child: _addExtraChargesWidget(),
                 ),
               )
-
-
             ],
           )
         : const SizedBox.shrink());

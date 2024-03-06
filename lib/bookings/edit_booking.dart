@@ -834,10 +834,13 @@ class EditBooking extends GetView<EditBookingController> {
         controller.calculatedValue.value = controller.price.value / 2;
         controller.customerPriceValue = (controller.price.value / 2).toString();
         controller.isDouble = false;
-      } else if (controller.isDoubleTheFare.value == true &&
-          controller.price.value.toString() ==
-              (double.parse(controller.customerPriceValue) * 2).toString()) {
+      } else if ((controller.isDoubleTheFare.value == true &&
+              controller.price.value.toString() ==
+                  (double.parse(controller.customerPriceValue) * 2)
+                      .toString()) ||
+          controller.isExtraChargesApplied) {
         controller.calculatedValue.value = controller.price.value / 2;
+        controller.isExtraChargesApplied = false;
       } else {
         controller.calculatedValue.value = controller.price.value;
       }

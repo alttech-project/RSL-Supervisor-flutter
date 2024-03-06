@@ -838,10 +838,13 @@ class BookingsPage extends GetView<BookingsController> {
     } else {
       printLogs(
           "hi fare ${controller.price.value.toString()} ${controller.customerPriceValue} ${double.parse(controller.customerPriceValue) * 2}");
-      if (controller.isDoubleTheFare.value == true &&
-          controller.price.value.toString() ==
-              (double.parse(controller.customerPriceValue) * 2).toString()) {
+      if ((controller.isDoubleTheFare.value == true &&
+              controller.price.value.toString() ==
+                  (double.parse(controller.customerPriceValue) * 2)
+                      .toString()) ||
+          controller.isExtraChargesApplied) {
         controller.calculatedValue.value = controller.price.value / 2;
+        controller.isExtraChargesApplied = false;
       } else {
         controller.calculatedValue.value = controller.price.value;
       }

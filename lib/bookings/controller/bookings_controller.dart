@@ -13,6 +13,7 @@ import 'package:rsl_supervisor/bookings/data/save_booking_data.dart';
 import 'package:rsl_supervisor/network/app_config.dart';
 import 'package:rsl_supervisor/place_search/data/get_place_details_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:rsl_supervisor/trip_history/data/export_pdf_data.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../dashboard/data/car_model_type_api.dart';
 import '../../dashboard/service/dashboard_service.dart';
@@ -119,6 +120,7 @@ class BookingsController extends GetxController
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
   String customerPriceValue = "0";
+  bool isExtraChargesApplied = false;
 
   @override
   void onInit() {
@@ -229,6 +231,11 @@ class BookingsController extends GetxController
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
+      if (roundTripselectedTripRadioValue.value == 1) {
+        isExtraChargesApplied = true;
+      } else {
+        isExtraChargesApplied = false;
+      }
     } else {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
@@ -239,6 +246,11 @@ class BookingsController extends GetxController
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
+      if (roundTripselectedTripRadioValue.value == 1) {
+        isExtraChargesApplied = true;
+      } else {
+        isExtraChargesApplied = false;
+      }
     }
   }
 

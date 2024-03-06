@@ -119,6 +119,7 @@ class EditBookingController extends GetxController {
   String customerPriceValue = "0";
   bool isFirstTime = true;
   bool isDouble = true;
+  bool isExtraChargesApplied = false;
 
   @override
   void onInit() {
@@ -370,6 +371,11 @@ class EditBookingController extends GetxController {
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
+      if (roundTripselectedTripRadioValue.value == 1) {
+        isExtraChargesApplied = true;
+      } else {
+        isExtraChargesApplied = false;
+      }
     } else {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
@@ -380,6 +386,11 @@ class EditBookingController extends GetxController {
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
+      if (roundTripselectedTripRadioValue.value == 1) {
+        isExtraChargesApplied = true;
+      } else {
+        isExtraChargesApplied = false;
+      }
     }
   }
 

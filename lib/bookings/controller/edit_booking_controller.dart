@@ -121,6 +121,8 @@ class EditBookingController extends GetxController {
   bool isDouble = true;
   bool isExtraChargesApplied = false;
 
+
+
   @override
   void onInit() {
     super.onInit();

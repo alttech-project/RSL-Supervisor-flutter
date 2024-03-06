@@ -116,18 +116,18 @@ class EditBooking extends GetView<EditBookingController> {
           SizedBox(height: 10.h),
           Column(
             children: [
-              _tripTypeRadioWidget(),
+              // _tripTypeRadioWidget(),
               SizedBox(height: 10.h),
             ],
-          ) /*Obx(() => controller.mobileTripType.value == 2 &&
-                  controller.mobileDoubleTheFare.value == 1
+          ), Obx(() => (controller.mobileTripType.value == 2  || controller.mobileTripType.value == 1)&&
+              (controller.mobileDoubleTheFare.value == 0|| controller.mobileDoubleTheFare.value == 1)
               ? Column(
                   children: [
                     _tripTypeRadioWidget(),
                     SizedBox(height: 10.h),
                   ],
                 )
-              : const SizedBox.shrink())*/
+              : const SizedBox.shrink())
           ,
           _customPricingInfo(context),
           SizedBox(height: 10.h),

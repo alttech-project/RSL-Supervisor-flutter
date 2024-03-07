@@ -119,8 +119,9 @@ class BookingsController extends GetxController
   RxBool isDoubleTheFare = false.obs;
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
-  String customerPriceValue = "0";
-  bool isExtraChargesApplied = false;
+
+/*  String customerPriceValue = "0";
+  bool isExtraChargesApplied = false;*/
 
   @override
   void onInit() {
@@ -230,13 +231,13 @@ class BookingsController extends GetxController
           double.parse(originalPrice) - extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
-      customerPriceValue = adjustedCustomerPrice.toString();
-      if (roundTripselectedTripRadioValue.value == 1 &&
+      // customerPriceValue = adjustedCustomerPrice.toString();
+      /* if (roundTripselectedTripRadioValue.value == 1 &&
           zoneFareApplied.value == 1) {
         isExtraChargesApplied = true;
       } else {
         isExtraChargesApplied = false;
-      }
+      }*/
     } else {
       if (originalPrice.isEmpty) {
         originalPrice = "0";
@@ -246,14 +247,14 @@ class BookingsController extends GetxController
           double.parse(originalPrice ?? "0") + extraChargeValue;
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
-      customerPriceValue = adjustedCustomerPrice.toString();
+      /* customerPriceValue = adjustedCustomerPrice.toString();
 
       if (roundTripselectedTripRadioValue.value == 1 &&
           zoneFareApplied.value == 1) {
         isExtraChargesApplied = true;
       } else {
         isExtraChargesApplied = false;
-      }
+      }*/
     }
   }
 
@@ -351,7 +352,6 @@ class BookingsController extends GetxController
       if (isDoubleTheFare.value) {
         price.value = double.tryParse(priceController.text) ?? 0;
         calculatedValue.value = price.value / 2;
-        isExtraChargesApplied = false;
         isDoubleTheFare.value = false;
         originalPrice = calculatedValue.value.toString();
         priceController.text = calculatedValue.value.toString();
@@ -659,7 +659,7 @@ class BookingsController extends GetxController
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
       originalPrice = priceController.text;
-      customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
+      // customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
       doubleTheFareCalculation();
     } else {
       rslShare = 0;
@@ -671,7 +671,7 @@ class BookingsController extends GetxController
       dropZoneGroupId = 0;
       priceController.clear();
       originalPrice = "0";
-      customerPriceValue = "0";
+      // customerPriceValue = "0";
     }
   }
 
@@ -778,9 +778,7 @@ class BookingsController extends GetxController
     emailController.text = corporateInfo.corporateEmail ?? "";
     pickupLocationController.text = corporateInfo.corporateLocation ?? "";
     pickupLatitude = (corporateInfo.corporateLat ?? 0).toDouble();
-    print("pickupLatitude--->$pickupLatitude");
     pickupLongitude = (corporateInfo.corporateLong ?? 0).toDouble();
-    print("dropLattotude--->$pickupLatitude");
 
     callCarMakeListApi(supervisorInfo);
 

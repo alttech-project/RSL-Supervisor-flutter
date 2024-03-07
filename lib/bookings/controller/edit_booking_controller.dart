@@ -116,9 +116,10 @@ class EditBookingController extends GetxController {
   RxBool isDoubleTheFare = false.obs;
   RxDouble calculatedValue = 0.0.obs;
   RxDouble price = 0.0.obs;
-  String customerPriceValue = "0";
 
-/*  bool isFirstTime = true;
+/*
+  String customerPriceValue = "0";
+  bool isFirstTime = true;
   bool isDouble = true;
   bool isExtraChargesApplied = false;*/
 

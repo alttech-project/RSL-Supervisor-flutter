@@ -133,7 +133,6 @@ class EditBookingController extends GetxController {
   }
 
   void tripTypeSelectedRadio(int? value) {
-    isFirstTime = false;
     selectedTripRadioValue.value = value ?? 0;
     if (selectedTripRadioValue.value == 2) {
       isDoubleTheFare.value = true;
@@ -711,11 +710,19 @@ class EditBookingController extends GetxController {
       pickupZoneGroupId = carMakeFareDetails?.pickupZoneGroupId ?? 0;
       dropZoneId = carMakeFareDetails?.dropZoneId ?? 0;
       dropZoneGroupId = carMakeFareDetails?.dropZoneGroupId ?? 0;
-      priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
-
-      originalPrice = carMakeFareDetails?.fare?.toString() ?? "";
-      customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
-    } else {
+     if (selectedBookingType.value.id == 1 &&
+         zoneFareApplied.value == 1 && roundTripselectedTripRadioValue.value == 1 && selectedTripRadioValue.value  == 2) {
+       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+       double fare = (carMakeFareDetails?.fare ?? 0) * 2;
+       priceController.text = fare.toStringAsFixed(1);
+       originalPrice =  fare.toStringAsFixed(1);
+       customerPriceValue = fare.toStringAsFixed(1);
+     } else {
+       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
+       originalPrice = carMakeFareDetails?.fare?.toString() ?? "";
+       customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
+     }
+         } else {
       rslShare = 0;
       driverShare = 0;
       corporateShare = 0;

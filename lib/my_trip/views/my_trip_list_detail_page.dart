@@ -142,6 +142,11 @@ class ListTripDetailsPage extends GetView<MyTripListController> {
                         )
                       : null,
             ),
+            controller.selectedTripDetail.value.discountFare! > 0 ?
+            CommonWidgetForDetails(
+              leadingText: 'Discount',
+              trailingText: 'AED ${controller.selectedTripDetail.value.discountFare ?? ""}',
+            ):SizedBox.shrink(),
             CommonWidgetForDetails(
               leadingText: 'Comments',
               trailingText: controller.selectedTripDetail.value.comments ?? "",

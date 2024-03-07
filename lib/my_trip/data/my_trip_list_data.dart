@@ -155,6 +155,7 @@ class ListTripDetails {
   String? dispatchedTrips;
   String? driverReply;
   String? travelStatusMessage;
+  num? discountFare;
 
   ListTripDetails(
       {this.iId,
@@ -207,7 +208,13 @@ class ListTripDetails {
       this.cancelledTrips,
       this.dispatchedTrips,
       this.driverReply,
-      this.travelStatusMessage});
+      this.travelStatusMessage,
+        this.discountFare,
+
+
+      }
+
+      );
 
   ListTripDetails.fromJson(Map<String, dynamic> json) {
     iId = '${json['_id']}';
@@ -262,6 +269,8 @@ class ListTripDetails {
     dispatchedTrips = '${json['dispatched_trips']}';
     driverReply = '${json['driver_reply']}';
     travelStatusMessage = json['travel_status_message'].toString();
+    discountFare = json['discount_fare'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -317,6 +326,8 @@ class ListTripDetails {
     data['dispatched_trips'] = dispatchedTrips;
     data['driver_reply'] = driverReply;
     data['travel_status_message'] = travelStatusMessage;
+    data['discount_fare'] = discountFare;
+
     return data;
   }
 }

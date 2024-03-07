@@ -133,6 +133,8 @@ class TripDetails {
   String? dispatchedTrips;
   String? driverReply;
   String? travelStatusMessage;
+  num? discountFare;
+
 
   TripDetails({
     this.iId,
@@ -188,6 +190,9 @@ class TripDetails {
     this.dispatchedTrips,
     this.driverReply,
     this.travelStatusMessage,
+    this.discountFare,
+
+
   });
 
   TripDetails.fromJson(Map<String, dynamic> json) {
@@ -244,6 +249,8 @@ class TripDetails {
     dispatchedTrips = json['dispatched_trips'].toString();
     driverReply = json['driver_reply'].toString();
     travelStatusMessage = json['travel_status_message'].toString();
+    discountFare = json['discount_fare'];
+
   }
 
   Map<String, dynamic> toJson() {

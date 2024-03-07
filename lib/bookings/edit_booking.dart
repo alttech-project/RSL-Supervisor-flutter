@@ -936,13 +936,13 @@ class EditBooking extends GetView<EditBookingController> {
         ? BoxTextFieldTransparent(
             hintText: "0",
             keyboardType: TextInputType.number,
-            textController: controller.extraChargesController,
+            textController: controller.addExtraChargesController,
             enable: true,
             autocorrect: false,
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
-              controller.extraChargesController.text =
+              controller.addExtraChargesController.text =
                   value.replaceAll(RegExp(r'[,.]'), ""),
               controller
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),
@@ -954,13 +954,13 @@ class EditBooking extends GetView<EditBookingController> {
         : BoxTextFieldTransparent(
             hintText: "0",
             keyboardType: TextInputType.datetime,
-            textController: controller.extraChargesController,
+            textController: controller.addExtraChargesController,
             enable: true,
             autocorrect: false,
             focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
-              controller.extraChargesController.text =
+              controller.addExtraChargesController.text =
                   value.replaceAll(RegExp(r'[,.]'), ""),
               controller
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),

@@ -836,8 +836,9 @@ class BookingsPage extends GetView<BookingsController> {
         controller.selectedTripRadioValue.value == 2) {
       controller.calculatedValue.value = controller.price.value * 2;
     } else {
-      printLogs(
-          "hi fare ${controller.price.value.toString()} ${controller.customerPriceValue} ${double.parse(controller.customerPriceValue) * 2}");
+      /* printLogs(
+          "hi fare ${controller.isDoubleTheFare.value} ${controller.isExtraChargesApplied} ${controller.price.value.toString()} ${controller.customerPriceValue} ${double.parse(controller.customerPriceValue) * 2}");
+     */
       if ((controller.isDoubleTheFare.value == true &&
               controller.price.value.toString() ==
                   (double.parse(controller.customerPriceValue) * 2)
@@ -891,12 +892,12 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _extraChargesWidget() {
-    final FocusNode extraChargesFocusNode = FocusNode();
+    /* final FocusNode extraChargesFocusNode = FocusNode();
     extraChargesFocusNode.addListener(() {
       if (extraChargesFocusNode.hasFocus) {
         controller.originalPrice = controller.priceController.text.trim();
       }
-    });
+    });*/
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",
@@ -904,7 +905,6 @@ class BookingsPage extends GetView<BookingsController> {
             textController: controller.extraChargesController,
             enable: true,
             autocorrect: false,
-            focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
               controller.extraChargesController.text =
@@ -921,7 +921,6 @@ class BookingsPage extends GetView<BookingsController> {
             textController: controller.extraChargesController,
             enable: true,
             autocorrect: false,
-            focusNode: extraChargesFocusNode,
             textInputAction: TextInputAction.done,
             onChanged: (value) => {
               controller.extraChargesController.text =

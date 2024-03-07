@@ -231,7 +231,8 @@ class BookingsController extends GetxController
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
-      if (roundTripselectedTripRadioValue.value == 1) {
+      if (roundTripselectedTripRadioValue.value == 1 &&
+          zoneFareApplied.value == 1) {
         isExtraChargesApplied = true;
       } else {
         isExtraChargesApplied = false;
@@ -246,7 +247,9 @@ class BookingsController extends GetxController
       calculateShares(adjustedCustomerPrice.toString());
       priceController.text = adjustedCustomerPrice.toString();
       customerPriceValue = adjustedCustomerPrice.toString();
-      if (roundTripselectedTripRadioValue.value == 1) {
+
+      if (roundTripselectedTripRadioValue.value == 1 &&
+          zoneFareApplied.value == 1) {
         isExtraChargesApplied = true;
       } else {
         isExtraChargesApplied = false;

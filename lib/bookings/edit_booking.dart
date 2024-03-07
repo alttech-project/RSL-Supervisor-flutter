@@ -818,7 +818,7 @@ class EditBooking extends GetView<EditBookingController> {
   }
 
   Widget _priceWidget() {
-    controller.price.value =
+    /*controller.price.value =
         double.tryParse(controller.priceController.text) ?? 0;
     if (controller.roundTripselectedTripRadioValue.value == 1 &&
         controller.selectedTripRadioValue.value == 2) {
@@ -849,7 +849,7 @@ class EditBooking extends GetView<EditBookingController> {
 
     controller.priceController.text =
         controller.calculatedValue.value.toString();
-
+*/
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",

@@ -948,7 +948,7 @@ class EditBooking extends GetView<EditBookingController> {
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
-            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
           )
         : BoxTextFieldTransparent(
@@ -966,7 +966,7 @@ class EditBooking extends GetView<EditBookingController> {
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), "")),
               controller.isValueChanged.value = true
             },
-            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
             /* inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

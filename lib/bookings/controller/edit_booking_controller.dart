@@ -121,8 +121,6 @@ class EditBookingController extends GetxController {
   bool isDouble = true;
   bool isExtraChargesApplied = false;
 
-
-
   @override
   void onInit() {
     super.onInit();
@@ -248,9 +246,41 @@ class EditBookingController extends GetxController {
       } else {
         isDouble = false;
       }
-      // carMakeFareApi();
+      callCarMakeFareApiToHandleZoneFare();
       callGetCorporatePackageListApi(false, packageId: packageId.value);
     }
+  }
+
+  void callCarMakeFareApiToHandleZoneFare() async {
+    if (pickupLatitude != 0.0 && dropLatitude != 0.0) {
+      var corporateId = await GetStorageController().getCorporateId();
+      supervisorInfo = await GetStorageController().getSupervisorInfo();
+      getCarMakeFareApi(CarMakeFareRequest(
+              supervisorId: supervisorInfo?.supervisorId ?? "",
+              kioskId: supervisorInfo?.kioskId ?? "",
+              corporateId: corporateId,
+              cid: supervisorInfo?.cid ?? "",
+              pickup_latitude: pickupLatitude,
+              pickup_longitude: pickupLongitude,
+              drop_latitude: dropLatitude,
+              drop_longitude: dropLongitude,
+              distance: approximateDistance.value,
+              modelId: taxiId.value.toString(),
+              carMakeId: carMakeId.value.toString()))
+          .then((response) {
+        apiLoading.value = false;
+        if ((response.status ?? 0) == 1) {
+          updateZoneFare(response.carMakeDetails?.carMakeFareDetails);
+        }
+      }).onError((error, stackTrace) {
+        apiLoading.value = false;
+        printLogs("CarModel api error: ${error.toString()}");
+      });
+    }
+  }
+
+  void updateZoneFare(CarMakeFareDetails? carMakeFareDetails) {
+    zoneFareApplied.value = carMakeFareDetails?.zoneFareApplied ?? 0;
   }
 
   void checkNewBookingValidation() async {

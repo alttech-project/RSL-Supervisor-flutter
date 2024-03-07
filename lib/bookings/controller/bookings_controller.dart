@@ -340,13 +340,49 @@ class BookingsController extends GetxController
     if (selectedTripRadioValue.value == 2) {
       isDoubleTheFare.value = true;
       roundTripselectedTripRadioValue.value = 1;
+
+      price.value = double.tryParse(priceController.text) ?? 0;
+      calculatedValue.value = price.value * 2;
+      originalPrice = calculatedValue.value.toString();
+      priceController.text = calculatedValue.value.toString();
     } else {
       roundTripselectedTripRadioValue.value = 0;
+
+      if (isDoubleTheFare.value) {
+        price.value = double.tryParse(priceController.text) ?? 0;
+        calculatedValue.value = price.value / 2;
+        isExtraChargesApplied = false;
+        isDoubleTheFare.value = false;
+        originalPrice = calculatedValue.value.toString();
+        priceController.text = calculatedValue.value.toString();
+      }
     }
   }
 
   void roundedSelectedRadio(int? value) {
     roundTripselectedTripRadioValue.value = value ?? 0;
+    doubleTheFareCalculation();
+  }
+
+  void doubleTheFareCalculation() {
+    price.value = double.tryParse(priceController.text) ?? 0;
+    //double
+    if (roundTripselectedTripRadioValue.value == 1 &&
+        selectedTripRadioValue.value == 2) {
+      isDoubleTheFare.value = true;
+      calculatedValue.value = price.value * 2;
+    } else {
+      //single
+      if (isDoubleTheFare.value == true) {
+        calculatedValue.value = price.value / 2;
+        isDoubleTheFare.value = false;
+      } else {
+        calculatedValue.value = price.value;
+        isDoubleTheFare.value = false;
+      }
+    }
+    originalPrice = calculatedValue.value.toString();
+    priceController.text = calculatedValue.value.toString();
   }
 
   void checkNewBookingValidation() async {
@@ -624,6 +660,7 @@ class BookingsController extends GetxController
       priceController.text = carMakeFareDetails?.fare?.toString() ?? "";
       originalPrice = priceController.text;
       customerPriceValue = carMakeFareDetails?.fare?.toString() ?? "";
+      doubleTheFareCalculation();
     } else {
       rslShare = 0;
       driverShare = 0;

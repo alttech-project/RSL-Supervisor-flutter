@@ -830,15 +830,14 @@ class BookingsPage extends GetView<BookingsController> {
   }
 
   Widget _priceWidget() {
-    controller.price.value =
+    /* controller.price.value =
         double.tryParse(controller.priceController.text) ?? 0;
     if (controller.roundTripselectedTripRadioValue.value == 1 &&
         controller.selectedTripRadioValue.value == 2) {
       controller.calculatedValue.value = controller.price.value * 2;
     } else {
-      /* printLogs(
+       printLogs(
           "hi fare ${controller.isDoubleTheFare.value} ${controller.isExtraChargesApplied} ${controller.price.value.toString()} ${controller.customerPriceValue} ${double.parse(controller.customerPriceValue) * 2}");
-     */
       if ((controller.isDoubleTheFare.value == true &&
               controller.price.value.toString() ==
                   (double.parse(controller.customerPriceValue) * 2)
@@ -853,7 +852,7 @@ class BookingsPage extends GetView<BookingsController> {
 
     controller.priceController.text =
         controller.calculatedValue.value.toString();
-
+*/
     return GetPlatform.isAndroid
         ? BoxTextFieldTransparent(
             hintText: "0",

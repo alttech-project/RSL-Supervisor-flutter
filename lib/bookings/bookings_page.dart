@@ -96,6 +96,10 @@ class BookingsPage extends GetView<BookingsController> {
         controller.changeTabIndex(value);
         if (value == 0) {
           controller.getUserInfo();
+          controller.priceController.clear();
+          controller.price.value = 0;
+          controller.calculatedValue.value = 0;
+          controller.isDoubleTheFare.value = false;
           bookingListController.stopTripListTimer();
           bookingListController.stopTripListOngoingTimer();
         } else if (value == 1) {
@@ -911,7 +915,7 @@ class BookingsPage extends GetView<BookingsController> {
               controller
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), ""))
             },
-            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
           )
         : BoxTextFieldTransparent(
@@ -927,7 +931,7 @@ class BookingsPage extends GetView<BookingsController> {
               controller
                   .handleExtraCharge(value.replaceAll(RegExp(r'[,.]'), ""))
             },
-            onSubmitted: (value) => controller.setExtraChargeForMinus(),
+            // onSubmitted: (value) => controller.setExtraChargeForMinus(),
             autofocus: false,
             /* inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

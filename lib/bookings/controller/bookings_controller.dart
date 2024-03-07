@@ -637,6 +637,7 @@ class BookingsController extends GetxController
           carMakeFareDetails.value =
               response.carMakeDetails?.carMakeFareDetails ??
                   CarMakeFareDetails();
+          // extraChargesController.clear();
         }
       }).onError((error, stackTrace) {
         apiLoading.value = false;

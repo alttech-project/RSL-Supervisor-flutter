@@ -61,7 +61,7 @@ class LoginController extends GetxController {
     appVersion.value = packageInfo.version;
     appBuildNumber.value = packageInfo.buildNumber;
     apk.value =
-        AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
+    AppConfig.currentEnvironment == Environment.demo ? "Demo" : "Live";
   }
 
 /*  getDeviceToken() async {
@@ -95,7 +95,7 @@ class LoginController extends GetxController {
           deviceToken: await GetStorageController().getDeviceToken(),
         ),
       ).then(
-        (response) {
+            (response) {
           apiLoading.value = false;
           if (response.status == 1) {
             currentView.value = LoginViews.otpPage;
@@ -107,7 +107,7 @@ class LoginController extends GetxController {
           }
         },
       ).catchError(
-        (onError) {
+            (onError) {
           apiLoading.value = false;
           Get.snackbar('Error!', onError.toString(),
               backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -134,7 +134,7 @@ class LoginController extends GetxController {
         deviceToken: await GetStorageController().getDeviceToken(),
       ),
     ).then(
-      (response) {
+          (response) {
         apiLoading.value = false;
         if (response.status == 1) {
           Get.snackbar('Success', '${response.message}',
@@ -146,7 +146,7 @@ class LoginController extends GetxController {
         }
       },
     ).catchError(
-      (onError) {
+          (onError) {
         apiLoading.value = false;
         Get.snackbar('Error!', onError.toString(),
             backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -159,7 +159,7 @@ class LoginController extends GetxController {
     apiLoading.value = true;
 
     LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
+    await locationManager.getCurrentLocation();
 
     if (result.data != null) {
       verifyOtpApi(
@@ -171,7 +171,7 @@ class LoginController extends GetxController {
           deviceToken: await GetStorageController().getDeviceToken(),
         ),
       ).then(
-        (response) async {
+            (response) async {
           apiLoading.value = false;
           if (response.status == 1) {
             kioskList = response.detail?.kioskList ?? [];
@@ -188,7 +188,7 @@ class LoginController extends GetxController {
           }
         },
       ).catchError(
-        (onError) {
+            (onError) {
           apiLoading.value = false;
           Get.snackbar('Error!', onError.toString(),
               backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -199,14 +199,14 @@ class LoginController extends GetxController {
       Get.defaultDialog(
           title: "ERROR!",
           middleText:
-              result.error ?? "Error occured while fetching current location");
+          result.error ?? "Error occured while fetching current location");
     }
   }
 
   callAssignSupervisorApi(imageUrl) async {
     apiLoading.value = true;
     LocationResult<Position> result =
-        await locationManager.getCurrentLocation();
+    await locationManager.getCurrentLocation();
 
     if (result.data != null) {
       assignSupervisorApi(
@@ -220,7 +220,7 @@ class LoginController extends GetxController {
             deviceToken: await GetStorageController().getDeviceToken(),
             photoUrl: imageUrl),
       ).then(
-        (response) {
+            (response) {
           apiLoading.value = false;
           if (response.status == 1) {
             var supervisorInfo = SupervisorInfo(
@@ -287,7 +287,7 @@ class LoginController extends GetxController {
           }
         },
       ).catchError(
-        (onError) {
+            (onError) {
           apiLoading.value = false;
           Get.snackbar('Error!', onError.toString(),
               backgroundColor: AppColors.kGetSnackBarColor.value);
@@ -298,7 +298,7 @@ class LoginController extends GetxController {
       Get.defaultDialog(
           title: "ERROR!",
           middleText:
-              result.error ?? "Error occured while fetching current location");
+          result.error ?? "Error occured while fetching current location");
     }
   }
 
@@ -359,7 +359,7 @@ class LoginController extends GetxController {
             child: Text(
               'Select Kiosk',
               style:
-                  AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
+              AppFontStyle.subHeading(color: AppColors.kPrimaryColor.value),
             ))
       ],
     );
@@ -368,40 +368,40 @@ class LoginController extends GetxController {
   _kioskList() {
     return Expanded(
       child:
-          // Obx(() =>
-          kioskList.isEmpty
-              ? Center(
-                  child: SizedBox(
-                    height: 280.h,
-                    child: Center(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "No kiosk found!",
-                              style:
-                                  AppFontStyle.subHeading(color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : ListView.separated(
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  itemCount: kioskList.length,
-                  itemBuilder: (context, index) {
-                    return _kioskListRow(context, index);
-                  },
-                  separatorBuilder: (context, index) => Divider(
-                    color: Colors.grey.withOpacity(0.6),
-                    thickness: 1,
-                    height: 5,
+      // Obx(() =>
+      kioskList.isEmpty
+          ? Center(
+        child: SizedBox(
+          height: 280.h,
+          child: Center(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "No kiosk found!",
+                    style:
+                    AppFontStyle.subHeading(color: Colors.grey),
+                    textAlign: TextAlign.center,
                   ),
                 ),
+              ],
+            ),
+          ),
+        ),
+      )
+          : ListView.separated(
+        shrinkWrap: true,
+        physics: const ScrollPhysics(),
+        itemCount: kioskList.length,
+        itemBuilder: (context, index) {
+          return _kioskListRow(context, index);
+        },
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.grey.withOpacity(0.6),
+          thickness: 1,
+          height: 5,
+        ),
+      ),
       // ),
     );
   }
@@ -503,7 +503,7 @@ void _cameraPermissionAlert() {
   } else {
     Future.delayed(
       const Duration(seconds: 2),
-      () async {
+          () async {
         _cameraPermissionAlert();
       },
     );

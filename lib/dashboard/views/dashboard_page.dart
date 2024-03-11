@@ -69,41 +69,43 @@ class DashboardPage extends GetView<DashBoardController> {
                                     ),
                                   ),
                                 ),
-                                controller.customDropOffEnable.value == 1
-                                    ? Row(
-                                        children: [
-                                          const Spacer(),
-                                          Text(
-                                            'Use Custom Drop Off',
-                                            style: AppFontStyle.subHeading(
-                                                color: Colors.white),
-                                          ),
-                                          SizedBox(
-                                            width: 5.w,
-                                          ),
-                                          SizedBox(
-                                            height: 30.h,
-                                            width: 40.w,
-                                            child: FittedBox(
-                                              fit: BoxFit.cover,
-                                              child: Switch(
-                                                value: controller
-                                                    .useCustomDrop.value,
-                                                inactiveTrackColor:
-                                                    Colors.red.shade300,
-                                                inactiveThumbColor:
-                                                    Colors.red.shade800,
-                                                activeColor: Colors.green,
-                                                onChanged: (bool newValue) {
-                                                  controller.customDropAction(
-                                                      newValue);
-                                                },
+                                Obx(() =>
+                                    controller.customDropOffEnable.value == 1
+                                        ? Row(
+                                            children: [
+                                              const Spacer(),
+                                              Text(
+                                                'Use Custom Drop Off',
+                                                style: AppFontStyle.subHeading(
+                                                    color: Colors.white),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : const SizedBox.shrink(),
+                                              SizedBox(
+                                                width: 5.w,
+                                              ),
+                                              SizedBox(
+                                                height: 30.h,
+                                                width: 40.w,
+                                                child: FittedBox(
+                                                  fit: BoxFit.cover,
+                                                  child: Switch(
+                                                    value: controller
+                                                        .useCustomDrop.value,
+                                                    inactiveTrackColor:
+                                                        Colors.red.shade300,
+                                                    inactiveThumbColor:
+                                                        Colors.red.shade800,
+                                                    activeColor: Colors.green,
+                                                    onChanged: (bool newValue) {
+                                                      controller
+                                                          .customDropAction(
+                                                              newValue);
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : const SizedBox.shrink()),
                                 DropSearchBar(
                                   pageType: 2,
                                 ),

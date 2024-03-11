@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rsl_supervisor/dashboard/controllers/dashboard_controller.dart';
 import 'package:rsl_supervisor/shared/styles/app_color.dart';
 import 'package:rsl_supervisor/shared/styles/app_font.dart';
@@ -55,19 +56,24 @@ class SideMenuPage extends GetView<DashBoardController> {
               _menuListRow(SideMenuIcon.home, 'Home'),
               _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
               /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
-            _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
+             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
 
-              controller.quickTripEnable.value == 1
-                  ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
-                  : const SizedBox.shrink(),
+              Obx(
+                () => controller.quickTripEnable.value == 1
+                    ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
+                    : const SizedBox.shrink(),
+              ),
               /*
-            controller.locationType.value == LocationType.GENERAL.toString()
+              controller.locationType.value == LocationType.GENERAL.toString()
                 ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
                 : const SizedBox.shrink(),
-             */
-              GetStorageController().getLocationType() == LocationType.HOTEL.toString()
-                  ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
-                  : const SizedBox.shrink(),
+              */
+              Obx(
+                () => controller.locationType.value ==
+                        LocationType.HOTEL.toString()
+                    ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
+                    : const SizedBox.shrink(),
+              ),
 
               _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
               //_menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
@@ -77,9 +83,11 @@ class SideMenuPage extends GetView<DashBoardController> {
               _menuListRow(SideMenuIcon.feeds, 'Feeds'),
               _menuListRow(SideMenuIcon.leaderBoard, 'Leaderboard'),
               // _menuListRow(SideMenuIcon.leaderBoard, 'Reorder List'),
-              Get.find<GetStorageController>().getRiderReferralUrl() == 1
-                  ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
-                  : const SizedBox(),
+              Obx(
+                () => controller.rideReferral.value == 1
+                    ? _menuListRow(SideMenuIcon.riderReferral, 'Rider Referral')
+                    : const SizedBox(),
+              ),
               // _menuListRow(SideMenuIcon.subscribers, 'Driver Fine'),
               _menuListRow(SideMenuIcon.logout, 'Logout'),
               Obx(

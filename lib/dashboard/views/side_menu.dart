@@ -65,7 +65,7 @@ class SideMenuPage extends GetView<DashBoardController> {
                 ? _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips')
                 : const SizedBox.shrink(),
              */
-              controller.locationType.value == LocationType.HOTEL.toString()
+              GetStorageController().getLocationType() == LocationType.HOTEL.toString()
                   ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
                   : const SizedBox.shrink(),
 

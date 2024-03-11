@@ -55,6 +55,7 @@ class DashBoardController extends GetxController {
   RxString locationType = "".obs;
   RxInt quickTripEnable = 0.obs;
   RxInt customDropOffEnable = 0.obs;
+  RxInt rideReferral = 0.obs;
 
   final LocationManager locationManager = LocationManager();
   late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
@@ -93,6 +94,7 @@ class DashBoardController extends GetxController {
     deviceToken = await GetStorageController().getDeviceToken();
     bool shiftStatus = await GetStorageController().getShiftStatus();
     locationType.value = await GetStorageController().getLocationType();
+    rideReferral.value = await GetStorageController().getRiderReferralUrl();
     quickTripEnable.value =
         await GetStorageController().getQuickTripEnableType();
     customDropOffEnable.value =

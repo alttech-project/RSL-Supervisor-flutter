@@ -4,14 +4,20 @@ class GetCorporatePackageListRequest {
   int? corporateId;
   int? modelId;
   int? packageType;
+  int? car_make_id;
 
-  GetCorporatePackageListRequest(
-      {this.corporateId, this.modelId, this.packageType});
+  GetCorporatePackageListRequest({
+    this.corporateId,
+    this.modelId,
+    this.packageType,
+    this.car_make_id,
+  });
 
   GetCorporatePackageListRequest.fromJson(Map<String, dynamic> json) {
     corporateId = json['corporate_id'];
     modelId = json['model_id'];
     packageType = json['package_type'];
+    car_make_id = json['car_make_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +25,7 @@ class GetCorporatePackageListRequest {
     data['corporate_id'] = corporateId;
     data['model_id'] = modelId;
     data['package_type'] = packageType;
+    data['car_make_id'] = car_make_id;
     return data;
   }
 }

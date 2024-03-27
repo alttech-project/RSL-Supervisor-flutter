@@ -631,6 +631,14 @@ class EditBookingController extends GetxController {
     if (corporateID.isNotEmpty) {
       corporateId = corporateID;
     }
+
+    int? carMake = 0;
+    if (carMakeId.value.isNotEmpty) {
+      carMake = int.parse(carMakeId.value);
+    } else {
+      carMake = 0;
+    }
+
     if (showLoader) {
       apiLoading.value = true;
     } else {
@@ -640,7 +648,8 @@ class EditBookingController extends GetxController {
       GetCorporatePackageListRequest(
           corporateId: int.parse(corporateId ?? "0"),
           modelId: int.parse(taxiId.value),
-          packageType: selectedPackageType.value.id),
+          packageType: selectedPackageType.value.id,
+          car_make_id: carMake),
     ).then(
       (response) {
         apiLoading.value = false;
@@ -1141,11 +1150,12 @@ class EditBookingController extends GetxController {
                                         isValueChanged.value = true,
                                         // updateModelFareDetails(),
                                         carMakeFareApi(),
-                                        if (selectedBookingType.value.id == 3)
+                                        callGetCorporatePackageListApi(true),
+                                        /* if (selectedBookingType.value.id == 3)
                                           {
                                             callGetCorporatePackageListApi(
                                                 true),
-                                          },
+                                          },*/
                                         animationController.reverse().then(
                                           (value) {
                                             Navigator.of(context).pop();

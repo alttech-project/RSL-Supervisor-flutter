@@ -30,31 +30,28 @@ class TripListWidget extends GetView<TripHistoryController> {
   }
 
   Widget _headerWidget() {
-    return
-      Padding(
-        padding: const EdgeInsets.only(
-          top: 0,
-        ),
-        child:
-
-        ListView.builder(
-          itemCount: controller.tripList.length,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final tripData = controller.tripList[index];
-            return InkWell(
-              onTap: () {
-                controller.getTripDetailFromList(
-                  detail: tripData,
-                );
-                Get.toNamed(AppRoutes.tripDetailPage);
-              },
-              child: _tripHistoryListWidget(tripData),
-            );
-          },
-        ),
-      );
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 0,
+      ),
+      child: ListView.builder(
+        itemCount: controller.tripList.length,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          final tripData = controller.tripList[index];
+          return InkWell(
+            onTap: () {
+              controller.getTripDetailFromList(
+                detail: tripData,
+              );
+              Get.toNamed(AppRoutes.tripDetailPage);
+            },
+            child: _tripHistoryListWidget(tripData),
+          );
+        },
+      ),
+    );
   }
 
   Widget _headerTitleWidget(String title) {
@@ -345,14 +342,17 @@ class TripListWidget extends GetView<TripHistoryController> {
                           ),
                         ),
                         SizedBox(height: 4.h),
-                        Flexible(child: Text(
-                          controller.displayTimeFormatter(details.pickupTime ?? ""),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: AppFontSize.small.value,
-                            fontWeight: AppFontWeight.semibold.value,
+                        Flexible(
+                          child: Text(
+                            controller
+                                .displayTimeFormatter(details.pickupTime ?? ""),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppFontSize.small.value,
+                              fontWeight: AppFontWeight.semibold.value,
+                            ),
                           ),
-                        ),),
+                        ),
                       ],
                     ),
                   ),
@@ -443,7 +443,7 @@ class TripListWidget extends GetView<TripHistoryController> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if(details.travelStatus == '9')...[
+        if (details.travelStatus == '9') ...[
           InkWell(
             onTap: () => controller.showCancelTripAlert(
               int.parse(details.tripId ?? "0"),
@@ -480,10 +480,13 @@ class TripListWidget extends GetView<TripHistoryController> {
               ),
             ),
           ),
-          SizedBox(width: 12.w,),
+          SizedBox(
+            width: 12.w,
+          ),
         ],
-        if(details.travelStatus == '1' && (details.completeTripMap?.isNotEmpty ?? false) &&
-            details.tripType != "Offline Trip")...[
+        if (details.travelStatus == '1' &&
+            (details.completeTripMap?.isNotEmpty ?? false) &&
+            details.tripType != "Offline Trip") ...[
           InkWell(
             onTap: () => controller.moveToMapPage(details.tripId ?? ""),
             child: Container(
@@ -518,7 +521,9 @@ class TripListWidget extends GetView<TripHistoryController> {
               ),
             ),
           ),
-          SizedBox(width: 12.w,),
+          SizedBox(
+            width: 12.w,
+          ),
         ],
         Container(
           decoration: BoxDecoration(

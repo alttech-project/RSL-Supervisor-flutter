@@ -286,6 +286,13 @@ class BookingsController extends GetxController
     if (corporateID.isNotEmpty) {
       corporateId = corporateID;
     }
+    int? carMake = 0;
+    if (carMakeId.value.isNotEmpty) {
+      carMake = int.parse(carMakeId.value);
+    } else {
+      carMake = 0;
+    }
+
     if (showLoader) {
       apiLoading.value = true;
     } else {
@@ -293,9 +300,11 @@ class BookingsController extends GetxController
     }
     getCorporatePackageListApi(
       GetCorporatePackageListRequest(
-          corporateId: int.parse(corporateId ?? "0"),
-          modelId: int.parse(taxiId.value),
-          packageType: selectedPackageType.value.id),
+        corporateId: int.parse(corporateId ?? "0"),
+        modelId: int.parse(taxiId.value),
+        packageType: selectedPackageType.value.id,
+        car_make_id: carMake,
+      ),
     ).then(
       (response) {
         apiLoading.value = false;
@@ -1008,11 +1017,12 @@ class BookingsController extends GetxController
                                           carMakeId.value =
                                               cars[selectedCarIndex].carMakeId,
                                           carMakeFareApi(),
-                                          if (selectedBookingType.value.id == 3)
-                                            {
-                                              callGetCorporatePackageListApi(
-                                                  true),
-                                            },
+                                          callGetCorporatePackageListApi(true),
+                                          /*if (selectedBookingType.value.id == 3)
+                                        {
+                                          callGetCorporatePackageListApi(
+                                              true),
+                                        },*/
                                           animationController.reverse().then(
                                             (value) {
                                               Navigator.of(context).pop();

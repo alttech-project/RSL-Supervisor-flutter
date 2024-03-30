@@ -97,7 +97,7 @@ class DashBoardController extends GetxController {
     locationType.value = await GetStorageController().getLocationType();
     rideReferral.value = await GetStorageController().getRiderReferralUrl();
     logoutVerification.value =
-    await GetStorageController().getLogoutVerification();
+        await GetStorageController().getLogoutVerification();
     quickTripEnable.value =
         await GetStorageController().getQuickTripEnableType();
     customDropOffEnable.value =
@@ -113,6 +113,7 @@ class DashBoardController extends GetxController {
   }
 
   void verifySuperVisorLocationApi(data) {
+    logOutLoader.value = true;
     verifySuperVisorLocation(
       VerifySuperVisorLocationRequestData(
         supervisorId: supervisorInfo.value.supervisorId,
@@ -124,6 +125,7 @@ class DashBoardController extends GetxController {
       ),
     ).then(
       (response) {
+        logOutLoader.value = false;
         if ((response.status ?? 0) == 1) {
           moveToCaptureImagePage(data);
         } else {
@@ -135,6 +137,7 @@ class DashBoardController extends GetxController {
       },
     ).onError(
       (error, stackTrace) {
+        logOutLoader.value = false;
         showSnackBar(
           title: 'Error',
           msg: error.toString(),

@@ -557,72 +557,137 @@ class EditBookingController extends GetxController {
       carMake = 0;
     }
 
-    editBookingApi(EditCorporateBookingRequestData(
-            id: editBookingTripId.value,
-            motor_model: taxi,
-            // car_make_id: carMake,
-            car_make_info: CarMakeInfo(
-                car_make_id: carMake, car_make_name: taxiModel.value),
-            pickupTime: date,
-            extraCharge: double.parse(extraCharge),
-            customerPrice: double.parse(priceController.text.trim()),
-            rsl_share: rslShare,
-            driver_share: driverShare,
-            corporate_share: corporateShare,
-            remarks: remarks,
-            zone_fare_applied: zoneFareApplied.value,
-            pickup_zone_id: pickupZoneId,
-            pickup_zone_group_id: pickupZoneGroupId,
-            drop_zone_id: dropZoneId,
-            drop_zone_group_id: dropZoneGroupId,
-            noteToDriver: noteToDriver,
-            flightNumber: flightNumber,
-            referenceNumber: refNumber,
-            noteToAdmin: noteToAdmin,
-            currentLocation: pickupLocation,
-            dropLocation: dropLocation,
-            pickupNotes: "",
-            dropNotes: "",
-            passengerPaymentOption: selectedPayment.value.paymentId,
-            finalPaymentOption: selectedPayment.value.paymentId,
-            now_after: selectedBookingType.value.id,
-            customer_rate: customerRate,
-            pickupLatitude: pickupLatitude,
-            pickupLongitude: pickupLongitude,
-            dropLatitude: dropLatitude,
-            dropLongitude: dropLongitude,
-            guestEmail: email,
-            guestName: name,
-            guestPhone: phone,
-            guestCountryCode: "+${countryCode.value}",
-            approx_distance: "${approximateDistance.value.toString()} km",
-            approx_duration: "${approximateTime.value.toString()} mins",
-            // approx_trip_fare: double.parse(approximateFare.value),
-            approx_trip_fare: selectedBookingType.value.id == 3
-                ? double.parse(packageAmount)
-                : double.parse(approximateFare.value),
-            roomNo: roomNo,
-            package_type: packageType,
-            package_id: packageId,
-            trip_type: selectedTripRadioValue.value,
-            double_the_fare: fareType,
-            route_polyline: overViewPolyLine.value))
-        .then((response) {
-      saveBookingApiLoading.value = false;
-      if ((response.status ?? 0) == 1) {
-        clearAllData();
-        goBackPage();
-      } else {
-        showDefaultDialog(
-          context: Get.context!,
-          title: "Alert",
-          message: response.message ?? "Something went wrong...",
-        );
-      }
-    }).onError((error, stackTrace) {
-      saveBookingApiLoading.value = false;
-      printLogs("EditBooking api error: ${error.toString()}");
-    });
+    if (selectedBookingType.value.id == 3) {
+      //package booking
+      editBookingApi(EditCorporateBookingRequestData(
+              id: editBookingTripId.value,
+              motor_model: taxi,
+              // car_make_id: carMake,
+              car_make_info: CarMakeInfo(
+                  car_make_id: carMake, car_make_name: taxiModel.value),
+              pickupTime: date,
+              extraCharge: 0,
+              customerPrice: 0,
+              rsl_share: 0,
+              driver_share: 0,
+              corporate_share: 0,
+              remarks: remarks,
+              zone_fare_applied: zoneFareApplied.value,
+              pickup_zone_id: pickupZoneId,
+              pickup_zone_group_id: pickupZoneGroupId,
+              drop_zone_id: dropZoneId,
+              drop_zone_group_id: dropZoneGroupId,
+              noteToDriver: noteToDriver,
+              flightNumber: flightNumber,
+              referenceNumber: refNumber,
+              noteToAdmin: noteToAdmin,
+              currentLocation: pickupLocation,
+              dropLocation: dropLocation,
+              pickupNotes: "",
+              dropNotes: "",
+              passengerPaymentOption: selectedPayment.value.paymentId,
+              finalPaymentOption: selectedPayment.value.paymentId,
+              now_after: selectedBookingType.value.id,
+              customer_rate: "",
+              pickupLatitude: pickupLatitude,
+              pickupLongitude: pickupLongitude,
+              dropLatitude: dropLatitude,
+              dropLongitude: dropLongitude,
+              guestEmail: email,
+              guestName: name,
+              guestPhone: phone,
+              guestCountryCode: "+${countryCode.value}",
+              approx_distance: "${approximateDistance.value.toString()} km",
+              approx_duration: "${approximateTime.value.toString()} mins",
+              approx_trip_fare: double.parse(packageAmount),
+              roomNo: roomNo,
+              package_type: packageType,
+              package_id: packageId,
+              trip_type: selectedTripRadioValue.value,
+              double_the_fare: 0,
+              route_polyline: overViewPolyLine.value))
+          .then((response) {
+        saveBookingApiLoading.value = false;
+        if ((response.status ?? 0) == 1) {
+          clearAllData();
+          goBackPage();
+        } else {
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Alert",
+            message: response.message ?? "Something went wrong...",
+          );
+        }
+      }).onError((error, stackTrace) {
+        saveBookingApiLoading.value = false;
+        printLogs("EditBooking api error: ${error.toString()}");
+      });
+    } else {
+      // normal booking
+      editBookingApi(EditCorporateBookingRequestData(
+              id: editBookingTripId.value,
+              motor_model: taxi,
+              // car_make_id: carMake,
+              car_make_info: CarMakeInfo(
+                  car_make_id: carMake, car_make_name: taxiModel.value),
+              pickupTime: date,
+              extraCharge: double.parse(extraCharge),
+              customerPrice: double.parse(priceController.text.trim()),
+              rsl_share: rslShare,
+              driver_share: driverShare,
+              corporate_share: corporateShare,
+              remarks: remarks,
+              zone_fare_applied: zoneFareApplied.value,
+              pickup_zone_id: pickupZoneId,
+              pickup_zone_group_id: pickupZoneGroupId,
+              drop_zone_id: dropZoneId,
+              drop_zone_group_id: dropZoneGroupId,
+              noteToDriver: noteToDriver,
+              flightNumber: flightNumber,
+              referenceNumber: refNumber,
+              noteToAdmin: noteToAdmin,
+              currentLocation: pickupLocation,
+              dropLocation: dropLocation,
+              pickupNotes: "",
+              dropNotes: "",
+              passengerPaymentOption: selectedPayment.value.paymentId,
+              finalPaymentOption: selectedPayment.value.paymentId,
+              now_after: selectedBookingType.value.id,
+              customer_rate: customerRate,
+              pickupLatitude: pickupLatitude,
+              pickupLongitude: pickupLongitude,
+              dropLatitude: dropLatitude,
+              dropLongitude: dropLongitude,
+              guestEmail: email,
+              guestName: name,
+              guestPhone: phone,
+              guestCountryCode: "+${countryCode.value}",
+              approx_distance: "${approximateDistance.value.toString()} km",
+              approx_duration: "${approximateTime.value.toString()} mins",
+              approx_trip_fare: double.parse(approximateFare.value),
+              roomNo: roomNo,
+              package_type: packageType,
+              package_id: packageId,
+              trip_type: selectedTripRadioValue.value,
+              double_the_fare: fareType,
+              route_polyline: overViewPolyLine.value))
+          .then((response) {
+        saveBookingApiLoading.value = false;
+        if ((response.status ?? 0) == 1) {
+          clearAllData();
+          goBackPage();
+        } else {
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Alert",
+            message: response.message ?? "Something went wrong...",
+          );
+        }
+      }).onError((error, stackTrace) {
+        saveBookingApiLoading.value = false;
+        printLogs("EditBooking api error: ${error.toString()}");
+      });
+    }
   }
 
   void goBackPage() {

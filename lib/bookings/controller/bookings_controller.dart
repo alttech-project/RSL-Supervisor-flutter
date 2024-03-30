@@ -312,7 +312,7 @@ class BookingsController extends GetxController
           packageList.clear();
           packageList.value = response.packageDetails?.packageList ?? [];
           packageList.insert(
-              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
+              0, CorporatePackageList(id: -1, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         } else {
@@ -322,7 +322,7 @@ class BookingsController extends GetxController
           );
           packageList.clear();
           packageList.insert(
-              0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
+              0, CorporatePackageList(id: -1, typeLabel: "Select Package"));
           packageList.refresh();
           packageData.value = packageList[0];
         }
@@ -332,7 +332,7 @@ class BookingsController extends GetxController
         apiLoading.value = false;
         packageList.clear();
         packageList.insert(
-            0, CorporatePackageList(id: 001, typeLabel: "Select Package"));
+            0, CorporatePackageList(id: -1, typeLabel: "Select Package"));
         packageList.refresh();
         packageData.value = packageList[0];
         showDefaultDialog(
@@ -435,7 +435,7 @@ class BookingsController extends GetxController
       } else if (taxiId.isEmpty || carMakeId.isEmpty) {
         _showSnackBar('Validation!', 'Kindly select car model!');
       } else if (selectedBookingType.value.id == 3 &&
-          (packageData.value.id == null || packageData.value.id == 001)) {
+          (packageData.value.id == null || packageData.value.id == -1)) {
         _showSnackBar('Validation!', 'Kindly select package!');
       } else if (selectedTripRadioValue.value == 0) {
         _showSnackBar('Validation!', 'Kindly select trip type!');
@@ -493,7 +493,7 @@ class BookingsController extends GetxController
     String packageAmount = "0";
     if (selectedBookingType.value.id == 3) {
       packageType = selectedPackageType.value.id;
-      packageId = packageData.value.id == 001 ? 0 : packageData.value.id;
+      packageId = packageData.value.id == -1 ? 0 : packageData.value.id;
       if (packageId == 0) {
         packageAmount = "0";
       } else {

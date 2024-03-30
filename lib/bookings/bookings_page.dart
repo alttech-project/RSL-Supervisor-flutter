@@ -1624,7 +1624,7 @@ class BookingsPage extends GetView<BookingsController> {
             value: value,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 0.w),
-              child: value.id == 001
+              child: value.id == -1
                   ? Text(
                       value.typeLabel.toString(),
                       style: GoogleFonts.outfit(

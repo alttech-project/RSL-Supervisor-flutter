@@ -44,6 +44,7 @@ class SplashController extends GetxController {
                 url: details?.supervisorRiderReferral ?? 0);
             storageController.saveVideoDate(date: details?.videoDate ?? "");
             storageController.saveImageDate(date: details?.imgDate ?? "");
+            storageController.saveLogoutVerification(type: details?.logoutVerification ?? 0 );
           }
           _checkLoginStatus();
         } else {

@@ -66,14 +66,17 @@ class DropOffList {
   String? longitude;
   String? fare;
   String? zoneFareApplied;
+  num? contractAmount;
 
-  DropOffList(
-      {this.name,
-      this.address,
-      this.latitude,
-      this.longitude,
-      this.fare,
-      this.zoneFareApplied});
+  DropOffList({
+    this.name,
+    this.address,
+    this.latitude,
+    this.longitude,
+    this.fare,
+    this.zoneFareApplied,
+    this.contractAmount,
+  });
 
   DropOffList.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -82,6 +85,7 @@ class DropOffList {
     longitude = json['longitude'].toString();
     fare = json['fare'];
     zoneFareApplied = json['zone_fare_applied'];
+    contractAmount = json['contractAmount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +96,8 @@ class DropOffList {
     data['longitude'] = longitude;
     data['fare'] = fare;
     data['zone_fare_applied'] = zoneFareApplied;
+    data['contractAmount'] = contractAmount;
+
     return data;
   }
 }

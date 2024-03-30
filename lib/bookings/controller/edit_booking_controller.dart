@@ -521,12 +521,19 @@ class EditBookingController extends GetxController {
 
     int packageType = 0;
     int? packageId = 0;
+    String packageAmount = "0";
     if (selectedBookingType.value.id == 3) {
       packageType = selectedPackageType.value.id;
       packageId = packageData.value.id == 001 ? 0 : packageData.value.id;
+      if (packageId == 0) {
+        packageAmount = "0";
+      } else {
+        packageAmount = packageData.value.amount.toString();
+      }
     } else {
       packageType = 0;
       packageId = 0;
+      packageAmount = "0";
     }
 
     int? fareType = 0;
@@ -590,7 +597,10 @@ class EditBookingController extends GetxController {
             guestCountryCode: "+${countryCode.value}",
             approx_distance: "${approximateDistance.value.toString()} km",
             approx_duration: "${approximateTime.value.toString()} mins",
-            approx_trip_fare: double.parse(approximateFare.value),
+            // approx_trip_fare: double.parse(approximateFare.value),
+            approx_trip_fare: selectedBookingType.value.id == 3
+                ? double.parse(packageAmount)
+                : double.parse(approximateFare.value),
             roomNo: roomNo,
             package_type: packageType,
             package_id: packageId,

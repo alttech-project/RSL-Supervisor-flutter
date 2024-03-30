@@ -26,6 +26,7 @@ import '../../utils/helpers/getx_storage.dart';
 import '../../utils/helpers/location_manager.dart';
 import '../data/dashboard_api_data.dart';
 import '../data/shift_in_api_data.dart';
+import '../data/verify_supervisor_location.dart';
 import '../service/dashboard_service.dart';
 
 class Car {
@@ -71,7 +72,7 @@ class DashBoardController extends GetxController {
   RxBool logOutLoader = false.obs;
   int selectedCarIndex = 0;
   Timer? _timer;
-
+  RxInt logoutVerification = 0.obs;
   final GetStorageController controller = Get.find<GetStorageController>();
 
   @override
@@ -95,6 +96,8 @@ class DashBoardController extends GetxController {
     bool shiftStatus = await GetStorageController().getShiftStatus();
     locationType.value = await GetStorageController().getLocationType();
     rideReferral.value = await GetStorageController().getRiderReferralUrl();
+    logoutVerification.value =
+    await GetStorageController().getLogoutVerification();
     quickTripEnable.value =
         await GetStorageController().getQuickTripEnableType();
     customDropOffEnable.value =
@@ -107,6 +110,37 @@ class DashBoardController extends GetxController {
     startTimer();
     callDashboardApi();
     callCarModelApi();
+  }
+
+  void verifySuperVisorLocationApi(data) {
+    verifySuperVisorLocation(
+      VerifySuperVisorLocationRequestData(
+        supervisorId: supervisorInfo.value.supervisorId,
+        cid: supervisorInfo.value.cid,
+        latitude: data!.latitude,
+        longitude: data!.longitude,
+        accuracy: data!.accuracy,
+        photoUrl: "",
+      ),
+    ).then(
+      (response) {
+        if ((response.status ?? 0) == 1) {
+          moveToCaptureImagePage(data);
+        } else {
+          showSnackBar(
+            title: 'Error',
+            msg: response.message ?? "Something went wrong...",
+          );
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        showSnackBar(
+          title: 'Error',
+          msg: error.toString(),
+        );
+      },
+    );
   }
 
   void startTimer() {
@@ -437,7 +471,12 @@ class DashBoardController extends GetxController {
     LocationResult<Position> result =
         await locationManager.getCurrentLocation();
     if (result.data != null) {
-      moveToCaptureImagePage(result.data);
+      if (logoutVerification.value == 1) {
+        verifySuperVisorLocationApi(result.data);
+      } else {
+        moveToCaptureImagePage(result.data);
+      }
+      // moveToCaptureImagePage(result.data);
     } else {
       showSnackBar(
         title: 'ERROR!',

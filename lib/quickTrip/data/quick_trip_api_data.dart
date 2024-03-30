@@ -21,28 +21,31 @@ class DispatchQuickTripRequestData {
   String? remarks;
   num? customPrice;
   num? paymentOption;
+  int? contractAmount;
 
-  DispatchQuickTripRequestData(
-      {this.kioskId,
-      this.tripId,
-      this.companyId,
-      this.supervisorName,
-      this.supervisorId,
-      this.supervisorUniqueId,
-      this.name,
-      this.countryCode,
-      this.mobileNo,
-      this.email,
-      this.fixedMeter,
-      this.kioskFare,
-      this.paymentId,
-      this.dropLatitude,
-      this.dropLongitude,
-      this.dropplace,
-      this.referenceNumber,
-      this.remarks,
-      this.customPrice,
-      this.paymentOption});
+  DispatchQuickTripRequestData({
+    this.kioskId,
+    this.tripId,
+    this.companyId,
+    this.supervisorName,
+    this.supervisorId,
+    this.supervisorUniqueId,
+    this.name,
+    this.countryCode,
+    this.mobileNo,
+    this.email,
+    this.fixedMeter,
+    this.kioskFare,
+    this.paymentId,
+    this.dropLatitude,
+    this.dropLongitude,
+    this.dropplace,
+    this.referenceNumber,
+    this.remarks,
+    this.customPrice,
+    this.paymentOption,
+    this.contractAmount,
+  });
 
   DispatchQuickTripRequestData.fromJson(Map<String, dynamic> json) {
     kioskId = json['kiosk_id'];
@@ -65,6 +68,7 @@ class DispatchQuickTripRequestData {
     remarks = json['remarks'];
     customPrice = json['custom_price'];
     paymentOption = json["payment_option"];
+    contractAmount = json["contract_amount"];
   }
 
   Map<String, dynamic> toJson() {
@@ -89,6 +93,8 @@ class DispatchQuickTripRequestData {
     data['remarks'] = this.remarks;
     data['custom_price'] = this.customPrice;
     data["payment_option"] = this.paymentOption;
+    data["contract_amount"] = this.contractAmount;
+
     return data;
   }
 }

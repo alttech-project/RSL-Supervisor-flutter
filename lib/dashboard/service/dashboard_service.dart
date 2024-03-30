@@ -7,6 +7,7 @@ import '../../network/app_config.dart';
 import '../../network/services.dart';
 import '../../utils/helpers/getx_storage.dart';
 import '../data/dashboard_api_data.dart';
+import '../data/verify_supervisor_location.dart';
 
 final ApiProvider _apiProvider = Get.find<ApiProvider>();
 final _storageController = Get.find<GetStorageController>();
@@ -52,4 +53,13 @@ Future<CarModelTypeResponseData> carModelApi(
   return carModelApiResponseFromJson(response);
 }
 
-
+Future<VerifySuperVisorLocationResponseData> verifySuperVisorLocation(
+    VerifySuperVisorLocationRequestData requestData) async {
+  final response = await _apiProvider.httpRequest(
+      resource: Resource(
+        url: '${AppConfig.webBaseUrl}verify_supervisor_location',
+        request: verifyLogoutApiRequestToJson(requestData),
+      ),
+      queryParam: {"type": "verify_supervisor_location"});
+  return verifyLogoutApiResponseFromJson(response);
+}

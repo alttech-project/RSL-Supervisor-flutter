@@ -37,23 +37,25 @@ class GetCoreDetails {
   int? supervisorRiderReferral;
   String? videoDate;
   String? imgDate;
+  int? logoutVerification;
 
-  GetCoreDetails({
-    this.monitorNodeUrl,
-    this.referralNodeUrl,
-    this.corporateNodeUrl,
-    this.supervisorRiderReferral,
-    this.videoDate,
-    this.imgDate,
-  });
+  GetCoreDetails(
+      {this.monitorNodeUrl,
+      this.referralNodeUrl,
+      this.corporateNodeUrl,
+      this.supervisorRiderReferral,
+      this.videoDate,
+      this.imgDate,
+      this.logoutVerification});
 
   GetCoreDetails.fromJson(Map<String, dynamic> json) {
     monitorNodeUrl = json['monitor_node_url'];
     referralNodeUrl = json['referral_node_url'];
-    corporateNodeUrl=json['corporate_node_url'];
+    corporateNodeUrl = json['corporate_node_url'];
     supervisorRiderReferral = json['supervisor_rider_referral'];
     videoDate = json['video_date'];
     imgDate = json['img_date'];
+    logoutVerification = json['logout_verification'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +66,7 @@ class GetCoreDetails {
     data['supervisor_rider_referral'] = supervisorRiderReferral;
     data['video_date'] = videoDate;
     data['img_date'] = imgDate;
+    data['logout_verification'] = logoutVerification;
     return data;
   }
 }

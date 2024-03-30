@@ -167,7 +167,10 @@ class BookingsPage extends GetView<BookingsController> {
                 ],
               )
             : const SizedBox.shrink(),
-        _customPricingInfo(context),
+        if (controller.selectedBookingType.value.id != 3)
+          _customPricingInfo(context)
+        else
+          const SizedBox.shrink(),
         SizedBox(height: 10.h),
         _additionalElementsInfo(context),
         SizedBox(height: 24.h),
@@ -1226,7 +1229,9 @@ class BookingsPage extends GetView<BookingsController> {
               _noteToAdminWidget(),
               _flightNumberWidget(),
               _refNumberWidget(),
-              _customerRateWidget(),
+              controller.selectedBookingType.value.id != 3
+                  ? _customerRateWidget()
+                  : const SizedBox.shrink(),
               _roomNumberWidget(),
               SizedBox(height: 10.h),
               _remarksLabel(),

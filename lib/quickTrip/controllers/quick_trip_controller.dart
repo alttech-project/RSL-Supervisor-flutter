@@ -7,6 +7,7 @@ import 'package:rsl_supervisor/routes/app_routes.dart';
 import 'package:rsl_supervisor/scanner/controllers/scanner_controller.dart';
 
 import '../../bookings/data/motor_details_data.dart';
+import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
 import '../../shared/styles/app_color.dart';
@@ -40,10 +41,14 @@ class QuickTripController extends GetxController {
   String originalFare = "0";
   double dropLatitude = 0.0, dropLongitude = 0.0;
   Rx<Payments> selectedPayment = quickTripsPaymentList[0].obs;
+  RxInt contractAmount = 0.obs;
+  final DashBoardController dashBoardController =
+      Get.find<DashBoardController>();
 
   @override
   void onInit() {
     super.onInit();
+    dashBoardController.stopTimer();
     _getUserInfo();
   }
 
@@ -54,6 +59,7 @@ class QuickTripController extends GetxController {
 
   @override
   void onClose() {
+    dashBoardController.startTimer();
     clearDatas();
 /*    tripIdController.dispose();
     dropLocationController.dispose();
@@ -74,6 +80,7 @@ class QuickTripController extends GetxController {
   }
 
   void checkValidation() async {
+    printLogs("contractAmount $contractAmount");
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     bool shiftStatus = await GetStorageController().getShiftStatus();
     if (!shiftStatus) {
@@ -115,26 +122,26 @@ class QuickTripController extends GetxController {
             apiLoading.value = true;
             dispatchQuickTripApi(
               DispatchQuickTripRequestData(
-                tripId: tripID,
-                kioskId: supervisorInfo?.kioskId,
-                companyId: supervisorInfo?.cid,
-                supervisorName: supervisorInfo?.supervisorName,
-                supervisorId: supervisorInfo?.supervisorId,
-                supervisorUniqueId: supervisorInfo?.supervisorUniqueId,
-                name: name,
-                countryCode: countryCode.value,
-                mobileNo: phone,
-                email: email,
-                fixedMeter: (fare.isEmpty) ? '2' : '1',
-                kioskFare: fare,
-                paymentId: paymentId,
-                dropLatitude: dropLatitude,
-                dropLongitude: dropLongitude,
-                dropplace: dropLocation,
-                referenceNumber: referenceNumber,
-                remarks: remarks,
-                paymentOption: int.parse(selectedPayment.value.paymentId),
-              ),
+                  tripId: tripID,
+                  kioskId: supervisorInfo?.kioskId,
+                  companyId: supervisorInfo?.cid,
+                  supervisorName: supervisorInfo?.supervisorName,
+                  supervisorId: supervisorInfo?.supervisorId,
+                  supervisorUniqueId: supervisorInfo?.supervisorUniqueId,
+                  name: name,
+                  countryCode: countryCode.value,
+                  mobileNo: phone,
+                  email: email,
+                  fixedMeter: (fare.isEmpty) ? '2' : '1',
+                  kioskFare: fare,
+                  paymentId: paymentId,
+                  dropLatitude: dropLatitude,
+                  dropLongitude: dropLongitude,
+                  dropplace: dropLocation,
+                  referenceNumber: referenceNumber,
+                  remarks: remarks,
+                  paymentOption: int.parse(selectedPayment.value.paymentId),
+                  contractAmount: contractAmount.value),
             ).then((response) {
               apiLoading.value = false;
               _handleDispatchQuickTripResponse(response);
@@ -187,27 +194,27 @@ class QuickTripController extends GetxController {
             apiLoading.value = true;
             dispatchQuickTripApi(
               DispatchQuickTripRequestData(
-                tripId: tripID,
-                kioskId: supervisorInfo!.kioskId,
-                companyId: supervisorInfo!.cid,
-                supervisorName: supervisorInfo!.supervisorName,
-                supervisorId: supervisorInfo!.supervisorId,
-                supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
-                name: name,
-                countryCode: countryCode.value,
-                mobileNo: phone,
-                email: email,
-                fixedMeter: (fare.isEmpty) ? '2' : '1',
-                kioskFare: fare,
-                paymentId: paymentId,
-                dropLatitude: dropLatitude,
-                dropLongitude: dropLongitude,
-                dropplace: dropLocation,
-                referenceNumber: referenceNumber,
-                remarks: remarks,
-                customPrice: double.parse(customerPrice),
-                paymentOption: int.parse(selectedPayment.value.paymentId),
-              ),
+                  tripId: tripID,
+                  kioskId: supervisorInfo!.kioskId,
+                  companyId: supervisorInfo!.cid,
+                  supervisorName: supervisorInfo!.supervisorName,
+                  supervisorId: supervisorInfo!.supervisorId,
+                  supervisorUniqueId: supervisorInfo!.supervisorUniqueId,
+                  name: name,
+                  countryCode: countryCode.value,
+                  mobileNo: phone,
+                  email: email,
+                  fixedMeter: (fare.isEmpty) ? '2' : '1',
+                  kioskFare: fare,
+                  paymentId: paymentId,
+                  dropLatitude: dropLatitude,
+                  dropLongitude: dropLongitude,
+                  dropplace: dropLocation,
+                  referenceNumber: referenceNumber,
+                  remarks: remarks,
+                  customPrice: double.parse(customerPrice),
+                  paymentOption: int.parse(selectedPayment.value.paymentId),
+                  contractAmount: contractAmount.value),
             ).then((response) {
               apiLoading.value = false;
               _handleDispatchQuickTripResponse(response);

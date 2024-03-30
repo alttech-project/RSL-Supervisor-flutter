@@ -175,6 +175,7 @@ class LocationsListWidget extends GetView<DashBoardController> {
       final QuickTripController quickTripController =
           Get.find<QuickTripController>();
       quickTripController
+        ..contractAmount.value = dropLocation.contractAmount?.toInt() ?? 0
         ..dropLocationController.text = dropLocation.name ?? ''
         ..dropLatitude = double.tryParse('${dropLocation.latitude}') ?? 0.0
         ..dropLongitude = double.tryParse('${dropLocation.longitude}') ?? 0.0

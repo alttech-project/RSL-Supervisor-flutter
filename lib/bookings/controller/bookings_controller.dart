@@ -439,7 +439,8 @@ class BookingsController extends GetxController
         _showSnackBar('Validation!', 'Kindly select package!');
       } else if (selectedTripRadioValue.value == 0) {
         _showSnackBar('Validation!', 'Kindly select trip type!');
-      } else if (price.isEmpty || double.parse(price) <= 0) {
+      } else if (selectedBookingType.value.id != 3 &&
+          (price.isEmpty || double.parse(price) <= 0)) {
         _showSnackBar('Validation!', 'Enter a valid price!');
       }
       /*else if (extraCharges.isNotEmpty && double.parse(extraCharges) <= 0) {

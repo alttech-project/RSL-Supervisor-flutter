@@ -59,6 +59,8 @@ Future<void> showDefaultDialog({
   required BuildContext context,
   required String title,
   required String message,
+  TextStyle? messageTextStyle, // New parameter for custom message text style
+
   bool isTwoButton = false,
   String? acceptBtnTitle,
   VoidCallback? acceptAction,
@@ -78,7 +80,7 @@ Future<void> showDefaultDialog({
         ),
         content: Text(
           message,
-          style: AppFontStyle.body(),
+          style: messageTextStyle ?? AppFontStyle.body(),
         ),
         actions: isTwoButton
             ? <Widget>[

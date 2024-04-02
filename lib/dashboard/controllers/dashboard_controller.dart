@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rsl_supervisor/dashboard/data/car_model_type_api.dart';
 import 'package:rsl_supervisor/dashboard/data/logout_api_data.dart';
@@ -15,7 +13,6 @@ import 'package:rsl_supervisor/shared/styles/app_font.dart';
 import 'package:rsl_supervisor/utils/helpers/alert_helpers.dart';
 import 'package:rsl_supervisor/widgets/app_loader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../location_queue/controllers/location_queue_controller.dart';
 import '../../network/app_config.dart';
 import '../../place_search/data/get_place_details_response.dart';
@@ -129,10 +126,22 @@ class DashBoardController extends GetxController {
         if ((response.status ?? 0) == 1) {
           moveToCaptureImagePage(data);
         } else {
-          showSnackBar(
-            title: 'Error',
-            msg: response.message ?? "Something went wrong...",
+          // showSnackBar(
+          //   title: 'Error',
+          //   msg: response.message ?? "Something went wrong...",
+          // );
+          showDefaultDialog(
+            context: Get.context!,
+            title: "Alert!",
+            message: response.message ?? "",
+            messageTextStyle: const TextStyle(fontWeight: FontWeight.bold), // Set message text style as bold
+            acceptAction: () {
+              Get.back();
+            },
+            isTwoButton: false,
+            acceptBtnTitle: "Ok",
           );
+
         }
       },
     ).onError(

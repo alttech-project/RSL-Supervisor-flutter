@@ -54,6 +54,7 @@ class DashBoardController extends GetxController {
   RxInt quickTripEnable = 0.obs;
   RxInt customDropOffEnable = 0.obs;
   RxInt rideReferral = 0.obs;
+  RxInt showDeActivate = 0.obs;
 
   final LocationManager locationManager = LocationManager();
   late LogoutApiResponse logoutApiResponse = LogoutApiResponse();
@@ -99,6 +100,8 @@ class DashBoardController extends GetxController {
         await GetStorageController().getQuickTripEnableType();
     customDropOffEnable.value =
         await GetStorageController().getCustomDropOffEnableType();
+    showDeActivate.value =
+    await GetStorageController().getShowSignUp();
     if (!shiftStatus) {
       isShiftIn.value = false;
     } else {
@@ -406,11 +409,9 @@ class DashBoardController extends GetxController {
       case 'Reorder List':
         Get.toNamed(AppRoutes.reOrderPage);
         break;
-
-      // case 'Driver Fine':
-      //   Get.toNamed(AppRoutes.driverFinePage);
-      //   break;
-
+      case 'Deactivate Account':
+         Get.toNamed(AppRoutes.deactivatePage);
+         break;
       default:
         break;
     }

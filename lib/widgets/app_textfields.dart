@@ -71,6 +71,9 @@ class UnderlinedTextField extends StatelessWidget {
   final int? maxLines;
   final Color? hintColor;
   final FocusNode? focusNode; // Added FocusNode property
+  final InputDecoration? decoration;
+  final int? maxLength;
+
 
   const UnderlinedTextField({
     super.key,
@@ -94,7 +97,10 @@ class UnderlinedTextField extends StatelessWidget {
     this.maxLines,
     this.hintColor,
     this.onChanged,
-    this.focusNode, // Include FocusNode in the constructor
+    this.focusNode,
+    this.decoration,
+    this.maxLength = 50,
+// Include FocusNode in the constructor
   });
 
   @override
@@ -109,7 +115,9 @@ class UnderlinedTextField extends StatelessWidget {
       cursorColor: cursorColor ?? AppColors.kPrimaryColor.value,
       autofocus: false,
       onFieldSubmitted: onSubmit,
-      decoration: InputDecoration(
+      maxLength: maxLength,
+
+      decoration: decoration ?? InputDecoration(
         labelText: inputLblTxt,
         labelStyle: inputLblStyle ??
             AppFontStyle.body(

@@ -19,11 +19,13 @@ import 'package:rsl_supervisor/trip_history/controllers/trip_history_controller.
 import 'package:rsl_supervisor/video/controller/upload_video_controller.dart';
 
 import '../bookings/controller/bookings_controller.dart';
+import '../delete_account/controller/deactivate_controller.dart';
 import '../leaderboard_new/controllers/leaderboard_controller_new.dart';
 import '../location_queue/controllers/location_queue_controller.dart';
 import '../login/controller/login_controller.dart';
 import '../network/services.dart';
 import '../offlineTrip/controllers/offline_trip_controller.dart';
+import '../signup_page/controller/signup_controller.dart';
 import '../utils/helpers/getx_storage.dart';
 import '../views/controller/splash_controller.dart';
 
@@ -57,6 +59,10 @@ class AppBind extends Bindings {
     Get.lazyPut<BookingsListController>(() => BookingsListController());
     Get.lazyPut<EditBookingController>(() => EditBookingController());
     Get.lazyPut<DriverFineController>(() => DriverFineController());
+    Get.lazyPut<SignUpController>(() => SignUpController());
+    Get.lazyPut<DeactivateAccountController>(() => DeactivateAccountController());
+
+
 
   }
 }

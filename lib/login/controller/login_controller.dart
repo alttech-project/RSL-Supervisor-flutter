@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rsl_supervisor/login/data/assign_supervisor_api_data.dart';
@@ -46,11 +47,14 @@ class LoginController extends GetxController {
   RxString appBuildNumber = "".obs;
   RxString apk = "".obs;
   var showAppVersion = true.obs;
+  RxInt enableSignUp = 0.obs;
+
 
   @override
   Future<void> onInit() async {
     super.onInit();
     currentView.value = LoginViews.emailPage;
+    enableSignUp.value = await GetStorageController().getShowSignUp();
     // getDeviceToken();
     _getAppInfo();
     // await requestCameraPermission();
@@ -404,6 +408,12 @@ class LoginController extends GetxController {
       ),
       // ),
     );
+  }
+  void navigateSignUpPage() {
+    Get.toNamed(
+      AppRoutes.signUpPage,
+    );
+
   }
 
   Widget _kioskListRow(BuildContext context, int index) {

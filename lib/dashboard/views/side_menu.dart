@@ -91,6 +91,11 @@ class SideMenuPage extends GetView<DashBoardController> {
               // _menuListRow(SideMenuIcon.subscribers, 'Driver Fine'),
               _menuListRow(SideMenuIcon.logout, 'Logout'),
               Obx(
+                    () => controller.showDeActivate.value == 1
+                    ?_menuListRow(SideMenuIcon.delete, 'Deactivate Account')
+                  : const SizedBox(),
+              ),
+              Obx(
                 () => ListTile(
                   title: Text(
                     "App Version : ${controller.appBuildNumber.value} (${controller.appVersion.value} - ${controller.apk.value})",
@@ -137,4 +142,6 @@ class SideMenuIcon {
   static const String leaderBoard = 'assets/side_menu/leaderboard.png';
   static const String riderReferral = 'assets/side_menu/rider_referral.png';
   static const String logout = 'assets/side_menu/logout.png';
+  static const String delete = 'assets/side_menu/delete.png';
+
 }

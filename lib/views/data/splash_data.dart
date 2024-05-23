@@ -38,6 +38,8 @@ class GetCoreDetails {
   String? videoDate;
   String? imgDate;
   int? logoutVerification;
+  int? signupEnableDisable;
+
 
   GetCoreDetails(
       {this.monitorNodeUrl,
@@ -46,7 +48,11 @@ class GetCoreDetails {
       this.supervisorRiderReferral,
       this.videoDate,
       this.imgDate,
-      this.logoutVerification});
+      this.logoutVerification,
+        this.signupEnableDisable,
+
+
+      });
 
   GetCoreDetails.fromJson(Map<String, dynamic> json) {
     monitorNodeUrl = json['monitor_node_url'];
@@ -56,6 +62,8 @@ class GetCoreDetails {
     videoDate = json['video_date'];
     imgDate = json['img_date'];
     logoutVerification = json['logout_verification'];
+    signupEnableDisable = json['signup_enable_disable'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +75,7 @@ class GetCoreDetails {
     data['video_date'] = videoDate;
     data['img_date'] = imgDate;
     data['logout_verification'] = logoutVerification;
+    data['signup_enable_disable'] = signupEnableDisable;
     return data;
   }
 }

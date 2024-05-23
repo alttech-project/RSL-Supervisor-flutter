@@ -63,6 +63,9 @@ class EmailInputWidget extends GetView<LoginController> {
                     },
                   ),
                 ),
+                controller.enableSignUp.value == 1 ?
+                Padding(padding: EdgeInsets.only(right: 10.w,top: 20.h),child:
+                _signUpWidget()):const SizedBox.shrink(),
               ],
             ),
           ),
@@ -85,6 +88,30 @@ class EmailInputWidget extends GetView<LoginController> {
           ),
         ),
       ],
+    );
+  }
+  Widget _signUpWidget() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: InkWell(
+        onTap: () => controller.navigateSignUpPage(),
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              "Sign Up",
+              style: TextStyle(
+                fontSize: AppFontSize.medium.value,
+                decorationColor: AppColors.kPrimaryColor.value,
+                // Set the underline color
+                decorationThickness: 2.0,
+                color: AppColors.kPrimaryColor.value,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

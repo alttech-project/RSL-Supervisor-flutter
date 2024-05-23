@@ -5,6 +5,7 @@ import 'package:rsl_supervisor/bookings/bookings_page.dart';
 import 'package:rsl_supervisor/bookings/upcoming_ongoing_list_detail_page.dart';
 import 'package:rsl_supervisor/bookings/edit_booking.dart';
 import 'package:rsl_supervisor/dashboard/views/dashboard_page.dart';
+import 'package:rsl_supervisor/delete_account/view/deactivate_account_view.dart';
 import 'package:rsl_supervisor/driver_fine/view/add_fine_type_view.dart';
 import 'package:rsl_supervisor/driver_fine/view/assign_fine_driver.dart';
 import 'package:rsl_supervisor/driver_fine/view/driver_fine_view.dart';
@@ -23,6 +24,7 @@ import 'package:rsl_supervisor/quickTrip/views/drop_location_page.dart';
 import 'package:rsl_supervisor/quickTrip/views/quick_trip_page.dart';
 import 'package:rsl_supervisor/reorderable_list_page.dart';
 import 'package:rsl_supervisor/rider_refferral/views/rider_referral_page.dart';
+import 'package:rsl_supervisor/signup_page/view/signup_page_view.dart';
 import 'package:rsl_supervisor/subscribers/views/subscriber_list_page.dart';
 import 'package:rsl_supervisor/trip_details/views/qr_page.dart';
 import 'package:rsl_supervisor/trip_details/views/trip_details_page.dart';
@@ -83,6 +85,10 @@ class AppRoutes {
   static const finnedDrivers = '/finnedDrivers';
   static const locationPermissionDeniedPage = '/locationPermissionDeniedPage';
   static const cameraPermissionDeniedPage = '/cameraPermissionDeniedPage';
+  static const signUpPage = '/signUpPage';
+  static const deactivatePage = '/deactivatePage';
+
+
 
 
 
@@ -189,7 +195,7 @@ List<GetPage> routes = [
   ),
   GetPage(
     name: AppRoutes.tripDetailPage,
-    page: () => TripDetailsPage(),
+    page: () => const TripDetailsPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),
@@ -358,6 +364,20 @@ List<GetPage> routes = [
   GetPage(
     name: AppRoutes.cameraPermissionDeniedPage,
     page: () => const CameraPermissionPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.signUpPage,
+    page: () => const SignUpPage(),
+    binding: AppBind(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 200),
+  ),
+  GetPage(
+    name: AppRoutes.deactivatePage,
+    page: () => const DeactivateAccountPage(),
     binding: AppBind(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 200),

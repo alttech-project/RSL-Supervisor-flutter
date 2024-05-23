@@ -22,7 +22,7 @@ class EditFarePage extends GetView<TripHistoryController> {
             Padding(
               padding: const EdgeInsets.only(left: 80),
               child: Text(
-                'Edit Fare',
+                '',
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: AppFontWeight.bold.value,
@@ -44,7 +44,7 @@ class EditFarePage extends GetView<TripHistoryController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+             /* Text(
                 'Fare',
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
@@ -69,7 +69,7 @@ class EditFarePage extends GetView<TripHistoryController> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20),*/
               Text(
                 'Comments',
                 style: TextStyle(
@@ -106,24 +106,21 @@ class EditFarePage extends GetView<TripHistoryController> {
                       style: AppFontStyle.body(color: Colors.white),
                       text: 'Submit',
                       isLoader: controller.showLoader.value,
-                      onTap: () {
-                      if (controller.farEditController.text == "") {
-                          showSnackBar(
-                              title: "Information",
-                              msg: "Enter Your Edited Fare");
-                        } else if (controller.commentAddController.text == "") {
-                          showSnackBar(
-                              title: "Information",
-                              msg: "Enter Your Comments");
-                        } else {
-                          controller.callEditFareApi(
-                              controller.commentAddController.text.trim(),
-                              int.parse(
-                                  controller.farEditController.text.trim()),
-                              int.parse(
-                                  controller.tripDetail.value.tripId ?? ''));
+                        onTap: () {
+                          if (controller.commentAddController.text == "") {
+                            showSnackBar(
+                                title: "Information",
+                                msg: "Enter Your Comments"
+                            );
+                          } else {
+                            controller.callEditFareApi(
+                                controller.commentAddController.text.trim(),
+                                int.tryParse(controller.farEditController.text.trim()) ?? 0,
+                                int.parse(controller.tripDetail.value.tripId ?? '')
+                            );
+                          }
                         }
-                      },
+
                     ),
                   ),
               ),

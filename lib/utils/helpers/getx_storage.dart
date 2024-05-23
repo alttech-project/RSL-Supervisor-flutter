@@ -194,6 +194,14 @@ class GetStorageController extends GetxController {
   Future<int> getLogoutVerification() async {
     return await storage.read("LogoutVerification") ?? 0;
   }
+
+  void saveShowSignUp({required int type}) {
+    storage.write("ShowSignUp", type);
+  }
+
+  Future<int> getShowSignUp() async {
+    return await storage.read("ShowSignUp") ?? 0;
+  }
 }
 
 class SupervisorInfo {

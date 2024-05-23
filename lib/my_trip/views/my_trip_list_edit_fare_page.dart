@@ -23,7 +23,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
             Padding(
               padding: const EdgeInsets.only(left: 80),
               child: Text(
-                'Edit Fare',
+                '',
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
                   fontWeight: AppFontWeight.bold.value,
@@ -45,7 +45,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+            /*  Text(
                 'Fare',
                 style: TextStyle(
                   color: AppColors.kPrimaryColor.value,
@@ -78,7 +78,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                   fontWeight: AppFontWeight.bold.value,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20),*/
               Container(
                 height: 150.h,
                 decoration: BoxDecoration(
@@ -106,10 +106,7 @@ class MyTripListEditFarePage extends GetView<MyTripListController> {
                   style: AppFontStyle.body(color: Colors.white),
                   text: 'Submit',
                   onTap: () {
-                    if (controller.farEditController.text == "") {
-                      showSnackBar(
-                          title: "Information", msg: "Enter Your Edited Fare");
-                    } else if (controller.commentAddController.text == "") {
+                    if (controller.commentAddController.text == "") {
                       showSnackBar(
                           title: "Information", msg: "Enter Your Comments");
                     } else {

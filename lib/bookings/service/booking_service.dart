@@ -15,32 +15,33 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 final _storageController = Get.find<GetStorageController>();
 
 Future<Map<String, dynamic>> googleMapApi(
-  double pickupLatitude,
-  double pickupLongitude,
-  double dropLatitude,
-  double dropLongitude,
-) async {
+    double pickupLatitude,
+    double pickupLongitude,
+    double dropLatitude,
+    double dropLongitude,
+    ) async {
   String url = await _storageController.getNodeUrl();
   url = url.replaceAll('passnode', 'ridenode');
   final response = await _apiProvider.httpRequest(
     requestType: RequestType.kGet,
     resource: Resource(
       url:
-          '${url}getDirections?origin=$pickupLatitude,$pickupLongitude&destination=$dropLatitude,$dropLongitude&mode=driving&key=${"AIzaSyBdqEy6MU7Th1WWKnfckzEDqJG4CWShBvk"}',
+      '${url}getDirections?origin=$pickupLatitude,$pickupLongitude&destination=$dropLatitude,$dropLongitude&mode=driving&key=${"AIzaSyBdqEy6MU7Th1WWKnfckzEDqJG4CWShBvk"}',
       request: '',
     ),
   );
   return json.decode(response);
 }
 
-Future<AllCarMakeListApiResponse> allCarMakesApi() async {
+Future<AllCarMakeListApiResponse> allCarMakesApi(
+    AllCarMakeListApiRequest requestData) async {
   String url = await _storageController.getBookingsUrl();
 
   final response = await _apiProvider.httpRequest(
-      requestType: RequestType.kGet,
+      requestType: RequestType.kPost,
       resource: Resource(
         url: '${url}allCarMakes',
-        request: "",
+        request: carMakeRequestToJson(requestData),
       ),
       queryParam: {"type": "allCarMakes"});
   return allCarMakeListApiResponseFromJson(response);

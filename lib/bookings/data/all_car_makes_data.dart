@@ -1,5 +1,23 @@
 import 'dart:convert';
 
+class AllCarMakeListApiRequest {
+  String? cid;
+
+  AllCarMakeListApiRequest({
+    this.cid,
+  });
+
+  AllCarMakeListApiRequest.fromJson(Map<String, dynamic> json) {
+    cid = json['company_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['company_id'] = cid;
+    return data;
+  }
+}
+
 class AllCarMakeListApiResponse {
   int? httpCode;
   int? status;
@@ -65,13 +83,13 @@ class CarMakeList {
 
   CarMakeList(
       {this.car_make_id,
-      this.car_make_name,
-      this.model_id,
-      this.model_name,
-      this.min_fare,
-      this.cancellation_fare,
-      this.beforeSelect,
-      this.afterSelect});
+        this.car_make_name,
+        this.model_id,
+        this.model_name,
+        this.min_fare,
+        this.cancellation_fare,
+        this.beforeSelect,
+        this.afterSelect});
 
   CarMakeList.fromJson(Map<String, dynamic> json) {
     car_make_id = json['car_make_id'];
@@ -101,4 +119,9 @@ class CarMakeList {
 AllCarMakeListApiResponse allCarMakeListApiResponseFromJson(String str) {
   final jsonData = json.decode(str);
   return AllCarMakeListApiResponse.fromJson(jsonData);
+}
+
+String carMakeRequestToJson(AllCarMakeListApiRequest data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
 }

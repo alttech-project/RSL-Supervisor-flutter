@@ -41,14 +41,14 @@ class EditBookingController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pickupLocationController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController dropLocationController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
   final TextEditingController priceController = TextEditingController();
   final TextEditingController extraChargesController = TextEditingController();
   final TextEditingController addExtraChargesController =
-      TextEditingController();
+  TextEditingController();
 
   final TextEditingController noteToDriverController = TextEditingController();
   final TextEditingController flightNumberController = TextEditingController();
@@ -298,17 +298,17 @@ class EditBookingController extends GetxController {
       var corporateId = await GetStorageController().getCorporateId();
       supervisorInfo = await GetStorageController().getSupervisorInfo();
       getCarMakeFareApi(CarMakeFareRequest(
-              supervisorId: supervisorInfo?.supervisorId ?? "",
-              kioskId: supervisorInfo?.kioskId ?? "",
-              corporateId: corporateId,
-              cid: supervisorInfo?.cid ?? "",
-              pickup_latitude: pickupLatitude,
-              pickup_longitude: pickupLongitude,
-              drop_latitude: dropLatitude,
-              drop_longitude: dropLongitude,
-              distance: approximateDistance.value,
-              modelId: taxiId.value.toString(),
-              carMakeId: carMakeId.value.toString()))
+          supervisorId: supervisorInfo?.supervisorId ?? "",
+          kioskId: supervisorInfo?.kioskId ?? "",
+          corporateId: corporateId,
+          cid: supervisorInfo?.cid ?? "",
+          pickup_latitude: pickupLatitude,
+          pickup_longitude: pickupLongitude,
+          drop_latitude: dropLatitude,
+          drop_longitude: dropLongitude,
+          distance: approximateDistance.value,
+          modelId: taxiId.value.toString(),
+          carMakeId: carMakeId.value.toString()))
           .then((response) {
         apiLoading.value = false;
         if ((response.status ?? 0) == 1) {
@@ -404,7 +404,7 @@ class EditBookingController extends GetxController {
   void calculateShares(String customerPriceValue) {
     if (GetPlatform.isIOS) {
       String cleanedValue =
-          customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
+      customerPriceValue.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
       priceController.text = cleanedValue;
     }
     var price = double.parse(customerPriceValue);
@@ -433,7 +433,7 @@ class EditBookingController extends GetxController {
       }
       String absoluteValue = value.replaceAll('-', '');
       double enteredValue =
-          absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
+      absoluteValue.isEmpty ? 0.0 : double.parse(absoluteValue);
       if (enteredValue > double.parse(originalPrice)) {
         setExtraChargeError(true);
         return;
@@ -561,52 +561,52 @@ class EditBookingController extends GetxController {
     if (selectedBookingType.value.id == 3) {
       //package booking
       editBookingApi(EditCorporateBookingRequestData(
-              id: editBookingTripId.value,
-              motor_model: taxi,
-              // car_make_id: carMake,
-              car_make_info: CarMakeInfo(
-                  car_make_id: carMake, car_make_name: taxiModel.value),
-              pickupTime: date,
-              extraCharge: 0,
-              customerPrice: 0,
-              rsl_share: 0,
-              driver_share: 0,
-              corporate_share: 0,
-              remarks: remarks,
-              zone_fare_applied: zoneFareApplied.value,
-              pickup_zone_id: pickupZoneId,
-              pickup_zone_group_id: pickupZoneGroupId,
-              drop_zone_id: dropZoneId,
-              drop_zone_group_id: dropZoneGroupId,
-              noteToDriver: noteToDriver,
-              flightNumber: flightNumber,
-              referenceNumber: refNumber,
-              noteToAdmin: noteToAdmin,
-              currentLocation: pickupLocation,
-              dropLocation: dropLocation,
-              pickupNotes: "",
-              dropNotes: "",
-              passengerPaymentOption: selectedPayment.value.paymentId,
-              finalPaymentOption: selectedPayment.value.paymentId,
-              now_after: selectedBookingType.value.id,
-              customer_rate: "",
-              pickupLatitude: pickupLatitude,
-              pickupLongitude: pickupLongitude,
-              dropLatitude: dropLatitude,
-              dropLongitude: dropLongitude,
-              guestEmail: email,
-              guestName: name,
-              guestPhone: phone,
-              guestCountryCode: "+${countryCode.value}",
-              approx_distance: "${approximateDistance.value.toString()} km",
-              approx_duration: "${approximateTime.value.toString()} mins",
-              approx_trip_fare: double.parse(packageAmount),
-              roomNo: roomNo,
-              package_type: packageType,
-              package_id: packageId,
-              trip_type: selectedTripRadioValue.value,
-              double_the_fare: 0,
-              route_polyline: overViewPolyLine.value))
+          id: editBookingTripId.value,
+          motor_model: taxi,
+          // car_make_id: carMake,
+          car_make_info: CarMakeInfo(
+              car_make_id: carMake, car_make_name: taxiModel.value),
+          pickupTime: date,
+          extraCharge: 0,
+          customerPrice: 0,
+          rsl_share: 0,
+          driver_share: 0,
+          corporate_share: 0,
+          remarks: remarks,
+          zone_fare_applied: zoneFareApplied.value,
+          pickup_zone_id: pickupZoneId,
+          pickup_zone_group_id: pickupZoneGroupId,
+          drop_zone_id: dropZoneId,
+          drop_zone_group_id: dropZoneGroupId,
+          noteToDriver: noteToDriver,
+          flightNumber: flightNumber,
+          referenceNumber: refNumber,
+          noteToAdmin: noteToAdmin,
+          currentLocation: pickupLocation,
+          dropLocation: dropLocation,
+          pickupNotes: "",
+          dropNotes: "",
+          passengerPaymentOption: selectedPayment.value.paymentId,
+          finalPaymentOption: selectedPayment.value.paymentId,
+          now_after: selectedBookingType.value.id,
+          customer_rate: "",
+          pickupLatitude: pickupLatitude,
+          pickupLongitude: pickupLongitude,
+          dropLatitude: dropLatitude,
+          dropLongitude: dropLongitude,
+          guestEmail: email,
+          guestName: name,
+          guestPhone: phone,
+          guestCountryCode: "+${countryCode.value}",
+          approx_distance: "${approximateDistance.value.toString()} km",
+          approx_duration: "${approximateTime.value.toString()} mins",
+          approx_trip_fare: double.parse(packageAmount),
+          roomNo: roomNo,
+          package_type: packageType,
+          package_id: packageId,
+          trip_type: selectedTripRadioValue.value,
+          double_the_fare: 0,
+          route_polyline: overViewPolyLine.value))
           .then((response) {
         saveBookingApiLoading.value = false;
         if ((response.status ?? 0) == 1) {
@@ -626,52 +626,52 @@ class EditBookingController extends GetxController {
     } else {
       // normal booking
       editBookingApi(EditCorporateBookingRequestData(
-              id: editBookingTripId.value,
-              motor_model: taxi,
-              // car_make_id: carMake,
-              car_make_info: CarMakeInfo(
-                  car_make_id: carMake, car_make_name: taxiModel.value),
-              pickupTime: date,
-              extraCharge: double.parse(extraCharge),
-              customerPrice: double.parse(priceController.text.trim()),
-              rsl_share: rslShare,
-              driver_share: driverShare,
-              corporate_share: corporateShare,
-              remarks: remarks,
-              zone_fare_applied: zoneFareApplied.value,
-              pickup_zone_id: pickupZoneId,
-              pickup_zone_group_id: pickupZoneGroupId,
-              drop_zone_id: dropZoneId,
-              drop_zone_group_id: dropZoneGroupId,
-              noteToDriver: noteToDriver,
-              flightNumber: flightNumber,
-              referenceNumber: refNumber,
-              noteToAdmin: noteToAdmin,
-              currentLocation: pickupLocation,
-              dropLocation: dropLocation,
-              pickupNotes: "",
-              dropNotes: "",
-              passengerPaymentOption: selectedPayment.value.paymentId,
-              finalPaymentOption: selectedPayment.value.paymentId,
-              now_after: selectedBookingType.value.id,
-              customer_rate: customerRate,
-              pickupLatitude: pickupLatitude,
-              pickupLongitude: pickupLongitude,
-              dropLatitude: dropLatitude,
-              dropLongitude: dropLongitude,
-              guestEmail: email,
-              guestName: name,
-              guestPhone: phone,
-              guestCountryCode: "+${countryCode.value}",
-              approx_distance: "${approximateDistance.value.toString()} km",
-              approx_duration: "${approximateTime.value.toString()} mins",
-              approx_trip_fare: double.parse(approximateFare.value),
-              roomNo: roomNo,
-              package_type: packageType,
-              package_id: packageId,
-              trip_type: selectedTripRadioValue.value,
-              double_the_fare: fareType,
-              route_polyline: overViewPolyLine.value))
+          id: editBookingTripId.value,
+          motor_model: taxi,
+          // car_make_id: carMake,
+          car_make_info: CarMakeInfo(
+              car_make_id: carMake, car_make_name: taxiModel.value),
+          pickupTime: date,
+          extraCharge: double.parse(extraCharge),
+          customerPrice: double.parse(priceController.text.trim()),
+          rsl_share: rslShare,
+          driver_share: driverShare,
+          corporate_share: corporateShare,
+          remarks: remarks,
+          zone_fare_applied: zoneFareApplied.value,
+          pickup_zone_id: pickupZoneId,
+          pickup_zone_group_id: pickupZoneGroupId,
+          drop_zone_id: dropZoneId,
+          drop_zone_group_id: dropZoneGroupId,
+          noteToDriver: noteToDriver,
+          flightNumber: flightNumber,
+          referenceNumber: refNumber,
+          noteToAdmin: noteToAdmin,
+          currentLocation: pickupLocation,
+          dropLocation: dropLocation,
+          pickupNotes: "",
+          dropNotes: "",
+          passengerPaymentOption: selectedPayment.value.paymentId,
+          finalPaymentOption: selectedPayment.value.paymentId,
+          now_after: selectedBookingType.value.id,
+          customer_rate: customerRate,
+          pickupLatitude: pickupLatitude,
+          pickupLongitude: pickupLongitude,
+          dropLatitude: dropLatitude,
+          dropLongitude: dropLongitude,
+          guestEmail: email,
+          guestName: name,
+          guestPhone: phone,
+          guestCountryCode: "+${countryCode.value}",
+          approx_distance: "${approximateDistance.value.toString()} km",
+          approx_duration: "${approximateTime.value.toString()} mins",
+          approx_trip_fare: double.parse(approximateFare.value),
+          roomNo: roomNo,
+          package_type: packageType,
+          package_id: packageId,
+          trip_type: selectedTripRadioValue.value,
+          double_the_fare: fareType,
+          route_polyline: overViewPolyLine.value))
           .then((response) {
         saveBookingApiLoading.value = false;
         if ((response.status ?? 0) == 1) {
@@ -727,7 +727,7 @@ class EditBookingController extends GetxController {
           packageType: selectedPackageType.value.id,
           car_make_id: carMake),
     ).then(
-      (response) {
+          (response) {
         apiLoading.value = false;
         if (response.status == 1) {
           packageList.clear();
@@ -759,7 +759,7 @@ class EditBookingController extends GetxController {
         }
       },
     ).onError(
-      (error, stackTrace) {
+          (error, stackTrace) {
         apiLoading.value = false;
         packageList.clear();
         packageList.insert(
@@ -779,7 +779,8 @@ class EditBookingController extends GetxController {
   void callCarMakeListApi() async {
     supervisorInfo = await GetStorageController().getSupervisorInfo();
 
-    allCarMakesApi().then((response) {
+    allCarMakesApi(AllCarMakeListApiRequest(cid: supervisorInfo?.cid ?? ""))
+        .then((response) {
       // apiLoading.value = false;
       if ((response.status ?? 0) == 1) {
         carModelList.value = response.carMakeDetails?.carMakeList ?? [];
@@ -802,17 +803,17 @@ class EditBookingController extends GetxController {
       var corporateId = await GetStorageController().getCorporateId();
       supervisorInfo = await GetStorageController().getSupervisorInfo();
       getCarMakeFareApi(CarMakeFareRequest(
-              supervisorId: supervisorInfo?.supervisorId ?? "",
-              kioskId: supervisorInfo?.kioskId ?? "",
-              corporateId: corporateId,
-              cid: supervisorInfo?.cid ?? "",
-              pickup_latitude: pickupLatitude,
-              pickup_longitude: pickupLongitude,
-              drop_latitude: dropLatitude,
-              drop_longitude: dropLongitude,
-              distance: approximateDistance.value,
-              modelId: taxiId.value.toString(),
-              carMakeId: carMakeId.value.toString()))
+          supervisorId: supervisorInfo?.supervisorId ?? "",
+          kioskId: supervisorInfo?.kioskId ?? "",
+          corporateId: corporateId,
+          cid: supervisorInfo?.cid ?? "",
+          pickup_latitude: pickupLatitude,
+          pickup_longitude: pickupLongitude,
+          drop_latitude: dropLatitude,
+          drop_longitude: dropLongitude,
+          distance: approximateDistance.value,
+          modelId: taxiId.value.toString(),
+          carMakeId: carMakeId.value.toString()))
           .then((response) {
         apiLoading.value = false;
         if ((response.status ?? 0) == 1) {
@@ -864,7 +865,7 @@ class EditBookingController extends GetxController {
     try {
       String dialCode = countryCode.value.replaceAll("+", "");
       Country country = countries.firstWhere(
-        (country) => country.dialCode == (dialCode),
+            (country) => country.dialCode == (dialCode),
       );
       initialCountryCode.value = country.code;
       return country.code;
@@ -953,7 +954,7 @@ class EditBookingController extends GetxController {
           final routes = routeArray[0] as Map<String, dynamic>;
 
           final overviewPolyLines =
-              routes['overview_polyline'] as Map<String, dynamic>;
+          routes['overview_polyline'] as Map<String, dynamic>;
 
           final overViewPoly = overviewPolyLines['points'] as String? ?? '';
 
@@ -962,21 +963,21 @@ class EditBookingController extends GetxController {
           final legsArray = routes['legs'] as List<dynamic>;
           for (var i = 0; i < legsArray.length; i++) {
             final timeObject =
-                legsArray[i]['duration'] as Map<String, dynamic>?;
+            legsArray[i]['duration'] as Map<String, dynamic>?;
             final legTime = timeObject?['value'] as int?;
             if (legTime != null) {
               time += legTime;
             }
 
             final distanceObject =
-                legsArray[i]['distance'] as Map<String, dynamic>?;
+            legsArray[i]['distance'] as Map<String, dynamic>?;
             final legDistance = distanceObject?['value'] as int?;
             if (legDistance != null) {
               distance += legDistance;
             }
 
             final trafficTimeObject =
-                legsArray[i]['duration_in_traffic'] as Map<String, dynamic>?;
+            legsArray[i]['duration_in_traffic'] as Map<String, dynamic>?;
             final legTrafficTime = trafficTimeObject?['value'] as int?;
             if (legTrafficTime != null) {
               trafficTime += legTrafficTime;
@@ -1100,150 +1101,150 @@ class EditBookingController extends GetxController {
             return (selectedCarIndex >= cars.length)
                 ? const SizedBox.shrink()
                 : AnimatedBuilder(
-                    animation: animationController,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          0,
-                          MediaQuery.of(context).size.height *
-                              verticalPositionTween
-                                  .evaluate(animationController),
-                        ),
-                        child: AlertDialog(
-                          backgroundColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 30.w, vertical: 24.h),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Available Cars',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: AppFontWeight.bold.value,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      animationController
-                                          .reverse()
-                                          .then((value) {
-                                        Navigator.of(context).pop();
-                                      });
-                                    },
-                                    child: Icon(
-                                      CupertinoIcons.multiply_circle,
-                                      color: AppColors
-                                          .kSecondaryContainerBorder.value,
-                                      size: 35.r,
-                                    ),
-                                  ),
-                                ],
+              animation: animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    MediaQuery.of(context).size.height *
+                        verticalPositionTween
+                            .evaluate(animationController),
+                  ),
+                  child: AlertDialog(
+                    backgroundColor: Colors.white,
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 30.w, vertical: 24.h),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Available Cars',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: AppFontWeight.bold.value,
                               ),
-                              Center(
-                                child: CachedNetworkImage(
-                                  imageUrl: cars[selectedCarIndex].imageUrl,
-                                  placeholder: (context, url) => const Center(
-                                    child: AppLoader(),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                animationController
+                                    .reverse()
+                                    .then((value) {
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              child: Icon(
+                                CupertinoIcons.multiply_circle,
+                                color: AppColors
+                                    .kSecondaryContainerBorder.value,
+                                size: 35.r,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: CachedNetworkImage(
+                            imageUrl: cars[selectedCarIndex].imageUrl,
+                            placeholder: (context, url) => const Center(
+                              child: AppLoader(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                            width: 250.w,
+                            height: 250.h,
+                          ),
+                        ),
+                        // SizedBox(width: 10.w),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                selectPreviousCar();
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                CupertinoIcons.chevron_left,
+                                color: selectedCarIndex > 0
+                                    ? AppColors.kPrimaryColor.value
+                                    : Colors
+                                    .grey, // Gray if not available
+                                size: 30.r,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  cars[selectedCarIndex].name,
+                                  style: TextStyle(
+                                    fontSize: 17.r,
+                                    fontWeight: AppFontWeight.bold.value,
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  width: 250.w,
-                                  height: 250.h,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              // SizedBox(width: 10.w),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      selectPreviousCar();
-                                      setState(() {});
-                                    },
-                                    icon: Icon(
-                                      CupertinoIcons.chevron_left,
-                                      color: selectedCarIndex > 0
-                                          ? AppColors.kPrimaryColor.value
-                                          : Colors
-                                              .grey, // Gray if not available
-                                      size: 30.r,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        cars[selectedCarIndex].name,
-                                        style: TextStyle(
-                                          fontSize: 17.r,
-                                          fontWeight: AppFontWeight.bold.value,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      selectNextCar(cars);
-                                      setState(() {});
-                                    },
-                                    icon: Icon(
-                                      CupertinoIcons.chevron_right,
-                                      color: selectedCarIndex < cars.length - 1
-                                          ? AppColors.kPrimaryColor.value
-                                          : Colors.grey,
-                                      size: 30.r,
-                                    ),
-                                  ),
-                                ],
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                selectNextCar(cars);
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                CupertinoIcons.chevron_right,
+                                color: selectedCarIndex < cars.length - 1
+                                    ? AppColors.kPrimaryColor.value
+                                    : Colors.grey,
+                                size: 30.r,
                               ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              CustomButton(
-                                  width: double.maxFinite,
-                                  linearColor: primaryButtonLinearColor,
-                                  height: 38.h,
-                                  borderRadius: 38.h / 2,
-                                  style: AppFontStyle.body(color: Colors.white),
-                                  text: 'Submit',
-                                  onTap: () => {
-                                        /* carModelController.text =
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        CustomButton(
+                            width: double.maxFinite,
+                            linearColor: primaryButtonLinearColor,
+                            height: 38.h,
+                            borderRadius: 38.h / 2,
+                            style: AppFontStyle.body(color: Colors.white),
+                            text: 'Submit',
+                            onTap: () => {
+                              /* carModelController.text =
                                             cars[selectedCarIndex].name,*/
-                                        taxiModel.value =
-                                            cars[selectedCarIndex].name,
-                                        taxiId.value =
-                                            cars[selectedCarIndex].modelId,
-                                        carMakeId.value =
-                                            cars[selectedCarIndex].carMakeId,
-                                        isValueChanged.value = true,
-                                        // updateModelFareDetails(),
-                                        carMakeFareApi(),
-                                        callGetCorporatePackageListApi(true),
-                                        /* if (selectedBookingType.value.id == 3)
+                              taxiModel.value =
+                                  cars[selectedCarIndex].name,
+                              taxiId.value =
+                                  cars[selectedCarIndex].modelId,
+                              carMakeId.value =
+                                  cars[selectedCarIndex].carMakeId,
+                              isValueChanged.value = true,
+                              // updateModelFareDetails(),
+                              carMakeFareApi(),
+                              callGetCorporatePackageListApi(true),
+                              /* if (selectedBookingType.value.id == 3)
                                           {
                                             callGetCorporatePackageListApi(
                                                 true),
                                           },*/
-                                        animationController.reverse().then(
-                                          (value) {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      }),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                              animationController.reverse().then(
+                                    (value) {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            }),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
           },
         );
       },

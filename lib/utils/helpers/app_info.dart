@@ -23,7 +23,7 @@ extension BaseURLHelper on BaseUrls {
 
 class AppInfo {
   static AppInfoPlusArgs? appInfo;
-  static String kAppBaseUrl = BaseUrls.demo.rawValue;
+  static String kAppBaseUrl = BaseUrls.live.rawValue;
 }
 
 class AppInfoPlusArgs {
@@ -35,17 +35,17 @@ class AppInfoPlusArgs {
 
   AppInfoPlusArgs(
       {this.deviceType,
-      this.deviceId,
-      this.versionCode,
-      this.versionName,
-      this.cid});
+        this.deviceId,
+        this.versionCode,
+        this.versionName,
+        this.cid});
 }
 
 getAppInfo() async {
   try {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     SupervisorInfo supervisorInfo =
-        await GetStorageController().getSupervisorInfo();
+    await GetStorageController().getSupervisorInfo();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
     if (GetPlatform.isAndroid) {

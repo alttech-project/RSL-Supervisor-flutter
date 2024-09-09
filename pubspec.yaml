@@ -66,10 +66,12 @@ dependencies:
   syncfusion_flutter_datepicker: ^23.1.36
   crypto: ^3.0.3
   barcode_image: ^2.0.3
-  share: ^2.0.4
+  #  share: ^2.0.4
+  share_plus: ^10.0.2
   percent_indicator: ^4.2.3
   camera: ^0.10.5+4
-  flutter_native_image: ^0.0.6+1
+  #  flutter_native_image: ^0.0.6+1
+  flutter_image_compress: ^2.3.0
   firebase_messaging: ^14.6.4
   firebase_analytics: ^10.4.3
   flutter_local_notifications: ^17.2.2

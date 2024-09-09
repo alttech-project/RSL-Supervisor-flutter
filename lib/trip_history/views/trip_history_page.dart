@@ -27,20 +27,21 @@ class TripHistoryPage extends GetView<TripHistoryController> {
           backgroundColor: Colors.black,
           body: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 0.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
               child: Column(
                 children: [
                   NavigationTitle(
                     title: "Trip History",
                     onTap: () => controller.goBack(),
                     rightBarWidget: Obx(
-                          () => Visibility(
+                      () => Visibility(
                         visible: controller.tripList.isNotEmpty,
                         child: CustomIconButton(
                           title: "Export",
                           icon: Icons.upload,
                           showLoader: controller.showBtnLoader.value,
-                          onTap: () => showAlertDialog(context), // Use showAlertDialog here
+                          onTap: () => showAlertDialog(
+                              context), // Use showAlertDialog here
                         ),
                       ),
                     ),
@@ -50,29 +51,28 @@ class TripHistoryPage extends GetView<TripHistoryController> {
                   SizedBox(
                     // height: MediaQuery.of(context).size.height * 0.6,
                     child: Obx(
-                          () => controller.showLoader.value
+                      () => controller.showLoader.value
                           ? const Center(child: AppLoader())
                           : controller.tripList.isNotEmpty
-                          ? TripListWidget()
-                          : Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 150.0.h, // Adjust the height as needed
-                            ),
-                            Text(
-                              "No trips found",
-                              style: AppFontStyle.body(
-                                color: Colors.white,
-                                weight: AppFontWeight.semibold.value,
-                              ),
-                            ),
-
-                          ],
-                        ),
-                      ),
+                              ? TripListWidget()
+                              : Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 150.0
+                                            .h, // Adjust the height as needed
+                                      ),
+                                      Text(
+                                        "No trips found",
+                                        style: AppFontStyle.body(
+                                          color: Colors.white,
+                                          weight: AppFontWeight.semibold.value,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                     ),
-
                   ),
                   //
                 ],
@@ -84,7 +84,6 @@ class TripHistoryPage extends GetView<TripHistoryController> {
     );
   }
 }
-
 
 void showAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(

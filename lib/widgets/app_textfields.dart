@@ -16,12 +16,12 @@ class CapsuleTextField extends StatelessWidget {
 
   const CapsuleTextField(
       {super.key,
-        required this.controller,
-        required this.hint,
-        this.onChanged,
-        this.isEnabled,
-        this.textStyle,
-        this.suffix});
+      required this.controller,
+      required this.hint,
+      this.onChanged,
+      this.isEnabled,
+      this.textStyle,
+      this.suffix});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,6 @@ class UnderlinedTextField extends StatelessWidget {
   final InputDecoration? decoration;
   final int? maxLength;
 
-
   const UnderlinedTextField({
     super.key,
     required this.controller,
@@ -116,25 +115,27 @@ class UnderlinedTextField extends StatelessWidget {
       autofocus: false,
       onFieldSubmitted: onSubmit,
       maxLength: maxLength,
-
-      decoration: decoration ?? InputDecoration(
-        labelText: inputLblTxt,
-        labelStyle: inputLblStyle ??
-            AppFontStyle.body(
-                weight: AppFontWeight.semibold.value, color: Colors.white70),
-        hintText: hint,
-        hintStyle: AppFontStyle.hint(color: hintColor ?? Colors.white70),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: borderColor ?? AppColors.kLightTextSecondary.value,
-              width: 0.5),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: focusColor ?? Colors.white),
-        ),
-        focusColor: focusColor ?? Colors.white,
-        suffixIcon: suffix,
-      ),
+      decoration: decoration ??
+          InputDecoration(
+            labelText: inputLblTxt,
+            labelStyle: inputLblStyle ??
+                AppFontStyle.body(
+                    weight: AppFontWeight.semibold.value,
+                    color: Colors.white70),
+            hintText: hint,
+            hintStyle: AppFontStyle.hint(color: hintColor ?? Colors.white70),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: borderColor ?? AppColors.kLightTextSecondary.value,
+                  width: 0.5),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: focusColor ?? Colors.white),
+            ),
+            focusColor: focusColor ?? Colors.white,
+            suffixIcon: suffix,
+            counterText: '',
+          ),
       textInputAction: textInputAction,
       validator: validator,
       readOnly: readOnly,

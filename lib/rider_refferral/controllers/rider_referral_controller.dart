@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+
+// import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/helpers/alert_helpers.dart';
@@ -32,7 +34,6 @@ class RiderReferralController extends GetxController {
             msg: response.message ?? "Something went wrong",
           );
           showLoader.value = false;
-
         }
       },
     ).onError(
@@ -67,7 +68,6 @@ class RiderReferralController extends GetxController {
             msg: response.message ?? "Something went wrong",
           );
           showLoader.value = false;
-
         }
       },
     ).onError(
@@ -118,7 +118,8 @@ class RiderReferralController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    callRiderReferralApi(int.parse(dashBoardController.supervisorInfo.value.supervisorId ?? ""));
+    callRiderReferralApi(
+        int.parse(dashBoardController.supervisorInfo.value.supervisorId ?? ""));
   }
 
   void shareReferralCode() {
@@ -126,6 +127,4 @@ class RiderReferralController extends GetxController {
     final String description = promoDetails.value.description ?? "";
     Share.share('$description\n$referralCodeLink');
   }
-
-
 }

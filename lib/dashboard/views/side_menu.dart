@@ -55,9 +55,6 @@ class SideMenuPage extends GetView<DashBoardController> {
               ),
               _menuListRow(SideMenuIcon.home, 'Home'),
               _menuListRow(SideMenuIcon.locationQueue, 'Location Queue'),
-              /*  _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips'),
-             _menuListRow(SideMenuIcon.offlineTrips, 'Offline Trips'),*/
-
               Obx(
                 () => controller.quickTripEnable.value == 1
                     ? _menuListRow(SideMenuIcon.quickTrips, 'Quick Trips')
@@ -74,7 +71,6 @@ class SideMenuPage extends GetView<DashBoardController> {
                     ? _menuListRow(SideMenuIcon.subscribers, 'Bookings')
                     : const SizedBox.shrink(),
               ),
-
               _menuListRow(SideMenuIcon.tripHistory, 'Trip History'),
               //_menuListRow(SideMenuIcon.dispatch, 'Dispatch'),
               _menuListRow(SideMenuIcon.myTrips, 'My Trips'),
@@ -91,9 +87,9 @@ class SideMenuPage extends GetView<DashBoardController> {
               // _menuListRow(SideMenuIcon.subscribers, 'Driver Fine'),
               _menuListRow(SideMenuIcon.logout, 'Logout'),
               Obx(
-                    () => controller.showDeActivate.value == 1
-                    ?_menuListRow(SideMenuIcon.delete, 'Deactivate Account')
-                  : const SizedBox(),
+                () => controller.showDeActivate.value == 1
+                    ? _menuListRow(SideMenuIcon.delete, 'Deactivate Account')
+                    : const SizedBox(),
               ),
               Obx(
                 () => ListTile(
@@ -143,5 +139,4 @@ class SideMenuIcon {
   static const String riderReferral = 'assets/side_menu/rider_referral.png';
   static const String logout = 'assets/side_menu/logout.png';
   static const String delete = 'assets/side_menu/delete.png';
-
 }

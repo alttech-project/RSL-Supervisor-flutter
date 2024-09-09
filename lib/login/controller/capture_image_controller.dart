@@ -2,10 +2,14 @@ import 'package:camera/camera.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+
+// import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 class CaptureImageController extends GetxController {
   RxBool loading = false.obs;
@@ -28,11 +32,47 @@ class CaptureImageController extends GetxController {
     isCameraInitialized.value = true;
   }
 
-  Future<void> compressImageAndGetFile(image) async {
+/*  Future<void> compressImageAndGetFile(image) async {
     loading.value = true;
     var compressedFile =
         await FlutterNativeImage.compressImage(image?.path ?? '', quality: 40);
     uploadFile(compressedFile);
+  }*/
+
+  Future<void> handleImageCompression(XFile image) async {
+    loading.value = true;
+    try {
+      final File imageFile = File(image.path); // Convert XFile to File
+
+      // Compress the image
+      final File compressedFile = await compressImageAndGetFile(imageFile);
+      print('Compressed file path: ${compressedFile.path}');
+      uploadFile(compressedFile);
+      // Perform additional actions with the compressed file
+    } catch (e) {
+      print('Error compressing image: $e');
+    }
+  }
+
+  Future<File> compressImageAndGetFile(File imageFile,
+      {int quality = 85}) async {
+    final img.Image? image = img.decodeImage(await imageFile.readAsBytes());
+
+    if (image == null) {
+      throw Exception('Failed to decode image');
+    }
+
+    final img.Image resizedImage =
+        img.copyResize(image, width: 800); // Resize image if needed
+
+    final Directory tempDir = await getTemporaryDirectory();
+    final String tempPath = tempDir.path;
+    final String newPath = '$tempPath/compressed_image.jpg';
+
+    final File compressedFile = File(newPath)
+      ..writeAsBytesSync(img.encodeJpg(resizedImage, quality: quality));
+
+    return compressedFile;
   }
 
   Future<void> uploadFile(File fileName) async {

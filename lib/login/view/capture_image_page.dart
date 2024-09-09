@@ -64,7 +64,7 @@ class CaptureImageScreen extends GetView<CaptureImageController> {
                         final image =
                             await controller.cameraController.takePicture();
 
-                        controller.compressImageAndGetFile(image);
+                        controller.handleImageCompression(image);
                       } catch (e) {
                         // If an error occurs, log the error to the console.
                         print(e);

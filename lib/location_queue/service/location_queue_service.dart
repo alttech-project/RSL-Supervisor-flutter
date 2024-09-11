@@ -31,7 +31,7 @@ Future<DriverQueuePositionResponse> driverQueuePositionApi(
   return driverQueuePositionResponseFromJson(response);
 }
 
-Future<DriverListResponse> updateDriverQueueApi(
+Future<UpdateDriverListResponse> updateDriverQueueApi(
     UpdateDriverQueueRequest requestData) async {
   final response = await _apiProvider.httpRequest(
       resource: Resource(
@@ -39,7 +39,7 @@ Future<DriverListResponse> updateDriverQueueApi(
         request: updateDriverQueueRequestToJson(requestData),
       ),
       queryParam: {"type": "update_driver_queue_new"});
-  return driverListApiResponseFromJson(response);
+  return updateDriverListApiResponseFromJson(response);
 }
 
 Future<AddDriverResponse> addDriverApi(AddDriverRequest requestData) async {

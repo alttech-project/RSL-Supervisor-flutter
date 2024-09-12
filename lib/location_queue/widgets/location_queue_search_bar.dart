@@ -31,10 +31,10 @@ class LocationQueueSearchBar extends GetView<LocationQueueController> {
                       color: AppColors.kStatusBarPrimaryColor.value),
                 ),
                 Obx(
-                  () => Container(
+                      () => Container(
                     padding: const EdgeInsets.only(left: 2),
                     child: Text(
-                      "${controller.driverList.length}",
+                      "${controller.secondaryDriverList.length+controller.driverList.length}",
                       style: AppFontStyle.normalText(
                           color: AppColors.kPrimaryColor.value),
                     ),
@@ -66,7 +66,7 @@ class LocationQueueSearchBar extends GetView<LocationQueueController> {
                   decoration: InputDecoration(
                     hintText: "Search...",
                     labelStyle:
-                        const TextStyle(color: Colors.grey, fontSize: 10),
+                    const TextStyle(color: Colors.grey, fontSize: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide: const BorderSide(
@@ -81,27 +81,27 @@ class LocationQueueSearchBar extends GetView<LocationQueueController> {
                     filled: true,
                     fillColor: Colors.white,
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
                     suffixIcon: Obx(
-                      () => controller.searchText.value.isNotEmpty
+                          () => controller.searchText.value.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(
-                                Icons.clear,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                controller.searchText.value = "";
-                                controller.searchController.value.text = "";
-                                controller.callDriverListApi();
-                                FocusScope.of(context).unfocus();
-                              },
-                            )
+                        icon: const Icon(
+                          Icons.clear,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          controller.searchText.value = "";
+                          controller.searchController.value.text = "";
+                          controller.callDriverListApi();
+                          FocusScope.of(context).unfocus();
+                        },
+                      )
                           : const Icon(
-                              Icons.search,
-                              color: Colors.grey,
-                              size: 20,
-                            ),
+                        Icons.search,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
                     ),
                   ),
                 )),

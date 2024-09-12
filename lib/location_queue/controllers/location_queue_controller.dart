@@ -146,12 +146,8 @@ class LocationQueueController extends GetxController {
   void callUpdateDriverQueueApi(
       {required List<int> driverArray,
       required List<int> secondaryDriverArray}) async {
-    driverList.refresh();
-    secondaryDriverList.refresh();
-    filteredDriverList.refresh();
-    filteredSecondaryDriverList.refresh();
     printLogs("driverArray $driverArray $secondaryDriverArray");
-   /* showLoader.value = true;
+    /* showLoader.value = true;
     updateDriverQueueApi(
       UpdateDriverQueueRequest(
         driverArray: driverArray,
@@ -382,10 +378,12 @@ class LocationQueueController extends GetxController {
 
   bool highlightedColor(item) {
     if (searchText.isNotEmpty) {
-      return (item.driverName ?? "")
+      var isHighLighted = (item.driverName ?? "")
               .toLowerCase()
               .contains(searchText.toLowerCase()) ||
           (item.taxiNo ?? "").toLowerCase().contains(searchText.toLowerCase());
+      printLogs("highlightedColor $isHighLighted");
+      return isHighLighted;
     }
     return false;
   }

@@ -60,6 +60,7 @@ enum AppFontSize {
   small,
   normal,
   medium,
+  medium100,
   large,
   veryLarge,
   heading,
@@ -82,6 +83,8 @@ extension FontSizeHelper on AppFontSize {
         return 15.sp;
       case AppFontSize.medium:
         return 16.sp;
+      case AppFontSize.medium100:
+        return 17.sp;
       case AppFontSize.large:
         return 18.sp;
       case AppFontSize.veryLarge:

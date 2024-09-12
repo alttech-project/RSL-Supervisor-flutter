@@ -47,6 +47,7 @@ class LocationQueueController extends GetxController {
   RxString qrData = "".obs;
   RxString qrMessage = "".obs;
   RxString searchText = ''.obs;
+  RxBool isDriverHighLighted = false.obs;
   Rx<TextEditingController> searchController = TextEditingController().obs;
   final scrollController = ScrollController();
 
@@ -383,8 +384,10 @@ class LocationQueueController extends GetxController {
               .contains(searchText.toLowerCase()) ||
           (item.taxiNo ?? "").toLowerCase().contains(searchText.toLowerCase());
       printLogs("highlightedColor $isHighLighted");
+      isDriverHighLighted.value = true;
       return isHighLighted;
     }
+    isDriverHighLighted.value = false;
     return false;
   }
 

@@ -40,444 +40,250 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                     const LocationQueueAppBar(),
                     const LocationQueueSearchBar(),
                     Flexible(
-                      child: Obx(() => controller.showDriverListLoader.value
-                          ? const Center(
-                              child: AppLoader(),
-                            )
-                          : controller.filteredDriverList.isNotEmpty ||
-                                  controller
-                                      .filteredSecondaryDriverList.isNotEmpty
-                              ? /*ReorderableListView(
-                                  scrollController: controller.scrollController,
-                                  shrinkWrap: true,
-                                  padding:
-                                      EdgeInsets.only(top: 5.h, bottom: 10.h),
-                                  onReorder: (oldIndex, newIndex) {
-                                    if (!controller.shiftStatus) {
-                                      showSnackBar(
-                                        title: 'Alert',
-                                        msg:
-                                            "You are not shift in. Please make shift in and try again!",
-                                      );
-                                      return;
-                                    }
+                      child: Obx(
+                        () => controller.showDriverListLoader.value
+                            ? const Center(
+                                child: AppLoader(),
+                              )
+                            : Obx(
+                                () => controller
+                                            .filteredDriverList.isNotEmpty ||
+                                        controller.filteredSecondaryDriverList
+                                            .isNotEmpty
+                                    ? ReorderableListView(
+                                        padding: EdgeInsets.only(
+                                            top: 5.h, bottom: 10.h),
+                                        onReorder: (oldIndex, newIndex) {
+                                          printLogs(
+                                              "reorder $oldIndex $newIndex");
 
-                                    int firstListLength =
-                                        controller.filteredDriverList.length;
+                                          if (!controller.shiftStatus) {
+                                            showSnackBar(
+                                              title: 'Alert',
+                                              msg:
+                                                  "You are not shift in. Please make shift in and try again!",
+                                            );
+                                            return;
+                                          }
 
-                                    if (oldIndex < firstListLength &&
-                                        newIndex < firstListLength) {
-                                      // Reordering within the first list
-                                      controller.reorderFirstList(
-                                          oldIndex, newIndex);
-                                    } else if (oldIndex >= firstListLength &&
-                                        newIndex >= firstListLength) {
-                                      // Reordering within the second list
-                                      controller.reorderSecondList(
-                                        oldIndex - firstListLength,
-                                        newIndex - firstListLength,
-                                      );
-                                    } else {
-                                      if (oldIndex < firstListLength) {
-                                        // Moving from list 1 to list 2
-                                        controller.moveFromFirstToSecondList(
-                                            oldIndex,
-                                            newIndex - firstListLength);
-                                      } else {
-                                        // Moving from list 2 to list 1
-                                        controller.moveFromSecondToFirstList(
-                                            oldIndex - firstListLength,
-                                            newIndex);
-                                      }
-                                    }
-                                  },
-                                  children: [
-                                    // First Driver List
-                                    for (int index = 0;
-                                        index <
+                                          // Determine header offset
+                                          final headerOffset =
+                                              1; // Number of headers
+
+                                          // Adjust indices for headers
+                                          if (oldIndex > 0) {
+                                            oldIndex -=
+                                                headerOffset; // Remove header offset
+                                          }
+                                          if (newIndex > 0) {
+                                            newIndex -=
+                                                headerOffset; // Remove header offset
+                                          }
+
+                                          // Determine list boundaries
+                                          final firstListLength = controller
+                                              .filteredDriverList.length;
+                                          final secondListStart = firstListLength +
+                                              headerOffset; // Adjust for headers
+
+                                          if (oldIndex < firstListLength &&
+                                              newIndex < firstListLength) {
+                                            // Reorder within the first list
+                                            printLogs(
+                                                "Reorder within the first list: $oldIndex $newIndex");
+                                            controller.reorderFirstList(
+                                                oldIndex, newIndex);
+                                          } else if (oldIndex >=
+                                                  secondListStart &&
+                                              newIndex >= secondListStart) {
+                                            // Reorder within the second list
+                                            final adjustedOldIndex =
+                                                oldIndex - secondListStart;
+                                            final adjustedNewIndex =
+                                                newIndex - secondListStart;
+                                            printLogs(
+                                                "Reorder within the second list: $adjustedOldIndex $adjustedNewIndex");
+                                            controller.reorderSecondList(
+                                                adjustedOldIndex,
+                                                adjustedNewIndex);
+                                          } else if (oldIndex <
+                                                  firstListLength &&
+                                              newIndex >= secondListStart) {
+                                            // Move from the first list to the second list
+                                            printLogs(
+                                                "Move from first list to second list: $oldIndex ${newIndex - secondListStart}");
                                             controller
-                                                .filteredDriverList.length;
-                                        index++)
-                                      AnimatedContainer(
-                                        key: Key(
-                                            'first_${controller.filteredDriverList[index].driverId}'),
-                                        // Unique key for the first list
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        decoration: BoxDecoration(
-                                          color: controller.highlightedColor(
-                                                  controller.filteredDriverList[
-                                                      index])
-                                              ? AppColors
-                                                  .kPrimaryTransparentColor
-                                                  .value
-                                                  .withOpacity(0.25)
-                                              : Colors.transparent,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: 6.h,
-                                            top: 6.h,
-                                            left: 4.w,
-                                            right: 4.w,
-                                          ),
-                                          child: DriverListWidget(
-                                            driverDetails: controller
-                                                .filteredDriverList[index],
-                                            position: (index + 1),
-                                            onTap: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .callDriverQueuePositionApi(
-                                                  driverDetails: controller
-                                                          .filteredDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                            removeDriver: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .showRemoveDriverAlert(
-                                                  driverDetails: controller
-                                                          .filteredDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-
-                                    // Second Driver List
-                                    for (int index = 0;
-                                        index <
+                                                .moveFromFirstToSecondList(
+                                                    oldIndex,
+                                                    newIndex - secondListStart);
+                                          } else if (oldIndex >=
+                                                  secondListStart &&
+                                              newIndex < firstListLength) {
+                                            // Move from the second list to the first list
+                                            printLogs(
+                                                "Move from second list to first list: ${oldIndex - secondListStart} $newIndex");
                                             controller
-                                                .filteredSecondaryDriverList
-                                                .length;
-                                        index++)
-                                      AnimatedContainer(
-                                        key: Key(
-                                            'second_${controller.filteredSecondaryDriverList[index].driverId}'),
-                                        // Unique key for the second list
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        decoration: BoxDecoration(
-                                          color: controller.highlightedColor(
+                                                .moveFromSecondToFirstList(
+                                                    oldIndex - secondListStart,
+                                                    newIndex);
+                                          } else {
+                                            controller
+                                                .moveFromSecondToFirstList(
+                                                    oldIndex - secondListStart,
+                                                    newIndex);
+                                          }
+                                        },
+                                        children: [
+                                          // First List Header (non-reorderable)
+                                          Padding(
+                                            key: const ValueKey(
+                                                'main_drivers_header'),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: const Text(
+                                              "Main Drivers Queue",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          // First List Items
+                                          for (int index = 0;
+                                              index <
+                                                  controller.filteredDriverList
+                                                      .length;
+                                              index++)
+                                            Container(
+                                              key: ValueKey(
+                                                  'first_${controller.filteredDriverList[index].driverId}'),
+                                              child: DriverListWidget(
+                                                driverDetails: controller
+                                                    .filteredDriverList[index],
+                                                position: index + 1,
+                                                onTap: () {
+                                                  if (!controller.shiftStatus) {
+                                                    showSnackBar(
+                                                      title: 'Alert',
+                                                      msg:
+                                                          "You are not shift in. Please make shift in and try again!",
+                                                    );
+                                                  } else {
+                                                    controller
+                                                        .callDriverQueuePositionApi(
+                                                      driverDetails: controller
+                                                              .filteredDriverList[
+                                                          index],
+                                                    );
+                                                  }
+                                                },
+                                                removeDriver: () {
+                                                  if (!controller.shiftStatus) {
+                                                    showSnackBar(
+                                                      title: 'Alert',
+                                                      msg:
+                                                          "You are not shift in. Please make shift in and try again!",
+                                                    );
+                                                  } else {
+                                                    controller
+                                                        .showRemoveDriverAlert(
+                                                      driverDetails: controller
+                                                              .filteredDriverList[
+                                                          index],
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          // Second List Header (non-reorderable)
+                                          Padding(
+                                            key: const ValueKey(
+                                                'secondary_drivers_header'),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: const Text(
+                                              "Secondary Drivers Queue",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          // Second List Items
+                                          for (int index = 0;
+                                              index <
                                                   controller
-                                                          .filteredSecondaryDriverList[
-                                                      index])
-                                              ? AppColors
-                                                  .kPrimaryTransparentColor
-                                                  .value
-                                                  .withOpacity(0.25)
-                                              : Colors.transparent,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: 6.h,
-                                            top: 6.h,
-                                            left: 4.w,
-                                            right: 4.w,
-                                          ),
-                                          child: DriverListWidget(
-                                            driverDetails: controller
-                                                    .filteredSecondaryDriverList[
-                                                index],
-                                            position: (index + 1),
-                                            onTap: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .callDriverQueuePositionApi(
-                                                  driverDetails: controller
-                                                          .filteredSecondaryDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                            removeDriver: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .showRemoveDriverAlert(
-                                                  driverDetails: controller
-                                                          .filteredSecondaryDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                )*/
-                              ReorderableListView(
-                                  scrollController: controller.scrollController,
-                                  shrinkWrap: true,
-                                  padding:
-                                      EdgeInsets.only(top: 5.h, bottom: 10.h),
-                                  onReorder: (oldIndex, newIndex) {
-                                    if (!controller.shiftStatus) {
-                                      showSnackBar(
-                                        title: 'Alert',
-                                        msg:
-                                            "You are not shift in. Please make shift in and try again!",
-                                      );
-                                      return;
-                                    }
-
-                                    int firstListLength =
-                                        controller.filteredDriverList.length;
-
-                                    if (oldIndex < firstListLength &&
-                                        newIndex < firstListLength) {
-                                      // Reordering within the first list
-                                      controller.reorderFirstList(
-                                          oldIndex, newIndex);
-                                    } else if (oldIndex >= firstListLength &&
-                                        newIndex >= firstListLength) {
-                                      // Reordering within the second list
-                                      controller.reorderSecondList(
-                                        oldIndex - firstListLength,
-                                        newIndex - firstListLength,
-                                      );
-                                    } else {
-                                      if (oldIndex < firstListLength) {
-                                        // Moving from list 1 to list 2
-                                        controller.moveFromFirstToSecondList(
-                                            oldIndex,
-                                            newIndex - firstListLength);
-                                      } else {
-                                        // Moving from list 2 to list 1
-                                        controller.moveFromSecondToFirstList(
-                                            oldIndex - firstListLength,
-                                            newIndex);
-                                      }
-                                    }
-                                  },
-                                  children: [
-                                    // Title for the First Driver List
-                                    Padding(
-                                      key: Key(controller
-                                          .generateRandomInteger(10000)
-                                          .toString()),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: const Text(
-                                        "Main Drivers Queue",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          // Change to your desired color
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-
-                                    // First Driver List
-                                    for (int index = 0;
-                                        index <
-                                            controller
-                                                .filteredDriverList.length;
-                                        index++)
-                                      AnimatedContainer(
-                                        key: Key(
-                                            'first_${controller.filteredDriverList[index].driverId}'),
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        decoration: BoxDecoration(
-                                          color: controller.highlightedColor(
-                                                  controller.filteredDriverList[
-                                                      index])
-                                              ? AppColors
-                                                  .kPrimaryTransparentColor
-                                                  .value
-                                                  .withOpacity(0.25)
-                                              : Colors.transparent,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: 6.h,
-                                            top: 6.h,
-                                            left: 4.w,
-                                            right: 4.w,
-                                          ),
-                                          child: DriverListWidget(
-                                            driverDetails: controller
-                                                .filteredDriverList[index],
-                                            position: (index + 1),
-                                            onTap: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .callDriverQueuePositionApi(
-                                                  driverDetails: controller
-                                                          .filteredDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                            removeDriver: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .showRemoveDriverAlert(
-                                                  driverDetails: controller
-                                                          .filteredDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-
-                                    // Separator or title for the Second Driver List
-                                    Padding(
-                                      key: Key(controller
-                                          .generateRandomInteger(10000)
-                                          .toString()),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: const Text(
-                                        "Secondary Drivers Queue",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          // Change to your desired color
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-
-                                    // Second Driver List
-                                    for (int index = 0;
-                                        index <
-                                            controller
-                                                .filteredSecondaryDriverList
-                                                .length;
-                                        index++)
-                                      AnimatedContainer(
-                                        key: Key(
-                                            'second_${controller.filteredSecondaryDriverList[index].driverId}'),
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        decoration: BoxDecoration(
-                                          color: controller.highlightedColor(
-                                                  controller
-                                                          .filteredSecondaryDriverList[
-                                                      index])
-                                              ? AppColors
-                                                  .kPrimaryTransparentColor
-                                                  .value
-                                                  .withOpacity(0.25)
-                                              : Colors.transparent,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: 6.h,
-                                            top: 6.h,
-                                            left: 4.w,
-                                            right: 4.w,
-                                          ),
-                                          child: DriverListWidget(
-                                            driverDetails: controller
-                                                    .filteredSecondaryDriverList[
-                                                index],
-                                            position: (index + 1),
-                                            onTap: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .callDriverQueuePositionApi(
-                                                  driverDetails: controller
-                                                          .filteredSecondaryDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                            removeDriver: () {
-                                              if (!controller.shiftStatus) {
-                                                showSnackBar(
-                                                  title: 'Alert',
-                                                  msg:
-                                                      "You are not shift in. Please make shift in and try again!",
-                                                );
-                                              } else {
-                                                controller
-                                                    .showRemoveDriverAlert(
-                                                  driverDetails: controller
-                                                          .filteredSecondaryDriverList[
-                                                      index],
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                )
-                              : SizedBox(
-                                  height: 200.h,
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "No drivers available",
-                                        style: TextStyle(
-                                          color: Colors.white54,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                                      .filteredSecondaryDriverList
+                                                      .length;
+                                              index++)
+                                            Container(
+                                              key: ValueKey(
+                                                  'second_${controller.filteredSecondaryDriverList[index].driverId}'),
+                                              child: DriverListWidget(
+                                                driverDetails: controller
+                                                        .filteredSecondaryDriverList[
+                                                    index],
+                                                position: controller
+                                                        .filteredDriverList
+                                                        .length +
+                                                    index +
+                                                    1,
+                                                onTap: () {
+                                                  if (!controller.shiftStatus) {
+                                                    showSnackBar(
+                                                      title: 'Alert',
+                                                      msg:
+                                                          "You are not shift in. Please make shift in and try again!",
+                                                    );
+                                                  } else {
+                                                    controller
+                                                        .callDriverQueuePositionApi(
+                                                      driverDetails: controller
+                                                              .filteredSecondaryDriverList[
+                                                          index],
+                                                    );
+                                                  }
+                                                },
+                                                removeDriver: () {
+                                                  if (!controller.shiftStatus) {
+                                                    showSnackBar(
+                                                      title: 'Alert',
+                                                      msg:
+                                                          "You are not shift in. Please make shift in and try again!",
+                                                    );
+                                                  } else {
+                                                    controller
+                                                        .showRemoveDriverAlert(
+                                                      driverDetails: controller
+                                                              .filteredSecondaryDriverList[
+                                                          index],
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                        ],
                                       )
-                                    ],
-                                  ),
-                                )),
+                                    : SizedBox(
+                                        height: 200.h,
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "No drivers available",
+                                              style: TextStyle(
+                                                color: Colors.white54,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                      ),
                     ),
                   ],
                 ),

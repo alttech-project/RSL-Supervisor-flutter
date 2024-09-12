@@ -203,13 +203,16 @@ String driverListApiRequestToJson(DriverListRequest data) {
 
 class UpdateDriverQueueRequest {
   List<int>? driverArray;
+  List<int>? secondaryDriverArray;
   String? kioskId;
   String? cid;
 
-  UpdateDriverQueueRequest({this.driverArray, this.kioskId, this.cid});
+  UpdateDriverQueueRequest(
+      {this.driverArray, this.secondaryDriverArray, this.kioskId, this.cid});
 
   UpdateDriverQueueRequest.fromJson(Map<String, dynamic> json) {
     driverArray = json['driverArray'].cast<int>();
+    secondaryDriverArray = json['secondaryDriverArray'].cast<int>();
     kioskId = json['kiosk_id'];
     cid = json['cid'];
   }
@@ -217,6 +220,7 @@ class UpdateDriverQueueRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['driverArray'] = driverArray;
+    data['secondaryDriverArray'] = secondaryDriverArray;
     data['kiosk_id'] = kioskId;
     data['cid'] = cid;
     return data;

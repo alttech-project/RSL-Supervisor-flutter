@@ -150,11 +150,12 @@ class LocationQueueController extends GetxController {
     secondaryDriverList.refresh();
     filteredDriverList.refresh();
     filteredSecondaryDriverList.refresh();
-    printLogs("driverArray $driverArray");
-    /*  showLoader.value = true;
+    printLogs("driverArray $driverArray $secondaryDriverArray");
+   /* showLoader.value = true;
     updateDriverQueueApi(
       UpdateDriverQueueRequest(
         driverArray: driverArray,
+        secondaryDriverArray: secondaryDriverArray,
         cid: supervisorInfo.cid,
         kioskId: supervisorInfo.kioskId,
       ),
@@ -162,10 +163,16 @@ class LocationQueueController extends GetxController {
       (response) {
         showLoader.value = false;
         if ((response.status ?? 0) == 1) {
-          driverList.value = response.driverList ?? [];
-          filteredDriverList.value = response.driverList ?? [];
-          driverList.refresh();
+          driverList.value = response.driverList?.mainDriverDetails ?? [];
+          filteredDriverList.value =
+              response.driverList?.mainDriverDetails ?? [];
           filteredDriverList.refresh();
+
+          secondaryDriverList.value =
+              response.driverList?.waitingDriverDetails ?? [];
+          filteredSecondaryDriverList.value =
+              response.driverList?.waitingDriverDetails ?? [];
+          filteredSecondaryDriverList.refresh();
         } else {
           showSnackBar(
             title: 'Alert',

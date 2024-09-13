@@ -8,6 +8,7 @@ import '../../shared/styles/app_font.dart';
 class DriverListWidget extends StatelessWidget {
   final DriverDetails driverDetails;
   final int position;
+  final bool isSecondary;
   final void Function()? onTap;
   final void Function()? removeDriver;
 
@@ -17,6 +18,7 @@ class DriverListWidget extends StatelessWidget {
     required this.position,
     this.onTap,
     this.removeDriver,
+    required this.isSecondary,
   });
 
   @override
@@ -32,16 +34,16 @@ class DriverListWidget extends StatelessWidget {
             Radius.circular(12.r),
           ),
         ),
-        padding: EdgeInsets.all(10.r),
+        padding: EdgeInsets.all(15.r),
         child: Row(
           children: [
             Container(
-              width: 32.r,
-              height: 32.r,
+              width: 50.r,
+              height: 50.r,
               decoration: BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(32.r / 2),
+                  Radius.circular(50.r / 2),
                 ),
               ),
               child: Center(
@@ -62,7 +64,7 @@ class DriverListWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        driverDetails.taxiNo ?? "",
+                        driverDetails.driverName ?? "",
                         style: AppFontStyle.body(
                           color: AppColors.kPrimaryColor.value,
                           weight: AppFontWeight.semibold.value,
@@ -73,13 +75,36 @@ class DriverListWidget extends StatelessWidget {
                         height: 5.h,
                       ),
                       Text(
-                        driverDetails.driverName ?? "",
+                        driverDetails.taxiNo ?? "",
                         style: AppFontStyle.body(
                           color: Colors.white,
                           weight: AppFontWeight.semibold.value,
                         ),
                         textAlign: TextAlign.left,
                       ),
+                      SizedBox(height: 5.h),
+                      _listRowWidget(
+                          firstText: "Entry Time:",
+                          secondText: driverDetails.entryTime ?? ""),
+                      SizedBox(height: 5.h),
+                      _listRowWidget(
+                          firstText: "Updated Time:", secondText: driverDetails.updatedTime ?? ""),
+                      SizedBox(height: 5.h),
+                      _listRowWidget(
+                          firstText: "Total Duration:", secondText: driverDetails.totalDuration ?? ""),
+                      SizedBox(height: 5.h),
+                      isSecondary
+                          ? Text(
+                        driverDetails.label ?? "",
+                              style: AppFontStyle.body(
+                                size: 12.sp,
+                                color: AppColors.kPrimaryColor.value,
+                                weight: AppFontWeight.normal.value,
+                              ),
+                              textAlign: TextAlign.left,
+                            )
+                          : SizedBox(),
+                      SizedBox(height: 10.h),
                     ],
                   ),
                 ),
@@ -119,6 +144,33 @@ class DriverListWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _listRowWidget(
+      {required String firstText, required String secondText}) {
+    return Row(
+      children: [
+        Text(
+          firstText,
+          style: AppFontStyle.body(
+            size: 12.sp,
+            color: Colors.white,
+            weight: AppFontWeight.normal.value,
+          ),
+          textAlign: TextAlign.left,
+        ),
+        SizedBox(width: 10.w), // Optional: Add spacing between the texts
+        Text(
+          secondText,
+          style: AppFontStyle.body(
+            size: 12.sp,
+            color: Colors.grey.withOpacity(0.9),
+            weight: AppFontWeight.normal.value,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ],
     );
   }
 

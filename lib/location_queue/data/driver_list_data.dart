@@ -100,6 +100,14 @@ class DriverDetails {
   String? driverRslNo;
   String? driverRsl;
   String? currentTripId;
+  String? entryTime;
+  String? updatedTime;
+  String? totalDuration;
+  String? label;
+
+
+
+
 
   DriverDetails({
     this.id,
@@ -114,6 +122,14 @@ class DriverDetails {
     this.driverRslNo,
     this.driverRsl,
     this.currentTripId,
+    this.entryTime,
+    this.updatedTime,
+    this.totalDuration,
+    this.label,
+
+
+
+
   });
 
   DriverDetails.fromJson(Map<String, dynamic> json) {
@@ -129,6 +145,11 @@ class DriverDetails {
     driverRslNo = json['driver_rsl_no'];
     driverRsl = json['driver_rsl'];
     currentTripId = json['current_trip_id'];
+    entryTime = json['entry_time'];
+    updatedTime = json['date_time'];
+    totalDuration = json['updated_date_time'];
+    label = json['label'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +166,14 @@ class DriverDetails {
     data['driver_rsl_no'] = driverRslNo;
     data['driver_rsl'] = driverRsl;
     data['current_trip_id'] = currentTripId;
+    data['date_time'] = updatedTime;
+    data['entry_time'] = entryTime;
+    data['label'] = label;
+    data['updated_date_time'] = updatedTime;
+
+
+
+
     return data;
   }
 }

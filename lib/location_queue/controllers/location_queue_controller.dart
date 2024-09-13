@@ -559,7 +559,7 @@ class LocationQueueController extends GetxController {
   }
 
   void reorderFirstList(int oldIndex, int newIndex) {
-    printLogs("reorder first");
+    printLogs("TAG:reorder first");
     var driverArray = filteredDriverList.toList();
 
     // If list is empty or oldIndex is out of bounds, return early
@@ -584,10 +584,11 @@ class LocationQueueController extends GetxController {
       secondaryDriverArray:
           filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
     );
+
   }
 
   void reorderSecondList(int oldIndex, int newIndex) {
-    printLogs("reorder second");
+    printLogs("TAG:reorder second");
     var driverArray = filteredSecondaryDriverList.toList();
 
     // If list is empty or oldIndex is out of bounds, return early
@@ -607,14 +608,16 @@ class LocationQueueController extends GetxController {
     filteredSecondaryDriverList.assignAll(driverArray);
     filteredSecondaryDriverList.refresh(); // Refresh first list
 
-    callUpdateDriverQueueApi(
-      driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-      secondaryDriverArray: driverArray.map((e) => e.driverId ?? 0).toList(),
-    );
+    // callUpdateDriverQueueApi(
+    //   driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
+    //   secondaryDriverArray: driverArray.map((e) => e.driverId ?? 0).toList(),
+    // );
+    printLogs("TAG:MAIN TO SECONDARY DRIVER--->${filteredSecondaryDriverList.map((e) => e.driverId ?? 0)}");
+
   }
 
   void moveFromFirstToSecondList(int oldIndex, int newIndex) {
-    printLogs("reorder first to second");
+    printLogs("TAG:reorder first to second");
     var firstList = filteredDriverList.toList();
     var secondList = filteredSecondaryDriverList.toList();
 
@@ -638,10 +641,13 @@ class LocationQueueController extends GetxController {
       secondaryDriverArray:
           filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
     );
+
+
   }
 
+
   void moveFromSecondToFirstList(int oldIndex, int newIndex) {
-    printLogs("reorder second to first");
+    printLogs("TAG:reorder second to first");
     var firstList = filteredDriverList.toList();
     var secondList = filteredSecondaryDriverList.toList();
 

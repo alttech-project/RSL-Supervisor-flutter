@@ -56,52 +56,78 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                       shrinkWrap: true,
                                       padding: EdgeInsets.only(
                                           top: 5.h, bottom: 10.h),
-                                        onReorder: (oldIndex, newIndex) {
-                                          printLogs("reorder $oldIndex $newIndex");
+                                      onReorder: (oldIndex, newIndex) {
+                                        printLogs(
+                                            "reorder $oldIndex $newIndex");
 
-                                          if (!controller.shiftStatus) {
-                                            showSnackBar(
-                                              title: 'Alert',
-                                              msg: "You are not shift in. Please make shift in and try again!",
-                                            );
-                                            return;
-                                          }
+                                        if (!controller.shiftStatus) {
+                                          showSnackBar(
+                                            title: 'Alert',
+                                            msg:
+                                                "You are not shift in. Please make shift in and try again!",
+                                          );
+                                          return;
+                                        }
 
-                                          // Determine header offset
-                                          final headerOffset = 1; // Number of headers
+                                        // Determine header offset
+                                        final headerOffset =
+                                            1; // Number of headers
 
-                                          // Adjust indices for headers
-                                          if (oldIndex > 0) {
-                                            oldIndex -= headerOffset; // Remove header offset
-                                          }
-                                          if (newIndex > 0) {
-                                            newIndex -= headerOffset; // Remove header offset
-                                          }
+                                        // Adjust indices for headers
+                                        if (oldIndex > 0) {
+                                          oldIndex -=
+                                              headerOffset; // Remove header offset
+                                        }
+                                        if (newIndex > 0) {
+                                          newIndex -=
+                                              headerOffset; // Remove header offset
+                                        }
 
-                                          final firstListLength = controller.filteredDriverList.length;
-                                          final secondListStart = firstListLength + headerOffset; // Adjust for headers
+                                        final firstListLength = controller
+                                            .filteredDriverList.length;
+                                        final secondListStart = firstListLength +
+                                            headerOffset; // Adjust for headers
 
-                                          if (oldIndex < firstListLength && newIndex < firstListLength) {
-                                            // Reorder within the first list
-                                            printLogs("Reorder within the first list: $oldIndex $newIndex");
-                                            controller.reorderFirstList(oldIndex, newIndex);
-                                          } else if (oldIndex >= secondListStart && newIndex >= secondListStart) {
-                                            // Reorder within the second list
-                                            final adjustedOldIndex = oldIndex - secondListStart;
-                                            final adjustedNewIndex = newIndex - secondListStart;
-                                            printLogs("Reorder within the second list: $adjustedOldIndex $adjustedNewIndex");
-                                            controller.reorderSecondList(adjustedOldIndex, adjustedNewIndex);
-                                          } else if (oldIndex < firstListLength && newIndex >= secondListStart) {
-                                            // Moving from the first list to the second list (allowed)
-                                            printLogs("Move from first list to second list: $oldIndex ${newIndex - secondListStart}");
-                                            controller.moveFromFirstToSecondList(oldIndex, newIndex - secondListStart);
-                                          } else if (oldIndex >= secondListStart && newIndex < firstListLength) {
-                                            showSnackBar(
-                                              title: 'Action Denied',
-                                              msg: "You cannot move a secondary driver to the main drivers' list.",
-                                            );
-                                          }
-                                        },
+                                        if (oldIndex < firstListLength &&
+                                            newIndex < firstListLength) {
+                                          // Reorder within the first list
+                                          printLogs(
+                                              "Reorder within the first list: $oldIndex $newIndex");
+                                          controller.reorderFirstList(
+                                              oldIndex, newIndex);
+                                        } else if (oldIndex >=
+                                                secondListStart &&
+                                            newIndex >= secondListStart) {
+                                          // Reorder within the second list
+                                          final adjustedOldIndex =
+                                              oldIndex - secondListStart;
+                                          final adjustedNewIndex =
+                                              newIndex - secondListStart;
+                                          printLogs(
+                                              "Reorder within the second list: $adjustedOldIndex $adjustedNewIndex");
+                                          controller.reorderSecondList(
+                                              adjustedOldIndex,
+                                              adjustedNewIndex);
+                                        } else if (oldIndex < firstListLength &&
+                                            newIndex >= secondListStart) {
+                                          // Moving from the first list to the second list (allowed)
+                                          printLogs(
+                                              "Move from first list to second list: $oldIndex ${newIndex - secondListStart}");
+                                          controller.moveFromFirstToSecondList(
+                                              oldIndex,
+                                              newIndex - secondListStart);
+                                        } else if (oldIndex >=
+                                                secondListStart &&
+                                            newIndex < firstListLength) {
+                                          printLogs(
+                                              "Move from second list to first list: $oldIndex ${newIndex - secondListStart}");
+                                          showSnackBar(
+                                            title: 'Action Denied',
+                                            msg:
+                                                "You cannot move a secondary driver to the main drivers' list.",
+                                          );
+                                        }
+                                      },
                                       children: [
                                         // First List Header (non-reorderable)
                                         Padding(
@@ -301,6 +327,7 @@ class LocationQueuePage extends GetView<LocationQueueController> {
     );
   }
 }
+
 /*
 
 ReorderableListView(

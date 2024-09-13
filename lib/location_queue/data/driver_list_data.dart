@@ -105,10 +105,6 @@ class DriverDetails {
   String? totalDuration;
   String? label;
 
-
-
-
-
   DriverDetails({
     this.id,
     this.modelId,
@@ -126,10 +122,6 @@ class DriverDetails {
     this.updatedTime,
     this.totalDuration,
     this.label,
-
-
-
-
   });
 
   DriverDetails.fromJson(Map<String, dynamic> json) {
@@ -149,7 +141,6 @@ class DriverDetails {
     updatedTime = json['date_time'];
     totalDuration = json['updated_date_time'];
     label = json['label'];
-
   }
 
   Map<String, dynamic> toJson() {
@@ -170,9 +161,6 @@ class DriverDetails {
     data['entry_time'] = entryTime;
     data['label'] = label;
     data['updated_date_time'] = updatedTime;
-
-
-
 
     return data;
   }

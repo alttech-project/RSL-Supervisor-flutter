@@ -38,12 +38,12 @@ class DriverListWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 50.r,
-              height: 50.r,
+              width: 41.r,
+              height: 41.r,
               decoration: BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(50.r / 2),
+                  Radius.circular(41.r / 2),
                 ),
               ),
               child: Center(
@@ -57,7 +57,7 @@ class DriverListWidget extends StatelessWidget {
             ),
             Flexible(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
                 child: SizedBox(
                   width: double.maxFinite,
                   child: Column(
@@ -88,14 +88,16 @@ class DriverListWidget extends StatelessWidget {
                           secondText: driverDetails.entryTime ?? ""),
                       SizedBox(height: 5.h),
                       _listRowWidget(
-                          firstText: "Updated Time:", secondText: driverDetails.updatedTime ?? ""),
+                          firstText: "Updated Time:",
+                          secondText: driverDetails.updatedTime ?? ""),
                       SizedBox(height: 5.h),
                       _listRowWidget(
-                          firstText: "Total Duration:", secondText: driverDetails.totalDuration ?? ""),
+                          firstText: "Total Duration:",
+                          secondText: driverDetails.totalDuration ?? ""),
                       SizedBox(height: 5.h),
                       isSecondary
                           ? Text(
-                        driverDetails.label ?? "",
+                              driverDetails.label ?? "-",
                               style: AppFontStyle.body(
                                 size: 12.sp,
                                 color: AppColors.kPrimaryColor.value,
@@ -103,8 +105,7 @@ class DriverListWidget extends StatelessWidget {
                               ),
                               textAlign: TextAlign.left,
                             )
-                          : SizedBox(),
-                      SizedBox(height: 10.h),
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -155,7 +156,7 @@ class DriverListWidget extends StatelessWidget {
           firstText,
           style: AppFontStyle.body(
             size: 12.sp,
-            color: Colors.white,
+            color: Colors.white10.withOpacity(0.7),
             weight: AppFontWeight.normal.value,
           ),
           textAlign: TextAlign.left,
@@ -165,7 +166,7 @@ class DriverListWidget extends StatelessWidget {
           secondText,
           style: AppFontStyle.body(
             size: 12.sp,
-            color: Colors.grey.withOpacity(0.9),
+            color: Colors.white10.withOpacity(0.9),
             weight: AppFontWeight.normal.value,
           ),
           textAlign: TextAlign.left,

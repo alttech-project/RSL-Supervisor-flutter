@@ -47,136 +47,206 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                 child: AppLoader(),
                               )
                             : controller.filteredDriverList.isNotEmpty ||
+                                    controller.filteredSecondaryDriverList
+                                        .isNotEmpty ||
                                     controller
-                                        .filteredSecondaryDriverList.isNotEmpty ||controller
-                            .waitingDriverList.isNotEmpty
+                                        .filteredWaitingDriverList.isNotEmpty
                                 ? Obx(
-                                    () =>  ReorderableListView(
-                                      scrollController: controller.scrollController,
+                                    () => ReorderableListView(
+                                      scrollController:
+                                          controller.scrollController,
                                       shrinkWrap: true,
-                                      padding: EdgeInsets.only(top: 5.h, bottom: 10.h),
+                                      padding: EdgeInsets.only(
+                                          top: 5.h, bottom: 10.h),
                                       onReorder: (oldIndex, newIndex) {
-                                        printLogs("reorder $oldIndex $newIndex");
+                                        printLogs(
+                                            "reorder $oldIndex $newIndex");
 
                                         if (!controller.shiftStatus) {
                                           showSnackBar(
                                             title: 'Alert',
-                                            msg: "You are not shift in. Please make shift in and try again!",
+                                            msg:
+                                                "You are not shift in. Please make shift in and try again!",
                                           );
                                           return;
                                         }
 
-                                        final headerOffset = 1; // Number of headers
+                                        final headerOffset =
+                                            1; // Number of headers
 
                                         // Adjust indices for headers
-                                        if (oldIndex > 0) oldIndex -= headerOffset;
-                                        if (newIndex > 0) newIndex -= headerOffset;
+                                        if (oldIndex > 0)
+                                          oldIndex -= headerOffset;
+                                        if (newIndex > 0)
+                                          newIndex -= headerOffset;
 
-                                        final firstListLength = controller.filteredDriverList.length;
-                                        final secondListStart = firstListLength + headerOffset; // Adjust for headers
-                                        final waitingListStart = secondListStart + controller.filteredSecondaryDriverList.length + headerOffset; // Waiting list start
+                                        final firstListLength = controller
+                                            .filteredDriverList.length;
+                                        final secondListStart = firstListLength +
+                                            headerOffset; // Adjust for headers
+                                        final waitingListStart = secondListStart +
+                                            controller
+                                                .filteredSecondaryDriverList
+                                                .length +
+                                            headerOffset; // Waiting list start
 
                                         // Prevent moving to or within the Waiting Drivers Queue
-                                        if (newIndex >= waitingListStart || oldIndex >= waitingListStart) {
+                                        if (newIndex >= waitingListStart ||
+                                            oldIndex >= waitingListStart) {
                                           showSnackBar(
                                             title: 'Action Denied',
-                                            msg: "You cannot move or reorder drivers in the Waiting Drivers Queue.",
+                                            msg:
+                                                "You cannot move or reorder drivers in the waiting queue.",
                                           );
                                           return;
                                         }
 
                                         // Reorder within the first list (Main Drivers)
-                                        if (oldIndex < firstListLength && newIndex < firstListLength+1) {
-                                          printLogs("Reorder within the first list: $oldIndex $newIndex");
+                                        if (oldIndex < firstListLength &&
+                                            newIndex < firstListLength + 1) {
+                                          printLogs(
+                                              "Reorder within the first list: $oldIndex $newIndex");
 
-                                          controller.reorderFirstList(oldIndex, newIndex);
+                                          controller.reorderFirstList(
+                                              oldIndex, newIndex);
                                         }
                                         // Reorder within the second list (Secondary Drivers)
-                                        else if (oldIndex >= secondListStart && newIndex >= secondListStart) {
-                                          final adjustedOldIndex = oldIndex - secondListStart;
-                                          final adjustedNewIndex = newIndex - secondListStart;
-                                          printLogs("Reorder within the second list: $adjustedOldIndex $adjustedNewIndex");
-                                          controller.reorderSecondList(adjustedOldIndex, adjustedNewIndex);
+                                        else if (oldIndex >= secondListStart &&
+                                            newIndex >= secondListStart) {
+                                          final adjustedOldIndex =
+                                              oldIndex - secondListStart;
+                                          final adjustedNewIndex =
+                                              newIndex - secondListStart;
+                                          printLogs(
+                                              "Reorder within the second list: $adjustedOldIndex $adjustedNewIndex");
+                                          controller.reorderSecondList(
+                                              adjustedOldIndex,
+                                              adjustedNewIndex);
                                         }
                                         // Moving from Main Drivers to Secondary Drivers (allowed)
-                                        else if (oldIndex < firstListLength && newIndex >= secondListStart && newIndex < waitingListStart) {
-                                          printLogs("Move from first list to second list: $oldIndex ${newIndex - secondListStart}");
-                                          controller.moveFromFirstToSecondList(oldIndex, newIndex - secondListStart);
+                                        else if (oldIndex < firstListLength &&
+                                            newIndex >= secondListStart &&
+                                            newIndex < waitingListStart) {
+                                          printLogs(
+                                              "Move from first list to second list: $oldIndex ${newIndex - secondListStart}");
+                                          controller.moveFromFirstToSecondList(
+                                              oldIndex,
+                                              newIndex - secondListStart);
                                         }
                                         // Prevent moving from Secondary Drivers to Main Drivers
-                                        else if (oldIndex >= secondListStart && newIndex < firstListLength) {
+                                        else if ((oldIndex >=
+                                                secondListStart) &&
+                                            newIndex < firstListLength) {
                                           showSnackBar(
                                             title: 'Action Denied',
-                                            msg: "You cannot move a secondary driver to the main drivers' list.",
+                                            msg:
+                                                "You cannot move or reorder drivers in the get ready queue.",
                                           );
                                         }
                                       },
                                       children: [
                                         // First List Header (non-reorderable)
                                         Padding(
-                                          key: const ValueKey('main_drivers_header'),
-                                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                                          child: Center(child:
-
-                                          Column(children: [
-                                            Text(
-                                              "Main Queue",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            ),
-                                            controller.filteredDriverList.isEmpty ?
-                                                Padding(padding: EdgeInsets.only(top: 10.h),child:
-                                            Text(
-                                              "The main queue has no drivers.",
-                                              style: TextStyle(
-                                                color: Colors.grey.withOpacity(0.6),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            )):SizedBox(),
-                                          ],)
-
-                                        )),
+                                            key: const ValueKey(
+                                                'main_drivers_header'),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: Center(
+                                                child: Column(
+                                              children: [
+                                                Text(
+                                                  "Main Queue",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: AppFontSize
+                                                        .medium100.value,
+                                                  ),
+                                                ),
+                                                controller.filteredDriverList
+                                                        .isEmpty
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 10.h),
+                                                        child: Text(
+                                                          "The main queue has no drivers.",
+                                                          style: TextStyle(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.6),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                AppFontSize
+                                                                    .medium100
+                                                                    .value,
+                                                          ),
+                                                        ))
+                                                    : SizedBox(),
+                                              ],
+                                            ))),
                                         // First List Items
-                                        for (int index = 0; index < controller.filteredDriverList.length; index++)
+                                        for (int index = 0;
+                                            index <
+                                                controller
+                                                    .filteredDriverList.length;
+                                            index++)
                                           AnimatedContainer(
-                                            key: ValueKey('first_${controller.filteredDriverList[index].driverId}'),
-                                            duration: const Duration(milliseconds: 300),
+                                            key: ValueKey(
+                                                'first_${controller.filteredDriverList[index].driverId}'),
+                                            duration: const Duration(
+                                                milliseconds: 300),
                                             decoration: BoxDecoration(
-                                              color: controller.highlightedColor(controller.filteredDriverList[index])
-                                                  ? AppColors.kPrimaryTransparentColor.value.withOpacity(0.25)
+                                              color: controller.highlightedColor(
+                                                      controller
+                                                              .filteredDriverList[
+                                                          index])
+                                                  ? AppColors
+                                                      .kPrimaryTransparentColor
+                                                      .value
+                                                      .withOpacity(0.25)
                                                   : Colors.transparent,
-                                              borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.r)),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(bottom: 6.h, top: 6.h, left: 4.w, right: 4.w),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 6.h,
+                                                  top: 6.h,
+                                                  left: 4.w,
+                                                  right: 4.w),
                                               child: DriverListWidget(
                                                 isSecondary: false,
-                                                driverDetails: controller.filteredDriverList[index],
+                                                driverDetails: controller
+                                                    .filteredDriverList[index],
                                                 position: (index + 1),
                                                 onTap: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.callDriverQueuePositionApi(
-                                                        driverDetails: controller.filteredDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredDriverList[
+                                                            index]);
                                                   }
                                                 },
                                                 removeDriver: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.showRemoveDriverAlert(
-                                                        driverDetails: controller.filteredDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredDriverList[
+                                                            index]);
                                                   }
                                                 },
                                               ),
@@ -184,67 +254,109 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                           ),
                                         // Second List Header (non-reorderable)
                                         Padding(
-                                          key: const ValueKey('secondary_drivers_header'),
-                                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                                          child: Center(child:
-                                          Column(children: [
-                                            Text(
-                                              "Get Ready Queue",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            ),
-                                            controller.filteredSecondaryDriverList.isEmpty ?
-                                            Padding(padding: EdgeInsets.only(top: 20.h),child:
-                                             Text(
-                                              "The ready queue has no drivers.",
-                                              style: TextStyle(
-                                                color: Colors.grey.withOpacity(0.6),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            )):SizedBox(),
-                                          ],)
-                                        )),
+                                            key: const ValueKey(
+                                                'secondary_drivers_header'),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: Center(
+                                                child: Column(
+                                              children: [
+                                                Text(
+                                                  "Get Ready Queue",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: AppFontSize
+                                                        .medium100.value,
+                                                  ),
+                                                ),
+                                                controller
+                                                        .filteredSecondaryDriverList
+                                                        .isEmpty
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 20.h),
+                                                        child: Text(
+                                                          "The ready queue has no drivers.",
+                                                          style: TextStyle(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.6),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                AppFontSize
+                                                                    .medium100
+                                                                    .value,
+                                                          ),
+                                                        ))
+                                                    : SizedBox(),
+                                              ],
+                                            ))),
                                         // Second List Items
-                                        for (int index = 0; index < controller.filteredSecondaryDriverList.length; index++)
+                                        for (int index = 0;
+                                            index <
+                                                controller
+                                                    .filteredSecondaryDriverList
+                                                    .length;
+                                            index++)
                                           AnimatedContainer(
-                                            key: ValueKey('second_${controller.filteredSecondaryDriverList[index].driverId}'),
-                                            duration: const Duration(milliseconds: 300),
+                                            key: ValueKey(
+                                                'second_${controller.filteredSecondaryDriverList[index].driverId}'),
+                                            duration: const Duration(
+                                                milliseconds: 300),
                                             decoration: BoxDecoration(
-                                              color: controller.highlightedColor(controller.filteredSecondaryDriverList[index])
-                                                  ? AppColors.kPrimaryTransparentColor.value.withOpacity(0.25)
+                                              color: controller.highlightedColor(
+                                                      controller
+                                                              .filteredSecondaryDriverList[
+                                                          index])
+                                                  ? AppColors
+                                                      .kPrimaryTransparentColor
+                                                      .value
+                                                      .withOpacity(0.25)
                                                   : Colors.transparent,
-                                              borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.r)),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(bottom: 6.h, top: 6.h, left: 4.w, right: 4.w),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 6.h,
+                                                  top: 6.h,
+                                                  left: 4.w,
+                                                  right: 4.w),
                                               child: DriverListWidget(
                                                 isSecondary: true,
-                                                driverDetails: controller.filteredSecondaryDriverList[index],
+                                                driverDetails: controller
+                                                        .filteredSecondaryDriverList[
+                                                    index],
                                                 position: (index + 1),
                                                 onTap: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.callDriverQueuePositionApi(
-                                                        driverDetails: controller.filteredSecondaryDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredSecondaryDriverList[
+                                                            index]);
                                                   }
                                                 },
                                                 removeDriver: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.showRemoveDriverAlert(
-                                                        driverDetails: controller.filteredSecondaryDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredSecondaryDriverList[
+                                                            index]);
                                                   }
                                                 },
                                               ),
@@ -252,66 +364,107 @@ class LocationQueuePage extends GetView<LocationQueueController> {
                                           ),
                                         // Waiting Drivers Header (non-reorderable)
                                         Padding(
-                                          key: const ValueKey('waiting_drivers_header'),
-                                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                                          child: Center(child:Column(children: [
-                                            Text(
-                                              "Waiting Queue",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            ),
-                                            controller.filteredWaitingDriverList.isEmpty ?
-                                            Padding(padding: EdgeInsets.only(top: 20.h),child:
-                                            Text(
-                                              "The waiting queue has no drivers.",
-                                              style: TextStyle(
-                                                color: Colors.grey.withOpacity(0.6),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: AppFontSize.medium100.value,
-                                              ),
-                                            )):SizedBox(),
-
-                                          ],)
-                                        )),
+                                            key: const ValueKey(
+                                                'waiting_drivers_header'),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: Center(
+                                                child: Column(
+                                              children: [
+                                                Text(
+                                                  "Waiting Queue",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: AppFontSize
+                                                        .medium100.value,
+                                                  ),
+                                                ),
+                                                controller
+                                                        .filteredWaitingDriverList
+                                                        .isEmpty
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 20.h),
+                                                        child: Text(
+                                                          "The waiting queue has no drivers.",
+                                                          style: TextStyle(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.6),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                AppFontSize
+                                                                    .medium100
+                                                                    .value,
+                                                          ),
+                                                        ))
+                                                    : SizedBox(),
+                                              ],
+                                            ))),
                                         // Waiting Drivers Items (non-reorderable)
-                                        for (int index = 0; index < controller.filteredWaitingDriverList.length; index++)
+                                        for (int index = 0;
+                                            index <
+                                                controller
+                                                    .filteredWaitingDriverList
+                                                    .length;
+                                            index++)
                                           Container(
-                                            key: ValueKey('waiting_${controller.filteredWaitingDriverList[index].driverId}'),
+                                            key: ValueKey(
+                                                'waiting_${controller.filteredWaitingDriverList[index].driverId}'),
                                             decoration: BoxDecoration(
-                                              color: controller.highlightedColor(controller.filteredWaitingDriverList[index])
-                                                  ? AppColors.kPrimaryTransparentColor.value.withOpacity(0.25)
+                                              color: controller.highlightedColor(
+                                                      controller
+                                                              .filteredWaitingDriverList[
+                                                          index])
+                                                  ? AppColors
+                                                      .kPrimaryTransparentColor
+                                                      .value
+                                                      .withOpacity(0.25)
                                                   : Colors.transparent,
-                                              borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.r)),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(bottom: 6.h, top: 6.h, left: 4.w, right: 4.w),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 6.h,
+                                                  top: 6.h,
+                                                  left: 4.w,
+                                                  right: 4.w),
                                               child: DriverListWidget(
                                                 isSecondary: true,
-                                                driverDetails: controller.waitingDriverList[index],
+                                                driverDetails: controller
+                                                        .filteredWaitingDriverList[
+                                                    index],
                                                 position: (index + 1),
                                                 onTap: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.callDriverQueuePositionApi(
-                                                        driverDetails: controller.waitingDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredWaitingDriverList[
+                                                            index]);
                                                   }
                                                 },
                                                 removeDriver: () {
                                                   if (!controller.shiftStatus) {
                                                     showSnackBar(
                                                       title: 'Alert',
-                                                      msg: "You are not shift in.Please make shift in and try again!",
+                                                      msg:
+                                                          "You are not shift in.Please make shift in and try again!",
                                                     );
                                                   } else {
                                                     controller.showRemoveDriverAlert(
-                                                        driverDetails: controller.waitingDriverList[index]);
+                                                        driverDetails: controller
+                                                                .filteredWaitingDriverList[
+                                                            index]);
                                                   }
                                                 },
                                               ),

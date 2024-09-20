@@ -20,9 +20,10 @@ class LocationQueueController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
   RxList<DriverDetails> driverList = <DriverDetails>[].obs;
   RxList<DriverDetails> secondaryDriverList = <DriverDetails>[].obs;
+  RxList<DriverDetails> waitingDriverList = <DriverDetails>[].obs;
+
   RxList<DriverDetails> filteredDriverList = <DriverDetails>[].obs;
   RxList<DriverDetails> filteredSecondaryDriverList = <DriverDetails>[].obs;
-  RxList<DriverDetails> waitingDriverList = <DriverDetails>[].obs;
   RxList<DriverDetails> filteredWaitingDriverList = <DriverDetails>[].obs;
 
   Timer? _timer;
@@ -59,7 +60,6 @@ class LocationQueueController extends GetxController {
   bool shiftStatus = true;
 
   int mainCount = 0;
-
 
   @override
   void onInit() {
@@ -124,15 +124,11 @@ class LocationQueueController extends GetxController {
               response.driverList?.waitingDriverDetails ?? [];
           filteredSecondaryDriverList.refresh();
 
-
           waitingDriverList.value =
               response.driverList?.outWaitingDriverDetails ?? [];
           filteredWaitingDriverList.value =
               response.driverList?.outWaitingDriverDetails ?? [];
           filteredWaitingDriverList.refresh();
-
-
-
         } else if ((response.status ?? 0) == -4) {
           stopTimer();
           GetStorageController().removeSupervisorInfo();
@@ -162,33 +158,27 @@ class LocationQueueController extends GetxController {
   void callUpdateDriverQueueApi(
       {required List<int> driverArray,
       required List<int> secondaryDriverArray,
-        required  driverID,
-        required  type,
-
-        required positionIndex,
-        required queueType
-
-
-      }) async {
+      required driverID,
+      required type,
+      required positionIndex,
+      required queueType}) async {
     printLogs("driverArray $driverArray $secondaryDriverArray");
     showLoader.value = true;
     updateDriverQueueApi(
       UpdateDriverQueueRequest(
-        driverArray: driverArray,
-        secondaryDriverArray: secondaryDriverArray,
-        cid: supervisorInfo.cid,
-        kioskId: supervisorInfo.kioskId,
-        driverID: driverID.toString(),
-        type: type,
-        positionIndex: positionIndex,
-        queueType: queueType
-
-      ),
+          driverArray: driverArray,
+          secondaryDriverArray: secondaryDriverArray,
+          cid: supervisorInfo.cid,
+          kioskId: supervisorInfo.kioskId,
+          driverID: driverID.toString(),
+          type: type,
+          positionIndex: positionIndex,
+          queueType: queueType),
     ).then(
       (response) {
         showLoader.value = false;
         if ((response.status ?? 0) == 1) {
-          driverList.value = response.driverList?.mainDriverDetails ?? [];
+          /* driverList.value = response.driverList?.mainDriverDetails ?? [];
           filteredDriverList.value =
               response.driverList?.mainDriverDetails ?? [];
           filteredDriverList.refresh();
@@ -203,7 +193,7 @@ class LocationQueueController extends GetxController {
               response.driverList?.outWaitingDriverDetails ?? [];
           waitingDriverList.value =
               response.driverList?.outWaitingDriverDetails ?? [];
-          filteredWaitingDriverList.refresh();
+          filteredWaitingDriverList.refresh();*/
           callDriverListApi();
         } else {
           showSnackBar(
@@ -365,10 +355,8 @@ class LocationQueueController extends GetxController {
       filteredDriverList.refresh();
       filteredSecondaryDriverList.value = secondaryDriverList;
       filteredSecondaryDriverList.refresh();
-
       filteredWaitingDriverList.value = waitingDriverList;
       filteredWaitingDriverList.refresh();
-
       return;
     }
 
@@ -414,17 +402,18 @@ class LocationQueueController extends GetxController {
         curve: Curves.easeInOut,
       );
     }
+
     final matchingItemIndexDriverName2 = filteredWaitingDriverList.indexWhere(
-            (item) => (item.driverName ?? "")
+        (item) => (item.driverName ?? "")
             .toLowerCase()
             .contains(query.toLowerCase()));
     final matchingItemIndexTaxiNo2 = filteredWaitingDriverList.indexWhere(
-            (item) =>
+        (item) =>
             (item.taxiNo ?? "").toLowerCase().contains(query.toLowerCase()));
     if (matchingItemIndexDriverName2 != -1) {
       scrollController.animateTo(
         matchingItemIndexDriverName2 *
-            filteredSecondaryDriverList.length.toDouble() *
+            filteredWaitingDriverList.length.toDouble() *
             10,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -638,7 +627,8 @@ class LocationQueueController extends GetxController {
 
     newIndex = newIndex.clamp(0, driverArray.length - 1);
 
-    printLogs("Reordering in first list: Old index: $oldIndex, New index: $newIndex");
+    printLogs(
+        "Reordering in first list: Old index: $oldIndex, New index: $newIndex");
 
     final driver = driverArray.removeAt(oldIndex);
     driverArray.insert(newIndex, driver);
@@ -651,12 +641,12 @@ class LocationQueueController extends GetxController {
       driverID: driver.driverId,
       type: 2,
       driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-      secondaryDriverArray: filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
+      secondaryDriverArray:
+          filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
       queueType: 1,
       positionIndex: newIndex,
     );
   }
-
 
   void reorderSecondList(int oldIndex, int newIndex) {
     printLogs("TAG:reorder second");
@@ -670,9 +660,11 @@ class LocationQueueController extends GetxController {
       newIndex--;
     }
 
-    newIndex = newIndex.clamp(0, driverArray.length - 1); // Clamp newIndex within valid range
+    newIndex = newIndex.clamp(
+        0, driverArray.length - 1); // Clamp newIndex within valid range
 
-    printLogs("Reordering in second list: Old index: $oldIndex, New index: $newIndex");
+    printLogs(
+        "Reordering in second list: Old index: $oldIndex, New index: $newIndex");
 
     final driver = driverArray.removeAt(oldIndex);
     driverArray.insert(newIndex, driver);
@@ -681,13 +673,13 @@ class LocationQueueController extends GetxController {
     filteredSecondaryDriverList.refresh(); // Refresh second list
 
     callUpdateDriverQueueApi(
-      driverID: driver.driverId,
-      type: 2,
-      driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-      secondaryDriverArray: filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
-      queueType: 2,
-      positionIndex: newIndex
-    );
+        driverID: driver.driverId,
+        type: 2,
+        driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
+        secondaryDriverArray:
+            filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
+        queueType: 2,
+        positionIndex: newIndex);
   }
 
   void moveFromFirstToSecondList(int oldIndex, int newIndex) {
@@ -702,11 +694,14 @@ class LocationQueueController extends GetxController {
       return;
     }
 
-    newIndex = newIndex.clamp(0, secondList.length); // Clamp newIndex within valid range
+    newIndex = newIndex.clamp(
+        0, secondList.length); // Clamp newIndex within valid range
 
-    printLogs("Moving from first to second list: Old index: $oldIndex, New index: $newIndex");
+    printLogs(
+        "Moving from first to second list: Old index: $oldIndex, New index: $newIndex");
 
-    final driver = firstList.removeAt(oldIndex); // Capture the driver being moved
+    final driver =
+        firstList.removeAt(oldIndex); // Capture the driver being moved
     secondList.insert(newIndex, driver); // Insert driver into the second list
 
     filteredDriverList.assignAll(firstList);
@@ -715,15 +710,16 @@ class LocationQueueController extends GetxController {
     filteredSecondaryDriverList.refresh(); // Refresh second list
 
     callUpdateDriverQueueApi(
-      driverID: driver.driverId,
-      type: 1,
-      driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-      secondaryDriverArray: filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
-      positionIndex: newIndex,
-      queueType: 1
-    );
+        driverID: driver.driverId,
+        type: 1,
+        driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
+        secondaryDriverArray:
+            filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
+        positionIndex: newIndex,
+        queueType: 1);
 
-    printLogs("TAG:Moved driver ID: ${driver.driverId ?? 'Unknown'} from first list to second list");
+    printLogs(
+        "TAG:Moved driver ID: ${driver.driverId ?? 'Unknown'} from first list to second list");
   }
 
   void moveFromSecondToFirstList(int oldIndex, int newIndex) {
@@ -735,10 +731,12 @@ class LocationQueueController extends GetxController {
     if (secondList.isEmpty || oldIndex >= secondList.length || oldIndex < 0)
       return;
 
-    newIndex = newIndex.clamp(0, firstList.length); // Clamp newIndex within valid range
+    newIndex = newIndex.clamp(
+        0, firstList.length); // Clamp newIndex within valid range
 
     // Print old and new index
-    printLogs("Moving from second to first list: Old index: $oldIndex, New index: $newIndex");
+    printLogs(
+        "Moving from second to first list: Old index: $oldIndex, New index: $newIndex");
 
     final driver = secondList.removeAt(oldIndex);
     firstList.insert(newIndex, driver);
@@ -748,7 +746,6 @@ class LocationQueueController extends GetxController {
     filteredSecondaryDriverList.assignAll(secondList);
     filteredSecondaryDriverList.refresh();
   }
-
 
   int generateRandomInteger(int max) {
     var random = Random();

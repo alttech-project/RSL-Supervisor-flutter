@@ -55,6 +55,8 @@ class DriverListResponse {
 class DriverList {
   List<DriverDetails>? mainDriverDetails;
   List<DriverDetails>? waitingDriverDetails;
+  List<DriverDetails>? outWaitingDriverDetails;
+
 
   DriverList({this.mainDriverDetails, this.waitingDriverDetails});
 
@@ -65,12 +67,19 @@ class DriverList {
         mainDriverDetails!.add(DriverDetails.fromJson(v));
       });
     }
-    if (json['waiting_driver_details'] != null) {
+    if (json['secondary_driver_details'] != null) {
       waitingDriverDetails = <DriverDetails>[];
-      json['waiting_driver_details'].forEach((v) {
+      json['secondary_driver_details'].forEach((v) {
         waitingDriverDetails!.add(DriverDetails.fromJson(v));
       });
     }
+    if (json['waiting_driver_details'] != null) {
+      outWaitingDriverDetails = <DriverDetails>[];
+      json['waiting_driver_details'].forEach((v) {
+        outWaitingDriverDetails!.add(DriverDetails.fromJson(v));
+      });
+    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -80,8 +89,12 @@ class DriverList {
           mainDriverDetails!.map((v) => v.toJson()).toList();
     }
     if (waitingDriverDetails != null) {
-      data['waiting_driver_details'] =
+      data['secondary_driver_details'] =
           waitingDriverDetails!.map((v) => v.toJson()).toList();
+    }
+    if (outWaitingDriverDetails != null) {
+      data['waiting_driver_details'] =
+          outWaitingDriverDetails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -223,15 +236,29 @@ class UpdateDriverQueueRequest {
   List<int>? secondaryDriverArray;
   String? kioskId;
   String? cid;
+  int? type;
+  String? driverID;
+  int? queueType;
+  int? positionIndex;
+
+
+
+
 
   UpdateDriverQueueRequest(
-      {this.driverArray, this.secondaryDriverArray, this.kioskId, this.cid});
+      {this.driverArray, this.secondaryDriverArray, this.kioskId, this.cid,this.driverID,this.type,this.queueType,this.positionIndex});
 
   UpdateDriverQueueRequest.fromJson(Map<String, dynamic> json) {
     driverArray = json['driverArray'].cast<int>();
     secondaryDriverArray = json['secondaryDriverArray'].cast<int>();
     kioskId = json['kiosk_id'];
     cid = json['cid'];
+    type = json['type'];
+    queueType = json['queue_type'];
+    positionIndex = json['position_in_index'];
+
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -240,6 +267,13 @@ class UpdateDriverQueueRequest {
     data['secondaryDriverArray'] = secondaryDriverArray;
     data['kiosk_id'] = kioskId;
     data['cid'] = cid;
+    data['type'] = type;
+    data['driver_id'] = driverID;
+    data['position_in_index'] = positionIndex;
+    data['queue_type'] = queueType;
+
+
+
     return data;
   }
 }

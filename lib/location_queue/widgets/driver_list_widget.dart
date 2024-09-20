@@ -152,7 +152,7 @@ class DriverListWidget extends StatelessWidget {
       {required String firstText, required String secondText}) {
     return Row(
       children: [
-        Text(
+       Text(
           firstText,
           style: AppFontStyle.body(
             size: 12.sp,
@@ -162,7 +162,7 @@ class DriverListWidget extends StatelessWidget {
           textAlign: TextAlign.left,
         ),
         SizedBox(width: 10.w), // Optional: Add spacing between the texts
-        Text(
+        Expanded(child: Text(
           secondText,
           style: AppFontStyle.body(
             size: 12.sp,
@@ -170,7 +170,7 @@ class DriverListWidget extends StatelessWidget {
             weight: AppFontWeight.normal.value,
           ),
           textAlign: TextAlign.left,
-        ),
+        )),
       ],
     );
   }

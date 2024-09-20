@@ -75,18 +75,20 @@ class CaptureImageController extends GetxController {
     return compressedFile;
   }
 
-  Future<void> uploadFile(File fileName) async {
+  Future<void> uploadFile(File file) async {
     final storageRef = FirebaseStorage.instance.ref();
     final metadata = SettableMetadata(contentType: "image/jpeg");
+
+    // Generate a unique path for the image
     final imagePath =
         "Supervisor/PhotosVerification/Photos_${DateFormat('dd-MM-yyyy').format(DateTime.now())}/photo_${Random().nextInt(100000000)}";
-    final uploadTask = storageRef.child(imagePath).putFile(fileName, metadata);
 
+    // Upload the file
+    final uploadTask = storageRef.child(imagePath).putFile(file, metadata);
+
+    // Listen to upload task events
     uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
-      if (taskSnapshot.state == TaskState.success) {
-        getImageUrl(imagePath);
-      }
-      /*switch (taskSnapshot.state) {
+      switch (taskSnapshot.state) {
         case TaskState.running:
           print("Image Upload is running");
           break;
@@ -97,25 +99,27 @@ class CaptureImageController extends GetxController {
           print("Image Upload was canceled");
           break;
         case TaskState.error:
-          print("Image Upload was error");
+          // print("Image Upload encountered an error: ${taskSnapshot.error}");
           break;
         case TaskState.success:
-          print("Image Upload success success");
+          print("Image Upload was successful");
           getImageUrl(imagePath);
           break;
-      }*/
+      }
+    }).onError((error) {
+      print("UploadTask error: $error");
     });
   }
 
-  void getImageUrl(String fileName) async {
+  void getImageUrl(String filePath) async {
     try {
-      final url =
-          await FirebaseStorage.instance.ref().child(fileName).getDownloadURL();
-      loading.value = false;
+      // Get the download URL of the uploaded file
+      final url = await FirebaseStorage.instance.ref().child(filePath).getDownloadURL();
       print("photoUrl: $url");
-      Get.back(result: url);
+      Get.back(result: url); // Assuming you're using GetX for navigation
     } catch (e) {
       print("getImageUrl error: $e");
     }
   }
+
 }

@@ -13,10 +13,10 @@ final ApiProvider _apiProvider = Get.find<ApiProvider>();
 Future<DriverListResponse> driverListApi(DriverListRequest requestData) async {
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.webBaseUrl}driver_list',
+        url: '${AppConfig.webBaseUrl}driver_list_new',
         request: driverListApiRequestToJson(requestData),
       ),
-      queryParam: {"type": "driver_list"});
+      queryParam: {"type": "driver_list_new"});
   return driverListApiResponseFromJson(response);
 }
 
@@ -24,10 +24,10 @@ Future<DriverQueuePositionResponse> driverQueuePositionApi(
     DriverQueuePositionRequest requestData) async {
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.webBaseUrl}driver_queue_position',
+        url: '${AppConfig.webBaseUrl}driver_queue_position_new',
         request: driverQueuePositionRequestToJson(requestData),
       ),
-      queryParam: {"type": "driver_queue_position"});
+      queryParam: {"type": "driver_queue_position_new"});
   return driverQueuePositionResponseFromJson(response);
 }
 
@@ -35,10 +35,10 @@ Future<DriverListResponse> updateDriverQueueApi(
     UpdateDriverQueueRequest requestData) async {
   final response = await _apiProvider.httpRequest(
       resource: Resource(
-        url: '${AppConfig.webBaseUrl}update_driver_queue_new',
+        url: '${AppConfig.webBaseUrl}reorder_shift_driver_queue',
         request: updateDriverQueueRequestToJson(requestData),
       ),
-      queryParam: {"type": "update_driver_queue_new"});
+      queryParam: {"type": "reorder_shift_driver_queue"});
   return driverListApiResponseFromJson(response);
 }
 

@@ -487,7 +487,10 @@ class LocationQueueController extends GetxController {
     fixedMeter = 1;
     qrData.value = "";
     qrMessage.value = "";
+/*
     Get.offNamed(AppRoutes.dispatchPage);
+*/
+  Get.back();
   }
 
   void submitAction() async {

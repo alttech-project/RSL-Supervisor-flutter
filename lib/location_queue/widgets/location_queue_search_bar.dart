@@ -34,7 +34,7 @@ class LocationQueueSearchBar extends GetView<LocationQueueController> {
                   () => Container(
                     padding: const EdgeInsets.only(left: 2),
                     child: Text(
-                      "${controller.secondaryDriverList.length + controller.driverList.length + controller.waitingDriverList.length}",
+                      "${ controller.driverList.length + controller.waitingDriverList.length}",
                       style: AppFontStyle.normalText(
                           color: AppColors.kPrimaryColor.value),
                     ),

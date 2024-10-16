@@ -116,16 +116,16 @@ class DriverListWidget extends StatelessWidget {
                 InkWell(
                   onTap: removeDriver,
                   child: Container(
-                    width: 23.r,
-                    height: 23.r,
+                    width: 30.r,
+                    height: 30.r,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14.r),
+                      borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(color: Colors.white54, width: 1.5),
                     ),
                     child: Center(
                       child: Icon(
                         Icons.close,
-                        size: 15.r,
+                        size: 22.r,
                         color: Colors.white54,
                       ),
                     ),
@@ -137,6 +137,7 @@ class DriverListWidget extends StatelessWidget {
                 Text(
                   modelName(),
                   style: AppFontStyle.body(
+                    size: 15.sp,
                       weight: AppFontWeight.semibold.value,
                       color: AppColors.kPrimaryColor.value),
                 ),

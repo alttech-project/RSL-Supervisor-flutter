@@ -19,11 +19,11 @@ import '../data/search_driver_data.dart';
 class LocationQueueController extends GetxController {
   SupervisorInfo supervisorInfo = SupervisorInfo();
   RxList<DriverDetails> driverList = <DriverDetails>[].obs;
-  RxList<DriverDetails> secondaryDriverList = <DriverDetails>[].obs;
+  // RxList<DriverDetails> secondaryDriverList = <DriverDetails>[].obs;
   RxList<DriverDetails> waitingDriverList = <DriverDetails>[].obs;
 
   RxList<DriverDetails> filteredDriverList = <DriverDetails>[].obs;
-  RxList<DriverDetails> filteredSecondaryDriverList = <DriverDetails>[].obs;
+  // RxList<DriverDetails> filteredSecondaryDriverList = <DriverDetails>[].obs;
   RxList<DriverDetails> filteredWaitingDriverList = <DriverDetails>[].obs;
 
   Timer? _timer;
@@ -118,11 +118,11 @@ class LocationQueueController extends GetxController {
               response.driverList?.mainDriverDetails ?? [];
           filteredDriverList.refresh();
 
-          secondaryDriverList.value =
+/*          secondaryDriverList.value =
               response.driverList?.waitingDriverDetails ?? [];
           filteredSecondaryDriverList.value =
               response.driverList?.waitingDriverDetails ?? [];
-          filteredSecondaryDriverList.refresh();
+          filteredSecondaryDriverList.refresh();*/
 
           waitingDriverList.value =
               response.driverList?.outWaitingDriverDetails ?? [];
@@ -353,8 +353,8 @@ class LocationQueueController extends GetxController {
     if (query.isEmpty) {
       filteredDriverList.value = driverList;
       filteredDriverList.refresh();
-      filteredSecondaryDriverList.value = secondaryDriverList;
-      filteredSecondaryDriverList.refresh();
+/*      filteredSecondaryDriverList.value = secondaryDriverList;
+      filteredSecondaryDriverList.refresh();*/
       filteredWaitingDriverList.value = waitingDriverList;
       filteredWaitingDriverList.refresh();
       return;
@@ -378,7 +378,7 @@ class LocationQueueController extends GetxController {
       );
     }
 
-    final matchingItemIndexDriverName1 = filteredSecondaryDriverList.indexWhere(
+  /*  final matchingItemIndexDriverName1 = filteredSecondaryDriverList.indexWhere(
         (item) => (item.driverName ?? "")
             .toLowerCase()
             .contains(query.toLowerCase()));
@@ -402,6 +402,8 @@ class LocationQueueController extends GetxController {
         curve: Curves.easeInOut,
       );
     }
+
+   */
 
     final matchingItemIndexDriverName2 = filteredWaitingDriverList.indexWhere(
         (item) => (item.driverName ?? "")
@@ -645,110 +647,110 @@ class LocationQueueController extends GetxController {
       type: 2,
       driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
       secondaryDriverArray:
-          filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
+          [],
       queueType: 1,
       positionIndex: newIndex,
     );
   }
 
-  void reorderSecondList(int oldIndex, int newIndex) {
-    printLogs("TAG:reorder second");
-    var driverArray = filteredSecondaryDriverList.toList();
+//   void reorderSecondList(int oldIndex, int newIndex) {
+//     printLogs("TAG:reorder second");
+//     var driverArray = filteredSecondaryDriverList.toList();
+//
+//     // If list is empty or oldIndex is out of bounds, return early
+//     if (driverArray.isEmpty || oldIndex >= driverArray.length || oldIndex < 0)
+//       return;
+//
+//     if (newIndex > oldIndex) {
+//       newIndex--;
+//     }
+//
+//     newIndex = newIndex.clamp(
+//         0, driverArray.length - 1); // Clamp newIndex within valid range
+//
+//     printLogs(
+//         "Reordering in second list: Old index: $oldIndex, New index: $newIndex");
+//
+//     final driver = driverArray.removeAt(oldIndex);
+//     driverArray.insert(newIndex, driver);
+//
+// /*    filteredSecondaryDriverList.assignAll(driverArray);
+//     filteredSecondaryDriverList.refresh(); */// Refresh second list
+//
+//     callUpdateDriverQueueApi(
+//         driverID: driver.driverId,
+//         type: 2,
+//         driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
+//         secondaryDriverArray:
+//             [],
+//         queueType: 2,
+//         positionIndex: newIndex);
+//   }
 
-    // If list is empty or oldIndex is out of bounds, return early
-    if (driverArray.isEmpty || oldIndex >= driverArray.length || oldIndex < 0)
-      return;
+  // void moveFromFirstToSecondList(int oldIndex, int newIndex) {
+  //   mainCount = 0;
+  //
+  //   printLogs("TAG:reorder first to second");
+  //   var firstList = filteredDriverList.toList();
+  //   var secondList = filteredSecondaryDriverList.toList();
+  //
+  //   // If first list is empty or oldIndex is out of bounds, return early
+  //   if (firstList.isEmpty || oldIndex >= firstList.length || oldIndex < 0) {
+  //     return;
+  //   }
+  //
+  //   newIndex = newIndex.clamp(
+  //       0, secondList.length); // Clamp newIndex within valid range
+  //
+  //   printLogs(
+  //       "Moving from first to second list: Old index: $oldIndex, New index: $newIndex");
+  //
+  //   final driver =
+  //       firstList.removeAt(oldIndex); // Capture the driver being moved
+  //   secondList.insert(newIndex, driver); // Insert driver into the second list
+  //
+  //   filteredDriverList.assignAll(firstList);
+  //   filteredDriverList.refresh(); // Refresh first list
+  //   filteredSecondaryDriverList.assignAll(secondList);
+  //   filteredSecondaryDriverList.refresh(); // Refresh second list
+  //
+  //   callUpdateDriverQueueApi(
+  //       driverID: driver.driverId,
+  //       type: 1,
+  //       driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
+  //       secondaryDriverArray:
+  //           filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
+  //       positionIndex: newIndex,
+  //       queueType: 1);
+  //
+  //   printLogs(
+  //       "TAG:Moved driver ID: ${driver.driverId ?? 'Unknown'} from first list to second list");
+  // }
 
-    if (newIndex > oldIndex) {
-      newIndex--;
-    }
-
-    newIndex = newIndex.clamp(
-        0, driverArray.length - 1); // Clamp newIndex within valid range
-
-    printLogs(
-        "Reordering in second list: Old index: $oldIndex, New index: $newIndex");
-
-    final driver = driverArray.removeAt(oldIndex);
-    driverArray.insert(newIndex, driver);
-
-    filteredSecondaryDriverList.assignAll(driverArray);
-    filteredSecondaryDriverList.refresh(); // Refresh second list
-
-    callUpdateDriverQueueApi(
-        driverID: driver.driverId,
-        type: 2,
-        driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-        secondaryDriverArray:
-            filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
-        queueType: 2,
-        positionIndex: newIndex);
-  }
-
-  void moveFromFirstToSecondList(int oldIndex, int newIndex) {
-    mainCount = 0;
-
-    printLogs("TAG:reorder first to second");
-    var firstList = filteredDriverList.toList();
-    var secondList = filteredSecondaryDriverList.toList();
-
-    // If first list is empty or oldIndex is out of bounds, return early
-    if (firstList.isEmpty || oldIndex >= firstList.length || oldIndex < 0) {
-      return;
-    }
-
-    newIndex = newIndex.clamp(
-        0, secondList.length); // Clamp newIndex within valid range
-
-    printLogs(
-        "Moving from first to second list: Old index: $oldIndex, New index: $newIndex");
-
-    final driver =
-        firstList.removeAt(oldIndex); // Capture the driver being moved
-    secondList.insert(newIndex, driver); // Insert driver into the second list
-
-    filteredDriverList.assignAll(firstList);
-    filteredDriverList.refresh(); // Refresh first list
-    filteredSecondaryDriverList.assignAll(secondList);
-    filteredSecondaryDriverList.refresh(); // Refresh second list
-
-    callUpdateDriverQueueApi(
-        driverID: driver.driverId,
-        type: 1,
-        driverArray: filteredDriverList.map((e) => e.driverId ?? 0).toList(),
-        secondaryDriverArray:
-            filteredSecondaryDriverList.map((e) => e.driverId ?? 0).toList(),
-        positionIndex: newIndex,
-        queueType: 1);
-
-    printLogs(
-        "TAG:Moved driver ID: ${driver.driverId ?? 'Unknown'} from first list to second list");
-  }
-
-  void moveFromSecondToFirstList(int oldIndex, int newIndex) {
-    printLogs("TAG:reorder second to first");
-    var firstList = filteredDriverList.toList();
-    var secondList = filteredSecondaryDriverList.toList();
-
-    // If second list is empty or oldIndex is out of bounds, return early
-    if (secondList.isEmpty || oldIndex >= secondList.length || oldIndex < 0)
-      return;
-
-    newIndex = newIndex.clamp(
-        0, firstList.length); // Clamp newIndex within valid range
-
-    // Print old and new index
-    printLogs(
-        "Moving from second to first list: Old index: $oldIndex, New index: $newIndex");
-
-    final driver = secondList.removeAt(oldIndex);
-    firstList.insert(newIndex, driver);
-
-    filteredDriverList.assignAll(firstList);
-    filteredDriverList.refresh(); // Refresh first list
-    filteredSecondaryDriverList.assignAll(secondList);
-    filteredSecondaryDriverList.refresh();
-  }
+//   void moveFromSecondToFirstList(int oldIndex, int newIndex) {
+//     printLogs("TAG:reorder second to first");
+//     var firstList = filteredDriverList.toList();
+//     var secondList = filteredSecondaryDriverList.toList();
+//
+//     // If second list is empty or oldIndex is out of bounds, return early
+//     if (secondList.isEmpty || oldIndex >= secondList.length || oldIndex < 0)
+//       return;
+//
+//     newIndex = newIndex.clamp(
+//         0, firstList.length); // Clamp newIndex within valid range
+//
+//     // Print old and new index
+//     printLogs(
+//         "Moving from second to first list: Old index: $oldIndex, New index: $newIndex");
+//
+//     final driver = secondList.removeAt(oldIndex);
+//     firstList.insert(newIndex, driver);
+//
+//     filteredDriverList.assignAll(firstList);
+//     filteredDriverList.refresh(); // Refresh first list
+// /*    filteredSecondaryDriverList.assignAll(secondList);
+//     filteredSecondaryDriverList.refresh();*/
+//   }
 
   int generateRandomInteger(int max) {
     var random = Random();
